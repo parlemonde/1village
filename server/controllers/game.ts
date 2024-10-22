@@ -303,31 +303,14 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
   //save draft game each step
   if (status && status === ActivityStatus.DRAFT) {
     if (game1) {
-      if (activityId) {
-        updateGameDraftIfExists(game1, activityId);
-      } else {
-        createGame(game1, userId, villageId, type, subType, selectedPhase, status, draftUrl);
-      }
-      res.sendStatus(200);
-      return;
+      createOrUpdateGame(game1, userId, villageId, type, subType, selectedPhase, status, draftUrl, activityId);
     } else if (game2) {
-      if (activityId) {
-        updateGameDraftIfExists(game2, activityId);
-      } else {
-        createGame(game2, userId, villageId, type, subType, selectedPhase, status, draftUrl);
-      }
-
-      res.sendStatus(200);
-      return;
+      createOrUpdateGame(game2, userId, villageId, type, subType, selectedPhase, status, draftUrl, activityId);
     } else if (game3) {
-      if (activityId) {
-        updateGameDraftIfExists(game3, activityId);
-      } else {
-        createGame(game3, userId, villageId, type, subType, selectedPhase, status, draftUrl);
-      }
-      res.sendStatus(200);
-      return;
+      createOrUpdateGame(game3, userId, villageId, type, subType, selectedPhase, status, draftUrl, activityId);
     }
+    res.sendStatus(200);
+    return;
   }
   //save published games if status is published
   await updateStatusToPublished(userId, villageId, type, subType);
@@ -335,7 +318,7 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
   res.sendStatus(200);
 });
 
-async function createGame(
+async function createOrUpdateGame(
   data: ActivityContent[],
   userId: number,
   villageId: number,
@@ -344,25 +327,56 @@ async function createGame(
   selectedPhase: number,
   status: number,
   draftUrl: string,
+  activityId?: number,
 ) {
-  const activity = new Activity();
-  activity.type = type;
-  activity.subType = subType;
-  activity.status = status;
-  // TODO: Travailler sur le type de data
-  activity.data = data as unknown as AnyData;
-  activity.data.draftUrl = draftUrl;
-  activity.phase = selectedPhase;
-  activity.content = data;
-  activity.userId = userId;
-  activity.villageId = villageId;
-  activity.responseActivityId = null;
-  activity.responseType = null;
-  activity.isPinned = false;
-  activity.displayAsUser = false;
-  activity.publishDate = new Date();
+  if (activityId) {
+    const activity = await AppDataSource.getRepository(Activity).findBy({ id: activityId });
+    const payload = activity[0].data.game as any;
+    switch (activity[0].phase) {
+      case 2:
+        payload.game1 = data;
+        break;
 
-  await AppDataSource.getRepository(Activity).save(activity);
+      case 3:
+        payload.game2 = data;
+        break;
+
+      case 4:
+        payload.game3 = data;
+        break;
+
+      default:
+        break;
+    }
+
+    console.log('PAYLOAD : ', payload);
+    await AppDataSource.createQueryBuilder()
+      .update(Activity)
+      .set({ data: payload, content: payload })
+      .where({
+        id: activityId,
+      })
+      .execute();
+  } else {
+    const activity = new Activity();
+    activity.type = type;
+    activity.subType = subType;
+    activity.status = status;
+    // TODO: Travailler sur le type de data
+    activity.data = data as unknown as AnyData;
+    activity.data.draftUrl = draftUrl;
+    activity.phase = selectedPhase;
+    activity.content = data;
+    activity.userId = userId;
+    activity.villageId = villageId;
+    activity.responseActivityId = null;
+    activity.responseType = null;
+    activity.isPinned = false;
+    activity.displayAsUser = false;
+    activity.publishDate = new Date();
+
+    await AppDataSource.getRepository(Activity).save(activity);
+  }
 }
 
 // --- Get all games standardised by subType ---

@@ -27,8 +27,23 @@ const CreateGame = ({ stepNumber }: PlayProps) => {
   const { query } = router;
   const { gameConfig, setStepsGame } = useContext(GameContext);
   const { activity } = useContext(ActivityContext);
-  const activityStepGame = activity?.data.game as StepsTypes[];
+  console.log('DATA : ', activity?.data);
+
   if (query?.activity_id) {
+    const data = activity?.data.game1;
+    let activityStepGame = activity?.data.game1 as StepsTypes[];
+    switch (stepNumber) {
+      case 3:
+        activityStepGame = activity?.data.game2 as StepsTypes[];
+        break;
+
+      case 4:
+        activityStepGame = activity?.data.game3 as StepsTypes[];
+        break;
+
+      default:
+        break;
+    }
     setStepsGame(stepNumber, activityStepGame);
   }
 

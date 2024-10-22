@@ -28,7 +28,10 @@ const MimiqueStep4 = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const { activity } = React.useContext(ActivityContext);
   const { query } = router;
-  const activityStepGame = activity?.data.game as StepsTypes[];
+  const activityStepGame1 = activity?.data.game1 as StepsTypes[];
+  const activityStepGame2 = activity?.data.game2 as StepsTypes[];
+  const activityStepGame3 = activity?.data.game3 as StepsTypes[];
+
   const activityId = query?.activity_id as string | null;
 
   const { gameConfig } = useContext(GameContext);
@@ -40,19 +43,20 @@ const MimiqueStep4 = () => {
       type: ActivityType.GAME,
       subType: GameType.MIMIC,
       game1: {
-        game: query?.activity_id && activityStepGame ? activityStepGame : gameConfig[0],
+        game: query?.activity_id && activityStepGame1 ? activityStepGame1 : gameConfig[0],
         labelPresentation: labelPresentation,
       },
       game2: {
-        game: query?.activity_id && activityStepGame ? activityStepGame : gameConfig[1],
+        game: query?.activity_id && activityStepGame2 ? activityStepGame2 : gameConfig[1],
         labelPresentation: labelPresentation,
       },
       game3: {
-        game: query?.activity_id && activityStepGame ? activityStepGame : gameConfig[2],
+        game: query?.activity_id && activityStepGame3 ? activityStepGame3 : gameConfig[2],
         labelPresentation: labelPresentation,
       },
       selectedPhase: selectedPhase,
       activityId: query?.activity_id ? activityId : null,
+      draftUrl: window.location.pathname,
     };
 
     setIsLoading(true);

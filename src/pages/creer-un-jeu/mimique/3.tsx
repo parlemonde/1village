@@ -24,7 +24,7 @@ const MimiqueStep3 = () => {
   const labelPresentation = user ? getUserDisplayName(user, false) : '';
   const { activity } = React.useContext(ActivityContext);
   const { query } = router;
-  const activityStepGame = activity?.data.game as StepsTypes[];
+  const activityStepGame = activity?.data.game3 as StepsTypes[];
   const activityId = query?.activity_id as string | null;
 
   const onNext = () => {
