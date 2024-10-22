@@ -11,7 +11,7 @@ import { ImageType } from '../../types/story.type';
 import { Activity } from '../entities/activity';
 import { Game } from '../entities/game';
 import { Image } from '../entities/image';
-import { UserType, User } from '../entities/user';
+import { UserType } from '../entities/user';
 import { VillagePhase } from '../entities/village';
 import { getActivities, getActivitiesCommentCount } from '../manager/activity';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
