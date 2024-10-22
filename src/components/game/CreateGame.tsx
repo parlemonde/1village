@@ -30,7 +30,6 @@ const CreateGame = ({ stepNumber }: PlayProps) => {
   console.log('DATA : ', activity?.data);
 
   if (query?.activity_id) {
-    const data = activity?.data.game1;
     let activityStepGame = activity?.data.game1 as StepsTypes[];
     switch (stepNumber) {
       case 3:
