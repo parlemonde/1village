@@ -16,7 +16,6 @@ import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
-import { useVillageRequests } from 'src/services/useVillages';
 import { ActivityStatus } from 'types/activity.type';
 import type { AnthemData } from 'types/anthem.type';
 
@@ -24,7 +23,6 @@ const AnthemStep5 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { village } = React.useContext(VillageContext);
-  const { editVillage } = useVillageRequests();
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as AnthemData) || null;
 
@@ -47,11 +45,11 @@ const AnthemStep5 = () => {
 
   const onPublish = async () => {
     setIsLoading(true);
-    const response = await save(true);
+    const response = await save();
     if (response.success) {
-      if (village !== null) {
-        await editVillage({ id: village.id, anthemId: response.activity.id });
-      }
+      // if (village !== null) {
+      //   await editVillage({ id: village.id, anthemId: response.activity.id });
+      // }
       window.location.assign('/admin/newportal/create/parametrer-hymne/success'); // use window location assign to refresh the page and get an updated village.
     }
   };

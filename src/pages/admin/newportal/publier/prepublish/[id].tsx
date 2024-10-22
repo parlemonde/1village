@@ -80,7 +80,7 @@ const Prepublier = () => {
       setIsLoading(false);
       queryClient.invalidateQueries({ queryKey: ['activities'] });
       setTimeout(() => {
-        router.push('/admin/newportal/publier');
+        window.location.assign('/admin/newportal/publier');
       }, 1000);
     } catch (error) {
       enqueueSnackbar('Une erreur est survenue', {

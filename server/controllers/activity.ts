@@ -12,7 +12,7 @@ import { Activity } from '../entities/activity';
 import { Game } from '../entities/game';
 import { Image } from '../entities/image';
 import { UserType } from '../entities/user';
-import { VillagePhase } from '../entities/village';
+import { Village, VillagePhase } from '../entities/village';
 import { getActivities, getActivitiesCommentCount } from '../manager/activity';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { getQueryString } from '../utils';
@@ -271,32 +271,61 @@ activityController.post(
     const villageIds = data.villages;
 
     try {
-      for (const villageId of villageIds) {
-        const activity = new Activity();
-        activity.type = activityParent.type;
-        activity.subType = activityParent.subType;
-        activity.status = ActivityStatus.PUBLISHED;
-        activity.data = activityParent.data;
-        activity.phase = data.phase;
-        activity.content = activityParent.content;
-        activity.userId = activityParent.userId;
-        activity.villageId = villageId;
-        activity.responseActivityId = activityParent.responseActivityId;
-        activity.responseType = activityParent.responseType;
-        activity.isPinned = activityParent.isPinned;
-        activity.displayAsUser = activityParent.displayAsUser;
-        activity.parentActivityId = activityParent.id;
-        activity.publishDate = new Date();
+      if (activityParent.type === 11) {
+        for (const villageId of villageIds) {
+          const activity = new Activity();
+          activity.type = activityParent.type;
+          activity.subType = activityParent.subType;
+          activity.status = ActivityStatus.PUBLISHED;
+          activity.data = activityParent.data;
+          activity.phase = data.phase;
+          activity.content = activityParent.content;
+          activity.userId = activityParent.userId;
+          activity.villageId = villageId;
+          activity.responseActivityId = activityParent.responseActivityId;
+          activity.responseType = activityParent.responseType;
+          activity.isPinned = activityParent.isPinned;
+          activity.displayAsUser = activityParent.displayAsUser;
+          activity.parentActivityId = activityParent.id;
+          activity.publishDate = new Date();
 
-        await AppDataSource.getRepository(Activity).save(activity);
+          await AppDataSource.getRepository(Activity).save(activity);
+          await AppDataSource.getRepository(Village).update({ id: villageId }, { anthemId: activity.id });
+        }
+        await AppDataSource.getRepository(Activity).update(
+          { id: data.activityParentId },
+          { status: ActivityStatus.PUBLISHED, isDisplayed: false, publishDate: new Date() },
+        );
+
+        res.sendJSON({ message: 'Votre hymne a été publiée' });
+      } else {
+        for (const villageId of villageIds) {
+          const activity = new Activity();
+          activity.type = activityParent.type;
+          activity.subType = activityParent.subType;
+          activity.status = ActivityStatus.PUBLISHED;
+          activity.data = activityParent.data;
+          activity.phase = data.phase;
+          activity.content = activityParent.content;
+          activity.userId = activityParent.userId;
+          activity.villageId = villageId;
+          activity.responseActivityId = activityParent.responseActivityId;
+          activity.responseType = activityParent.responseType;
+          activity.isPinned = activityParent.isPinned;
+          activity.displayAsUser = activityParent.displayAsUser;
+          activity.parentActivityId = activityParent.id;
+          activity.publishDate = new Date();
+
+          await AppDataSource.getRepository(Activity).save(activity);
+        }
+
+        await AppDataSource.getRepository(Activity).update(
+          { id: data.activityParentId },
+          { status: ActivityStatus.PUBLISHED, isDisplayed: false, publishDate: new Date() },
+        );
+
+        res.sendJSON({ message: 'Votre publication a été publiée' });
       }
-
-      await AppDataSource.getRepository(Activity).update(
-        { id: data.activityParentId },
-        { status: ActivityStatus.PUBLISHED, isDisplayed: false, publishDate: new Date() },
-      );
-
-      res.sendJSON({ message: 'Votre publication a été publiée' });
     } catch (error) {
       res.sendJSON({ message: 'Une erreur est survenue' });
     }
@@ -544,6 +573,7 @@ activityController.delete(
   async (req: Request, res: Response) => {
     const id = parseInt(req.params.id, 10) || 0;
     const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id } });
+
     if (activity === null || req.user === undefined) {
       res.status(204).send();
       return;
@@ -553,13 +583,32 @@ activityController.delete(
       return;
     }
 
-    if (activity.status === ActivityStatus.DRAFT) {
-      // No soft delete for drafts.
-      await AppDataSource.getRepository(Activity).delete({ id });
+    if (activity.type === 11) {
+      if (activity.status === ActivityStatus.DRAFT) {
+        // No soft delete for drafts.
+        await AppDataSource.getRepository(Activity).delete({ id });
+      } else {
+        await AppDataSource.createQueryBuilder().delete().from(Activity).where('parentActivityId = :id', { id: activity.id }).execute();
+        await AppDataSource.getRepository(Activity).softDelete({ id });
+      }
     } else {
-      await AppDataSource.createQueryBuilder().delete().from(Activity).where('parentActivityId = :id', { id: activity.id }).execute();
-      await AppDataSource.getRepository(Activity).softDelete({ id });
+      if (activity.status === ActivityStatus.DRAFT) {
+        // No soft delete for drafts.
+        await AppDataSource.getRepository(Activity).delete({ id });
+      } else {
+        await AppDataSource.createQueryBuilder().delete().from(Activity).where('parentActivityId = :id', { id: activity.id }).execute();
+        await AppDataSource.getRepository(Activity).softDelete({ id });
+      }
     }
+
+    // Mise à jour des villages ayant cet anthemId
+    await AppDataSource.getRepository(Village)
+      .createQueryBuilder()
+      .update(Village)
+      .set({ anthemId: null })
+      .where('anthemId = :id', { id: activity.id })
+      .execute();
+
     res.status(204).send();
   },
 );

@@ -44,7 +44,6 @@ const ModifPrepublish = () => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const { mutateAsync: updatePhase } = useUpdateActivityPhase({ activityId: Number(id), phase: Number(selectedPhase) });
-
   useEffect(() => {
     if (childrenActivities) {
       const publishedVillageIds = childrenActivities.map((activity: Activity) => activity.villageId);
@@ -106,48 +105,96 @@ const ModifPrepublish = () => {
   }
 
   const handlePublish = async () => {
-    try {
-      setIsLoading(true);
-      const villagesToAdd = selectedVillages.filter((villageId) => !publishedVillageIds.includes(villageId));
-      const villagesToDelete = publishedVillageIds.filter((villageId) => !selectedVillages.includes(villageId));
+    if (activityParent.type === 11) {
+      try {
+        setIsLoading(true);
+        const villagesToAdd = selectedVillages.filter((villageId) => !publishedVillageIds.includes(villageId));
+        const villagesToDelete = publishedVillageIds.filter((villageId) => !selectedVillages.includes(villageId));
 
-      if (Number(selectedPhase) !== childrenActivities[0].phase) {
-        await Promise.all(
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          childrenActivities.map(async (activity) => {
-            await updatePhase({ activityId: activity.id, phase: Number(selectedPhase) });
-          }),
-        );
-        await updatePhase({ activityId: activityParent.id, phase: Number(selectedPhase) });
-
-        enqueueSnackbar('Phase mise à jour avec succès', { variant: 'success' });
-      }
-
-      if (villagesToAdd.length > 0) {
-        await postAdminActivity({ activityParentId: Number(id), phase: Number(selectedPhase), villages: villagesToAdd });
-        enqueueSnackbar('Activités publiées avec succès', { variant: 'success' });
-      }
-
-      if (villagesToDelete.length > 0) {
-        await Promise.all(
-          childrenActivities
-            .filter((activity: { villageId: number }) => villagesToDelete.includes(activity.villageId))
-            .map(async (activity: { id: number }) => {
-              await deleteActivity(activity.id);
+        if (Number(selectedPhase) !== childrenActivities[0].phase) {
+          await Promise.all(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            childrenActivities.map(async (activity) => {
+              await updatePhase({ activityId: activity.id, phase: Number(selectedPhase) });
             }),
-        );
-        enqueueSnackbar('Activités supprimées avec succès', { variant: 'success' });
+          );
+          await updatePhase({ activityId: activityParent.id, phase: Number(selectedPhase) });
+
+          enqueueSnackbar('Phase mise à jour avec succès', { variant: 'success' });
+        }
+
+        if (villagesToAdd.length > 0) {
+          await postAdminActivity({ activityParentId: Number(id), phase: Number(selectedPhase), villages: villagesToAdd });
+          enqueueSnackbar('Hymnes publiés avec succès', { variant: 'success' });
+        }
+
+        if (villagesToDelete.length > 0) {
+          await Promise.all(
+            childrenActivities
+              .filter((activity: { villageId: number }) => villagesToDelete.includes(activity.villageId))
+              .map(async (activity: { id: number }) => {
+                // eslint-disable-next-line
+                // @ts-ignore
+                await deleteActivity(activity.id);
+              }),
+          );
+          enqueueSnackbar('Hymnes supprimés avec succès', { variant: 'success' });
+        }
+
+        await queryClient.invalidateQueries({ queryKey: ['activityById', 'activities'] });
+
+        setTimeout(() => {
+          setIsLoading(false);
+          window.location.assign('/admin/newportal/publier');
+        }, 1000);
+      } catch (error) {
+        enqueueSnackbar('Une erreur est survenue lors de la modification', { variant: 'error' });
       }
+    } else {
+      try {
+        setIsLoading(true);
+        const villagesToAdd = selectedVillages.filter((villageId) => !publishedVillageIds.includes(villageId));
+        const villagesToDelete = publishedVillageIds.filter((villageId) => !selectedVillages.includes(villageId));
 
-      await queryClient.invalidateQueries({ queryKey: ['activityById', 'activities'] });
+        if (Number(selectedPhase) !== childrenActivities[0].phase) {
+          await Promise.all(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            childrenActivities.map(async (activity) => {
+              await updatePhase({ activityId: activity.id, phase: Number(selectedPhase) });
+            }),
+          );
+          await updatePhase({ activityId: activityParent.id, phase: Number(selectedPhase) });
 
-      setTimeout(() => {
-        setIsLoading(false);
-        router.push('/admin/newportal/publier');
-      }, 1000);
-    } catch (error) {
-      enqueueSnackbar('Une erreur est survenue lors de la modification', { variant: 'error' });
+          enqueueSnackbar('Phase mise à jour avec succès', { variant: 'success' });
+        }
+
+        if (villagesToAdd.length > 0) {
+          await postAdminActivity({ activityParentId: Number(id), phase: Number(selectedPhase), villages: villagesToAdd });
+          enqueueSnackbar('Activités publiées avec succès', { variant: 'success' });
+        }
+
+        if (villagesToDelete.length > 0) {
+          await Promise.all(
+            childrenActivities
+              .filter((activity: { villageId: number }) => villagesToDelete.includes(activity.villageId))
+              .map(async (activity: { id: number }) => {
+                await deleteActivity(activity.id);
+              }),
+          );
+          enqueueSnackbar('Activités supprimées avec succès', { variant: 'success' });
+        }
+
+        await queryClient.invalidateQueries({ queryKey: ['activityById', 'activities'] });
+
+        setTimeout(() => {
+          setIsLoading(false);
+          window.location.assign('/admin/newportal/publier');
+        }, 1000);
+      } catch (error) {
+        enqueueSnackbar('Une erreur est survenue lors de la modification', { variant: 'error' });
+      }
     }
   };
 

@@ -80,7 +80,9 @@ export default function ActivityCard({
             <PelicoSouriant />
           </Avatar>
         }
-        title={title}
+        // eslint-disable-next-line
+        // @ts-ignore
+        title={activity.type === 11 ? 'Hymne' : title}
         subheader={activity.status === 0 ? subtitle : ''}
         titleTypographyProps={{ variant: 'h6' }}
         sx={{
@@ -141,19 +143,9 @@ export default function ActivityCard({
       {activity.status !== 0 && (
         <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
           <Link href={`/admin/newportal/publier/prepublish/${activity.id}`}>
-            {/* eslint-disable-next-line */}
-            {/* @ts-ignore */}
-            {activity.data.title.length === 0 || activity.data.resume.length === 0 ? (
-              // eslint-disable-next-line
-              // @ts-ignore
-              <Button disabled="true" size="small" sx={{ border: 1, marginRight: 1 }}>
-                Publier
-              </Button>
-            ) : (
-              <Button size="small" sx={{ border: 1, marginRight: 1 }}>
-                Publier
-              </Button>
-            )}
+            <Button size="small" sx={{ border: 1, marginRight: 1 }}>
+              Publier
+            </Button>
           </Link>
         </CardActions>
       )}
