@@ -215,8 +215,8 @@ const ClassroomParamStep2 = () => {
             <p className="text">
               Pour sécuriser la connexion des familles, nous allons créer{' '}
               <span style={{ fontWeight: 'bold' }}>un identifiant unique à chaque enfant de votre classe. </span> <br></br>Ensuite chaque famille
-              pourra créer jusqu&apos;à 5 accès avec ce même identifiant unique : ainsi les parents divorcés, les grands-parents, les grands-frères ou
-              les grandes-soeurs pourront accéder à 1Village. <br></br>
+              pourra créer jusqu&apos;à 5 accès avec ce même identifiant unique : ainsi plusieurs personnes de la famille pourront accéder à 1Village.
+              <br></br>
               <br></br>Vous devez donc créer autant d&apos;identifiants qu&apos;il y a d&apos;enfants dans votre classe. Vous pourrez rajouter des
               identifiants en cours d&apos;années, lorsqu&apos;un nouvel enfant arrive dans votre classe par exemple.
             </p>

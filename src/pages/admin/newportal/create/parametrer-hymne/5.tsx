@@ -54,7 +54,6 @@ const AnthemStep5 = () => {
       }
       window.location.assign('/admin/newportal/create/parametrer-hymne/success'); // use window location assign to refresh the page and get an updated village.
     }
-    setIsLoading(false);
   };
 
   if (data === null || activity === null || !isAnthem(activity)) {
