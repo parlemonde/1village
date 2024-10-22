@@ -126,7 +126,7 @@ const ModifPrepublish = () => {
 
       if (villagesToAdd.length > 0) {
         await postAdminActivity({ activityParentId: Number(id), phase: Number(selectedPhase), villages: villagesToAdd });
-        enqueueSnackbar('Nouvelles activités créées avec succès', { variant: 'success' });
+        enqueueSnackbar('Activités publiées avec succès', { variant: 'success' });
       }
 
       if (villagesToDelete.length > 0) {

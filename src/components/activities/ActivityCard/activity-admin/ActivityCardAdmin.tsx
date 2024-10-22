@@ -8,6 +8,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Card, CardHeader, Avatar, CardMedia, CardContent, Typography, Button, CardActions, Menu, MenuItem } from '@mui/material';
 
 import { deleteActivity } from 'src/api/activities/activities.admin.delete';
+import { useGetChildrenActivitiesById } from 'src/api/activities/activities.adminGetChildren';
 import { usePublishActivity } from 'src/api/activities/activities.put';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 import { htmlToText } from 'src/utils';
@@ -20,6 +21,17 @@ export default function ActivityCard({
   modifiedDisabled?: boolean;
 }) {
   const publishActivity = usePublishActivity({ activityId: activity.id });
+  const howManyChildren = useGetChildrenActivitiesById({ id: Number(activity.id) });
+  // eslint-disable-next-line
+  // @ts-ignore
+  const publishDate = new Date(activity.publishDate);
+  const formattedDate = new Intl.DateTimeFormat('fr-FR', {
+    year: '2-digit',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(publishDate);
+
+  const subtitle = `Publié le ${formattedDate} dans ${howManyChildren.data?.length} Village-Monde`;
   const queryClient = useQueryClient();
   const router = useRouter();
   const title: string = activity?.data?.title ? (activity.data.title as string) : '';
@@ -69,6 +81,7 @@ export default function ActivityCard({
           </Avatar>
         }
         title={title}
+        subheader={activity.status === 0 ? subtitle : ''}
         titleTypographyProps={{ variant: 'h6' }}
         sx={{
           // refer to mui content only classname
@@ -125,13 +138,22 @@ export default function ActivityCard({
           {htmlToText(content)}
         </Typography>
       </CardContent>
-      {/* display publish button only if activity is not published yet (status = 1) */}
       {activity.status !== 0 && (
         <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
           <Link href={`/admin/newportal/publier/prepublish/${activity.id}`}>
-            <Button size="small" sx={{ border: 1, marginRight: 1 }}>
-              Publier
-            </Button>
+            {/* eslint-disable-next-line */}
+            {/* @ts-ignore */}
+            {activity.data.title.length === 0 || activity.data.resume.length === 0 ? (
+              // eslint-disable-next-line
+              // @ts-ignore
+              <Button disabled="true" size="small" sx={{ border: 1, marginRight: 1 }}>
+                Publier
+              </Button>
+            ) : (
+              <Button size="small" sx={{ border: 1, marginRight: 1 }}>
+                Publier
+              </Button>
+            )}
           </Link>
         </CardActions>
       )}

@@ -117,11 +117,6 @@ activityController.get({ path: '/mascotte', userType: UserType.OBSERVATOR }, asy
 });
 
 activityController.get({ path: '/admin/draft' }, async (req, res) => {
-  // const adminUsers = await AppDataSource.getRepository(User)
-  //   .createQueryBuilder('User')
-  //   .select('User.id')
-  //   .where('user.type IN (:...type)', { type: 0 })
-  //   .getMany();
   const adminUsers = await AppDataSource.query(`
     SELECT user.id
     FROM user
@@ -132,7 +127,7 @@ activityController.get({ path: '/admin/draft' }, async (req, res) => {
     const draftActivities = await AppDataSource.getRepository(Activity)
       .createQueryBuilder('Activity')
       .where('Activity.status = :status', { status: req.query.status ? Number(getQueryString(req.query.status)) || 0 : undefined })
-      .andWhere('Activity.userId IN (:...userIds)', { userIds: adminUsers.map((u) => u.id) })
+      .andWhere('Activity.userId IN (:...userIds)', { userIds: adminUsers.map((u: { id: number }) => u.id) })
       .orderBy('Activity.updateDate', 'DESC')
       .limit(req.query.limit ? Number(getQueryString(req.query.limit)) || 200 : undefined)
       .getMany();
@@ -143,7 +138,7 @@ activityController.get({ path: '/admin/draft' }, async (req, res) => {
       .createQueryBuilder('Activity')
       .where('Activity.status = :status', { status: req.query.status ? Number(getQueryString(req.query.status)) || 0 : undefined })
       .andWhere('Activity.isDisplayed = :isDisplayed', { isDisplayed: req.query.isDisplayed ? req.query.isDisplayed === 'true' : false })
-      .andWhere('Activity.userId IN (:...userIds)', { userIds: adminUsers.map((u) => u.id) })
+      .andWhere('Activity.userId IN (:...userIds)', { userIds: adminUsers.map((u: { id: number }) => u.id) })
       .orderBy('Activity.updateDate', 'DESC')
       .limit(req.query.limit ? Number(getQueryString(req.query.limit)) || 200 : undefined)
       .getMany();
@@ -296,7 +291,10 @@ activityController.post(
         await AppDataSource.getRepository(Activity).save(activity);
       }
 
-      await AppDataSource.getRepository(Activity).update({ id: data.activityParentId }, { status: ActivityStatus.PUBLISHED, isDisplayed: false });
+      await AppDataSource.getRepository(Activity).update(
+        { id: data.activityParentId },
+        { status: ActivityStatus.PUBLISHED, isDisplayed: false, publishDate: new Date() },
+      );
 
       res.sendJSON({ message: 'Votre publication a été publiée' });
     } catch (error) {

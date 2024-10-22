@@ -22,7 +22,7 @@ const AllDraft = () => {
           <h1 style={{ marginLeft: 10 }}>Activités non publiées</h1>
         </div>
       </Link>
-      <div style={{ width: isMobile ? '100%' : '40%' }}>
+      <div style={{ width: isMobile ? '100%' : '40%', marginTop: 20 }}>
         <SearchField setter={(e) => setSearch(e.currentTarget.value)} />
       </div>
       <AllActivitiesAdmin activities={data} search={search} />

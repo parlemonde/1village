@@ -21,9 +21,6 @@ const Publier = () => {
   const { user } = React.useContext(UserContext);
   const draftActivities = useGetActivitiesAdminDraft({ limit: 2, isDraft: true });
   const publishedActivities = useGetActivitiesAdminDraft({ limit: 2, isDraft: false, isDisplayed: false });
-  console.log('draftActivities = ', draftActivities);
-  console.log('publishedActivities = ', publishedActivities);
-  console.log('User = ', user);
 
   const router = useRouter();
 

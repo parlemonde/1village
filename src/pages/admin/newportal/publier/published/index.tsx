@@ -6,13 +6,13 @@ import { useGetActivitiesAdminDraft } from 'src/api/activities/activities.admin.
 import { useGetVillages } from 'src/api/villages/villages.get';
 import SearchField from 'src/components/SearchField';
 import type { Option } from 'src/components/accueil/Filters/FilterSelect';
-import { FilterSelect } from 'src/components/accueil/Filters/FilterSelect';
+// import { FilterSelect } from 'src/components/accueil/Filters/FilterSelect';
 import AllActivitiesAdmin from 'src/components/activities/ActivityCard/activity-admin/AllActivitiesAdmin';
 import BackArrow from 'src/svg/back-arrow.svg';
 
 const Published = () => {
   const [search, setSearch] = useState('');
-  const [selectedVillage, setSelectedVillage] = useState<Option<number> | null>(null);
+  const [selectedVillage] = useState<Option<number> | null>(null);
   const { data, isError, isIdle, isLoading } = useGetActivitiesAdminDraft({ limit: null, isDraft: false, isDisplayed: false });
   const villages = useGetVillages();
   function filterActivitiesByVillage(selectedVillage: Option<number> | null, activities: Activity[]) {
@@ -39,7 +39,7 @@ const Published = () => {
         }}
       >
         <div>
-          <FilterSelect
+          {/* <FilterSelect
             name="Village - Monde"
             onChange={(e: Option<number>) => setSelectedVillage(e)}
             options={villages.data.reduce<Array<Option<number>>>((acc, village, i) => {
@@ -50,9 +50,9 @@ const Published = () => {
               return acc;
             }, [])}
             value={selectedVillage ? selectedVillage.key : 0}
-          />
+          /> */}
         </div>
-        <div style={{ width: '40%' }}>
+        <div style={{ width: '40%', marginTop: 20 }}>
           <SearchField setter={(e) => setSearch(e.currentTarget.value)} />
         </div>
       </div>
