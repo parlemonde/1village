@@ -12,7 +12,7 @@ import { Activity } from '../entities/activity';
 import { Game } from '../entities/game';
 import { Image } from '../entities/image';
 import { UserType } from '../entities/user';
-import { VillagePhase } from '../entities/village';
+import { Village, VillagePhase } from '../entities/village';
 import { getActivities, getActivitiesCommentCount } from '../manager/activity';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { getQueryString } from '../utils';
@@ -116,6 +116,37 @@ activityController.get({ path: '/mascotte', userType: UserType.OBSERVATOR }, asy
   }
 });
 
+activityController.get({ path: '/admin/draft' }, async (req, res) => {
+  const adminUsers = await AppDataSource.query(`
+    SELECT user.id
+    FROM user
+    WHERE user.type IN (0, 1, 2)
+  `);
+
+  if (!req.query.isDisplayed) {
+    const draftActivities = await AppDataSource.getRepository(Activity)
+      .createQueryBuilder('Activity')
+      .where('Activity.status = :status', { status: req.query.status ? Number(getQueryString(req.query.status)) || 0 : undefined })
+      .andWhere('Activity.userId IN (:...userIds)', { userIds: adminUsers.map((u: { id: number }) => u.id) })
+      .orderBy('Activity.updateDate', 'DESC')
+      .limit(req.query.limit ? Number(getQueryString(req.query.limit)) || 200 : undefined)
+      .getMany();
+
+    res.sendJSON(draftActivities);
+  } else {
+    const draftActivities = await AppDataSource.getRepository(Activity)
+      .createQueryBuilder('Activity')
+      .where('Activity.status = :status', { status: req.query.status ? Number(getQueryString(req.query.status)) || 0 : undefined })
+      .andWhere('Activity.isDisplayed = :isDisplayed', { isDisplayed: req.query.isDisplayed ? req.query.isDisplayed === 'true' : false })
+      .andWhere('Activity.userId IN (:...userIds)', { userIds: adminUsers.map((u: { id: number }) => u.id) })
+      .orderBy('Activity.updateDate', 'DESC')
+      .limit(req.query.limit ? Number(getQueryString(req.query.limit)) || 200 : undefined)
+      .getMany();
+
+    res.sendJSON(draftActivities);
+  }
+});
+
 // --- Create an activity ---
 type CreateActivityData = {
   type: number;
@@ -196,15 +227,11 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   }
 
   const villageId = req.user.type <= UserType.MEDIATOR ? data.villageId || req.user.villageId || null : req.user.villageId || null;
-  if (villageId === null) {
-    throw new AppError('Invalid data, missing village Id', ErrorCode.INVALID_DATA);
-  }
 
   // Delete old draft if needed.
   if (data.status === ActivityStatus.PUBLISHED || data.status === ActivityStatus.DRAFT) {
     await AppDataSource.getRepository(Activity).delete({
       userId: req.user.id,
-      villageId,
       type: data.type,
       subType: data.subType ?? IsNull(),
       status: ActivityStatus.DRAFT,
@@ -219,7 +246,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   activity.phase = data.phase || VillagePhase.DISCOVER;
   activity.content = data.content;
   activity.userId = req.user.id;
-  activity.villageId = villageId;
+  activity.villageId = villageId || undefined;
   activity.responseActivityId = data.responseActivityId ?? null;
   activity.responseType = data.responseType ?? null;
   activity.isPinned = data.isPinned || false;
@@ -229,6 +256,81 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
 
   res.sendJSON(activity);
 });
+
+activityController.post(
+  { path: '/publish', userType: UserType.SUPER_ADMIN | UserType.ADMIN | UserType.MEDIATOR },
+  async (req: Request, res: Response) => {
+    if (!req.user) {
+      throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+    }
+
+    const data = req.body;
+
+    const activityParent = await AppDataSource.getRepository(Activity).findOneOrFail({ where: { id: data.activityParentId } });
+
+    const villageIds = data.villages;
+
+    try {
+      if (activityParent.type === 11) {
+        for (const villageId of villageIds) {
+          const activity = new Activity();
+          activity.type = activityParent.type;
+          activity.subType = activityParent.subType;
+          activity.status = ActivityStatus.PUBLISHED;
+          activity.data = activityParent.data;
+          activity.phase = data.phase;
+          activity.content = activityParent.content;
+          activity.userId = activityParent.userId;
+          activity.villageId = villageId;
+          activity.responseActivityId = activityParent.responseActivityId;
+          activity.responseType = activityParent.responseType;
+          activity.isPinned = activityParent.isPinned;
+          activity.displayAsUser = activityParent.displayAsUser;
+          activity.parentActivityId = activityParent.id;
+          activity.publishDate = new Date();
+
+          await AppDataSource.getRepository(Activity).save(activity);
+          await AppDataSource.getRepository(Village).update({ id: villageId }, { anthemId: activity.id });
+        }
+        await AppDataSource.getRepository(Activity).update(
+          { id: data.activityParentId },
+          { status: ActivityStatus.PUBLISHED, isDisplayed: false, publishDate: new Date() },
+        );
+
+        res.sendJSON({ message: 'Votre hymne a été publiée' });
+      } else {
+        for (const villageId of villageIds) {
+          const activity = new Activity();
+          activity.type = activityParent.type;
+          activity.subType = activityParent.subType;
+          activity.status = ActivityStatus.PUBLISHED;
+          activity.data = activityParent.data;
+          activity.phase = data.phase;
+          activity.content = activityParent.content;
+          activity.userId = activityParent.userId;
+          activity.villageId = villageId;
+          activity.responseActivityId = activityParent.responseActivityId;
+          activity.responseType = activityParent.responseType;
+          activity.isPinned = activityParent.isPinned;
+          activity.displayAsUser = activityParent.displayAsUser;
+          activity.parentActivityId = activityParent.id;
+          activity.publishDate = new Date();
+
+          await AppDataSource.getRepository(Activity).save(activity);
+        }
+
+        await AppDataSource.getRepository(Activity).update(
+          { id: data.activityParentId },
+          { status: ActivityStatus.PUBLISHED, isDisplayed: false, publishDate: new Date() },
+        );
+
+        res.sendJSON({ message: 'Votre publication a été publiée' });
+      }
+    } catch (error) {
+      res.sendJSON({ message: 'Une erreur est survenue' });
+    }
+  },
+);
 
 // --- Update activity ---
 type UpdateActivity = {
@@ -465,6 +567,91 @@ activityController.delete({ path: '/:id', userType: UserType.TEACHER }, async (r
   }
   res.status(204).send();
 });
+
+activityController.delete(
+  { path: '/admin/:id', userType: UserType.SUPER_ADMIN | UserType.ADMIN | UserType.MEDIATOR },
+  async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id, 10) || 0;
+    const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id } });
+
+    if (activity === null || req.user === undefined) {
+      res.status(204).send();
+      return;
+    }
+    if (activity.userId !== req.user.id && req.user.type > UserType.ADMIN) {
+      res.status(204).send();
+      return;
+    }
+
+    if (activity.type === 11) {
+      if (activity.status === ActivityStatus.DRAFT) {
+        // No soft delete for drafts.
+        await AppDataSource.getRepository(Activity).delete({ id });
+      } else {
+        await AppDataSource.createQueryBuilder().delete().from(Activity).where('parentActivityId = :id', { id: activity.id }).execute();
+        await AppDataSource.getRepository(Activity).softDelete({ id });
+      }
+    } else {
+      if (activity.status === ActivityStatus.DRAFT) {
+        // No soft delete for drafts.
+        await AppDataSource.getRepository(Activity).delete({ id });
+      } else {
+        await AppDataSource.createQueryBuilder().delete().from(Activity).where('parentActivityId = :id', { id: activity.id }).execute();
+        await AppDataSource.getRepository(Activity).softDelete({ id });
+      }
+    }
+
+    // Mise à jour des villages ayant cet anthemId
+    await AppDataSource.getRepository(Village)
+      .createQueryBuilder()
+      .update(Village)
+      .set({ anthemId: null })
+      .where('anthemId = :id', { id: activity.id })
+      .execute();
+
+    res.status(204).send();
+  },
+);
+
+activityController.get(
+  { path: '/children', userType: UserType.SUPER_ADMIN | UserType.ADMIN | UserType.MEDIATOR },
+  async (req: Request, res: Response) => {
+    const id = req.query.id;
+    const activities = await AppDataSource.getRepository(Activity)
+      .createQueryBuilder('Activity')
+      .where('Activity.parentActivityId = :id', { id })
+      .getMany();
+    res.sendJSON(activities);
+  },
+);
+
+activityController.put(
+  {
+    path: '/admin/:id',
+    userType: UserType.SUPER_ADMIN | UserType.ADMIN | UserType.MEDIATOR,
+  },
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { phase } = req.body;
+
+    try {
+      const activityRepository = AppDataSource.getRepository(Activity);
+      const activity = await activityRepository.findOneBy({ id: Number(id) });
+
+      if (!activity) {
+        return res.status(404).sendJSON({ message: 'Activité non existante' });
+      }
+
+      activity.phase = phase;
+      await activityRepository.save(activity);
+
+      return res.sendJSON({ message: 'Phase updated successfully', activity });
+    } catch (error) {
+      console.error('Error updating phase:', error);
+      return res.status(500).sendJSON({ message: 'Internal Server Error' });
+    }
+  },
+);
 
 // --- Add comment controllers
 activityController.router.use(`/:id${commentController.name}`, commentController.router);

@@ -40,7 +40,9 @@ const AnthemStep4 = () => {
   }
 
   const updateChorus = (chorusLyrics: Syllable[]) => {
-    updateActivity({ data: { ...data, chorusLyrics } });
+    // const newActivity = { ...activity, data: { ...data, chorusLyrics }, status: 1, villageId: 0 };
+    // updateActivity(newActivity);
+    updateActivity({ data: { ...data, chorusLyrics }, status: 1 });
   };
 
   const onNext = () => {

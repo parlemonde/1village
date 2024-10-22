@@ -30,7 +30,7 @@ export class Image implements ImageInterface {
   public village: Village | null;
 
   @Column({ nullable: false })
-  public villageId: number;
+  public villageId: number | undefined;
 
   @ManyToOne(() => Activity, (activity: Activity) => activity.images, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'activityId' })

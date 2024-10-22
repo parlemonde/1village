@@ -101,7 +101,8 @@ const AnthemStep1 = () => {
     setIsLoading(true);
     // [1] Build the verse url
     await buildVerseUrl();
-
+    const updatedActivity = { ...activity, villageId: undefined, phase: 3 };
+    updateActivity(updatedActivity);
     // [2] Save the activity
     save().catch(console.error);
     setIsLoading(false);

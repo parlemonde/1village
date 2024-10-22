@@ -1,17 +1,39 @@
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useQueryClient } from 'react-query';
 import type { Activity } from 'server/entities/activity';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Card, CardHeader, Avatar, CardMedia, CardContent, Typography, Button, CardActions, CircularProgress, Menu, MenuItem } from '@mui/material';
+import { Card, CardHeader, Avatar, CardMedia, CardContent, Typography, Button, CardActions, Menu, MenuItem } from '@mui/material';
 
+import { deleteActivity } from 'src/api/activities/activities.admin.delete';
+import { useGetChildrenActivitiesById } from 'src/api/activities/activities.adminGetChildren';
 import { usePublishActivity } from 'src/api/activities/activities.put';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 import { htmlToText } from 'src/utils';
 
-export default function ActivityCard(activity: Pick<Activity, 'images' | 'content' | 'phase' | 'data' | 'id' | 'status'>) {
+export default function ActivityCard({
+  activity,
+  modifiedDisabled,
+}: {
+  activity: Pick<Activity, 'images' | 'content' | 'phase' | 'data' | 'id' | 'status'>;
+  modifiedDisabled?: boolean;
+}) {
   const publishActivity = usePublishActivity({ activityId: activity.id });
+  const howManyChildren = useGetChildrenActivitiesById({ id: Number(activity.id) });
+  // eslint-disable-next-line
+  // @ts-ignore
+  const publishDate = new Date(activity.publishDate);
+  const formattedDate = new Intl.DateTimeFormat('fr-FR', {
+    year: '2-digit',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(publishDate);
+
+  const subtitle = `Publié le ${formattedDate} dans ${howManyChildren.data?.length} Village-Monde`;
   const queryClient = useQueryClient();
+  const router = useRouter();
   const title: string = activity?.data?.title ? (activity.data.title as string) : '';
   const isImageUrl = activity.content.find((e) => e.type === 'image')?.value;
   const imageUrl: string = isImageUrl ? isImageUrl : 'https://placehold.co/600x400?text=No Picture';
@@ -26,6 +48,20 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+  const handleDelete = () => {
+    deleteActivity(activity.id);
+    queryClient.invalidateQueries({ queryKey: ['activities'] });
+    router.reload();
+    setAnchorEl(null);
+  };
+  const handleModified = () => {
+    if (activity.status === 0) {
+      router.push(`/admin/newportal/publier/prepublish/edit/${activity.id}`);
+    } else {
+      router.push(`/admin/newportal/contenulibre/edit/1/${activity.id}`);
+    }
+    setAnchorEl(null);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -44,7 +80,10 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
             <PelicoSouriant />
           </Avatar>
         }
-        title={title}
+        // eslint-disable-next-line
+        // @ts-ignore
+        title={activity.type === 11 ? 'Hymne' : title}
+        subheader={activity.status === 0 ? subtitle : ''}
         titleTypographyProps={{ variant: 'h6' }}
         sx={{
           // refer to mui content only classname
@@ -73,8 +112,10 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <MenuItem onClick={handleClose}>Modifier</MenuItem>
-              <MenuItem onClick={handleClose}>Supprimer</MenuItem>
+              <MenuItem onClick={handleModified} disabled={modifiedDisabled}>
+                Modifier
+              </MenuItem>
+              <MenuItem onClick={handleDelete}>Supprimer</MenuItem>
             </Menu>
           </>
         }
@@ -99,12 +140,13 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
           {htmlToText(content)}
         </Typography>
       </CardContent>
-      {/* display publish button only if activity is not published yet (status = 1) */}
       {activity.status !== 0 && (
         <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Button size="small" sx={{ border: 1 }} onClick={() => publishActivity.mutate()} disabled={publishActivity.isLoading}>
-            {publishActivity.isLoading ? <CircularProgress /> : 'Publier'}
-          </Button>
+          <Link href={`/admin/newportal/publier/prepublish/${activity.id}`}>
+            <Button size="small" sx={{ border: 1, marginRight: 1 }}>
+              Publier
+            </Button>
+          </Link>
         </CardActions>
       )}
     </Card>

@@ -43,7 +43,11 @@ const phrase = {
 export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete, gameType }: GameCardProps) => {
   const [totalGamesCount, setTotalGamesCount] = useState<number>(0);
   const [availableGamesCount, setAvailableGamesCount] = useState<number>(0);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const { data: countAbleToPlay } = useCountAbleToPlayStandardGame(gameType, activity.villageId);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const { data: countAllStandardGame } = useCountAllStandardGame(gameType, activity.villageId);
   const typeOfGame = TYPE_OF_GAME[gameType];
   const path = `/creer-un-jeu/${typeOfGame}/displayList`;

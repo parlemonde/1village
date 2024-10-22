@@ -9,7 +9,7 @@ const FreeContentSuccess = () => {
       <div style={{ width: '100%', padding: '1rem 1rem 1rem 1rem' }}>
         <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
           <p className="text" style={{ textAlign: 'center' }}>
-            La publication a été crée ! Rendez-vous dans l’espace de publication pour la rendre visible aux classes
+            La publication a été créée ! Rendez-vous dans l’espace de publication pour la rendre visible aux classes
           </p>
           <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
         </div>

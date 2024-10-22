@@ -159,6 +159,13 @@ export const Navigation = (): JSX.Element => {
         disabled: isParent,
       },
       {
+        label: 'Créer une énigme',
+        path: '/creer-une-enigme',
+        icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 2,
+        disabled: isParent,
+      },
+      {
         label: 'Lancer un défi',
         path: '/lancer-un-defi',
         icon: <TargetIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
@@ -169,13 +176,6 @@ export const Navigation = (): JSX.Element => {
         label: 'Jouer ensemble',
         path: '/creer-un-jeu',
         icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-        phase: 2,
-        disabled: isParent,
-      },
-      {
-        label: 'Créer une énigme',
-        path: '/creer-une-enigme',
-        icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 2,
         disabled: isParent,
       },
