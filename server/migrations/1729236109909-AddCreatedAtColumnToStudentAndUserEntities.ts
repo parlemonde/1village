@@ -11,7 +11,7 @@ export class AddCreatedAtColumnToStudentAndUserEntities1729236109909 implements 
         isNullable: true,
       }),
     );
-    await queryRunner.query(`UPDATE "student" SET "createdAt" = NULL WHERE "createdAt" IS NOT NULL`);
+    await queryRunner.query('UPDATE `student` SET `createdAt` = NULL WHERE `createdAt` IS NOT NULL');
     await queryRunner.changeColumn(
       'student',
       'createdAt',
@@ -30,7 +30,7 @@ export class AddCreatedAtColumnToStudentAndUserEntities1729236109909 implements 
         isNullable: true,
       }),
     );
-    await queryRunner.query(`UPDATE "user" SET "createdAt" = NULL WHERE "createdAt" IS NOT NULL`);
+    await queryRunner.query('UPDATE `user` SET `createdAt` = NULL WHERE `createdAt` IS NOT NULL');
     await queryRunner.changeColumn(
       'user',
       'createdAt',
