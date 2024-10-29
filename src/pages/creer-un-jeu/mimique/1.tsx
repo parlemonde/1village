@@ -38,7 +38,7 @@ const MimiqueStep1 = () => {
         signification: '',
         fakeSignification1: '',
         fakeSignification2: '',
-        video: gameConfig[0],
+        video: '',
       },
       selectedPhase: selectedPhase,
       status: ActivityStatus.DRAFT,
