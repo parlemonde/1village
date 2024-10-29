@@ -21,7 +21,7 @@ const MimiqueStep1 = () => {
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const { gameConfig } = React.useContext(GameContext);
-  const labelPresentation = user ? getUserDisplayName(user, false) : '';
+  //const labelPresentation = user ? getUserDisplayName(user, false) : '';
 
   // TODO
   // envoyer l'acitivité
