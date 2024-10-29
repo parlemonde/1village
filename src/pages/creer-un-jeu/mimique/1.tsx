@@ -20,7 +20,7 @@ const MimiqueStep1 = () => {
   const { selectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
-  const { gameConfig } = React.useContext(GameContext);
+  //const { gameConfig } = React.useContext(GameContext);
   //const labelPresentation = user ? getUserDisplayName(user, false) : '';
 
   // TODO
