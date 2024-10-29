@@ -30,7 +30,7 @@ const ExpressionStep5 = () => {
   const { gameConfig } = useContext(GameContext);
 
   const onPublish = async () => {
-    const data: GameDataMonneyOrExpression = {
+    /* const data: GameDataMonneyOrExpression = {
       userId: user?.id || 0,
       villageId: village?.id || 0,
       type: ActivityType.GAME,
@@ -54,10 +54,10 @@ const ExpressionStep5 = () => {
         radio: gameConfig?.[0]?.[1]?.inputs?.[0]?.selectedValue,
       },
       selectedPhase: selectedPhase,
-    };
+    };*/
 
     setIsLoading(true);
-    await postGameDataMonneyOrExpression(data);
+    // await postGameDataMonneyOrExpression(data);
     localStorage.removeItem('gameConfig');
     router.push('/creer-un-jeu/expression/success');
     setIsLoading(false);

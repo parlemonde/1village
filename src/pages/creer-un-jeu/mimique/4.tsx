@@ -30,7 +30,7 @@ const MimiqueStep4 = () => {
   const { gameConfig } = useContext(GameContext);
 
   const onPublish = async () => {
-    const data: GameDataMonneyOrExpression = {
+    /*const data: GameDataMonneyOrExpression = {
       userId: user?.id || 0,
       villageId: village?.id || 0,
       type: ActivityType.GAME,
@@ -48,10 +48,10 @@ const MimiqueStep4 = () => {
         labelPresentation: labelPresentation,
       },
       selectedPhase: selectedPhase,
-    };
+    };*/
 
     setIsLoading(true);
-    await postGameDataMonneyOrExpression(data);
+    //await postGameDataMonneyOrExpression(data);
     localStorage.removeItem('gameConfig');
     router.push('/creer-un-jeu/mimique/success');
     setIsLoading(false);
