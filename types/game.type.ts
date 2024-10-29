@@ -61,11 +61,11 @@ export interface Game {
   userId: number;
   villageId: number | undefined;
   activityId: number;
-  fakeSignification1: string;
-  fakeSignification2: string;
+  fakeSignification1?: string;
+  fakeSignification2?: string;
   origine?: string;
-  signification: string;
-  video: string;
+  signification?: string;
+  video?: string;
 }
 
 export type GamesData = {
@@ -77,12 +77,11 @@ export type GamesData = {
 export type GameData = {
   gameId?: number | null;
   type: GameType;
-  value: string;
   origine?: string;
-  signification: string;
-  fakeSignification1: string;
-  fakeSignification2: string;
-  video: string;
+  signification?: string;
+  fakeSignification1?: string;
+  fakeSignification2?: string;
+  video?: string;
 };
 
 // --- three different mimiques ---
@@ -156,10 +155,11 @@ export type GameDataMonneyOrExpression = {
   villageId: number;
   type: number;
   subType: number;
-  game1: GameDataStep;
-  game2: GameDataStep;
-  game3: GameDataStep;
+  game: GameData;
   selectedPhase: number;
+  status?: number;
+  draftUrl: string;
+  activityId?: number | null;
 };
 export type DataForPlayed = {
   game: StepsTypes;

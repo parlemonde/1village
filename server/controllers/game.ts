@@ -3,6 +3,7 @@ import type { NextFunction, Request, Response } from 'express';
 
 import type { ActivityContent, AnyData } from '../../types/activity.type';
 import { ActivityStatus } from '../../types/activity.type';
+import type { GameData } from '../../types/game.type';
 import { Activity } from '../entities/activity';
 import { Game } from '../entities/game';
 import { GameResponse } from '../entities/gameResponse';
@@ -270,6 +271,17 @@ gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req
   res.sendJSON(GameResponse);
 });
 
+const checkIfUserGameExists = async (data: any, content: ActivityContent, activityId: number) => {
+  const responses = await AppDataSource.getRepository(Activity).find({ where: { id: activityId } });
+  if (responses) {
+    await AppDataSource.createQueryBuilder()
+      .update(Activity)
+      .set({ data: data, content: content })
+      .where('id = :activityId', { activityId })
+      .execute();
+  }
+};
+
 //--- Create a standardised game ---
 
 gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
@@ -279,24 +291,27 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
   }
 
   const data = req.body;
-  const game1 = data.game1;
-  const game2 = data.game2;
-  const game3 = data.game3;
+  const game = data;
 
-  createGame(game1, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
-  createGame(game2, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
-  createGame(game3, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
+  // step 1
+  if (!data.activityId) {
+    const activity = await createActivity(game, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
+    if (activity) {
+      createGame(game as GameData, activity);
+    }
+  }
 
   res.sendStatus(200);
 });
 
-async function createGame(data: ActivityContent[], userId: number, villageId: number, type: number, subType: number, selectedPhase: number) {
+// --- create a activity ---
+async function createActivity(data: ActivityContent[], userId: number, villageId: number, type: number, subType: number, selectedPhase: number) {
   const activity = new Activity();
   activity.type = type;
   activity.subType = subType;
   activity.status = ActivityStatus.PUBLISHED;
   // TODO: Travailler sur le type de data
-  activity.data = data as unknown as AnyData;
+  activity.data.draftUrl;
   activity.phase = selectedPhase;
   activity.content = data;
   activity.userId = userId;
@@ -308,8 +323,23 @@ async function createGame(data: ActivityContent[], userId: number, villageId: nu
   activity.publishDate = new Date();
 
   await AppDataSource.getRepository(Activity).save(activity);
+  return activity;
 }
 
+// --- create a game ---
+async function createGame(data: GameData, activity: Activity) {
+  const game = new Game();
+  game.activityId = activity.id;
+  game.villageId = activity.villageId;
+  game.userId = activity.userId;
+  game.type = activity.subType;
+  game.signification = data.signification;
+  game.fakeSignification1 = data.fakeSignification1;
+  game.fakeSignification2 = data.fakeSignification2;
+  game.origine = data.origine;
+  game.video = data.video;
+  await AppDataSource.getRepository(Game).save(game);
+}
 // --- Get all games standardised by subType ---
 
 gameController.get({ path: '/allStandardGame', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {

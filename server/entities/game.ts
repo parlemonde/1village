@@ -54,17 +54,17 @@ export class Game implements GameInterface {
   public type: number | null;
 
   @Column({ type: 'text' })
-  public fakeSignification1: string;
+  public fakeSignification1?: string;
 
   @Column({ type: 'text' })
-  public fakeSignification2: string;
+  public fakeSignification2?: string;
 
   @Column({ type: 'text' })
   public origine?: string;
 
   @Column({ type: 'text' })
-  public signification: string;
+  public signification?: string;
 
   @Column({ type: 'text' })
-  public video: string;
+  public video?: string;
 }
