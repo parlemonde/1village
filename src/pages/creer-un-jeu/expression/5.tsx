@@ -13,7 +13,7 @@ import { UserContext } from 'src/contexts/userContext';
 //import { VillageContext } from 'src/contexts/villageContext';
 //import { getUserDisplayName } from 'src/utils';
 //import { ActivityType } from 'types/activity.type';
-import type { StepsTypes, GameDataMonneyOrExpression } from 'types/game.type';
+import type { StepsTypes } from 'types/game.type';
 //import { GameType } from 'types/game.type';
 import { UserType } from 'types/user.type';
 
