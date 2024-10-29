@@ -11,7 +11,7 @@ import CreateGame from 'src/components/game/CreateGame';
 import { GameContext } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-import { getUserDisplayName } from 'src/utils';
+//import { getUserDisplayName } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import { GameType, type GameDataMonneyOrExpression } from 'types/game.type';
 
