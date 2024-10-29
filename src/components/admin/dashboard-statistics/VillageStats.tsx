@@ -14,6 +14,8 @@ import styles from './styles/charts.module.css';
 import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
 import { useCountries } from 'src/services/useCountries';
 import { useVillages } from 'src/services/useVillages';
+import { formatDate } from 'src/utils';
+import type { FamiliesWithoutAccount, OneVillageTableRow } from 'types/statistics.type';
 import type { VillageFilter } from 'types/village.type';
 
 const VillageStats = () => {
@@ -22,6 +24,7 @@ const VillageStats = () => {
   const [options, setOptions] = useState<VillageFilter>({ countryIsoCode: '' });
 
   const pelicoMessage = 'Merci de sélectionner un village-monde pour analyser ses statistiques ';
+  const noDataFoundMessage = 'Pas de données pour le Village-Monde sélectionné';
 
   const { countries } = useCountries();
 
@@ -33,13 +36,13 @@ const VillageStats = () => {
     });
   }, [selectedCountry]);
 
-  const [rows, setRows] = React.useState<Array<{ id: string | number; [key: string]: string | boolean | number | React.ReactNode }>>([]);
+  const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
   React.useEffect(() => {
     if (villagesStats.data?.familiesWithoutAccount) {
-      setRows([]);
-      setRows(createRows(villagesStats.data?.familiesWithoutAccount));
+      setFamiliesWithoutAccountRows([]);
+      setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(villagesStats.data?.familiesWithoutAccount));
     }
-  }, [villagesStats.data?.familiesWithoutAccount]);
+  }, [villagesStats.data?.familiesWithoutAccount, villagesStats.data?.floatingAccounts]);
 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
@@ -86,24 +89,15 @@ const VillageStats = () => {
       </div>
     );
   }
-  function createRows(
-    data: Array<{
-      student_id: string | number;
-      student_firstname: string;
-      student_lastname: string;
-      village_name: string;
-      classroom_name: string;
-      classroom_country: string;
-    }>,
-  ): Array<{ id: string | number; [key: string]: string | boolean | number | React.ReactNode }> {
+  function createFamiliesWithoutAccountRows(data: Array<FamiliesWithoutAccount>): Array<OneVillageTableRow> {
     return data.map((row) => {
       return {
-        id: row.student_id, // id is string | number
-        student: `${row.student_firstname} ${row.student_lastname}`, // string
-        vm: row.village_name, // string
-        classroom: row.classroom_name, // string
-        country: row.classroom_country, // string
-        creationDate: 'À venir', // string
+        id: row.student_id,
+        student: `${row.student_firstname} ${row.student_lastname}`,
+        vm: row.village_name,
+        classroom: row.classroom_name,
+        country: row.classroom_country,
+        creationDate: row.student_creation_date ? formatDate(row.student_creation_date) : 'Donnée non disponible',
       };
     });
   }
@@ -141,10 +135,10 @@ const VillageStats = () => {
           <>
             <OneVillageTable
               admin={false}
-              emptyPlaceholder={<p>{pelicoMessage}</p>}
-              data={rows}
+              emptyPlaceholder={<p>{noDataFoundMessage}</p>}
+              data={familiesWithoutAccountRows}
               columns={FamiliesWithoutAccountHeaders}
-              titleContent={`À surveiller : comptes non créés (${rows.length})`}
+              titleContent={`À surveiller : comptes non créés (${familiesWithoutAccountRows.length})`}
             />
             <Box
               className={styles.classroomStats}
