@@ -47,6 +47,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   const [gameType, setGameType] = useState<GameType>(GameType.MIMIC);
   const [gameConfig, setGameConfig] = useState<Array<StepsTypes[]>>(GAME_FIELDS_CONFIG[gameType].steps);
   const inputSelectedValue = gameConfig[0]?.[0]?.inputs?.[0]?.selectedValue;
+  const [activityId, setActivityId] = useState<GameType>(GameType.MIMIC);
 
   const updateGameType = (type: GameType) => {
     setGameType(type);

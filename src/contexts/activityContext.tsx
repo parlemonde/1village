@@ -1,8 +1,7 @@
+import { Card, CircularProgress } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useQueryClient } from 'react-query';
-
-import { Card, CircularProgress } from '@mui/material';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
@@ -34,6 +33,8 @@ interface ActivityContextValue {
   save(publish?: boolean): Promise<ActivitySaveResponse>;
   createActivityIfNotExist(type: number, selectedPhase: number, subType?: number, initialData?: AnyData, isVillageActivity?: boolean): Promise<void>;
   setDraft(draft: Activity | null): void;
+  activityId: number | null;
+  setActivityId(activityId: number): void;
 }
 
 export const ActivityContext = React.createContext<ActivityContextValue>({
@@ -46,6 +47,8 @@ export const ActivityContext = React.createContext<ActivityContextValue>({
   save: async () => ({ success: false }),
   createActivityIfNotExist: async () => {},
   setDraft: () => {},
+  activityId: null,
+  setActivityId: () => {},
 });
 
 function getInitialActivity(): Activity | null {
@@ -73,6 +76,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
   const [draft, setDraft] = React.useState<Activity | null>(null);
   const [draftStep, setDraftStep] = React.useState(0);
   const draftStepTimeout = React.useRef<number | undefined>(undefined);
+  const [activityId, setActivityId] = React.useState();
 
   const currentActivityId = activity === null ? null : activity.id;
 
@@ -390,8 +394,10 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
       createActivityIfNotExist,
       save,
       setDraft,
+      activityId,
+      setActivityId,
     }),
-    [activity, setActivity, updateActivity, createNewActivity, addContent, deleteContent, createActivityIfNotExist, save],
+    [activityId, setActivityId, activity, setActivity, updateActivity, createNewActivity, addContent, deleteContent, createActivityIfNotExist, save],
   );
 
   return (

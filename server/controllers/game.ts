@@ -271,16 +271,10 @@ gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req
   res.sendJSON(GameResponse);
 });
 
-const checkIfUserGameExists = async (data: any, content: ActivityContent, activityId: number) => {
-  const responses = await AppDataSource.getRepository(Activity).find({ where: { id: activityId } });
-  if (responses) {
-    await AppDataSource.createQueryBuilder()
-      .update(Activity)
-      .set({ data: data, content: content })
-      .where('id = :activityId', { activityId })
-      .execute();
-  }
-};
+async function getActivityById(activityId: number) {
+  const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id: activityId } });
+  return activity;
+}
 
 //--- Create a standardised game ---
 
@@ -291,17 +285,22 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
   }
 
   const data = req.body;
-  const game = data;
-
+  let activityId = data.activityId;
   // step 1
   if (!data.activityId) {
-    const activity = await createActivity(game, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
+    const activity = await createActivity(data, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
     if (activity) {
-      createGame(game as GameData, activity);
+      activityId = activity.id;
+      createGame(data.game as GameData, activity);
+    }
+  } else {
+    const activity = await getActivityById(data.activityId);
+    if (activity) {
+      activityId = activity.id;
+      createGame(data.game as GameData, activity);
     }
   }
-
-  res.sendStatus(200);
+  res.sendJSON(activityId);
 });
 
 // --- create a activity ---
@@ -311,6 +310,7 @@ async function createActivity(data: ActivityContent[], userId: number, villageId
   activity.subType = subType;
   activity.status = ActivityStatus.PUBLISHED;
   // TODO: Travailler sur le type de data
+  activity.data = data as unknown as AnyData;
   activity.data.draftUrl;
   activity.phase = selectedPhase;
   activity.content = data;
@@ -322,8 +322,8 @@ async function createActivity(data: ActivityContent[], userId: number, villageId
   activity.displayAsUser = false;
   activity.publishDate = new Date();
 
-  await AppDataSource.getRepository(Activity).save(activity);
-  return activity;
+  const result = await AppDataSource.getRepository(Activity).save(activity);
+  return result;
 }
 
 // --- create a game ---
