@@ -76,7 +76,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
   const [draft, setDraft] = React.useState<Activity | null>(null);
   const [draftStep, setDraftStep] = React.useState(0);
   const draftStepTimeout = React.useRef<number | undefined>(undefined);
-  const [activityId, setActivityId] = React.useState();
+  const [activityId, setActivityId] = React.useState<number | null>(null);
 
   const currentActivityId = activity === null ? null : activity.id;
 
@@ -397,7 +397,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
       activityId,
       setActivityId,
     }),
-    [activityId, setActivityId, activity, setActivity, updateActivity, createNewActivity, addContent, deleteContent, createActivityIfNotExist, save],
+    [activity, setActivity, updateActivity, createNewActivity, addContent, deleteContent, createActivityIfNotExist, save, activityId, setActivityId],
   );
 
   return (
