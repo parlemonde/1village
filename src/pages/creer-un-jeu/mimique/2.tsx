@@ -21,7 +21,7 @@ const MimiqueStep2 = () => {
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const { gameConfig } = useContext(GameContext);
-  const { activityId, setActivityId } = useContext(ActivityContext);
+  const { activityId } = useContext(ActivityContext);
 
   const onNext = async () => {
     const data: GameDataMonneyOrExpression = {

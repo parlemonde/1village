@@ -27,7 +27,7 @@ const MimiqueStep1 = () => {
   // TODO
   // envoyer l'acitivité
   const { gameConfig } = useContext(GameContext);
-  const { activityId, setActivityId } = useContext(ActivityContext);
+  const { setActivityId } = useContext(ActivityContext);
 
   const onNext = async () => {
     const data: GameDataMonneyOrExpression = {
