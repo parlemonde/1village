@@ -17,17 +17,9 @@ export class PhaseHistory {
   })
   phase: VillagePhase;
 
-  @CreateDateColumn({
-    type: 'datetime',
-    precision: 6,
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
+  @CreateDateColumn({ type: 'datetime' })
   public startingOn: Date;
 
-  @DeleteDateColumn({
-    type: 'datetime',
-    precision: 6,
-    nullable: true,
-  })
+  @DeleteDateColumn({ type: 'datetime' })
   public endingOn: Date;
 }

@@ -52,7 +52,8 @@ const Phases = () => {
 
   const handleHeaderCheckboxChange = (phase: VillagePhase, checked: boolean) => {
     for (const key in villagePhases) {
-      if (villagePhases[key] <= phase) {
+      const village = villages.data.find((vil) => vil.id == +key);
+      if (villagePhases[key] <= phase && village.activePhase < phase) {
         villagePhases[key] = VillagePhase.DISCOVER;
         setVillagePhases((prevState) => ({
           ...prevState,
