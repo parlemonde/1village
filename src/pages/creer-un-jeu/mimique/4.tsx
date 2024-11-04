@@ -3,7 +3,6 @@ import React, { useContext } from 'react';
 
 import { Button, Tooltip, Backdrop, CircularProgress } from '@mui/material';
 
-//import { postGameDataMonneyOrExpression } from 'src/api/game/game.post';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
@@ -11,47 +10,19 @@ import CreateGame from 'src/components/game/CreateGame';
 import Previsualisation from 'src/components/game/Previsualisation';
 import { GameContext } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
-//import { VillageContext } from 'src/contexts/villageContext';
-//import { getUserDisplayName } from 'src/utils';
-//import { ActivityType } from 'types/activity.type';
 import type { StepsTypes } from 'types/game.type';
-//import { GameType } from 'types/game.type';
 import { UserType } from 'types/user.type';
 
 const MimiqueStep4 = () => {
   const router = useRouter();
   const { user } = React.useContext(UserContext);
-  //const { village } = React.useContext(VillageContext);
   const isObservator = user?.type === UserType.OBSERVATOR;
-  //const { selectedPhase } = React.useContext(VillageContext);
-  //const labelPresentation = user ? getUserDisplayName(user, false) : '';
   const [isLoading, setIsLoading] = React.useState(false);
 
   const { gameConfig } = useContext(GameContext);
 
   const onPublish = async () => {
-    /*const data: GameDataMonneyOrExpression = {
-      userId: user?.id || 0,
-      villageId: village?.id || 0,
-      type: ActivityType.GAME,
-      subType: GameType.MIMIC,
-      game1: {
-        game: gameConfig[0],
-        labelPresentation: labelPresentation,
-      },
-      game2: {
-        game: gameConfig[1],
-        labelPresentation: labelPresentation,
-      },
-      game3: {
-        game: gameConfig[2],
-        labelPresentation: labelPresentation,
-      },
-      selectedPhase: selectedPhase,
-    };*/
-
     setIsLoading(true);
-    //await postGameDataMonneyOrExpression(data);
     localStorage.removeItem('gameConfig');
     router.push('/creer-un-jeu/mimique/success');
     setIsLoading(false);
