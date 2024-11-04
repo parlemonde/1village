@@ -1,17 +1,20 @@
 import { useSnackbar } from 'notistack';
 import React, { useState, useEffect } from 'react';
 
+import { softDeletePhaseHistory } from 'src/api/phaseHistory/phaseHistory.delete';
+import { postPhaseHistory } from 'src/api/phaseHistory/phaseHistory.post';
 import { useUpdateVillages } from 'src/api/villages/villages.put';
 import { Modal } from 'src/components/Modal';
 import type { VillagePhase } from 'types/village.type';
 
 interface SavePhasesModalProps {
   villagePhases: { [villageId: number]: VillagePhase };
+  goToNextStep: { [villageId: number]: boolean };
   isModalOpen: boolean;
   setIsModalOpen: (val: boolean) => void;
 }
 
-export function SavePhasesModal({ villagePhases, isModalOpen, setIsModalOpen }: SavePhasesModalProps) {
+export function SavePhasesModal({ villagePhases, goToNextStep, isModalOpen, setIsModalOpen }: SavePhasesModalProps) {
   const [isModalLoading, setIsModalLoading] = useState(false);
   const updateVillages = useUpdateVillages();
   const { enqueueSnackbar } = useSnackbar();
@@ -20,9 +23,28 @@ export function SavePhasesModal({ villagePhases, isModalOpen, setIsModalOpen }: 
     const promises = [];
     for (const key in villagePhases) {
       const villageId: number = +key;
-      promises.push(updateVillages.mutateAsync({ id: villageId, villageData: { activePhase: villagePhases[villageId] } }));
+      if (goToNextStep[villageId]) {
+        const updatedPhase = Math.min(villagePhases[villageId] + 1, 3);
+        promises.push(
+          updateVillages.mutateAsync({
+            id: villageId,
+            villageData: { activePhase: updatedPhase },
+          }),
+        );
+        promises.push(
+          postPhaseHistory({
+            villageId,
+            phase: updatedPhase,
+          }),
+        );
+        promises.push(softDeletePhaseHistory(villageId, updatedPhase - 1));
+      }
     }
-    await Promise.allSettled(promises);
+    try {
+      await Promise.allSettled(promises);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   useEffect(() => {
@@ -63,7 +85,10 @@ export function SavePhasesModal({ villagePhases, isModalOpen, setIsModalOpen }: 
       ariaDescribedBy="Modal de validation des phases"
     >
       <div id="brouillon-desc" style={{ padding: '0.5rem' }}>
-        <p>Les modifications que tu souhaites apporter vont modifier les phases actives.</p>
+        <p>
+          Les modifications que tu souhaites apporter vont modifier les phases actives. <br />
+          Attention, faire passer un village à l&apos;étape suivante est un choix définitif.
+        </p>
       </div>
     </Modal>
   );

@@ -9,6 +9,7 @@ import { Classroom } from './classroom';
 import { Game } from './game';
 import { GameResponse } from './gameResponse';
 import { Image } from './image';
+import { PhaseHistory } from './phaseHistory';
 import { User } from './user';
 
 export { VillagePhase };
@@ -38,6 +39,9 @@ export class Village implements VillageInterface {
     default: VillagePhase.DISCOVER,
   })
   public activePhase: number;
+
+  @OneToMany(() => PhaseHistory, (phaseHistory) => phaseHistory.village, { eager: true })
+  public phaseHistories: PhaseHistory[];
 
   @OneToOne(() => Activity, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'anthemId' })

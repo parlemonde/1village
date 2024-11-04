@@ -3,8 +3,10 @@ import React from 'react';
 import type { QueryFunction } from 'react-query';
 import { useQueryClient, useQuery } from 'react-query';
 
+import { postPhaseHistory } from 'src/api/phaseHistory/phaseHistory.post';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Village, VillageFilter } from 'types/village.type';
+import { VillagePhase } from 'types/village.type';
 
 export const useVillages = (options?: VillageFilter): { villages: Village[]; setVillages(newVillages: Village[]): void } => {
   const queryClient = useQueryClient();
@@ -64,6 +66,10 @@ export const useVillageRequests = () => {
           name: newVillage.name,
           countries: newVillage.countries.map((c) => c.isoCode),
         },
+      });
+      await postPhaseHistory({
+        villageId: response.data.id,
+        phase: VillagePhase.DISCOVER,
       });
       if (response.error) {
         enqueueSnackbar('Une erreur est survenue...', {

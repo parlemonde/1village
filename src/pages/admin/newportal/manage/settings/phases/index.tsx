@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 
-import { Button, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Button, Checkbox, Paper, Step, StepLabel, Stepper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 import { useGetVillages } from 'src/api/villages/villages.get';
 import { SavePhasesModal } from 'src/components/admin/manage/settings/SavePhasesModal';
@@ -15,17 +15,23 @@ import { VillagePhase } from 'types/village.type';
 const Phases = () => {
   const { user } = React.useContext(UserContext);
   const hasAccess = user !== null && user.type in [UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN];
-  const [villagePhases, setVillagePhases] = useState<{ [villageId: number]: VillagePhase }>({});
   const villages = useGetVillages();
+  const [villagePhases, setVillagePhases] = useState<{ [villageId: number]: VillagePhase }>({});
+  const [goToNextStep, setGoToNextStep] = useState<{ [villageId: number]: boolean }>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
+  const steps = ['Discover', 'Exchange', 'Imagine'];
   useEffect(() => {
     if (villages.data) {
-      const newVillagePhases: { [villageId: number]: VillagePhase } = {};
       villages.data.forEach((village: Village) => {
-        newVillagePhases[village.id] = village.activePhase;
+        setVillagePhases((prevState) => ({
+          ...prevState,
+          [village.id]: village.activePhase,
+        }));
+        setGoToNextStep({
+          [village.id]: false,
+        });
       });
-      setVillagePhases(newVillagePhases);
+      setGoToNextStep(villages.data.reduce((acc, village) => ({ ...acc, [village.id]: false }), {}));
     }
   }, [villages.data]);
 
@@ -35,29 +41,19 @@ const Phases = () => {
   if (villages.isError) return <p>Error!</p>;
   if (villages.isLoading || villages.isIdle) return <p>Loading...</p>;
 
-  const handleCheckboxChange = (villageId: number, phase: VillagePhase, checked: boolean) => {
-    if (phase === VillagePhase.EXCHANGE || phase === VillagePhase.IMAGINE) {
-      setVillagePhases((prevState) => ({
-        ...prevState,
-        [villageId]: checked ? phase : phase - 1,
-      }));
-    } else {
-      setVillagePhases((prevState) => ({
-        ...prevState,
-        [villageId]: 1,
-      }));
-    }
+  const handleCheckboxChange = (villageId: number) => {
+    setGoToNextStep((prevState) => ({
+      ...prevState,
+      [villageId]: !prevState[villageId],
+    }));
   };
 
-  const handleHeaderCheckboxChange = (phase: VillagePhase, checked: boolean) => {
+  const handleHeaderCheckboxChange = (checked: boolean) => {
     for (const key in villagePhases) {
-      if (villagePhases[key] <= phase) {
-        villagePhases[key] = VillagePhase.DISCOVER;
-        setVillagePhases((prevState) => ({
-          ...prevState,
-          [key]: checked ? phase : phase - 1,
-        }));
-      }
+      setGoToNextStep((prevState) => ({
+        ...prevState,
+        [key]: checked,
+      }));
     }
   };
 
@@ -74,10 +70,10 @@ const Phases = () => {
         </div>
       </Link>
       <div style={{ textAlign: 'right', marginTop: 30, marginBottom: 30 }}>
-        <Button variant="outlined" onClick={handleLogCheckboxStates}>
-          Enregistrer les paramètres
+        <Button variant="outlined" disabled={Object.keys(goToNextStep).every((key) => !goToNextStep[+key])} onClick={handleLogCheckboxStates}>
+          Passer à l&apos;étape suivante
         </Button>
-        <SavePhasesModal villagePhases={villagePhases} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+        <SavePhasesModal villagePhases={villagePhases} goToNextStep={goToNextStep} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
       </div>
       <div style={{ overflowX: 'auto' }}>
         <Paper>
@@ -108,40 +104,36 @@ const Phases = () => {
                 }}
               >
                 <TableRow>
+                  <TableCell align="center">
+                    <Checkbox
+                      checked={Object.keys(goToNextStep).every((key) => goToNextStep[+key])}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleHeaderCheckboxChange(event.target.checked)}
+                    />
+                  </TableCell>
                   <TableCell align="center">Village-Monde</TableCell>
-                  <TableCell align="left">Phase 1</TableCell>
-                  <TableCell align="left">
-                    <Checkbox
-                      checked={Object.values(villagePhases).every((phase) => phase >= VillagePhase.EXCHANGE)}
-                      onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                        handleHeaderCheckboxChange(VillagePhase.EXCHANGE, event.target.checked)
-                      }
-                    />
-                    Phase 2
-                  </TableCell>
-                  <TableCell align="left">
-                    <Checkbox
-                      checked={Object.values(villagePhases).every((phase) => phase === VillagePhase.IMAGINE)}
-                      onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                        handleHeaderCheckboxChange(VillagePhase.IMAGINE, event.target.checked)
-                      }
-                    />
-                    Phase 3
-                  </TableCell>
+                  <TableCell align="center">Phases</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {villages.data.map((village: Village) => (
                   <TableRow key={village.id}>
+                    <TableCell align="center">
+                      <Checkbox
+                        disabled={villagePhases[village.id] == VillagePhase.IMAGINE}
+                        checked={!!goToNextStep[village.id]}
+                        onChange={() => handleCheckboxChange(village.id)}
+                      />
+                    </TableCell>
                     <TableCell align="center">{village.name}</TableCell>
-                    {[1, 2, 3].map((phase) => (
-                      <TableCell align="left" key={phase}>
-                        <Checkbox
-                          checked={villagePhases[village.id] >= phase ? true : false}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleCheckboxChange(village.id, phase, event.target.checked)}
-                        />
-                      </TableCell>
-                    ))}
+                    <TableCell align="center">
+                      <Stepper activeStep={village.activePhase} alternativeLabel>
+                        {steps.map((label) => (
+                          <Step key={label}>
+                            <StepLabel>{label}</StepLabel>
+                          </Step>
+                        ))}
+                      </Stepper>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
