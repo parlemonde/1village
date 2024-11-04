@@ -1,7 +1,8 @@
-import { Card, CircularProgress } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useQueryClient } from 'react-query';
+
+import { Card, CircularProgress } from '@mui/material';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
