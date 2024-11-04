@@ -293,6 +293,7 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
       activityId = activity.id;
       createGame(data.game as GameData, activity);
     }
+    // step 2 & 3
   } else {
     const activity = await getActivityById(data.activityId);
     if (activity) {
