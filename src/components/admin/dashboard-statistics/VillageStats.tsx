@@ -3,28 +3,27 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import Typography from '@mui/material/Typography';
 
 import { OneVillageTable } from '../OneVillageTable';
+import TabPanel from './TabPanel';
 import StatsCard from './cards/StatsCard/StatsCard';
 import CountriesDropdown from './filters/CountriesDropdown';
 import VillageDropdown from './filters/VillageDropdown';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
+import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
+import { FamiliesWithoutAccountHeaders } from './utils/tableHeaders';
 import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
 import { useCountries } from 'src/services/useCountries';
 import { useVillages } from 'src/services/useVillages';
-import { formatDate } from 'src/utils';
-import type { FamiliesWithoutAccount, OneVillageTableRow } from 'types/statistics.type';
+import type { OneVillageTableRow } from 'types/statistics.type';
 import type { VillageFilter } from 'types/village.type';
 
 const VillageStats = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [selectedVillage, setSelectedVillage] = useState<string>('');
   const [options, setOptions] = useState<VillageFilter>({ countryIsoCode: '' });
-
-  const pelicoMessage = 'Merci de sélectionner un village-monde pour analyser ses statistiques ';
-  const noDataFoundMessage = 'Pas de données pour le Village-Monde sélectionné';
+  const [value, setValue] = React.useState(0);
 
   const { countries } = useCountries();
 
@@ -39,10 +38,9 @@ const VillageStats = () => {
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
   React.useEffect(() => {
     if (villagesStats.data?.familiesWithoutAccount) {
-      setFamiliesWithoutAccountRows([]);
       setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(villagesStats.data?.familiesWithoutAccount));
     }
-  }, [villagesStats.data?.familiesWithoutAccount, villagesStats.data?.floatingAccounts]);
+  }, [villagesStats.data?.familiesWithoutAccount]);
 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
@@ -53,54 +51,12 @@ const VillageStats = () => {
     setSelectedVillage(village);
   };
 
-  interface TabPanelProps {
-    children?: React.ReactNode;
-    index: number;
-    value: number;
-  }
-
-  function a11yProps(index: number) {
-    return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
-    };
-  }
-  const [value, setValue] = React.useState(0);
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  const FamiliesWithoutAccountHeaders = [
-    { key: 'student', label: 'Nom Prénom Enfant', sortable: true },
-    { key: 'vm', label: 'Village-Monde', sortable: true },
-    { key: 'classroom', label: 'Classe', sortable: true },
-    { key: 'country', label: 'Pays', sortable: true },
-    { key: 'creationDate', label: 'Date de création identifiant', sortable: true },
-  ];
-  function CustomTabPanel(props: TabPanelProps) {
-    const { children, value, index, ...other } = props;
 
-    return (
-      <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other}>
-        {value === index && (
-          <Box sx={{ p: 0 }}>
-            <Typography>{children}</Typography>
-          </Box>
-        )}
-      </div>
-    );
-  }
-  function createFamiliesWithoutAccountRows(data: Array<FamiliesWithoutAccount>): Array<OneVillageTableRow> {
-    return data.map((row) => {
-      return {
-        id: row.student_id,
-        student: `${row.student_firstname} ${row.student_lastname}`,
-        vm: row.village_name,
-        classroom: row.classroom_name,
-        country: row.classroom_country,
-        creationDate: row.student_creation_date ? formatDate(row.student_creation_date) : 'Donnée non disponible',
-      };
-    });
-  }
+  const pelicoMessage = 'Merci de sélectionner un village-monde pour analyser ses statistiques ';
+  const noDataFoundMessage = 'Pas de données pour le Village-Monde sélectionné';
   return (
     <>
       <Box
@@ -122,13 +78,13 @@ const VillageStats = () => {
         </div>
       </Box>
       <Tabs value={value} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
-        <Tab label="En classe" {...a11yProps(0)} />
-        <Tab label="En famille" {...a11yProps(1)} />
+        <Tab label="En classe" />
+        <Tab label="En famille" />
       </Tabs>
-      <CustomTabPanel value={value} index={0}>
+      <TabPanel value={value} index={0}>
         <p>Statistiques - En classe</p>
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
         {!selectedVillage ? (
           <PelicoCard message={pelicoMessage} />
         ) : (
@@ -157,7 +113,7 @@ const VillageStats = () => {
             </Box>
           </>
         )}
-      </CustomTabPanel>
+      </TabPanel>
     </>
   );
 };
