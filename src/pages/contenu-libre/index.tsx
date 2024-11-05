@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -16,7 +17,7 @@ const ContenuLibre = () => {
   const { user } = React.useContext(UserContext);
   const { selectedPhase } = React.useContext(VillageContext);
 
-  const isModerator = user !== null && user.type <= UserType.MEDIATOR;
+  const isModerator = user !== null && user.type <= UserType.TEACHER;
 
   const onNext = () => {
     const success = createNewActivity(ActivityType.CONTENU_LIBRE, selectedPhase);
