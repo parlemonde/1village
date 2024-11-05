@@ -215,6 +215,15 @@ export const Navigation = (): JSX.Element => {
         phase: 3,
         disabled: firstStoryCreated === false || isParent,
       },
+      ...(isTeacher
+        ? [
+            {
+              ...FREE_CONTENT,
+              phase: 3,
+              disabled: false,
+            },
+          ]
+        : []),
     ],
     [firstStoryCreated, mascotteActivity, village, isTeacher, isParent],
   );
