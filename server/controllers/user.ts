@@ -305,6 +305,7 @@ type EditUserData = {
   postalCode?: string;
   address?: string;
   avatar?: string;
+  createdAt?: string;
   displayName?: string;
   type?: UserType;
   villageId?: number | null;
@@ -331,6 +332,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
     address: { type: 'string', nullable: true },
     avatar: { type: 'string', nullable: true },
     displayName: { type: 'string', nullable: true },
+    createdAt: { type: 'string', nullable: true },
     type: {
       type: 'number',
       nullable: true,
