@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -17,6 +18,7 @@ const ContenuLibre = () => {
   const { selectedPhase } = React.useContext(VillageContext);
 
   const isModerator = user !== null && user.type <= UserType.MEDIATOR;
+  const isTeacher = user !== null && user.type === UserType.TEACHER;
 
   const onNext = () => {
     const success = createNewActivity(ActivityType.CONTENU_LIBRE, selectedPhase);
@@ -25,7 +27,7 @@ const ContenuLibre = () => {
     }
   };
 
-  if (!isModerator) {
+  if (!isModerator && !isTeacher) {
     return <h1>Vous n&apos;avez pas accès à cette page, vous devez être modérateur.</h1>;
   }
 
