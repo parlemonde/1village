@@ -25,7 +25,7 @@ export const PELICO_USER: User = {
     isoCode: 'FR',
     name: 'France',
   },
-  createdAt: new Date(),
+  createdAt: '',
   displayName: null,
   email: '',
   firstLogin: 0,

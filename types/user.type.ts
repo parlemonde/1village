@@ -29,7 +29,7 @@ export interface User {
   city: string;
   postalCode: string;
   address: string;
-  createdAt: Date;
+  createdAt: string;
   position: {
     lat: number;
     lng: number;
