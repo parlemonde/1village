@@ -83,10 +83,7 @@ export function SavePhasesModal({ villagesToUpdate, isModalOpen, setIsModalOpen 
       ariaDescribedBy="Modal de validation des phases"
     >
       <div id="brouillon-desc" style={{ padding: '0.5rem' }}>
-        <p>
-          Les modifications que tu souhaites apporter vont modifier les phases actives. <br />
-          Attention, faire passer un village à l&apos;étape suivante est un choix définitif.
-        </p>
+        <p>Les modifications que tu souhaites apporter vont modifier les phases actives.</p>
       </div>
     </Modal>
   );
