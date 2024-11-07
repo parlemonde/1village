@@ -38,7 +38,7 @@ function getAppDataSource(): DataSource {
     entities: [path.join(__dirname, '../entities/*.js')],
     migrations: [path.join(__dirname, '../migrations/*.js')],
     subscribers: [],
-    synchronize: true,
+    synchronize: false,
     ...connectionOptions,
   });
 }

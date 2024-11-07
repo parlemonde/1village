@@ -12,7 +12,7 @@ interface PhaseDropdownProps {
 }
 
 export default function PhaseDropdown({ onPhaseChange }: PhaseDropdownProps) {
-  const [phase, setPhase] = React.useState('4');
+  const [phase, setPhase] = React.useState('0');
 
   const handleChange = (event: SelectChangeEvent) => {
     const selectedPhase = event.target.value as string;
@@ -25,7 +25,7 @@ export default function PhaseDropdown({ onPhaseChange }: PhaseDropdownProps) {
       <FormControl fullWidth size="small">
         <InputLabel id="phase-menu-select">Phase</InputLabel>
         <Select labelId="phase-menu-select" id="phase-menu" value={phase} label="Phase" onChange={handleChange}>
-          <MenuItem value={4} selected>
+          <MenuItem value={0} selected>
             Toutes les phases
           </MenuItem>
           <MenuItem value={1}>Phase 1</MenuItem>

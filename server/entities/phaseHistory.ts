@@ -9,7 +9,7 @@ export class PhaseHistory {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @ManyToOne(() => Village, (village) => village.phaseHistories)
+  @ManyToOne(() => Village, (village) => village.phaseHistories, { onDelete: 'CASCADE' })
   village: Village;
 
   @Column({

@@ -9,12 +9,11 @@ import type { VillagePhase } from 'types/village.type';
 
 interface SavePhasesModalProps {
   villagePhases: { [villageId: number]: VillagePhase };
-  goToNextStep: { [villageId: number]: boolean };
   isModalOpen: boolean;
   setIsModalOpen: (val: boolean) => void;
 }
 
-export function SavePhasesModal({ villagePhases, goToNextStep, isModalOpen, setIsModalOpen }: SavePhasesModalProps) {
+export function SavePhasesModal({ villagePhases, isModalOpen, setIsModalOpen }: SavePhasesModalProps) {
   const [isModalLoading, setIsModalLoading] = useState(false);
   const updateVillages = useUpdateVillages();
   const { enqueueSnackbar } = useSnackbar();
@@ -23,22 +22,20 @@ export function SavePhasesModal({ villagePhases, goToNextStep, isModalOpen, setI
     const promises = [];
     for (const key in villagePhases) {
       const villageId: number = +key;
-      if (goToNextStep[villageId]) {
-        const updatedPhase = Math.min(villagePhases[villageId] + 1, 3);
-        promises.push(
-          updateVillages.mutateAsync({
-            id: villageId,
-            villageData: { activePhase: updatedPhase },
-          }),
-        );
-        promises.push(
-          postPhaseHistory({
-            villageId,
-            phase: updatedPhase,
-          }),
-        );
-        promises.push(softDeletePhaseHistory(villageId, updatedPhase - 1));
-      }
+      const updatedPhase = Math.min(villagePhases[villageId], 3);
+      promises.push(
+        updateVillages.mutateAsync({
+          id: villageId,
+          villageData: { activePhase: updatedPhase },
+        }),
+      );
+      promises.push(
+        postPhaseHistory({
+          villageId,
+          phase: updatedPhase,
+        }),
+      );
+      promises.push(softDeletePhaseHistory(villageId, updatedPhase - 1));
     }
     try {
       await Promise.allSettled(promises);
@@ -85,10 +82,7 @@ export function SavePhasesModal({ villagePhases, goToNextStep, isModalOpen, setI
       ariaDescribedBy="Modal de validation des phases"
     >
       <div id="brouillon-desc" style={{ padding: '0.5rem' }}>
-        <p>
-          Les modifications que tu souhaites apporter vont modifier les phases actives. <br />
-          Attention, faire passer un village à l&apos;étape suivante est un choix définitif.
-        </p>
+        <p>Les modifications que tu souhaites apporter vont modifier les phases actives.</p>
       </div>
     </Modal>
   );
