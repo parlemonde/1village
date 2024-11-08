@@ -97,7 +97,7 @@ const MaClasse = () => {
     setDeleteIndex({ index: -1, isDraft: false });
   };
 
-  const deleteVideo = (id: number) => async () => {
+  const deleteVideo = async (id: number) => {
     const response = await axiosRequest({
       method: 'DELETE',
       url: `/videos/${id}`,

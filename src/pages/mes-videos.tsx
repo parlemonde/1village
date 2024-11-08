@@ -17,19 +17,15 @@ const MesVideos = () => {
   const { videos } = useVideos();
   const [selectedVideo, setSelectedVideo] = React.useState<Video | null>(null);
 
-  const deleteVideo = (id: number) => async () => {
+  const deleteVideo = async (id: number) => {
     const response = await axiosRequest({
       method: 'DELETE',
       url: `/videos/${id}`,
     });
     if (response.error) {
-      enqueueSnackbar('Une erreur est survenue...', {
-        variant: 'error',
-      });
+      enqueueSnackbar('Une erreur est survenue...', { variant: 'error' });
     } else {
-      enqueueSnackbar('Vidéo supprimée avec succès !', {
-        variant: 'success',
-      });
+      enqueueSnackbar('Vidéo supprimée avec succès !', { variant: 'success' });
       queryClient.invalidateQueries('videos');
     }
   };
