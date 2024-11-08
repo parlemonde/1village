@@ -51,9 +51,15 @@ export const ThirdPhase = () => {
           <>
             <div
               id="new-user-desc"
-              style={{ minHeight: '15rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginTop: '2rem' }}
+              style={{ minHeight: '15rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}
             >
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem' }}>
+              <div>
+                {textToDisplay}
+                <a href={urlForm} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: '#4c3ed9' }}>
+                  {textForUrl}
+                </a>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginTop: '2rem' }}>
                 <div>
                   <p>{'Si vous voulez poursuivre les échanges avec vos pélicopains, retournez sur la phase 2'}</p>
                   <Button
@@ -97,13 +103,6 @@ export const ThirdPhase = () => {
                     Poursuivre sur la phase 3
                   </Button>
                 </div>
-              </div>
-
-              <div style={{ marginTop: '2rem' }}>
-                {textToDisplay}
-                <a href={urlForm} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: '#4c3ed9' }}>
-                  {textForUrl}
-                </a>
               </div>
             </div>
           </>
