@@ -52,7 +52,7 @@ export const SecondPhase = () => {
               style={{ minHeight: '15rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}
             >
               <div>
-                Avant de passer à la phase suivante, prenez 5 minutes pour nous faire vos retours sur la phase 1 :{' '}
+                <p>Avant de passer à la phase suivante, prenez 5 minutes pour nous faire vos retours sur la phase 1 :</p>
                 <a href={urlForm} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: '#4c3ed9' }}>
                   Vos retours sur la phase 1 d&apos;1Village 2024/25
                 </a>

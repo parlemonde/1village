@@ -14,7 +14,7 @@ export const ThirdPhase = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [isModalOpen, setIsModalOpen] = React.useState(true);
   const urlForm = 'https://docs.google.com/forms/d/e/1FAIpQLSfncEkPDYsPjK3RCjX_YBUC2uNxD-RAd2Bn_KGlimv765M-Vw/viewform';
-  const textToDisplay = 'Avant de passer à la phase suivante, prenez 5 minutes pour nous faire vos retours sur la phase 1 : ';
+  const textToDisplay = 'Avant de passer à la phase suivante, prenez 5 minutes pour nous faire vos retours sur la phase 2 : ';
   const textForUrl = "Vos retours sur la phase 2 d'1Village 2024/25";
 
   if (!user) {
@@ -54,7 +54,7 @@ export const ThirdPhase = () => {
               style={{ minHeight: '15rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}
             >
               <div>
-                {textToDisplay}
+                <p>{textToDisplay}</p>
                 <a href={urlForm} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: '#4c3ed9' }}>
                   {textForUrl}
                 </a>
