@@ -15,12 +15,6 @@ export interface Phases {
   phase: string;
 }
 
-interface Data {
-  name: string;
-  type6?: string;
-  type2?: string;
-}
-
 export interface ClassroomsStats {
   data: ClassroomStats[];
   phases: Phases[];

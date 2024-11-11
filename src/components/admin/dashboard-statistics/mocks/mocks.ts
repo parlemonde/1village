@@ -1,6 +1,6 @@
-import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
+import type { ClassroomStats, SessionsStats } from 'types/statistics.type';
 
-export const mockClassroomsStats: ClassroomsStats[] = [
+export const mockClassroomsStats: ClassroomStats[] = [
   {
     classroomId: 1,
     classroomCountryCode: 'FR',

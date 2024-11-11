@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import React, { useState } from 'react';
 
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import ClassroomDetailsCard from './cards/ClassroomDetailsCard/ClassroomDetailsCard';
 import CommentCard from './cards/CommentCard/CommentCard';
 import BarCharts from './charts/BarCharts';
-import CountriesDropdown from './filters/CountriesDropdown';
+import Dropdown from './filters/Dropdown';
 import PhaseDropdown from './filters/PhaseDropdown';
 import PhaseDetails from './menu/PhaseDetails';
 import { mockClassroomsStats, mockDataByMonth } from './mocks/mocks';
@@ -16,13 +15,12 @@ import styles from './styles/charts.module.css';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
 
-const barChartData = [{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }];
 const BarChartTitle = 'Evolution des connexions';
 
 const ClassroomStats = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(null, null, 1);
-  const statisticsClassrooms = useStatisticsClassrooms(null, 'FR', null) as ClassroomsStats;
+  const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
   const countriesMap = mockClassroomsStats.map((country) => country.classroomCountryCode);
   const countries = [...new Set(countriesMap)]; // avoid duplicates
   const handleCountryChange = (country: string) => {
@@ -36,13 +34,13 @@ const ClassroomStats = () => {
           <PhaseDropdown />
         </div>
         <div className={styles.medFilter}>
-          <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} label={'Tous les pays'} />
+          <Dropdown data={countries} onItemChange={handleCountryChange} label={'Tous les pays'} title="Pays" />
         </div>
         <div className={styles.medFilter}>
-          <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} label={'Tous les pays'} />
+          <Dropdown data={countries} onItemChange={handleCountryChange} label={'Tous les villages'} title="Village" />
         </div>
         <div className={styles.medFilter}>
-          <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} label={'Tous les pays'} />
+          <Dropdown data={countries} onItemChange={handleCountryChange} label={'Toutes les classes'} title="Classe" />
         </div>
       </div>
       <CommentCard />

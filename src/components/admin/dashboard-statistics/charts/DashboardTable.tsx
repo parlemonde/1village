@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Typography } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -9,8 +7,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Box } from '@mui/system';
+import React from 'react';
 
-function createData(classroom: string, vm: sting, prof: string, status: string) {
+function createData(classroom: string, vm: string, prof: string, status: string) {
   return { classroom, vm, prof, status };
 }
 
