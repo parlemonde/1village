@@ -10,9 +10,10 @@ import Select from '@mui/material/Select';
 interface CountriesDropdownProps {
   countries: string[];
   onCountryChange: (country: string) => void;
+  label: string;
 }
 
-export default function CountriesDropdown({ countries, onCountryChange }: CountriesDropdownProps) {
+export default function CountriesDropdown({ countries, onCountryChange, label }: CountriesDropdownProps) {
   const [country, setCountry] = React.useState('');
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -22,11 +23,11 @@ export default function CountriesDropdown({ countries, onCountryChange }: Countr
   };
 
   return (
-    <Box sx={{ maxWidth: 120 }}>
+    <Box>
       <FormControl fullWidth size="small">
         <InputLabel id="country-menu-select">Pays</InputLabel>
         <Select labelId="country-menu-select" id="country-select" value={country} label="Pays" onChange={handleChange}>
-          <MenuItem value="">Tous les pays</MenuItem>
+          <MenuItem value="">{label}</MenuItem>
           {countries.map((country) => (
             <MenuItem key={country} value={country}>
               {country}

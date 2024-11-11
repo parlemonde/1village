@@ -1,4 +1,4 @@
-export interface ClassroomsStats {
+export interface ClassroomStats {
   classroomId: number;
   classroomCountryCode: string;
   villageId: number;
@@ -8,6 +8,22 @@ export interface ClassroomsStats {
   commentsCount: number;
   videosCount: number;
   activities: { count: number; type: number; phase: number }[];
+}
+
+export interface Phases {
+  data: Record<string, string | number>[];
+  phase: string;
+}
+
+interface Data {
+  name: string;
+  type6?: string;
+  type2?: string;
+}
+
+export interface ClassroomsStats {
+  data: ClassroomStats[];
+  phases: Phases[];
 }
 
 export interface SessionsStats {

@@ -1,10 +1,12 @@
 import type { Request } from 'express';
 
+import { Classroom } from '../entities/classroom';
 import {
   getClassroomsInfos,
   getConnectedClassroomsCount,
   getContributedClassroomsCount,
   getRegisteredClassroomsCount,
+  normalizeForCountry,
 } from '../stats/classroomStats';
 import {
   getAverageConnections,
@@ -17,31 +19,31 @@ import {
   getMinDuration,
   getUserConnectionsList,
 } from '../stats/sessionStats';
+import { AppDataSource } from '../utils/data-source';
 import { Controller } from './controller';
 
+const classroomRepository = AppDataSource.getRepository(Classroom);
 export const statisticsController = new Controller('/statistics');
 
 statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
   const villageId = req.query.villageId ? parseInt(req.query.villageId as string) : null;
+  const countryCode = req.query.countryCode ? (req.query.countryCode as string) : null;
+  const classroomId = req.query.classroomId ? parseInt(req.query.classroomId as string) : null;
   // const phase = req.params.phase ? parseInt(req.params.phase) : null;
-
-  if (!villageId) {
-    return res.status(400).json({ message: 'Village ID is required' });
-  }
 
   try {
     // Appelez les fonctions avec villageId
-    const minDuration = await getMinDuration(villageId);
-    const maxDuration = await getMaxDuration(villageId);
-    const averageDuration = await getAverageDuration(villageId);
-    const medianDuration = await getMedianDuration(villageId); // TODO - add phase
-    const minConnections = await getMinConnections(villageId); // TODO - add phase
-    const maxConnections = await getMaxConnections(villageId); // TODO - add phase
-    const averageConnections = await getAverageConnections(villageId); // TODO - add phase
-    const medianConnections = await getMedianConnections(villageId); // TODO - add phase
+    const minDuration = await getMinDuration(villageId, countryCode, classroomId);
+    const maxDuration = await getMaxDuration(villageId, countryCode, classroomId);
+    const averageDuration = await getAverageDuration(villageId, countryCode, classroomId);
+    const medianDuration = await getMedianDuration(villageId, countryCode, classroomId);
+    const minConnections = await getMinConnections(villageId, countryCode, classroomId);
+    const maxConnections = await getMaxConnections(villageId, countryCode, classroomId);
+    const averageConnections = await getAverageConnections(villageId, countryCode, classroomId);
+    const medianConnections = await getMedianConnections(villageId, countryCode, classroomId);
     const testConnections = await getUserConnectionsList();
     const registeredClassroomsCount = await getRegisteredClassroomsCount(villageId);
-    const connectedClassroomsCount = await getConnectedClassroomsCount(villageId); // TODO - add phase
+    const connectedClassroomsCount = await getConnectedClassroomsCount(villageId);
     // const contributedClassroomsCount = await getContributedClassroomsCount(villageId);
 
     return res.sendJSON({
@@ -64,8 +66,12 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
   }
 });
 
-statisticsController.get({ path: '/classrooms' }, async (_req, res) => {
-  const classroomsData = await classroomRepository
+statisticsController.get({ path: '/classrooms' }, async (req, res) => {
+  const villageId = req.query.villageId ? parseInt(req.query.villageId as string) : null;
+  const countryCode = req.query.countryCode ? (req.query.countryCode as string) : null;
+  const classroomId = req.query.classroomId ? parseInt(req.query.classroomId as string) : null;
+
+  const queryBuilder = classroomRepository
     .createQueryBuilder('classroom')
     .leftJoin('classroom.village', 'village')
     .leftJoin('classroom.user', 'user')
@@ -95,7 +101,7 @@ statisticsController.get({ path: '/classrooms' }, async (_req, res) => {
         )
       )
       FROM (
-        SELECT 
+        SELECT
           activity.phase,
           JSON_ARRAYAGG(
             JSON_OBJECT(
@@ -104,7 +110,7 @@ statisticsController.get({ path: '/classrooms' }, async (_req, res) => {
             )
           ) AS activities
         FROM (
-          SELECT 
+          SELECT
             activity.phase,
             activity.type,
             COUNT(activity.id) AS totalActivities
@@ -119,20 +125,58 @@ statisticsController.get({ path: '/classrooms' }, async (_req, res) => {
     ) AS activitiesCount`,
     )
     .groupBy('classroom.id')
-    .addGroupBy('user.id')
-    .getRawMany();
+    .addGroupBy('user.id');
 
-  res.sendJSON(
-    classroomsData.map((classroom) => ({
-      ...classroom,
-      commentsCount: parseInt(classroom.commentsCount, 10),
-      videosCount: parseInt(classroom.videosCount, 10),
-    })),
-  );
+  if (villageId) {
+    queryBuilder.where('village.id = :villageId', { villageId });
+  }
+
+  if (countryCode) {
+    queryBuilder.where('user.countryCode = :countryCode', { countryCode });
+  }
+
+  if (classroomId) {
+    queryBuilder.where('classroom.id = :classroomId', { classroomId });
+  }
+
+  const classroomsData = await queryBuilder.getRawMany();
+
+  const transformedData = classroomsData.map((classroom) => ({
+    classroomId: classroom.classroomId,
+    classroomName: classroom.classroomName,
+    classroomCountryCode: classroom.classroomCountryCode,
+    villageId: classroom.villageId,
+    villageName: classroom.villageName,
+    commentsCount: parseInt(classroom.commentsCount, 10),
+    videosCount: parseInt(classroom.videosCount, 10),
+    userFirstName: classroom.userFirstname,
+    userLastName: classroom.userLastname,
+    activities: classroom.activitiesCount
+      ? classroom.activitiesCount.flatMap((phaseObj) =>
+          phaseObj.activities.map((activity) => ({
+            count: activity.count,
+            type: activity.type,
+            phase: phaseObj.phase,
+          })),
+        )
+      : [], // Si activitiesCount est null, retourner une liste vide
+  }));
+
+  const result = { data: [...transformedData], phases: normalizeForCountry(transformedData) };
+
+  res.sendJSON(classroomsData);
+
+  // res.sendJSON(
+  //   classroomsData.map((classroom) => ({
+  //     ...classroom,
+  //     commentsCount: parseInt(classroom.commentsCount, 10),
+  //     videosCount: parseInt(classroom.videosCount, 10),
+  //   })),
+  // );
 });
 
-statisticsController.get({ path: '/classrooms' }, async (_req, res) => {
-  res.sendJSON({
-    classrooms: await getClassroomsInfos(),
-  });
-});
+// statisticsController.get({ path: '/classrooms' }, async (_req, res) => {
+//   res.sendJSON({
+//     classrooms: await getClassroomsInfos(),
+//   });
+// });

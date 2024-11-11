@@ -1,64 +1,37 @@
 import React from 'react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
-import { BarChart } from '@mui/x-charts/BarChart';
-
-import { mockClassroomsStats } from '../mocks/mocks';
 import styles from '../styles/charts.module.css';
 
-interface SumData {
-  country: string;
-  total: number;
+const data = [
+  { country: 'FR', total: 80 },
+  { country: 'CA', total: 70 },
+  { country: 'PT', total: 60 },
+  { country: 'Grèce', total: 50 },
+  { country: 'Maroc', total: 40 },
+  { country: 'Tunisie', total: 30 },
+  { country: 'Belgique', total: 20 },
+  { country: 'Roumanie', total: 10 },
+];
+
+interface Data {
+  highlightCountry: string;
 }
 
-const sumData: { [country: string]: SumData } = {};
-mockClassroomsStats.forEach((country) => {
-  const { classroomCountryCode, commentsCount, activities } = country;
-
-  if (!sumData[classroomCountryCode]) {
-    sumData[classroomCountryCode] = {
-      country: classroomCountryCode,
-      total: 0,
-    };
-  }
-
-  sumData[classroomCountryCode].total += commentsCount;
-
-  activities.forEach((activity) => {
-    sumData[classroomCountryCode].total += activity.count;
-  });
-});
-
-const dataset: { country: string; total: number }[] = Object.values(sumData);
-
-const chartSetting = {
-  width: 500,
-  height: 400,
-};
-
-const valueFormatter = (value: number | null) => `${value}`;
-
-export default function HorizontalBars() {
+export default function CustomBarChart({ highlightCountry }: Data) {
   return (
-    <div className={styles.horizontalBars}>
-      <BarChart
-        dataset={dataset}
-        yAxis={[{ scaleType: 'band', dataKey: 'country' }]}
-        series={[
-          {
-            dataKey: 'total',
-            valueFormatter,
-            color: '#DAD7FE', // if country selected with filer : #4C3ED9
-          },
-        ]}
-        layout="horizontal"
-        slotProps={{
-          bar: {
-            clipPath: 'inset(0px round 10px)',
-          },
-        }}
-        {...chartSetting}
-      />
-      <div className={styles.customLegend}>Publications et commentaires</div>
-    </div>
+    <ResponsiveContainer width="100%" height={400} className={styles.horizontalBars}>
+      <BarChart data={data} layout="vertical" barSize={15} barCategoryGap="15%" margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+        <XAxis type="number" axisLine={false} tickLine={false} tick={{ fill: '#666' }} />
+        <YAxis type="category" dataKey="country" width={80} axisLine={false} tickLine={false} tick={{ fill: '#666', dx: -5 }} />
+
+        <Tooltip />
+        <Bar dataKey="total" radius={[10, 10, 10, 10]}>
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={entry.country === highlightCountry ? '#4C3ED9' : '#DAD7FE'} />
+          ))}
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
   );
 }

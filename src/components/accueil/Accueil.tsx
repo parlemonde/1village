@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { Button } from '@mui/material';
+import React from 'react';
 
 import { filterActivitiesByTerm, filterActivitiesWithLastGame } from './Filters/FilterActivities';
 import { LinkChild } from './LinkChild';

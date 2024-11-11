@@ -1,46 +1,66 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { BarChart } from '@mui/x-charts/BarChart';
 
 import styles from '../styles/charts.module.css';
 
-type BarChartDataItem = {
-  data: number[];
-};
-
 interface Props {
-  barChartData: BarChartDataItem[];
+  dataByMonth: { month: string; barChartData: { value: number; isSelected: boolean }[] }[];
   title?: string;
   className?: string;
 }
 
-//add isSelected to change colors #4339F2 or #DAD7FE
+const BarCharts: React.FC<Props> = ({ dataByMonth, title, className }) => {
+  const [selectedMonthIndex, setSelectedMonthIndex] = useState(0);
+  const selectedData = dataByMonth[selectedMonthIndex];
 
-const BarCharts: React.FC<Props> = ({ barChartData, title, className }) => {
-  const seriesData = barChartData.map((item) => ({ data: item.data }));
+  const handleMonthChange = (direction: 'prev' | 'next') => {
+    if (direction === 'prev' && selectedMonthIndex > 0) {
+      setSelectedMonthIndex(selectedMonthIndex - 1);
+    } else if (direction === 'next' && selectedMonthIndex < dataByMonth.length - 1) {
+      setSelectedMonthIndex(selectedMonthIndex + 1);
+    }
+  };
+
   return (
     <div className={classNames(styles.barContainer, className)}>
       {title && <div className={styles.title}>{title}</div>}
-      <BarChart
-        xAxis={[
-          {
-            scaleType: 'band',
-            data: ['group A', 'group B', 'group C'],
-            colorMap: {
-              type: 'piecewise',
-              thresholds: [new Date(2021, 1, 1), new Date(2023, 1, 1)],
-              colors: ['#DAD7FE'],
+      <div className={styles.selector}>
+        <button onClick={() => handleMonthChange('prev')}>&lt;</button>
+        <span>{selectedData.month}</span>
+        <button onClick={() => handleMonthChange('next')}>&gt;</button>
+      </div>
+      <div className={styles.chart}>
+        <BarChart
+          sx={{
+            '& .MuiChartsAxis-bottom .MuiChartsAxis-line': {
+              strokeWidth: 0,
             },
-          },
-        ]}
-        series={seriesData}
-        slotProps={{
-          bar: {
-            clipPath: `inset(0px round 40px)`,
-          },
-        }}
-      />
+            '& .MuiChartsAxis-left .MuiChartsAxis-line': {
+              strokeWidth: 0,
+            },
+          }}
+          xAxis={[
+            {
+              scaleType: 'band',
+              data: selectedData.barChartData.map((_, index) => index + 1),
+              tickSize: 0,
+            },
+          ]}
+          yAxis={[{ tickSize: 0 }]}
+          series={[
+            {
+              data: selectedData.barChartData.map((data) => data.value),
+            },
+          ]}
+          slotProps={{
+            bar: {
+              clipPath: `inset(0px round 40px)`,
+            },
+          }}
+        />
+      </div>
     </div>
   );
 };
