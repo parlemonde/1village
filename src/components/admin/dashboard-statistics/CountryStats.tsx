@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import Box from '@mui/material/Box';
+import React, { useState } from 'react';
 
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
@@ -12,9 +10,10 @@ import BarCharts from './charts/BarCharts';
 import DashboardTable from './charts/DashboardTable';
 import HorizontalBarsChart from './charts/HorizontalChart';
 import PieCharts from './charts/PieCharts';
-import CountriesDropdown from './filters/CountriesDropdown';
+import Dropdown from './filters/Dropdown';
+import PhaseDropdown from './filters/PhaseDropdown';
 import PhaseDetails from './menu/PhaseDetails';
-import { mockClassroomsStats, mockConnectionsStats, mockDataByMonth } from './mocks/mocks';
+import { mockClassroomsStats, mockDataByMonth } from './mocks/mocks';
 import styles from './styles/charts.module.css';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
@@ -27,39 +26,19 @@ const pieChartData = {
   ],
 };
 
-const barChartData = [{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }];
 const EngagementBarChartTitle = 'Évolution des connexions';
 const ContributionBarChartTitle = 'Contribution des classes';
 
 const CountryStats = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
-  const statisticsClassrooms = useStatisticsClassrooms(null, 'FR', null) as ClassroomsStats;
+  const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
   const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(null, 'FR', null);
 
-  // const countriesMap = mockClassroomsStats.map((country) => country.classroomCountryCode);
-  // const countries = [...new Set(countriesMap)]; // avoid duplicates
-  // const handleCountryChange = (country: string) => {
-  //   setSelectedCountry(country);
-  // };
-
-  // const filteredVillage = mockClassroomsStats.filter((village) => village.classroomCountryCode === selectedCountry);
-
-  // const classStats = mockConnectionsStats.map((classroom) => ({
-  //   registered: classroom.registeredClassroomsCount,
-  //   connected: classroom.connectedClassroomsCount,
-  //   contributed: classroom.contributedClassroomsCount,
-  // }));
-
-  // const connectStats = mockConnectionsStats.map((connect) => ({
-  //   averageConnection: connect.averageConnections,
-  //   averageDuration: connect.averageDuration,
-  //   minDuration: connect.minDuration,
-  //   maxDuration: connect.maxDuration,
-  //   medianDuration: connect.medianDuration,
-  //   minConnections: connect.minConnections,
-  //   maxConnections: connect.maxConnections,
-  //   medianConnections: connect.medianConnections,
-  // }));
+  const countriesMap = mockClassroomsStats.map((country) => country.classroomCountryCode);
+  const countries = [...new Set(countriesMap)]; // avoid duplicates
+  const handleCountryChange = (country: string) => {
+    setSelectedCountry(country);
+  };
 
   return (
     <>
@@ -67,9 +46,9 @@ const CountryStats = () => {
         <div className={styles.smallFilter}>
           <PhaseDropdown />
         </div>
-        {/* <div className={styles.medFilter}>
-          <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} label={'Tous les pays'} />
-        </div> */}
+        <div className={styles.medFilter}>
+          <Dropdown data={countries} onItemChange={handleCountryChange} label={'Tous les pays'} title="Pays" />
+        </div>
         <div className={styles.medFilter} />
         <div className={styles.medFilter} />
       </div>

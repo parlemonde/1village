@@ -1,8 +1,7 @@
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import React, { useContext } from 'react';
+import React from 'react';
 
-import type ClassroomStats from './ClassroomStats';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesContributionCard from './cards/ClassesContributionCard/ClassesContributionCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
