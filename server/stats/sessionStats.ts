@@ -6,55 +6,106 @@ const analyticSessionRepository = AppDataSource.getRepository(AnalyticSession);
 const durationThreshold = 60;
 const teacherType = UserType.TEACHER;
 
-export const getMinDuration = async (villageId: number) => {
-  const result = await analyticSessionRepository
+export const getMinDuration = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+  const queryBuilder = analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('user.villageId', 'villageId')
-    .addSelect('MIN(analytic_session.duration)', 'minDuration')
+    .select('MIN(analytic_session.duration)', 'minDuration')
     .innerJoin('analytic_session.user', 'user')
-    .where('user.villageId = :villageId', { villageId })
-    .getRawOne();
+    .leftJoin('user.classroom', 'classroom');
+
+  if (villageId) {
+    queryBuilder.where('user.villageId = :villageId', { villageId });
+  }
+
+  if (countryCode) {
+    queryBuilder.where('user.countryCode = :countryCode', { countryCode });
+  }
+
+  if (classroomId) {
+    queryBuilder.where('classroom.id = :classroomId', { classroomId });
+  }
+
+  const result = await queryBuilder.getRawOne();
 
   return result.minDuration ? parseInt(result.minDuration, 10) : null;
 };
 
-export const getMaxDuration = async (villageId: number) => {
-  const result = await analyticSessionRepository
+export const getMaxDuration = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+  const queryBuilder = analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('user.villageId', 'villageId')
     .select('MAX(analytic_session.duration)', 'maxDuration')
     .innerJoin('analytic_session.user', 'user')
-    .where('user.villageId = :villageId', { villageId })
-    .getRawOne();
+    .leftJoin('user.classroom', 'classroom');
+
+  if (villageId) {
+    queryBuilder.where('user.villageId = :villageId', { villageId });
+  }
+
+  if (countryCode) {
+    queryBuilder.where('user.countryCode = :countryCode', { countryCode });
+  }
+
+  if (classroomId) {
+    queryBuilder.where('classroom.id = :classroomId', { classroomId });
+  }
+
+  const result = await queryBuilder.getRawOne();
 
   return result.maxDuration ? parseInt(result.maxDuration, 10) : null;
 };
 
-export const getAverageDuration = async (villageId: number) => {
-  const result = await analyticSessionRepository
+export const getAverageDuration = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+  const queryBuilder = analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('user.villageId', 'villageId')
     .select('ROUND(AVG(analytic_session.duration), 0)', 'averageDuration')
     .innerJoin('analytic_session.user', 'user')
-    .where('user.villageId = :villageId', { villageId })
-    .getRawOne();
+    .leftJoin('user.classroom', 'classroom');
+
+  if (villageId) {
+    queryBuilder.where('user.villageId = :villageId', { villageId });
+  }
+
+  if (countryCode) {
+    queryBuilder.where('user.countryCode = :countryCode', { countryCode });
+  }
+
+  if (classroomId) {
+    queryBuilder.where('classroom.id = :classroomId', { classroomId });
+  }
+
+  const result = await queryBuilder.getRawOne();
 
   return result.averageDuration ? parseInt(result.averageDuration, 10) : null;
 };
 
 // TODO - add phase: number | null
-export const getMedianDuration = async (villageId: number) => {
-  const durations = await analyticSessionRepository
+export const getMedianDuration = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+  const queryBuilder = analyticSessionRepository
     .createQueryBuilder('analytic_session')
-    .select('analytic_session.duration', 'duration') // Sélectionner la durée
-    .innerJoin('analytic_session.user', 'user') // Joindre la table user
-    .where('user.villageId = :villageId', { villageId }) // Filtrer par villageId
-    .andWhere('analytic_session.duration IS NOT NULL') // S'assurer que la durée n'est pas nulle
-    .orderBy('analytic_session.duration', 'ASC') // Trier par durée croissante
-    .getRawMany();
+    .select('analytic_session.duration', 'duration')
+    .innerJoin('analytic_session.user', 'user')
+    .leftJoin('user.classroom', 'classroom')
+    .where('analytic_session.duration IS NOT NULL')
+    .orderBy('analytic_session.duration', 'ASC');
+  if (villageId) {
+    queryBuilder.andWhere('user.villageId = :villageId', { villageId });
+  }
+
+  if (countryCode) {
+    queryBuilder.where('user.countryCode = :countryCode', { countryCode });
+  }
+
+  if (classroomId) {
+    queryBuilder.where('classroom.id = :classroomId', { classroomId });
+  }
+
+  const durations = await queryBuilder.getRawMany();
 
   if (durations.length === 0) {
-    return null; // Retourner null s'il n'y a aucune durée
+    return null;
   }
 
   const formatedToIntDurations = durations.map((row) => parseInt(row.duration, 10));
@@ -69,21 +120,33 @@ export const getMedianDuration = async (villageId: number) => {
 };
 
 // TODO - add phase: number | null
-export const getMinConnections = async (villageId: number) => {
+export const getMinConnections = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+  const subQueryBuilder = analyticSessionRepository
+    .createQueryBuilder('analytic_session')
+    .select('COUNT(analytic_session.id)', 'occurrences')
+    .innerJoin('analytic_session.user', 'user')
+    .leftJoin('user.classroom', 'classroom')
+    .groupBy('analytic_session.userId');
+
+  if (villageId) {
+    subQueryBuilder.where('user.villageId = :villageId', { villageId });
+  }
+
+  if (countryCode) {
+    subQueryBuilder.where('user.countryCode = :countryCode', { countryCode });
+  }
+
+  if (classroomId) {
+    subQueryBuilder.where('classroom.id = :classroomId', { classroomId });
+  }
+
   const result = await analyticSessionRepository
     .createQueryBuilder()
     .select('MIN(subquery.occurrences)', 'minConnections')
-    .from((subQuery) => {
-      return subQuery
-        .select('COUNT(analytic_session.id)', 'occurrences') // Compter les occurrences de sessions analytiques par utilisateur
-        .from('analytic_session', 'analytic_session')
-        .innerJoin('analytic_session.user', 'user') // Joindre la table user
-        .where('user.villageId = :villageId', { villageId }) // Filtrer par villageId
-        .groupBy('analytic_session.userId'); // Grouper par utilisateur pour obtenir le nombre de sessions analytiques
-    }, 'subquery')
+    .from(`(${subQueryBuilder.getQuery()})`, 'subquery')
+    .setParameters(subQueryBuilder.getParameters())
     .getRawOne();
 
-  // Si aucun résultat n'est trouvé, renvoyer null
   if (!result || result.minConnections === null) {
     return null;
   }
@@ -91,22 +154,33 @@ export const getMinConnections = async (villageId: number) => {
   return parseInt(result.minConnections, 10);
 };
 
-// TODO - add phase: number | null
-export const getMaxConnections = async (villageId: number) => {
+export const getMaxConnections = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+  const subQueryBuilder = analyticSessionRepository
+    .createQueryBuilder('analytic_session')
+    .select('COUNT(analytic_session.id)', 'occurrences')
+    .innerJoin('analytic_session.user', 'user')
+    .leftJoin('user.classroom', 'classroom')
+    .groupBy('analytic_session.userId');
+
+  if (villageId) {
+    subQueryBuilder.where('user.villageId = :villageId', { villageId });
+  }
+
+  if (countryCode) {
+    subQueryBuilder.where('user.countryCode = :countryCode', { countryCode });
+  }
+
+  if (classroomId) {
+    subQueryBuilder.where('classroom.id = :classroomId', { classroomId });
+  }
+
   const result = await analyticSessionRepository
     .createQueryBuilder()
     .select('MAX(subquery.occurrences)', 'maxConnections')
-    .from((subQuery) => {
-      return subQuery
-        .select('COUNT(analytic_session.id)', 'occurrences') // Compter les occurrences de sessions analytiques par utilisateur
-        .from('analytic_session', 'analytic_session')
-        .innerJoin('analytic_session.user', 'user') // Joindre la table user
-        .where('user.villageId = :villageId', { villageId }) // Filtrer par villageId
-        .groupBy('analytic_session.userId'); // Grouper par utilisateur pour obtenir le nombre de sessions analytiques
-    }, 'subquery')
+    .from(`(${subQueryBuilder.getQuery()})`, 'subquery')
+    .setParameters(subQueryBuilder.getParameters())
     .getRawOne();
 
-  // Si aucun résultat n'est trouvé, renvoyer null
   if (!result || result.maxConnections === null) {
     return null;
   }
@@ -114,43 +188,67 @@ export const getMaxConnections = async (villageId: number) => {
   return parseInt(result.maxConnections, 10);
 };
 
-// TODO - add phase: number | null
-export const getAverageConnections = async (villageId: number) => {
+export const getAverageConnections = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+  const subQueryBuilder = analyticSessionRepository
+    .createQueryBuilder('analytic_session')
+    .select('COUNT(analytic_session.id)', 'occurrences')
+    .innerJoin('analytic_session.user', 'user')
+    .leftJoin('user.classroom', 'classroom')
+    .groupBy('analytic_session.userId');
+
+  if (villageId) {
+    subQueryBuilder.where('user.villageId = :villageId', { villageId });
+  }
+
+  if (countryCode) {
+    subQueryBuilder.where('user.countryCode = :countryCode', { countryCode });
+  }
+
+  if (classroomId) {
+    subQueryBuilder.where('classroom.id = :classroomId', { classroomId });
+  }
+
   const result = await analyticSessionRepository
     .createQueryBuilder()
-    .select('AVG(subquery.occurrences)', 'averageConnections') // Sélectionner la moyenne des occurrences
-    .from((subQuery) => {
-      return subQuery
-        .select('COUNT(analytic_session.id)', 'occurrences') // Compter les occurrences de sessions analytiques par utilisateur
-        .from('analytic_session', 'analytic_session')
-        .innerJoin('analytic_session.user', 'user') // Joindre la table user
-        .where('user.villageId = :villageId', { villageId }) // Filtrer par villageId
-        .groupBy('analytic_session.userId'); // Grouper par utilisateur pour obtenir le nombre de sessions analytiques
-    }, 'subquery')
+    .select('AVG(subquery.occurrences)', 'averageConnections')
+    .from(`(${subQueryBuilder.getQuery()})`, 'subquery')
+    .setParameters(subQueryBuilder.getParameters())
     .getRawOne();
 
-  // Si aucun résultat n'est trouvé, renvoyer null
   if (!result || result.averageConnections === null) {
     return null;
   }
 
-  return parseFloat(result.averageConnections);
+  return parseInt(result.averageConnections, 10);
 };
 
 // TODO - add phase: number | null
-export const getMedianConnections = async (villageId: number) => {
+export const getMedianConnections = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+  const subQueryBuilder = analyticSessionRepository
+    .createQueryBuilder('analytic_session')
+    .select('COUNT(analytic_session.id)', 'occurrences')
+    .innerJoin('analytic_session.user', 'user')
+    .leftJoin('user.classroom', 'classroom')
+    .groupBy('analytic_session.userId')
+    .orderBy('occurrences', 'ASC');
+
+  if (villageId) {
+    subQueryBuilder.where('user.villageId = :villageId', { villageId });
+  }
+
+  if (countryCode) {
+    subQueryBuilder.where('user.countryCode = :countryCode', { countryCode });
+  }
+
+  if (classroomId) {
+    subQueryBuilder.where('classroom.id = :classroomId', { classroomId });
+  }
+
   const result = await analyticSessionRepository
     .createQueryBuilder()
     .select('subquery.occurrences', 'occurrences')
-    .from((subQuery) => {
-      return subQuery
-        .select('COUNT(analytic_session.id)', 'occurrences') // Compter les occurrences de sessions analytiques par utilisateur
-        .from('analytic_session', 'analytic_session')
-        .innerJoin('analytic_session.user', 'user') // Joindre la table user
-        .where('user.villageId = :villageId', { villageId }) // Filtrer par villageId
-        .groupBy('analytic_session.userId') // Grouper par utilisateur pour obtenir le nombre de sessions analytiques
-        .orderBy('occurrences', 'ASC'); // Trier par nombre croissant d'occurrences
-    }, 'subquery')
+    .from(`(${subQueryBuilder.getQuery()})`, 'subquery')
+    .setParameters(subQueryBuilder.getParameters()) // Passer les paramètres utilisés dans la sous-requête
     .getRawMany();
 
   // Si aucun résultat n'est trouvé, renvoyer null

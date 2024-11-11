@@ -12,10 +12,11 @@ import type { Country } from 'types/country.type';
 interface CountriesDropdownProps {
   countries: Country[];
   onCountryChange: (country: string) => void;
+  label: string;
 }
 
-export default function CountriesDropdown({ countries, onCountryChange }: CountriesDropdownProps) {
-  const [country, setCountry] = React.useState<string>('');
+export default function CountriesDropdown({ countries, onCountryChange, label }: CountriesDropdownProps) {
+  const [country, setCountry] = React.useState('');
 
   const handleChange = (event: SelectChangeEvent) => {
     const selectedCountry = event.target.value as string;
@@ -24,24 +25,14 @@ export default function CountriesDropdown({ countries, onCountryChange }: Countr
   };
 
   return (
-    <Box
-      sx={{
-        minWidth: {
-          xs: 'none',
-          md: 150,
-        },
-        maxWidth: {
-          xs: 'none',
-          md: 200,
-        },
-      }}
-    >
+    <Box>
       <FormControl fullWidth size="small">
         <InputLabel id="country-menu-select">Pays</InputLabel>
         <Select labelId="country-menu-select" id="country-select" value={country} label="Pays" onChange={handleChange}>
-          {countries.map((c) => (
-            <MenuItem key={c.isoCode} value={c.isoCode}>
-              {c.name}
+          <MenuItem value="">{label}</MenuItem>
+          {countries.map((country) => (
+            <MenuItem key={country} value={country}>
+              {country}
             </MenuItem>
           ))}
         </Select>

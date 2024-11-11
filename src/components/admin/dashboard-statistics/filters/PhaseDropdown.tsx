@@ -21,7 +21,7 @@ export default function PhaseDropdown({ onPhaseChange }: PhaseDropdownProps) {
   };
 
   return (
-    <Box sx={{ minWidth: 150, maxWidth: 200 }}>
+    <Box>
       <FormControl fullWidth size="small">
         <InputLabel id="phase-menu-select">Phase</InputLabel>
         <Select labelId="phase-menu-select" id="phase-menu" value={phase} label="Phase" onChange={handleChange}>
