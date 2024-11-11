@@ -1,9 +1,8 @@
+import { Box, Button, Link, Tooltip } from '@mui/material';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
 import React from 'react';
-
-import { Box, Button, Link, Tooltip } from '@mui/material';
 
 import { AvatarImg } from '../Avatar';
 import { Flag } from '../Flag';

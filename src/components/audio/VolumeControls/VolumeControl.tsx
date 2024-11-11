@@ -1,9 +1,8 @@
-import type { ReactElement } from 'react';
-import React from 'react';
-
 import VolumeUp from '@mui/icons-material/VolumeUp';
 import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
+import React from 'react';
+import type { ReactElement } from 'react';
 
 interface VolumeControlProps {
   icon?: ReactElement;

@@ -1,9 +1,8 @@
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Card, CardHeader, Avatar, CardMedia, CardContent, Typography, Button, CardActions, CircularProgress, Menu, MenuItem } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useQueryClient } from 'react-query';
 import type { Activity } from 'server/entities/activity';
-
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Card, CardHeader, Avatar, CardMedia, CardContent, Typography, Button, CardActions, CircularProgress, Menu, MenuItem } from '@mui/material';
 
 import { usePublishActivity } from 'src/api/activities/activities.put';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';

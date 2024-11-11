@@ -1,8 +1,7 @@
+import { Button, CircularProgress } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import React from 'react';
 import ReactPlayer from 'react-player';
-
-import { Button, CircularProgress } from '@mui/material';
 
 import type { ViewProps } from '../../content.types';
 import { KeepRatio } from 'src/components/KeepRatio';

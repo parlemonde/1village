@@ -1,9 +1,8 @@
-import classNames from 'classnames';
-import React from 'react';
-
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import DescriptionIcon from '@mui/icons-material/Description';
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import classNames from 'classnames';
+import React from 'react';
 
 import styles from './ClassesExchangesCard.module.css';
 

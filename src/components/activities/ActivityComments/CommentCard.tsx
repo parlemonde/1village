@@ -1,7 +1,6 @@
+import { Box, Button, CircularProgress, Paper } from '@mui/material';
 import dynamic from 'next/dynamic';
 import React from 'react';
-
-import { Box, Button, CircularProgress, Paper } from '@mui/material';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';

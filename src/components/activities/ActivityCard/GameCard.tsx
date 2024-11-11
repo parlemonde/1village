@@ -1,10 +1,9 @@
+import { Button } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import router from 'next/router';
 import React, { useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
-
-import { Button } from '@mui/material';
 
 import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';

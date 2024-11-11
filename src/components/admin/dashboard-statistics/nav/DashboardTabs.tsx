@@ -1,9 +1,8 @@
-import React from 'react';
-
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
+import React from 'react';
 
 interface TabPanelProps {
   children?: React.ReactNode;

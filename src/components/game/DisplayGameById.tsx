@@ -1,3 +1,5 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Box, Button, Grid } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -5,8 +7,6 @@ import React, { useState, useCallback, useMemo, useContext } from 'react';
 
 // import AccessTimeIcon from '@mui/icons-material/AccessTime';
 // import ShuffleIcon from '@mui/icons-material/Shuffle';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box, Button, Grid } from '@mui/material';
 
 import { KeepRatio } from '../KeepRatio';
 import { useOneGameById } from 'src/api/game/game.getOneGameById';
