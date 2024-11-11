@@ -1,7 +1,6 @@
+import CircleIcon from '@mui/icons-material/Circle';
 import React from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
-
-import CircleIcon from '@mui/icons-material/Circle';
 
 import TooltipMouseTracker from '../TooltipMouseTracker/TooltipMouseTracker';
 import styles from './DashboardWorldMap.module.css';

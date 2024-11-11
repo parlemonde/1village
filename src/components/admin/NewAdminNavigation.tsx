@@ -1,8 +1,7 @@
+import { Container, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { Container, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 
 import { UserContext } from 'src/contexts/userContext';
 import AnalyserIcon from 'src/svg/analyser.svg';

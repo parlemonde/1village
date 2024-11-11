@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { BarChart } from '@mui/x-charts/BarChart';
 import classNames from 'classnames';
 import React, { useState } from 'react';
-
-// import { BarChart } from '@mui/x-charts/BarChart';
 
 import styles from '../styles/charts.module.css';
 

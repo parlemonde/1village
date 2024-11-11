@@ -1,6 +1,3 @@
-import * as React from 'react';
-import { useState } from 'react';
-
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {
   Accordion,
@@ -14,6 +11,8 @@ import {
   TableRow,
   TableSortLabel,
 } from '@mui/material';
+import * as React from 'react';
+import { useState } from 'react';
 
 import ArrowRight from 'src/svg/arrow-right.svg';
 

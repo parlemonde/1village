@@ -1,7 +1,6 @@
+import { Button, Card } from '@mui/material';
 import Link from 'next/link';
 import React from 'react';
-
-import { Button, Card } from '@mui/material';
 
 import type { ActivityViewProps } from './activity-view.types';
 import { ENIGME_TYPES, getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';

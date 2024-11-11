@@ -1,13 +1,12 @@
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { Button, Divider, TextField } from '@mui/material';
+import Alert from '@mui/material/Alert';
 import Link from 'next/link';
 import { useSnackbar } from 'notistack';
 import React from 'react';
 import ReactPlayer from 'react-player';
 import { useQueryClient } from 'react-query';
-
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import SettingsIcon from '@mui/icons-material/Settings';
-import { Button, Divider, TextField } from '@mui/material';
-import Alert from '@mui/material/Alert';
 
 import { Modal } from 'src/components/Modal';
 import { useCopy } from 'src/hooks/useCopy';

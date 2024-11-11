@@ -1,6 +1,5 @@
-import React from 'react';
-
 import EditIcon from '@mui/icons-material/Edit'; // Assurez-vous que ce package est installé ou utilisez une autre icône.
+import React from 'react';
 
 import styles from './CommentCard.module.css';
 

@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { Button } from '@mui/material';
+import React from 'react';
 
 import AudioMixerTrackControl from '../AudioMixerTrackControls/AudioMixerTrackControl';
 import styles from './AudioMixer.module.css';

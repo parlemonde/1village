@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-
 import { TextField, IconButton, Autocomplete, Popper, Fade, Paper, Box, Icon } from '@mui/material';
+import React, { useState } from 'react';
 
 import type { DisplayableInstrumentsType } from '../../../../utils/instruments';
 import { InstrumentSvg } from '../InstrumentSvg/InstrumentSvg';

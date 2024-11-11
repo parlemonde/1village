@@ -1,6 +1,5 @@
-import * as React from 'react';
-
 import { Typography } from '@mui/material';
+import * as React from 'react';
 
 import { Flag } from 'src/components/Flag';
 import { ClassroomContext } from 'src/contexts/classroomContext';
