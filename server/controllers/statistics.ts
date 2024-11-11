@@ -152,7 +152,7 @@ statisticsController.get({ path: '/classrooms' }, async (req, res) => {
     userFirstName: classroom.userFirstname,
     userLastName: classroom.userLastname,
     activities: classroom.activitiesCount
-      ? classroom.activitiesCount.flatMap((phaseObj) =>
+      ? classroom.activitiesCount.flatMap((phaseObj: { activities: any[]; phase: string }) =>
           phaseObj.activities.map((activity) => ({
             count: activity.count,
             type: activity.type,

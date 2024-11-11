@@ -1,5 +1,5 @@
 import { UserType } from '../../types/user.type';
-import { Activity } from '../entities/activity';
+import type { Activity } from '../entities/activity';
 import { Classroom } from '../entities/classroom';
 import { Video } from '../entities/video';
 import { AppDataSource } from '../utils/data-source';
@@ -78,11 +78,11 @@ export const getContributedClassroomsCount = async (villageId: number) => {
   return parseInt(result.classroomsCount);
 };
 
-export const normalizeForCountry = (inputData) => {
+export const normalizeForCountry = (inputData: any) => {
   const phaseMap = new Map();
 
-  inputData.forEach(({ activities, classroomCountryCode }) => {
-    activities.forEach(({ count, phase, type }) => {
+  inputData.forEach(({ activities, classroomCountryCode }: any) => {
+    activities.forEach(({ count, phase, type }: any) => {
       if (!phaseMap.has(phase)) {
         phaseMap.set(phase, new Map());
       }
@@ -98,7 +98,7 @@ export const normalizeForCountry = (inputData) => {
   });
 
   // Obtenez tous les codes pays uniques
-  const allCountryCodes = Array.from(new Set(inputData.map(({ classroomCountryCode }) => classroomCountryCode)));
+  const allCountryCodes = Array.from(new Set(inputData.map(({ classroomCountryCode }: any) => classroomCountryCode)));
 
   // Préparer les données de sortie
   const result = Array.from(phaseMap.entries()).map(([phase, countryMap]) => ({
@@ -107,7 +107,7 @@ export const normalizeForCountry = (inputData) => {
       const countryData = countryMap.get(code) || {};
 
       // Inclure seulement les propriétés de type qui existent dans countryData
-      const filteredData = Object.keys(countryData).reduce((acc, key) => {
+      const filteredData = Object.keys(countryData).reduce((acc: { [key: string]: number }, key) => {
         if (countryData[key] > 0) {
           acc[key] = countryData[key];
         }
