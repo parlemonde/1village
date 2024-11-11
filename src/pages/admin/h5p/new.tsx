@@ -1,12 +1,11 @@
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { Breadcrumbs, Button } from '@mui/material';
+import MaterialLink from '@mui/material/Link';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import * as React from 'react';
 import { useQueryClient } from 'react-query';
-
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { Breadcrumbs, Button } from '@mui/material';
-import MaterialLink from '@mui/material/Link';
 
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { H5pEditor } from 'src/components/h5p';

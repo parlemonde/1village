@@ -1,7 +1,6 @@
+import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import Link from 'next/link';
 import React from 'react';
-
-import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 
 import { UserContext } from 'src/contexts/userContext';
 import BackArrow from 'src/svg/back-arrow.svg';

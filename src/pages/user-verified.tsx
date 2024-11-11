@@ -1,7 +1,6 @@
+import { Box, Grid, Link, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useRef } from 'react';
-
-import { Box, Grid, Link, Typography } from '@mui/material';
 
 import { UserContext } from 'src/contexts/userContext';
 import { useUserRequests } from 'src/services/useUsers';

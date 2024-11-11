@@ -1,8 +1,3 @@
-import Link from 'next/link';
-import { useSnackbar } from 'notistack';
-import React, { useState, useMemo } from 'react';
-import { useQueryClient } from 'react-query';
-
 import {
   Button,
   Table,
@@ -25,6 +20,10 @@ import {
   FormControl,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material/Select';
+import Link from 'next/link';
+import { useSnackbar } from 'notistack';
+import React, { useState, useMemo } from 'react';
+import { useQueryClient } from 'react-query';
 
 import { useFeatureFlags } from 'src/api/featureFlag/featureFlag.get';
 import { useUsers } from 'src/api/user/user.list';

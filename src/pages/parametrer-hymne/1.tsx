@@ -1,9 +1,8 @@
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import { Box } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 import styles from '../../styles/parametrer-hymne.module.css';
 import { DEFAULT_ANTHEM_DATA } from 'src/activity-types/anthem.constants';

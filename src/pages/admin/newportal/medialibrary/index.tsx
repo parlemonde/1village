@@ -1,5 +1,3 @@
-import React, { useContext, useState } from 'react';
-
 // Tout doit être responsive
 
 // STEP 1: les filtres (proposition modal sur les filtre)
@@ -19,6 +17,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import React, { useContext, useState } from 'react';
 
 import MediaCard from 'src/components/admin/mediatheque/CardMediatheque';
 import CheckboxAdmin from 'src/components/admin/mediatheque/CheckboxAdmin';

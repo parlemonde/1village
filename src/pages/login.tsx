@@ -1,8 +1,7 @@
+import { Backdrop, Box, Button, CircularProgress, Grid, Link, Tooltip, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import qs from 'query-string';
 import React from 'react';
-
-import { Backdrop, Box, Button, CircularProgress, Grid, Link, Tooltip, Typography } from '@mui/material';
 
 import { isRedirectValid } from '../components/accueil/NewHome';
 import { UserContext } from 'src/contexts/userContext';

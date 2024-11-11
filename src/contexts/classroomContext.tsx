@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { Card, CircularProgress } from '@mui/material';
+import React from 'react';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';

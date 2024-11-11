@@ -1,6 +1,3 @@
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
@@ -18,6 +15,8 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 import { isRedirectValid } from '../components/accueil/NewHome';
 import { UserContext } from 'src/contexts/userContext';
