@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { postGameDataMonneyOrExpression } from 'src/api/game/game.post';
 import { Base } from 'src/components/Base';
@@ -42,7 +42,6 @@ const MimiqueStep3 = () => {
       draftUrl: window.location.pathname,
       activityId: activityId,
     };
-
     await postGameDataMonneyOrExpression(data);
     router.push('/creer-un-jeu/mimique/4');
   };

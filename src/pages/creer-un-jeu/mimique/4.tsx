@@ -3,11 +3,13 @@ import React, { useContext } from 'react';
 
 import { Button, Tooltip, Backdrop, CircularProgress } from '@mui/material';
 
+import { publishCreatedGames } from 'src/api/game/game.publishGame';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import CreateGame from 'src/components/game/CreateGame';
 import Previsualisation from 'src/components/game/Previsualisation';
+import { ActivityContext } from 'src/contexts/activityContext';
 import { GameContext } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
 import type { StepsTypes } from 'types/game.type';
@@ -20,9 +22,11 @@ const MimiqueStep4 = () => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const { gameConfig } = useContext(GameContext);
+  const { activityId } = useContext(ActivityContext);
 
   const onPublish = async () => {
     setIsLoading(true);
+    await publishCreatedGames(activityId);
     localStorage.removeItem('gameConfig');
     router.push('/creer-un-jeu/mimique/success');
     setIsLoading(false);

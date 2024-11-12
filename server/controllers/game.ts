@@ -309,7 +309,7 @@ async function createActivity(data: ActivityContent[], userId: number, villageId
   const activity = new Activity();
   activity.type = type;
   activity.subType = subType;
-  activity.status = ActivityStatus.PUBLISHED;
+  activity.status = ActivityStatus.DRAFT;
   // TODO: Travailler sur le type de data
   activity.data = data as unknown as AnyData;
   activity.data.draftUrl;
@@ -509,3 +509,35 @@ gameController.get({ path: '/countAbleToPlayStandardGame', userType: UserType.TE
 });
 
 export { gameController };
+
+// --- Get games related to an activity ---
+
+gameController.get({ path: '/getGamesActivity', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+  const activityId = req.body.activityId;
+  const games = await AppDataSource.getRepository(Game).find({
+    where: { activityId },
+    order: { createDate: 'DESC' },
+  });
+  res.sendJSON(games);
+});
+
+// publish game : update status activity to published
+gameController.put({ path: '/publishGame', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+
+  const { activityId } = req.body;
+  await AppDataSource.createQueryBuilder()
+    .update(Activity)
+    .set({ status: ActivityStatus.PUBLISHED })
+    .where('id = :activityId', { activityId })
+    .execute();
+
+  res.sendJSON({ message: 'les jeux ont été publiés' });
+});
