@@ -32,7 +32,6 @@ const MimiqueStep1 = () => {
       type: ActivityType.GAME,
       subType: GameType.MIMIC,
       game: {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         gameId: activityGames[0] ? activityGames[0]?.id : null,
         type: GameType.MIMIC,
         origine: gameConfig?.[0]?.[0]?.inputs?.[2]?.selectedValue,
