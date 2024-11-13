@@ -25,11 +25,12 @@ export class AddPhaseHistory1731486908522 implements MigrationInterface {
           },
           {
             name: 'startingOn',
-            type: 'date',
+            type: 'datetime',
           },
           {
             name: 'endingOn',
-            type: 'date',
+            type: 'datetime',
+            isNullable: true,
           },
         ],
       }),
