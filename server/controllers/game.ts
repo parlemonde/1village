@@ -286,21 +286,42 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
 
   const data = req.body;
   let activityId = data.activityId;
-  // step 1
-  if (!data.activityId) {
-    const activity = await createActivity(data, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
-    if (activity) {
-      activityId = activity.id;
-      await createGame(data.game as GameData, activity);
-    }
-    // step 2 & 3
+  const gameId = data.game?.gameId ? data.game?.gameId : null;
+
+  // edit
+  if (gameId) {
+    const game = data.game;
+    await AppDataSource.createQueryBuilder()
+      .update(Game)
+      .set({
+        type: game.type,
+        origine: game.origine,
+        signification: game.signification,
+        fakeSignification1: game.fakeSignification1,
+        fakeSignification2: game.fakeSignification2,
+        video: game.video,
+      })
+      .where('id = :gameId', { gameId })
+      .execute();
   } else {
-    const activity = await getActivityById(data.activityId);
-    if (activity) {
-      activityId = activity.id;
-      await createGame(data.game as GameData, activity);
+    // Creation
+    // step 1
+    if (!data.activityId) {
+      const activity = await createActivity(data, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
+      if (activity) {
+        activityId = activity.id;
+        await createGame(data.game as GameData, activity);
+      }
+      // step 2 & 3
+    } else {
+      const activity = await getActivityById(data.activityId);
+      if (activity) {
+        activityId = activity.id;
+        await createGame(data.game as GameData, activity);
+      }
     }
   }
+
   const games = await AppDataSource.getRepository(Game)
     .createQueryBuilder('game')
     .where('game.activityId = :activityId', { activityId })

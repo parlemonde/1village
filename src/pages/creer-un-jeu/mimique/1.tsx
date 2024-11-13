@@ -22,7 +22,7 @@ const MimiqueStep1 = () => {
   const { selectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
-  const { gameConfig, setActivityGames } = useContext(GameContext);
+  const { gameConfig, setActivityGames, activityGames } = useContext(GameContext);
   const { setActivityId } = useContext(ActivityContext);
 
   const onNext = async () => {
@@ -32,6 +32,7 @@ const MimiqueStep1 = () => {
       type: ActivityType.GAME,
       subType: GameType.MIMIC,
       game: {
+        gameId: activityGames[0] ? activityGames[0].id : null,
         type: GameType.MIMIC,
         origine: gameConfig?.[0]?.[0]?.inputs?.[2]?.selectedValue,
         signification: gameConfig?.[0]?.[0]?.inputs?.[1]?.selectedValue,
