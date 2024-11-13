@@ -3,7 +3,7 @@ import React from 'react';
 
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import { Checkbox } from '@mui/material';
+import { Checkbox, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import MobileStepper from '@mui/material/MobileStepper';
 
@@ -269,6 +269,36 @@ export const FirstPhase = () => {
             </div>
             <div style={{ display: 'flex', alignItems: 'stretch' }}>
               <div style={{ flex: 1, marginRight: '1rem', minWidth: 0 }}>
+                <Typography variant="h3" mx={1} mb={2}>
+                  Professionnel de l'éducation
+                </Typography>
+                <PanelInput
+                  value={newUser.lastname || ''}
+                  defaultValue={'non renseignée'}
+                  label="Nom : "
+                  placeholder="Nom : "
+                  hasError={!newUser.lastname}
+                  isEditMode
+                  isRequired
+                  onChange={(lastname) => {
+                    setNewUser((u) => ({ ...u, lastname }));
+                  }}
+                />
+                <PanelInput
+                  value={newUser.firstname || ''}
+                  defaultValue={'non renseignée'}
+                  label="Prénom : "
+                  placeholder="Prénom : "
+                  hasError={!newUser.firstname}
+                  isEditMode
+                  isRequired
+                  onChange={(firstname) => {
+                    setNewUser((u) => ({ ...u, firstname }));
+                  }}
+                />
+                <Typography variant="h3" mx={1} my={2}>
+                  Établissement
+                </Typography>
                 <PanelInput
                   value={newUser.school || ''}
                   defaultValue={'non renseignée'}
@@ -333,10 +363,10 @@ export const FirstPhase = () => {
                   <PanelInput value={user.country.name} defaultValue={''} label="Pays :" placeholder="Pays" isEditMode={false} />
                 )}
                 <PanelInput
-                  style={{ marginTop: '2rem' }}
+                  style={{ marginTop: '1rem' }}
                   value={newUser.displayName || ''}
                   defaultValue={'non renseigné'}
-                  label="Nom affiché : "
+                  label="Pseudo : "
                   placeholder={getUserDisplayName({ ...user, ...newUser, type: user?.type }, false)}
                   isEditMode
                   onChange={(displayName) => {
