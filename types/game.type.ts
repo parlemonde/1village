@@ -75,7 +75,7 @@ export type GamesData = {
 };
 
 export type GameData = {
-  gameId?: number | null;
+  id?: number | null;
   type: GameType;
   origine?: string;
   signification?: string;

@@ -52,7 +52,7 @@ interface GameProviderProps {
 export const GameProvider = ({ children }: GameProviderProps) => {
   const [gameType, setGameType] = useState<GameType>(GameType.MIMIC);
   const [gameConfig, setGameConfig] = useState<Array<StepsTypes[]>>(GAME_FIELDS_CONFIG[gameType].steps);
-  const [activityGames, setActivityGames] = useState<Array<unknown>>([]);
+  const [activityGames, setActivityGames] = useState<Array<GameData>>([]);
   const { activityId } = useContext(ActivityContext);
 
   const inputSelectedValue = gameConfig[0]?.[0]?.inputs?.[0]?.selectedValue;

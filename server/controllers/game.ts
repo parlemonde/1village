@@ -286,7 +286,7 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
 
   const data = req.body;
   let activityId = data.activityId;
-  const gameId = data.game?.gameId ? data.game?.gameId : null;
+  const gameId = data.game?.id ? data.game?.id : null;
 
   // edit
   if (gameId) {
