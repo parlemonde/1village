@@ -11,6 +11,13 @@ export class AddPhaseHistory1731486908522 implements MigrationInterface {
             name: 'id',
             type: 'int',
             isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
+          },
+          {
+            name: 'villageId',
+            type: 'int',
+            isNullable: false,
           },
           {
             name: 'phase',
@@ -18,11 +25,12 @@ export class AddPhaseHistory1731486908522 implements MigrationInterface {
           },
           {
             name: 'startingOn',
-            type: 'date',
+            type: 'datetime',
           },
           {
             name: 'endingOn',
-            type: 'date',
+            type: 'datetime',
+            isNullable: true,
           },
         ],
       }),
@@ -66,15 +74,6 @@ export class AddPhaseHistory1731486908522 implements MigrationInterface {
       const foreignKey = table.foreignKeys.find((fk) => fk.columnNames.indexOf('questionId') !== -1);
       if (foreignKey) {
         await queryRunner.dropForeignKey('phase_history', foreignKey);
-        await queryRunner.createForeignKey(
-          'phase_history',
-          new TableForeignKey({
-            columnNames: ['villageId'],
-            referencedColumnNames: ['id'],
-            referencedTableName: 'village',
-            onDelete: 'CASCADE',
-          }),
-        );
         await queryRunner.dropIndex('phase_history', 'IDX_PHASE_HISTORY');
         await queryRunner.dropTable('phase_history');
       }
