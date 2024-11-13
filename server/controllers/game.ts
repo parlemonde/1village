@@ -291,14 +291,14 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
     const activity = await createActivity(data, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
     if (activity) {
       activityId = activity.id;
-      createGame(data.game as GameData, activity);
+      await createGame(data.game as GameData, activity);
     }
     // step 2 & 3
   } else {
     const activity = await getActivityById(data.activityId);
     if (activity) {
       activityId = activity.id;
-      createGame(data.game as GameData, activity);
+      await createGame(data.game as GameData, activity);
     }
   }
   const games = await AppDataSource.getRepository(Game)
