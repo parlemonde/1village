@@ -299,6 +299,7 @@ type EditUserData = {
   firstname?: string;
   lastname?: string;
   countryCode?: string;
+  createdAt?: string;
   level?: string;
   school?: string;
   city?: string;
@@ -324,6 +325,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
     firstname: { type: 'string', nullable: true },
     lastname: { type: 'string', nullable: true },
     countryCode: { type: 'string', nullable: true },
+    createdAt: { type: 'string', nullable: true },
     level: { type: 'string', nullable: true },
     school: { type: 'string', nullable: true },
     city: { type: 'string', nullable: true },
