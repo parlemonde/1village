@@ -26,14 +26,13 @@ const MimiqueStep1 = () => {
   const { setActivityId } = useContext(ActivityContext);
 
   const onNext = async () => {
-    const gameId = activityGames[0] ? activityGames[0]?.id : null;
     const data: GameDataMonneyOrExpression = {
       userId: user?.id || 0,
       villageId: village?.id || 0,
       type: ActivityType.GAME,
       subType: GameType.MIMIC,
       game: {
-        gameId: gameId,
+        gameId: activityGames[0] ? activityGames[0]?.id : null,
         type: GameType.MIMIC,
         origine: gameConfig?.[0]?.[0]?.inputs?.[2]?.selectedValue,
         signification: gameConfig?.[0]?.[0]?.inputs?.[1]?.selectedValue,
