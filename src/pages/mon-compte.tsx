@@ -277,6 +277,7 @@ const Presentation = () => {
             label="École :"
             placeholder="Nom de votre école"
             isEditMode={editMode === 0}
+            isBold
             onChange={(school) => {
               setNewUser((u) => (!u ? u : { ...u, school }));
             }}
@@ -287,6 +288,7 @@ const Presentation = () => {
             label="Niveau de la classe :"
             placeholder="Niveau de votre classe"
             isEditMode={editMode === 0}
+            isBold
             onChange={(level) => {
               setNewUser((u) => (!u ? u : { ...u, level }));
             }}
@@ -297,6 +299,7 @@ const Presentation = () => {
             label="Adresse de l'école :"
             placeholder="Adresse"
             isEditMode={editMode === 0}
+            isBold
             onChange={(address) => {
               setNewUser((u) => (!u ? u : { ...u, address }));
             }}
@@ -307,6 +310,7 @@ const Presentation = () => {
             label="Ville :"
             placeholder="Ville"
             isEditMode={editMode === 0}
+            isBold
             onChange={(city) => {
               setNewUser((u) => (!u ? u : { ...u, city }));
             }}
@@ -317,6 +321,7 @@ const Presentation = () => {
             label="Code postal :"
             placeholder="Code postal"
             isEditMode={editMode === 0}
+            isBold
             onChange={(postalCode) => {
               setNewUser((u) => (!u ? u : { ...u, postalCode }));
             }}
@@ -327,6 +332,7 @@ const Presentation = () => {
             label="Nom affiché sur vos publications :"
             placeholder={getUserDisplayName(user, false, true)}
             isEditMode={editMode === 0}
+            isBold
             onChange={(displayName) => {
               setNewUser((u) => (!u ? u : { ...u, displayName }));
             }}
