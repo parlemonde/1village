@@ -32,7 +32,7 @@ export class AddPhaseHistory1731486908522 implements MigrationInterface {
       'phase_history',
       new TableIndex({
         name: 'IDX_PHASE_HISTORY',
-        columnNames: ['village', 'phase'],
+        columnNames: ['villageId', 'phase'],
         isUnique: true,
       }),
     );
