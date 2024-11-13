@@ -32,7 +32,7 @@ const MimiqueStep1 = () => {
       type: ActivityType.GAME,
       subType: GameType.MIMIC,
       game: {
-        gameId: activityGames[0] ? activityGames[0].id : null,
+        gameId: activityGames[0] ? activityGames[0]?.id : null,
         type: GameType.MIMIC,
         origine: gameConfig?.[0]?.[0]?.inputs?.[2]?.selectedValue,
         signification: gameConfig?.[0]?.[0]?.inputs?.[1]?.selectedValue,
