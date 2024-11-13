@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react';
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
+import { getAllActivityGames } from 'src/api/game/game.getAllActivityGames';
 import { GAME_FIELDS_CONFIG } from 'src/config/games/game';
-import type { inputType, StepsTypes } from 'types/game.type';
+import { ActivityContext } from 'src/contexts/activityContext';
+import type { GameData, inputType, StepsTypes } from 'types/game.type';
 import { GameType } from 'types/game.type';
 
 type GameContextType = {
@@ -13,6 +15,8 @@ type GameContextType = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateGameConfig: (value: any, input: inputType) => void;
   inputSelectedValue?: string;
+  activityGames: Array<GameData>;
+  setActivityGames: (activityGames: Array<GameData>) => void;
 };
 
 export const GameContext = createContext<GameContextType>({
@@ -24,6 +28,8 @@ export const GameContext = createContext<GameContextType>({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
   updateGameConfig: (_value: any, _input: inputType) => {},
   inputSelectedValue: '',
+  activityGames: [],
+  setActivityGames: () => {},
 });
 
 export const useGame = () => {
@@ -46,6 +52,9 @@ interface GameProviderProps {
 export const GameProvider = ({ children }: GameProviderProps) => {
   const [gameType, setGameType] = useState<GameType>(GameType.MIMIC);
   const [gameConfig, setGameConfig] = useState<Array<StepsTypes[]>>(GAME_FIELDS_CONFIG[gameType].steps);
+  const [activityGames, setActivityGames] = useState<Array<GameType[]>>([]);
+  const { activityId } = useContext(ActivityContext);
+
   const inputSelectedValue = gameConfig[0]?.[0]?.inputs?.[0]?.selectedValue;
 
   const updateGameType = (type: GameType) => {
@@ -72,8 +81,28 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     saveGameResponseInSessionStorage(configCopy);
   };
 
+  const getActivityGames = async (activityId: number) => {
+    const gamesList = await getAllActivityGames(activityId);
+    setActivityGames(gamesList);
+  };
+  useEffect(() => {
+    if (activityId) {
+      getActivityGames(activityId);
+    }
+  }, [activityId]);
   return (
-    <GameContext.Provider value={{ updateGameConfig, gameType, setGameType: updateGameType, gameConfig, setGameConfig, inputSelectedValue }}>
+    <GameContext.Provider
+      value={{
+        updateGameConfig,
+        gameType,
+        setGameType: updateGameType,
+        gameConfig,
+        setGameConfig,
+        inputSelectedValue,
+        activityGames,
+        setActivityGames,
+      }}
+    >
       {children}
     </GameContext.Provider>
   );

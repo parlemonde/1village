@@ -22,11 +22,7 @@ const MimiqueStep1 = () => {
   const { selectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
-  //const labelPresentation = user ? getUserDisplayName(user, false) : '';
-
-  // TODO
-  // envoyer l'acitivité
-  const { gameConfig } = useContext(GameContext);
+  const { gameConfig, setActivityGames } = useContext(GameContext);
   const { setActivityId } = useContext(ActivityContext);
 
   const onNext = async () => {
@@ -51,7 +47,8 @@ const MimiqueStep1 = () => {
 
     const result = await postGameDataMonneyOrExpression(data);
     if (result) {
-      setActivityId(result);
+      setActivityId(result.activityId);
+      setActivityGames(result.games);
     }
     router.push('/creer-un-jeu/mimique/2');
   };

@@ -1,10 +1,12 @@
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { GameDataMonneyOrExpression } from 'types/game.type';
+import type { GameDataMonneyOrExpression, GameData } from 'types/game.type';
 
-// TODO: changer les noms du type et de la fonction une fois que Mimique sera standardisé aussi
-
-export async function postGameDataMonneyOrExpression(data: GameDataMonneyOrExpression): Promise<number | null | undefined> {
-  const response = await axiosRequest<number>({
+export interface PostGameResponse {
+  activityId: number;
+  games: Array<GameData>;
+}
+export async function postGameDataMonneyOrExpression(data: GameDataMonneyOrExpression): Promise<PostGameResponse> {
+  const response = await axiosRequest<PostGameResponse>({
     method: 'POST',
     url: '/games/standardGame',
     data,

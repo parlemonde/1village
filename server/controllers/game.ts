@@ -301,7 +301,12 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
       createGame(data.game as GameData, activity);
     }
   }
-  res.sendJSON(activityId);
+  const games = await AppDataSource.getRepository(Game)
+    .createQueryBuilder('game')
+    .where('game.activityId = :activityId', { activityId })
+    .orderBy('game.createDate', 'DESC')
+    .getMany();
+  res.sendJSON({ activityId, games });
 });
 
 // --- create a activity ---

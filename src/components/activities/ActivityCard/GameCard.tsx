@@ -119,7 +119,7 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
                       light
                       // eslint-disable-next-line
                       // @ts-ignore
-                      url={activity.content.game[0].inputs[0].selectedValue}
+                      url={activity.content.game[0]?.inputs[0].selectedValue}
                       style={{ backgroundColor: 'black', margin: 'auto' }}
                     />
                   </Link>
