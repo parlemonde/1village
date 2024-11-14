@@ -82,6 +82,7 @@ export type GameData = {
   fakeSignification1?: string;
   fakeSignification2?: string;
   video?: string;
+  gameId?: number | null;
 };
 
 // --- three different mimiques ---

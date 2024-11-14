@@ -12,7 +12,6 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { GameContext } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-//import { getUserDisplayName } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { GameDataMonneyOrExpression } from 'types/game.type';
 import { GameType } from 'types/game.type';
@@ -23,8 +22,7 @@ const MimiqueStep1 = () => {
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const { gameConfig, setActivityGames, activityGames } = useContext(GameContext);
-  const { setActivityId } = useContext(ActivityContext);
-
+  const { setActivityId, activityId } = useContext(ActivityContext);
   const onNext = async () => {
     const data: GameDataMonneyOrExpression = {
       userId: user?.id || 0,
@@ -43,7 +41,7 @@ const MimiqueStep1 = () => {
       selectedPhase: selectedPhase,
       status: ActivityStatus.DRAFT,
       draftUrl: window.location.pathname,
-      activityId: null,
+      activityId: activityId ? activityId : null,
     };
 
     const result = await postGameDataMonneyOrExpression(data);

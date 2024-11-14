@@ -57,13 +57,13 @@ export const GameCardMaClasse = ({
 
   // eslint-disable-next-line
   // @ts-ignore
-  const media = activity.content.game[0].inputs[0].selectedValue || '';
+  const media = activity.content.game[0]?.inputs[0].selectedValue || '';
   // eslint-disable-next-line
   // @ts-ignore
-  const responseToDisplay = activity.content.game[0].inputs[1].selectedValue.toLowerCase() || '';
+  const responseToDisplay = activity.content.game[0]?.inputs[1].selectedValue.toLowerCase() || '';
   // eslint-disable-next-line
   // @ts-ignore
-  const origine = activity.content.game[0].inputs[2].selectedValue || '';
+  const origine = activity.content.game[0]?.inputs[2].selectedValue || '';
   // eslint-disable-next-line
   // @ts-ignore
   const language = activity.content.language || '';

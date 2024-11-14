@@ -287,7 +287,6 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
   const data = req.body;
   let activityId = data.activityId;
   const gameId = data.game?.id ? data.game?.id : null;
-
   // edit
   if (gameId) {
     const game = data.game;
@@ -325,7 +324,7 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
   const games = await AppDataSource.getRepository(Game)
     .createQueryBuilder('game')
     .where('game.activityId = :activityId', { activityId })
-    .orderBy('game.createDate', 'DESC')
+    .orderBy('game.createDate', 'ASC')
     .getMany();
   res.sendJSON({ activityId, games });
 });
@@ -544,10 +543,12 @@ gameController.get({ path: '/getGamesActivity', userType: UserType.TEACHER }, as
     return;
   }
   const activityId = req.body.activityId;
-  const games = await AppDataSource.getRepository(Game).find({
-    where: { activityId },
-    order: { createDate: 'DESC' },
-  });
+  const games = await AppDataSource.getRepository(Game)
+    .createQueryBuilder('game')
+    .where('game.activityId = :activityId', { activityId })
+    .orderBy('game.createDate', 'ASC')
+    .getMany();
+
   res.sendJSON(games);
 });
 

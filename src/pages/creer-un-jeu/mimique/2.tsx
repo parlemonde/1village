@@ -20,8 +20,8 @@ const MimiqueStep2 = () => {
   const { selectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
-  const { gameConfig } = useContext(GameContext);
-  const { activityId } = useContext(ActivityContext);
+  const { gameConfig, setActivityGames, activityGames } = useContext(GameContext);
+  const { setActivityId, activityId } = useContext(ActivityContext);
 
   const onNext = async () => {
     const data: GameDataMonneyOrExpression = {
@@ -30,6 +30,7 @@ const MimiqueStep2 = () => {
       type: ActivityType.GAME,
       subType: GameType.MIMIC,
       game: {
+        id: activityGames?.[1] ? activityGames?.[1]?.id : null,
         type: GameType.MIMIC,
         origine: gameConfig?.[1]?.[0]?.inputs?.[2]?.selectedValue,
         signification: gameConfig?.[1]?.[0]?.inputs?.[1]?.selectedValue,
@@ -43,7 +44,11 @@ const MimiqueStep2 = () => {
       activityId: activityId,
     };
 
-    await postGameDataMonneyOrExpression(data);
+    const result = await postGameDataMonneyOrExpression(data);
+    if (result) {
+      setActivityId(result.activityId);
+      setActivityGames(result.games);
+    }
     router.push('/creer-un-jeu/mimique/3');
   };
 
