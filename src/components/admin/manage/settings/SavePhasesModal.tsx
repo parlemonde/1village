@@ -8,21 +8,21 @@ import { Modal } from 'src/components/Modal';
 import type { VillagePhase } from 'types/village.type';
 
 interface SavePhasesModalProps {
-  villagePhases: { [villageId: number]: VillagePhase };
+  villagesToUpdate: { [villageId: number]: VillagePhase };
   isModalOpen: boolean;
   setIsModalOpen: (val: boolean) => void;
 }
 
-export function SavePhasesModal({ villagePhases, isModalOpen, setIsModalOpen }: SavePhasesModalProps) {
+export function SavePhasesModal({ villagesToUpdate, isModalOpen, setIsModalOpen }: SavePhasesModalProps) {
   const [isModalLoading, setIsModalLoading] = useState(false);
   const updateVillages = useUpdateVillages();
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleConfirm = async (villagePhases: { [villageId: number]: VillagePhase }) => {
+  const handleConfirm = async (villagesToUpdate: { [villageId: number]: VillagePhase }) => {
     const promises = [];
-    for (const key in villagePhases) {
+    for (const key in villagesToUpdate) {
       const villageId: number = +key;
-      const updatedPhase = Math.min(villagePhases[villageId], 3);
+      const updatedPhase = Math.min(villagesToUpdate[villageId], 3);
       promises.push(
         updateVillages.mutateAsync({
           id: villageId,
@@ -54,6 +54,7 @@ export function SavePhasesModal({ villagePhases, isModalOpen, setIsModalOpen }: 
       });
       setIsModalOpen(false);
       setIsModalLoading(false);
+      window.location.reload();
     }
     if (updateVillages.isError) {
       enqueueSnackbar("Une erreur s'est produite lors de la modifications !", {
@@ -70,7 +71,7 @@ export function SavePhasesModal({ villagePhases, isModalOpen, setIsModalOpen }: 
       noCloseButton={true}
       maxWidth="sm"
       title="Es-tu sûr ?"
-      onConfirm={async () => handleConfirm(villagePhases)}
+      onConfirm={async () => handleConfirm(villagesToUpdate)}
       onClose={() => {
         setIsModalOpen(false);
       }}
