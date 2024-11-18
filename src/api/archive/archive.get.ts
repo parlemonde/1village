@@ -11,7 +11,7 @@ const BASE_URL = '/api/archives';
 export const useListArchives = () => {
   const { user } = React.useContext(UserContext);
 
-  const hasAccess = user?.type === UserType.SUPER_ADMIN || user?.type === UserType.ADMIN || user?.type === UserType.MEDIATOR;
+  const hasAccess = user !== null && user.type in [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.MEDIATOR];
 
   return useQuery(
     ['archives'],

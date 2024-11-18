@@ -11,7 +11,7 @@ import { UserType } from 'types/user.type';
 
 const Archive = () => {
   const { user } = React.useContext(UserContext);
-  const hasAccess = user?.type === UserType.SUPER_ADMIN;
+  const hasAccess = user !== null && user.type in [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.MEDIATOR];
   const [archives, setArchives] = useState<string[]>([]);
   const { enqueueSnackbar } = useSnackbar();
 
