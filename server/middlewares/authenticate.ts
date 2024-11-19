@@ -9,7 +9,7 @@ import { AppDataSource } from '../utils/data-source';
 
 const secret: string = process.env.APP_SECRET || '';
 
-export function authenticate(userType: UserType | undefined = undefined): RequestHandler {
+export function authenticate(userType?: UserType | UserType[] | undefined) {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     let token: string;
     if (req.cookies && req.cookies['access-token']) {

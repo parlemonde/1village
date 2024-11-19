@@ -278,8 +278,8 @@ analyticController.router.post(
       // Retrieve current user session or save the new one.
       // eslint-disable-next-line prefer-const
       let [sessionCount, userPhase] = await Promise.all([
-        AppDataSource.getRepository(AnalyticSession).count({ where: { id: data.sessionId } }),
-        AppDataSource.getRepository(User).createQueryBuilder('user').select('user.firstlogin').where({ id: data.userId }).getRawOne(),
+        AppDataSource.getRepository(AnalyticSession).count({where: {id: data.sessionId}}),
+        AppDataSource.getRepository(User).createQueryBuilder('user').select('user.firstlogin').where({id: data.userId}).getRawOne(),
       ]);
 
       if (sessionCount === 0 && data.event === 'pageview' && data.params?.isInitial) {
@@ -331,7 +331,7 @@ analyticController.router.post(
         pagePerf.data = data.params.perf as BrowserPerf;
         AppDataSource.getRepository(AnalyticPerformance).save(pagePerf).catch(); // no need to wait
       } else if (data.event === 'session' && data.params?.duration) {
-        AppDataSource.getRepository(AnalyticSession).update({ id: data.sessionId }, { duration: data.params?.duration }).catch(); // no need to wait
+        AppDataSource.getRepository(AnalyticSession).update({id: data.sessionId}, {duration: data.params?.duration}).catch(); // no need to wait
       }
     } catch (e) {
       logger.error(e);

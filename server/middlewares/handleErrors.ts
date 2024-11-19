@@ -31,7 +31,7 @@ interface PromiseRequestHandler extends RequestHandler {
   (req: Request, res: Response, next: NextFunction): Promise<void> | void;
 }
 
-export function handleErrors(fn: RequestHandler): RequestHandler {
+export function handleErrors(fn) {
   return (req: Request, res: Response, next: NextFunction): void => {
     const sendError = (err: Error | AppError): void => {
       logger.error(err.message);
