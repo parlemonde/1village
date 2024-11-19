@@ -220,14 +220,14 @@ export const getH5pRouter = async () => {
         res.status(400).send('Malformed request');
         return;
       }
-      const {id: contentId, metadata} = await h5pEditor.saveOrUpdateContentReturnMetaData(
+      const { id: contentId, metadata } = await h5pEditor.saveOrUpdateContentReturnMetaData(
         undefined as unknown as string,
         req.body.params.params,
         req.body.params.metadata,
         req.body.library,
         req.user as unknown as H5pUser,
       );
-      res.status(200).json({contentId, metadata});
+      res.status(200).json({ contentId, metadata });
     }),
   );
 
@@ -238,14 +238,14 @@ export const getH5pRouter = async () => {
         res.status(400).send('Malformed request');
         return;
       }
-      const {id: contentId, metadata} = await h5pEditor.saveOrUpdateContentReturnMetaData(
+      const { id: contentId, metadata } = await h5pEditor.saveOrUpdateContentReturnMetaData(
         req.params.contentId,
         req.body.params.params,
         req.body.params.metadata,
         req.body.library,
         req.user as unknown as H5pUser,
       );
-      res.status(200).sendJSON({contentId, metadata});
+      res.status(200).sendJSON({ contentId, metadata });
     }),
   );
 
