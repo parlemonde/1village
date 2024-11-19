@@ -27,10 +27,19 @@ export const Accueil = () => {
   const router = useRouter();
   const [withPagination, setWithPagination] = React.useState(true);
 
+  //Check if the app is in archive mode
   React.useEffect(() => {
+    const isArchiveMode = process.env.NEXT_PUBLIC_ARCHIVE_MODE === 'true';
+    if (isArchiveMode) {
+      setWithPagination(false);
+      return;
+    }
+
     if (!router.isReady) return;
-    setWithPagination(!('nopagination' in router.query));
-  }, [router.isReady, router.query]);
+    const urlParams = new URLSearchParams(window.location.search);
+    const noPagination = urlParams.has('nopagination');
+    setWithPagination(!noPagination);
+  }, [router.isReady]);
 
   //TODO: redo conditions and switchs
   const filterCountries = React.useMemo(() => {
