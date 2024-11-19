@@ -32,9 +32,19 @@ interface OneVillageTableProps {
   columns: Array<{ key: string; label: string; sortable?: boolean }>;
   actions?(id: string | number, index: number): React.ReactNode | React.ReactNodeArray;
   titleContent?: string;
+  usePagination?: boolean;
 }
 
-export const OneVillageTable = ({ 'aria-label': ariaLabel, emptyPlaceholder, admin, data, columns, actions, titleContent }: OneVillageTableProps) => {
+export const OneVillageTable = ({
+  'aria-label': ariaLabel,
+  emptyPlaceholder,
+  admin,
+  data,
+  columns,
+  actions,
+  titleContent,
+  usePagination: usePaginationProp,
+}: OneVillageTableProps) => {
   const theme = useTheme();
   const color = admin ? 'white' : 'black';
   const backgroundColor = admin ? theme.palette.secondary.main : primaryColorLight;
@@ -43,26 +53,47 @@ export const OneVillageTable = ({ 'aria-label': ariaLabel, emptyPlaceholder, adm
     limit: 10,
     sort: 'asc',
   });
+
   const handleChangePage = (_event: unknown, newPage: number) => {
-    setTableOptions({ ...options, page: newPage + 1 });
-  };
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTableOptions({ ...options, page: 1, limit: parseInt(event.target.value, 10) });
-  };
-  const onSortBy = (name: string) => () => {
-    if (options.order === name) {
-      setTableOptions({ ...options, page: 1, sort: options.sort === 'asc' ? 'desc' : 'asc' });
-    } else {
-      setTableOptions({ ...options, page: 1, order: name });
-    }
+    setTableOptions((prevOptions) => ({ ...prevOptions, page: newPage + 1 }));
   };
 
-  const usePagination = options.page !== undefined && options.limit !== undefined;
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTableOptions((prevOptions) => ({
+      ...prevOptions,
+      page: 1,
+      limit: parseInt(event.target.value, 10),
+    }));
+  };
+  const onSortBy = (name: string) => () => {
+    setTableOptions((prevOptions) => {
+      if (prevOptions.order === name) {
+        return {
+          ...prevOptions,
+          page: 1,
+          sort: prevOptions.sort === 'asc' ? 'desc' : 'asc',
+        };
+      } else {
+        return { ...prevOptions, page: 1, order: name };
+      }
+    });
+  };
+
+  const usePagination = usePaginationProp !== undefined ? usePaginationProp : options.page !== undefined && options.limit !== undefined;
   const displayedData = React.useMemo(() => {
     const useSort = options.sort !== undefined && options.order !== undefined;
     const sortedData = useSort
-      ? data.sort((a, b) => {
-          return (a[options.order || 0] || 0) >= (b[options.order || 0] || 0) ? (options.sort === 'asc' ? 1 : -1) : options.sort === 'asc' ? -1 : 1;
+      ? [...data].sort((a, b) => {
+          const aValue = a[options.order || ''] || '';
+          const bValue = b[options.order || ''] || '';
+
+          if (aValue > bValue) {
+            return options.sort === 'asc' ? 1 : -1;
+          } else if (aValue < bValue) {
+            return options.sort === 'asc' ? -1 : 1;
+          } else {
+            return 0;
+          }
         })
       : data;
     return usePagination ? paginate(sortedData, options.limit || 10, options.page || 1) : sortedData;
