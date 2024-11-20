@@ -273,7 +273,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       setIsReset(false);
       setErrorModalOpen(!isSuccess);
       if (isSuccess || tryCount === 1) {
-        setGameResponses(await getGameStats(getOneGameById.content.game[currentStep].id || 0));
+        setGameResponses(await getGameStats(getOneGameById?.content?.game[currentStep].id || 0));
       }
       setTryCount(tryCount + 1);
     },
