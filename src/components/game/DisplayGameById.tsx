@@ -25,7 +25,6 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import { primaryColor } from 'src/styles/variables.const';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { GameType } from 'types/game.type';
-import type { Game } from 'types/game.type';
 import type { GameResponse } from 'types/gameResponse.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
