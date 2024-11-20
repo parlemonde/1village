@@ -25,7 +25,7 @@ type Data = {
   language?: string;
   monney?: string;
   radio: string;
-  type?: string;
+  type?: number;
 };
 
 export type DataUse = {
