@@ -63,7 +63,7 @@ export const FirstPhase = () => {
   };
 
   const updateUser = async () => {
-    if (!newUser.city || !newUser.address || !newUser.pseudo || !newUser.school || !newUser.email || !newUser.postalCode) {
+    if (!newUser.firstname || !newUser.lastname || !newUser.school || !newUser.level || !newUser.address || !newUser.city || !newUser.postalCode) {
       return;
     }
     setIsLoading(true);
@@ -159,7 +159,17 @@ export const FirstPhase = () => {
                 color={currentStep === 2 || currentStep === 4 ? 'primary' : 'inherit'}
                 variant={currentStep === 2 || currentStep === 4 ? 'contained' : 'text'}
                 sx={currentStep === 2 || currentStep === 4 ? undefined : defaultTextButtonStyle}
-                disabled={(currentStep === 3 && (!newUser.city || !newUser.address || !newUser.postalCode)) || (currentStep === 2 && !cguChecked)}
+                disabled={
+                  (currentStep === 3 &&
+                    (!newUser.firstname ||
+                      !newUser.lastname ||
+                      !newUser.school ||
+                      !newUser.level ||
+                      !newUser.address ||
+                      !newUser.city ||
+                      !newUser.postalCode)) ||
+                  (currentStep === 2 && !cguChecked)
+                }
                 onClick={() => {
                   if (currentStep === 3) {
                     getNewUserPosition().catch();
@@ -270,7 +280,7 @@ export const FirstPhase = () => {
             <div style={{ display: 'flex', alignItems: 'stretch' }}>
               <div style={{ flex: 1, marginRight: '1rem', minWidth: 0 }}>
                 <Typography variant="h3" mx={1} mb={2}>
-                  Professionnel de l'éducation
+                  Professionnel de l&apos;éducation
                 </Typography>
                 <PanelInput
                   value={newUser.lastname || ''}

@@ -329,7 +329,7 @@ const Presentation = () => {
           <PanelInput
             value={newUser.displayName || ''}
             defaultValue={getUserDisplayName(user, false, true)}
-            label="Nom affiché sur vos publications :"
+            label="Pseudo :"
             placeholder={getUserDisplayName(user, false, true)}
             isEditMode={editMode === 0}
             isBold
