@@ -38,6 +38,7 @@ phaseHistoryController.post({ path: '/' }, async (_req, res) => {
     const phaseHistory = new PhaseHistory();
     phaseHistory.village = village;
     phaseHistory.phase = data.phase;
+    phaseHistory.startingOn = new Date();
 
     // Save phase history in db
     const phaseHistoryRepository = AppDataSource.getRepository(PhaseHistory);
