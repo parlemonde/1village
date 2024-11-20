@@ -151,8 +151,6 @@ const ResetPassword: React.FunctionComponent = () => {
               <Box width="90%" maxWidth="350px" margin="0 auto">
                 <Typography margin="0 auto" align="left">
                   Veuillez renseigner l&apos;email lié à votre compte.
-                  <br />
-                  Nous vous enverrons un email avec un lien qui vous permettra de réinitialiser votre mot de passe.
                 </Typography>
 
                 <Box
@@ -208,8 +206,6 @@ const ResetPassword: React.FunctionComponent = () => {
             ) : (
               <Box textAlign="center" display="block" height="fit-content">
                 <PelicoSouriant style={{ width: '100%', maxWidth: '250px', maxHeight: '250px', cursor: 'pointer' }} />
-                <div>Un email vient de vous être envoyé à l&apos;adresse donnée</div>
-                <br />
                 <div>Si cette adresse e-mail est enregistrée, nous y avons envoyé les instructions afin de réinitialiser votre mot de passe.</div>
               </Box>
             )}
