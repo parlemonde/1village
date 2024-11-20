@@ -458,7 +458,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
         <AlreadyPlayedModal
           handleSuccessClick={handleConfirmModal}
           isOpen={isGameModalOpen}
-          gameId={getOneGameById.content.game[currentStep].id as number}
+          gameId={getOneGameById?.content?.game[currentStep].id as number}
         />
         <Grid container justifyContent="space-between">
           <Grid item xs={6}>
