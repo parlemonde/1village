@@ -455,7 +455,11 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
             <p>Dommage ! Ce n’est pas cette réponse. Essayez encore !</p>
           )}
         </Modal>
-        <AlreadyPlayedModal handleSuccessClick={handleConfirmModal} isOpen={isGameModalOpen} gameId={getOneGameById.content.game[currentStep].id} />
+        <AlreadyPlayedModal
+          handleSuccessClick={handleConfirmModal}
+          isOpen={isGameModalOpen}
+          gameId={getOneGameById.content.game[currentStep].id as number}
+        />
         <Grid container justifyContent="space-between">
           <Grid item xs={6}>
             {(found || tryCount > 1) && (
