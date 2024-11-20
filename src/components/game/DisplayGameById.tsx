@@ -208,7 +208,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       villageId,
     } = getOneGameById || {};
 
-    const responses: { signification: string; isSuccess: boolean; value: number }[] = [];
+    const responses: { signification: string | undefined; isSuccess: boolean; value: number }[] = [];
     const euro = content.monney;
     const media = getOneGameById.content.game[currentStep].video;
 
