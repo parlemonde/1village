@@ -10,7 +10,12 @@ type Input = {
 };
 
 type GameItem = {
-  inputs: Input[];
+  inputs?: Input[];
+  video?: string;
+  origine?: string;
+  signification?: string;
+  fakeSignification1?: string;
+  fakeSignification2?: string;
 };
 
 type Data = {
