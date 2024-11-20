@@ -25,6 +25,7 @@ type Data = {
   monney?: string;
   radio: string;
   type?: string;
+  id?: number;
 };
 
 export type DataUse = {
