@@ -263,7 +263,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       if (playContent.responses.length === 0) {
         return;
       }
-      const apiResponse = await sendNewGameResponse(getOneGameById.content.game[currentStep].id || 0, selection, playContent.villageId || 0);
+      const apiResponse = await sendNewGameResponse(getOneGameById?.content?.game[currentStep].id || 0, selection, playContent.villageId || 0);
       if (!apiResponse) {
         console.error('Error reaching server');
         return;
