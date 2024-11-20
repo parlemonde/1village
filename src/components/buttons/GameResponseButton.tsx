@@ -12,6 +12,7 @@ type ResponseButtonProps = {
   onClick: (value: number, isSuccess?: boolean) => Promise<void>;
   isCorrect?: boolean;
   mimicOrigine?: string;
+  isReset?: boolean;
 };
 
 const ResponseButton = ({
@@ -21,15 +22,19 @@ const ResponseButton = ({
   signification = '',
   disabled = false,
   isCorrect,
+  isReset = false,
 }: // mimicOrigine,
 ResponseButtonProps) => {
   const [hasBeenSelected, setHasBeenSelected] = useState<boolean>(false);
 
+  if (isReset && hasBeenSelected) {
+    setHasBeenSelected(false);
+  }
   const handleClick = useCallback(() => {
     if (hasBeenSelected) return;
     setHasBeenSelected(true);
     return onClick(value, isSuccess);
-  }, [hasBeenSelected, isSuccess, value, setHasBeenSelected, onClick]);
+  }, [hasBeenSelected, onClick, value, isSuccess]);
 
   const color = isSuccess ? 'success' : 'error';
 

@@ -37,7 +37,7 @@ type GetOneGameByIdProps = {
   id: number;
 };
 
-export async function getOneGameById({ subType, id }: GetOneGameByIdProps) {
+export async function getGameByActivityId({ subType, id }: GetOneGameByIdProps) {
   const path = `/standardGame/${id}${serializeToQueryUrl({
     subType,
   })}`;
@@ -48,6 +48,6 @@ export async function getOneGameById({ subType, id }: GetOneGameByIdProps) {
   return response.error ? undefined : (response.data as DataUse);
 }
 
-export function useOneGameById(subType: number, id: number) {
-  return useQuery(['getOneGameById', { subType, id }], () => getOneGameById({ subType, id }));
+export function useGameByActivityId(subType: number, id: number) {
+  return useQuery(['getGameByActivityId', { subType, id }], () => getGameByActivityId({ subType, id }));
 }

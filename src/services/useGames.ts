@@ -176,6 +176,7 @@ export const useGameRequests = () => {
       url: `/games/play/${id}`,
       data: { value, villageId },
     });
+
     if (response.error) {
       return false;
     }

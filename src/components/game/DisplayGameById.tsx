@@ -8,7 +8,7 @@ import { Box, Button, Grid } from '@mui/material';
 
 import { KeepRatio } from '../KeepRatio';
 import { ActivityComments } from '../activities/ActivityComments';
-import { useOneGameById } from 'src/api/game/game.getOneGameById';
+import { useGameByActivityId } from 'src/api/game/game.getOneGameById';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
@@ -116,18 +116,19 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
   const { user } = useContext(UserContext);
   const { village } = useContext(VillageContext);
   const { users } = useVillageUsers();
-  const { getRandomGame, sendNewGameResponse, getGameStats, getAvailableGames, resetGamesPlayedForUser } = useGameRequests();
+  const { sendNewGameResponse, getGameStats, resetGamesPlayedForUser } = useGameRequests();
   const [tryCount, setTryCount] = useState<number>(0);
   const [found, setFound] = useState<boolean>(false);
   const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
   const [isGameModalOpen, setIsLastGameModalOpen] = useState<boolean>(false);
   const [gameResponses, setGameResponses] = useState<GameResponse[]>([]);
-  const [selectedValue] = useState(RadioBoxValues.NEW);
+  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [isReset, setIsReset] = useState<boolean>(false);
   const router = useRouter();
   const { id } = router.query;
 
-  const gameId = parseInt(String(id));
-  const { data: getOneGameById } = useOneGameById(subType, gameId || 0);
+  const activityId = parseInt(String(id));
+  const { data: getOneGameById } = useGameByActivityId(subType, activityId || 0);
 
   const usersMap = React.useMemo(() => {
     return users.reduce<{ [key: number]: User }>((acc, user) => {
@@ -178,42 +179,20 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       router.push('/');
     }
   };
-  const sortGamesByDescOrder = (games: Game[]) => {
-    return games.sort((a, b) => {
-      const dateA = a.createDate ? new Date(a.createDate).getTime() : 0;
-      const dateB = b.createDate ? new Date(b.createDate).getTime() : 0;
-      return dateB - dateA;
-    });
-  };
 
   const getNextGame = useCallback(async () => {
     setFound(false);
+    setCurrentStep(currentStep + 1);
     setGameResponses([]);
     setTryCount(0);
     setErrorModalOpen(false);
+    setIsReset(true);
 
-    const allGames = await getAvailableGames(subType);
-    const availableGamesByDescOrder = sortGamesByDescOrder(allGames);
-    const currentGameIndex = availableGamesByDescOrder.findIndex((g) => g.id === gameId);
-    const availableGames = allGames.filter((g) => g.id !== gameId);
-
-    const isLastGame = availableGames.length === 0;
-
-    const NEXT_GAME_MAPPER = {
-      [RadioBoxValues.NEW]: () => availableGamesByDescOrder[currentGameIndex + 1 < availableGamesByDescOrder.length ? currentGameIndex + 1 : 0],
-      [RadioBoxValues.RANDOM]: async () => {
-        return await getRandomGame(subType);
-      },
-    };
-
-    const nextGame = isLastGame ? undefined : await NEXT_GAME_MAPPER[selectedValue]();
-
-    if (isLastGame || !nextGame) {
+    if (currentStep + 1 === getOneGameById?.content?.game?.length) {
       setIsLastGameModalOpen(true);
       return;
     }
-    router.push(`./${nextGame?.id}`);
-  }, [getAvailableGames, subType, selectedValue, router, gameId, getRandomGame]);
+  }, [currentStep, getOneGameById?.content?.game?.length]);
 
   const userMap = useMemo(
     () =>
@@ -228,45 +207,40 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
     if (!getOneGameById) {
       return { responses: [] };
     }
-
+    const media = getOneGameById.data.game.video;
     const {
       id,
       content,
-      content: {
-        game: steps,
-        labelPresentation,
-        radio,
-        language,
-        monney,
-        game: [
-          {
-            inputs: [{ selectedValue: media, type }],
-          },
-        ],
-      },
+      content: { game: steps, labelPresentation, radio, language, monney, type },
       createDate,
       villageId,
     } = getOneGameById || {};
 
     const responses: { signification: string; isSuccess: boolean; value: number }[] = [];
-
-    let fakeSignificationIndex = 1;
     const euro = content.monney;
-    steps.map(({ inputs }) => {
-      inputs.map((input) => {
-        if (input.response || input.response === false) {
-          if (getOneGameById.subType === GameType.MONEY) {
-            const significationWithEuro = `${input.selectedValue} ${euro}`;
-            responses.push({ isSuccess: input.response, signification: significationWithEuro, value: input.response ? 0 : fakeSignificationIndex });
-          } else {
-            responses.push({ isSuccess: input.response, signification: input.selectedValue, value: input.response ? 0 : fakeSignificationIndex });
-          }
-          if (input.response === false) {
-            ++fakeSignificationIndex;
-          }
-        }
+
+    if (steps[currentStep]) {
+      const significationWithEuro = `${steps[currentStep].signification} ${euro}`;
+      const fakeSignification1WithEuro = `${steps[currentStep].fakeSignification1} ${euro}`;
+      const fakeSignification2WithEuro = `${steps[currentStep].fakeSignification2} ${euro}`;
+
+      responses.push({
+        isSuccess: true,
+        signification: getOneGameById.subType === GameType.MONEY ? significationWithEuro : steps[currentStep].signification,
+        value: 2,
       });
-    });
+      responses.push({
+        isSuccess: false,
+        signification: getOneGameById.subType === GameType.MONEY ? fakeSignification1WithEuro : steps[currentStep].fakeSignification1,
+        value: 1,
+      });
+      responses.push({
+        isSuccess: false,
+        signification: getOneGameById.subType === GameType.MONEY ? fakeSignification2WithEuro : steps[currentStep].fakeSignification2,
+        value: 0,
+      });
+    }
+
     return {
       responses,
       labelPresentation,
@@ -279,7 +253,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       type,
       villageId,
     };
-  }, [getOneGameById]);
+  }, [getOneGameById, currentStep]);
 
   const gameCreator = useMemo(() => {
     if (getOneGameById === undefined) {
@@ -291,22 +265,22 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
   const userIsPelico = user !== null && user.type <= UserType.MEDIATOR;
 
   const choices = React.useMemo(() => (playContent.responses.length > 0 ? shuffleArray(playContent.responses.length) : []), [playContent.responses]);
-
   const handleClick = useCallback(
     async (selection: string, isSuccess: boolean = false) => {
       if (playContent.responses.length === 0) {
         return;
       }
-      const apiResponse = await sendNewGameResponse(playContent.id || 0, selection, playContent.villageId || 0);
+      const apiResponse = await sendNewGameResponse(getOneGameById.content.game[currentStep].id || 0, selection, playContent.villageId || 0);
       if (!apiResponse) {
         console.error('Error reaching server');
         return;
       }
 
       setFound(isSuccess);
+      setIsReset(false);
       setErrorModalOpen(!isSuccess);
       if (isSuccess || tryCount === 1) {
-        setGameResponses(await getGameStats(playContent.id || 0));
+        setGameResponses(await getGameStats(getOneGameById.content.game[currentStep].id || 0));
       }
       setTryCount(tryCount + 1);
     },
@@ -319,8 +293,9 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       setGameResponses,
       setTryCount,
       tryCount,
-      playContent?.id,
       playContent.villageId,
+      currentStep,
+      getOneGameById?.content?.game,
     ],
   );
 
@@ -332,7 +307,11 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
   if (playContent.responses.length === 0 || !gameCreator) {
     return (
       <Base>
-        <AlreadyPlayedModal handleSuccessClick={handleConfirmModal} isOpen={isGameModalOpen} gameId={playContent.id || 0} />
+        <AlreadyPlayedModal
+          handleSuccessClick={handleConfirmModal}
+          isOpen={isGameModalOpen}
+          gameId={getOneGameById?.content?.game[currentStep].id || 0}
+        />
       </Base>
     );
   }
@@ -429,6 +408,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
                         signification={signification}
                         disabled={isDisabled}
                         isCorrect={isCorrect || (tryCount > 1 && isSuccess)}
+                        isReset={isReset}
                       />
                     </div>
                   );
@@ -482,7 +462,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
             <p>Dommage ! Ce n’est pas cette réponse. Essayez encore !</p>
           )}
         </Modal>
-        <AlreadyPlayedModal handleSuccessClick={handleConfirmModal} isOpen={isGameModalOpen} gameId={gameId} />
+        <AlreadyPlayedModal handleSuccessClick={handleConfirmModal} isOpen={isGameModalOpen} gameId={getOneGameById.content.game[currentStep].id} />
         <Grid container justifyContent="space-between">
           <Grid item xs={6}>
             {(found || tryCount > 1) && (

@@ -400,12 +400,20 @@ gameController.get({ path: '/standardGame/:id', userType: UserType.TEACHER }, as
     return;
   }
   const id = parseInt(req.params.id, 10) || 0;
-  const game = await AppDataSource.getRepository(Activity).findOne({ where: { id } });
-  if (!game || (req.user.type === UserType.TEACHER && req.user.villageId !== game.villageId)) {
+  const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id } });
+  const activityId = activity.id;
+  if (!activity || (req.user.type === UserType.TEACHER && req.user.villageId !== activity.villageId)) {
     next();
     return;
   }
-  res.sendJSON(game);
+  const games = await AppDataSource.getRepository(Game)
+    .createQueryBuilder('game')
+    .where('game.activityId = :activityId', { activityId })
+    .orderBy('game.createDate', 'ASC')
+    .getMany();
+
+  activity.content.game = games;
+  res.sendJSON(activity);
 });
 
 // --- Get one random game standardised to play ---
@@ -469,7 +477,7 @@ gameController.get({ path: '/ableToPlayStandardGame', userType: UserType.TEACHER
   const type = 4;
   const subType = parseInt(getQueryString(req.query.subType) || '0', 10);
 
-  const games = await AppDataSource.getRepository(Activity)
+  const activity = await AppDataSource.getRepository(Activity)
     .createQueryBuilder('activity')
     .leftJoin(GameResponse, 'GameResponse')
     .andWhere('`activity`.`villageId` = :villageId', { villageId: villageId })
@@ -490,6 +498,14 @@ gameController.get({ path: '/ableToPlayStandardGame', userType: UserType.TEACHER
       { userId: req.user.id },
     )
     .getMany();
+
+  const activityId = activity[0].id;
+  const games = await AppDataSource.getRepository(Game)
+    .createQueryBuilder('game')
+    .where('game.activityId = :activityId', { activityId })
+    .orderBy('game.createDate', 'ASC')
+    .getMany();
+
   res.sendJSON({
     activities: games,
   });
