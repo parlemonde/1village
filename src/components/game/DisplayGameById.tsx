@@ -210,7 +210,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
 
     const responses: { signification: string | undefined; isSuccess: boolean; value: number }[] = [];
     const euro = content.monney;
-    const media = getOneGameById.content.game[currentStep].video;
+    const media = getOneGameById.content.game[currentStep].video as string;
 
     if (steps[currentStep]) {
       const significationWithEuro = `${steps[currentStep].signification} ${euro}`;
