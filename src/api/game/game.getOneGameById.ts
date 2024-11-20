@@ -16,6 +16,7 @@ type GameItem = {
   signification?: string;
   fakeSignification1?: string;
   fakeSignification2?: string;
+  id?: number;
 };
 
 type Data = {
@@ -25,7 +26,6 @@ type Data = {
   monney?: string;
   radio: string;
   type?: string;
-  id?: number;
 };
 
 export type DataUse = {
