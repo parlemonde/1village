@@ -60,7 +60,7 @@ const Inscription = () => {
       setIsPasswordValid(false);
 
       if (!password.match(/\d/)) {
-        passwordMessageRef.current = 'Le mot de passe doit contenir un chiffre';
+        passwordMessageRef.current = 'Le mot de passe doit contenir au moins un chiffre';
       }
       if (!password.match(/[A-Z]/)) {
         if (passwordMessageRef.current) {
@@ -68,14 +68,20 @@ const Inscription = () => {
         }
         passwordMessageRef.current += ' une lettre majuscule';
       }
-      if (password.length < 8) {
+      if (!password.match(/[\w\s]/)) {
         if (passwordMessageRef.current) {
           passwordMessageRef.current += ' et ';
         }
-        passwordMessageRef.current += 'faire au moins 8 caractères';
+        passwordMessageRef.current += 'un caractère spécial';
+      }
+      if (password.length < 12) {
+        if (passwordMessageRef.current) {
+          passwordMessageRef.current += ' et ';
+        }
+        passwordMessageRef.current += 'faire au moins 12 caractères';
       }
 
-      if (!password.match(/\d/) || !password.match(/[A-Z]/) || password.length < 8) {
+      if (!password.match(/\d/) || !password.match(/[A-Z]/) || password.length < 12) {
         setIsPasswordValid(false);
       } else {
         setIsPasswordValid(true);
