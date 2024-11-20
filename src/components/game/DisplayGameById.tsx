@@ -200,7 +200,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
     if (!getOneGameById) {
       return { responses: [] };
     }
-    const media = getOneGameById.data.game.video;
     const {
       id,
       content,
@@ -211,6 +210,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
 
     const responses: { signification: string; isSuccess: boolean; value: number }[] = [];
     const euro = content.monney;
+    const media = getOneGameById.content.game[currentStep].video;
 
     if (steps[currentStep]) {
       const significationWithEuro = `${steps[currentStep].signification} ${euro}`;
