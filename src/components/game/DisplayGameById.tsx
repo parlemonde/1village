@@ -47,12 +47,6 @@ type AlreadyPlayedModalProps = {
   handleSuccessClick: () => void;
 };
 
-enum RadioBoxValues {
-  NEW = 'Nouvelle',
-  RANDOM = 'Aléatoire',
-  // MOSAIC = 'Mosaïque',
-}
-
 // type RadioNextGameProps = {
 //   value: RadioBoxValues;
 //   Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>> & {
