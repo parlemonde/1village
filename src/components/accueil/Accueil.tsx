@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Button } from '@mui/material';
@@ -23,6 +24,13 @@ export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
   const isMediator = user && user.type <= UserType.MEDIATOR;
+  const router = useRouter();
+  const [withPagination, setWithPagination] = React.useState(true);
+
+  React.useEffect(() => {
+    if (!router.isReady) return;
+    setWithPagination(!('nopagination' in router.query));
+  }, [router.isReady, router.query]);
 
   //TODO: redo conditions and switchs
   const filterCountries = React.useMemo(() => {
@@ -106,7 +114,7 @@ export const Accueil = () => {
           </KeepRatio>
           <h1 style={{ marginTop: '1rem' }}>Dernières activités</h1>
           <Filters countries={filterCountries} filters={filters} onChange={setFilters} phase={selectedPhase} />
-          <Activities activities={activitiesFiltered} withLinks withPagination />
+          <Activities activities={activitiesFiltered} withLinks withPagination={withPagination} />
         </>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', padding: '0 1rem', alignItems: 'center' }}>

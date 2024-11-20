@@ -16,14 +16,14 @@ type Link = {
 
 const Gerer = () => {
   const { user } = React.useContext(UserContext);
-  const hasAccess = user !== null && user.type in [UserType.ADMIN, UserType.SUPER_ADMIN];
+  const hasAccess = user !== null && user.type in [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.MEDIATOR];
 
   if (!hasAccess) {
     return <h1>Vous n&apos;avez pas accès à cette page, vous devez être modérateur ou super admin.</h1>;
   }
 
   const links: Link[] = [
-    { name: 'Archiver', link: '/admin/newportal/manage/settings/archive', rights: [UserType.SUPER_ADMIN] },
+    { name: 'Archiver', link: '/admin/newportal/manage/settings/archive', rights: [UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR] },
     { name: 'Présentation de Pélico', link: '/admin/newportal/manage/settings/pelico', rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
     { name: 'Paramétrer la home', link: '/admin/newportal/manage/settings/home', rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
     { name: 'Paramétrer les phases', link: '/admin/newportal/manage/settings/phases', rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
