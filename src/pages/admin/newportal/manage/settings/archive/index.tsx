@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Typography, Box, List, ListItem } from '@mui/material';
 
+import { Modal } from '../../../../../../components/Modal';
 import { useListArchives } from 'src/api/archive/archive.get';
 import { UserContext } from 'src/contexts/userContext';
 import BackArrow from 'src/svg/back-arrow.svg';
@@ -14,6 +15,7 @@ const Archive = () => {
   const hasAccess = user !== null && user.type in [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.MEDIATOR];
   const [archives, setArchives] = useState<string[]>([]);
   const { enqueueSnackbar } = useSnackbar();
+  const [modal, setModal] = useState(false);
 
   const { data: listArchive, isError: listArchiveError, isLoading: listArchiveLoading } = useListArchives();
 
@@ -57,6 +59,26 @@ const Archive = () => {
             ))}
           </List>
         )}
+      </Box>
+      <Box display="flex" flexDirection="column" alignItems="center" style={{ marginTop: '2rem' }}>
+        <Link href={`#`}>
+          <a style={{ fontWeight: 'bold' }}>Médiathèque</a>
+        </Link>
+      </Box>
+      <Box display="flex" flexDirection="column" alignItems="center" style={{ marginTop: '2rem' }}>
+        <button className="warning-button" onClick={() => setModal(!modal)}>
+          Archiver les médias de l&apos;année courante
+        </button>
+        <Modal
+          open={modal}
+          error
+          fullWidth
+          title="Confirmer l'archivage"
+          onClose={() => setModal(false)}
+          onConfirm={() => console.log('confirm')}
+          ariaDescribedBy="delete-action-desc"
+          ariaLabelledBy="delete-action-title"
+        />
       </Box>
     </div>
   );
