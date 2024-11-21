@@ -26,13 +26,10 @@ export class AddPhaseHistory1731486908522 implements MigrationInterface {
           {
             name: 'startingOn',
             type: 'datetime',
-            precision: 6,
-            default: 'CURRENT_TIMESTAMP(6)',
           },
           {
             name: 'endingOn',
             type: 'datetime',
-            precision: 6,
             isNullable: true,
           },
         ],

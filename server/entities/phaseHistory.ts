@@ -4,7 +4,7 @@ import type { VillagePhase } from './village';
 import { Village } from './village';
 
 @Entity()
-@Index(['village', 'phase'], { unique: true })
+@Index('IDX_PHASE_HISTORY', ['village', 'phase'], { unique: true })
 export class PhaseHistory {
   @PrimaryGeneratedColumn()
   public id: number;
