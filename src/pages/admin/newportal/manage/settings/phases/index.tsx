@@ -124,7 +124,7 @@ const Phases = () => {
                   <TableCell align="left">
                     <Checkbox
                       checked={Object.values(villagePhases).every((phase) => phase >= VillagePhase.EXCHANGE)}
-                      disabled={!!villages.data.find((village) => village.activePhase > VillagePhase.EXCHANGE)}
+                      disabled={villages.data.every((village) => village.activePhase > VillagePhase.EXCHANGE)}
                       onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                         handleHeaderCheckboxChange(VillagePhase.EXCHANGE, event.target.checked)
                       }
@@ -134,7 +134,7 @@ const Phases = () => {
                   <TableCell align="left">
                     <Checkbox
                       checked={Object.values(villagePhases).every((phase) => phase === VillagePhase.IMAGINE)}
-                      disabled={!!villages.data.find((village) => village.activePhase >= VillagePhase.IMAGINE)}
+                      disabled={villages.data.every((village) => village.activePhase >= VillagePhase.IMAGINE)}
                       onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                         handleHeaderCheckboxChange(VillagePhase.IMAGINE, event.target.checked)
                       }
