@@ -11,7 +11,7 @@ import { diskStorage } from '../middlewares/multer';
 
 type RouteOptions = {
   path: string;
-  userType?: UserType | UserType[];
+  userType?: UserType;
 };
 
 fs.ensureDir(path.join(__dirname, '../fileUpload/videos')).catch();
