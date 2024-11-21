@@ -74,7 +74,7 @@ export class AddPhaseHistory1731486908522 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     const table = await queryRunner.getTable('phase_history');
     if (table) {
-      const foreignKey = table.foreignKeys.find((fk) => fk.columnNames.indexOf('questionId') !== -1);
+      const foreignKey = table.foreignKeys.find((fk) => fk.columnNames.indexOf('villageId') !== -1);
       if (foreignKey) {
         await queryRunner.dropForeignKey('phase_history', foreignKey);
         await queryRunner.dropIndex('phase_history', 'IDX_PHASE_HISTORY');

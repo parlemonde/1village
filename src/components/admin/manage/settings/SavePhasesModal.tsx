@@ -5,7 +5,7 @@ import { softDeletePhaseHistory } from 'src/api/phaseHistory/phaseHistory.delete
 import { postPhaseHistory } from 'src/api/phaseHistory/phaseHistory.post';
 import { useUpdateVillages } from 'src/api/villages/villages.put';
 import { Modal } from 'src/components/Modal';
-import type { VillagePhase } from 'types/village.type';
+import { VillagePhase } from 'types/village.type';
 
 interface SavePhasesModalProps {
   villagesToUpdate: { [villageId: number]: VillagePhase };
@@ -22,7 +22,7 @@ export function SavePhasesModal({ villagesToUpdate, isModalOpen, setIsModalOpen 
     const promises = [];
     for (const key in villagesToUpdate) {
       const villageId: number = +key;
-      const updatedPhase = Math.min(villagesToUpdate[villageId], 3);
+      const updatedPhase = Math.min(villagesToUpdate[villageId], VillagePhase.IMAGINE);
       promises.push(
         updateVillages.mutateAsync({
           id: villageId,
