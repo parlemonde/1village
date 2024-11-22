@@ -28,16 +28,27 @@ const CreateGame = ({ stepNumber }: PlayProps) => {
   }
 
   if (activityGames?.[stepNumber] && !gameConfig[stepNumber][0].addedData) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     gameConfig[stepNumber][0].inputs[2].selectedValue = activityGames?.[stepNumber]?.origine ? activityGames?.[stepNumber]?.origine : '';
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     gameConfig[stepNumber][0].inputs[1].selectedValue = activityGames?.[stepNumber]?.signification ? activityGames?.[stepNumber]?.signification : '';
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     gameConfig[stepNumber][1].inputs[0].selectedValue = activityGames?.[stepNumber]?.fakeSignification1
       ? activityGames?.[stepNumber]?.fakeSignification1
       : '';
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     gameConfig[stepNumber][1].inputs[1].selectedValue = activityGames?.[stepNumber]?.fakeSignification2
       ? activityGames?.[stepNumber]?.fakeSignification2
       : '';
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     gameConfig[stepNumber][0].inputs[0].selectedValue = activityGames?.[stepNumber]?.video ? activityGames?.[stepNumber]?.video : '';
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     gameConfig[stepNumber][0].addedData = true;
   }
 
