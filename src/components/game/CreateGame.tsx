@@ -28,7 +28,7 @@ const CreateGame = ({ stepNumber }: PlayProps) => {
   }
 
   if (activityGames?.[stepNumber] && !gameConfig[stepNumber][0].addedData) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // @ts-ignore
     gameConfig[stepNumber][0].inputs[2].selectedValue = activityGames?.[stepNumber]?.origine ? activityGames?.[stepNumber]?.origine : '';
     gameConfig[stepNumber][0].inputs[1].selectedValue = activityGames?.[stepNumber]?.signification ? activityGames?.[stepNumber]?.signification : '';
     gameConfig[stepNumber][1].inputs[0].selectedValue = activityGames?.[stepNumber]?.fakeSignification1
