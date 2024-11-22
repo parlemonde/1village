@@ -22,7 +22,7 @@ const ComponentMapping = {
 
 const CreateGame = ({ stepNumber }: PlayProps) => {
   const { gameConfig, activityGames } = useContext(GameContext);
-  if (activityGames?.[stepNumber] && !gameConfig[stepNumber][0].addedData) {
+  if (activityGames?.[stepNumber] && !gameConfig[stepNumber][0].addedData && gameConfig) {
     gameConfig[stepNumber][0].inputs[2].selectedValue = activityGames?.[stepNumber]?.origine ? activityGames?.[stepNumber]?.origine : '';
     gameConfig[stepNumber][0].inputs[1].selectedValue = activityGames?.[stepNumber]?.signification ? activityGames?.[stepNumber]?.signification : '';
     gameConfig[stepNumber][1].inputs[0].selectedValue = activityGames?.[stepNumber]?.fakeSignification1
