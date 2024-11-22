@@ -3,6 +3,7 @@ export interface ActivityContent {
   id: number; // needed to sort content.
   type: ActivityContentType;
   value: string;
+  game?: unknown;
 }
 
 export type AnyData = Record<string, unknown>;
