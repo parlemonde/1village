@@ -38,6 +38,7 @@ export type StepsTypes = {
   title?: string;
   description?: string;
   inputs?: inputType[];
+  addedData?: boolean;
 };
 
 export type GameFieldConfigType = {
