@@ -293,12 +293,12 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
     await AppDataSource.createQueryBuilder()
       .update(Game)
       .set({
-        type: game.type,
-        origine: game.origine,
-        signification: game.signification,
-        fakeSignification1: game.fakeSignification1,
-        fakeSignification2: game.fakeSignification2,
-        video: game.video,
+        type: game.type ? game.type : null,
+        origine: game.origine ? game.origine : '',
+        signification: game.signification ? game.signification : '',
+        fakeSignification1: game.fakeSignification1 ? game.fakeSignification1 : '',
+        fakeSignification2: game.fakeSignification2 ? game.fakeSignification2 : '',
+        video: game.video ? game.video : '',
       })
       .where('id = :gameId', { gameId })
       .execute();
@@ -553,12 +553,12 @@ export { gameController };
 
 // --- Get games related to an activity ---
 
-gameController.get({ path: '/getGamesActivity', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+gameController.get({ path: '/getAllGamesActivity', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     next();
     return;
   }
-  const activityId = req.body.activityId;
+  const activityId = req.query.activityId;
   const games = await AppDataSource.getRepository(Game)
     .createQueryBuilder('game')
     .where('game.activityId = :activityId', { activityId })

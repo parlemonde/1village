@@ -23,6 +23,8 @@ const MimiqueStep1 = () => {
   const { village } = React.useContext(VillageContext);
   const { gameConfig, setActivityGames, activityGames } = useContext(GameContext);
   const { setActivityId, activityId } = useContext(ActivityContext);
+  const nextUrl = activityId ? `/creer-un-jeu/mimique/2?activity-id=${activityId}` : '/creer-un-jeu/mimique/2';
+
   const onNext = async () => {
     const data: GameDataMonneyOrExpression = {
       userId: user?.id || 0,
@@ -43,13 +45,12 @@ const MimiqueStep1 = () => {
       draftUrl: window.location.pathname,
       activityId: activityId ? activityId : null,
     };
-
     const result = await postGameDataMonneyOrExpression(data);
     if (result) {
       setActivityId(result.activityId);
       setActivityGames(result.games);
     }
-    router.push('/creer-un-jeu/mimique/2');
+    router.push(nextUrl);
   };
   return (
     <Base>

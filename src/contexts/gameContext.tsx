@@ -54,7 +54,6 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   const [gameConfig, setGameConfig] = useState<Array<StepsTypes[]>>(GAME_FIELDS_CONFIG[gameType].steps);
   const [activityGames, setActivityGames] = useState<Array<GameData>>([]);
   const { activityId } = useContext(ActivityContext);
-
   const inputSelectedValue = gameConfig[0]?.[0]?.inputs?.[0]?.selectedValue;
 
   const updateGameType = (type: GameType) => {
@@ -83,6 +82,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
 
   const getActivityGames = async (activityId: number) => {
     const gamesList = await getAllActivityGames(activityId);
+
     setActivityGames(gamesList);
   };
   useEffect(() => {

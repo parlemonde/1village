@@ -22,6 +22,9 @@ const MimiqueStep3 = () => {
   const { village } = React.useContext(VillageContext);
   const { gameConfig, setActivityGames, activityGames } = React.useContext(GameContext);
   const { setActivityId, activityId } = React.useContext(ActivityContext);
+  const nextUrl = activityId ? `/creer-un-jeu/mimique/4?activity-id=${activityId}` : '/creer-un-jeu/mimique/4';
+  const prevUrl = activityId ? `/creer-un-jeu/mimique/2?activity-id=${activityId}` : '/creer-un-jeu/mimique/2';
+
   const onNext = async () => {
     const data: GameDataMonneyOrExpression = {
       userId: user?.id || 0,
@@ -47,11 +50,11 @@ const MimiqueStep3 = () => {
       setActivityId(result.activityId);
       setActivityGames(result.games);
     }
-    router.push('/creer-un-jeu/mimique/4');
+    router.push(nextUrl);
   };
 
   const onPrev = () => {
-    router.push(`/creer-un-jeu/mimique/2`);
+    router.push(prevUrl);
   };
 
   return (

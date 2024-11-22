@@ -99,6 +99,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
         router.push('/');
       } else {
         setActivity(response.data);
+        setActivityId(response.data.id);
       }
     },
     [router],
