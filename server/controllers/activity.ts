@@ -188,6 +188,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
     },
     content: {
       type: 'array',
+      game: null,
       items: {
         type: 'object',
         properties: {
@@ -374,6 +375,7 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
     },
     content: {
       type: 'array',
+      game: null,
       items: {
         type: 'object',
         properties: {

@@ -32,6 +32,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreatePelicoData> = {
   properties: {
     content: {
       type: 'array',
+      game: null,
       items: {
         type: 'object',
         properties: {
@@ -69,6 +70,7 @@ const UPDATE_SCHEMA: JSONSchemaType<UpdatePelicoData> = {
   properties: {
     content: {
       type: 'array',
+      game: null,
       items: {
         type: 'object',
         properties: {
