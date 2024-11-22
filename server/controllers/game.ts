@@ -401,7 +401,7 @@ gameController.get({ path: '/standardGame/:id', userType: UserType.TEACHER }, as
   }
   const id = parseInt(req.params.id, 10) || 0;
   const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id } });
-  const activityId = activity.id;
+  const activityId = activity?.id;
   if (!activity || (req.user.type === UserType.TEACHER && req.user.villageId !== activity.villageId)) {
     next();
     return;
