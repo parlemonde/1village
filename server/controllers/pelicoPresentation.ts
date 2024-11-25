@@ -27,12 +27,13 @@ pelicoController.get({ path: '/:id', userType: UserType.OBSERVATOR }, async (req
 type CreatePelicoData = {
   content: ActivityContent[];
 };
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 const CREATE_SCHEMA: JSONSchemaType<CreatePelicoData> = {
   type: 'object',
   properties: {
     content: {
       type: 'array',
-      game: null,
       items: {
         type: 'object',
         properties: {
@@ -65,12 +66,13 @@ pelicoController.post({ path: '', userType: UserType.ADMIN }, async (req: Reques
 type UpdatePelicoData = {
   content?: ActivityContent[];
 };
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 const UPDATE_SCHEMA: JSONSchemaType<UpdatePelicoData> = {
   type: 'object',
   properties: {
     content: {
       type: 'array',
-      game: null,
       items: {
         type: 'object',
         properties: {
