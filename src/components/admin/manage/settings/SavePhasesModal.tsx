@@ -1,28 +1,47 @@
 import { useSnackbar } from 'notistack';
 import React, { useState, useEffect } from 'react';
 
+import { softDeletePhaseHistory } from 'src/api/phaseHistory/phaseHistory.delete';
+import { postPhaseHistory } from 'src/api/phaseHistory/phaseHistory.post';
 import { useUpdateVillages } from 'src/api/villages/villages.put';
 import { Modal } from 'src/components/Modal';
-import type { VillagePhase } from 'types/village.type';
+import { VillagePhase } from 'types/village.type';
 
 interface SavePhasesModalProps {
-  villagePhases: { [villageId: number]: VillagePhase };
+  villagesToUpdate: { [villageId: number]: VillagePhase };
   isModalOpen: boolean;
   setIsModalOpen: (val: boolean) => void;
 }
 
-export function SavePhasesModal({ villagePhases, isModalOpen, setIsModalOpen }: SavePhasesModalProps) {
+export function SavePhasesModal({ villagesToUpdate, isModalOpen, setIsModalOpen }: SavePhasesModalProps) {
   const [isModalLoading, setIsModalLoading] = useState(false);
   const updateVillages = useUpdateVillages();
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleConfirm = async (villagePhases: { [villageId: number]: VillagePhase }) => {
+  const handleConfirm = async (villagesToUpdate: { [villageId: number]: VillagePhase }) => {
     const promises = [];
-    for (const key in villagePhases) {
+    for (const key in villagesToUpdate) {
       const villageId: number = +key;
-      promises.push(updateVillages.mutateAsync({ id: villageId, villageData: { activePhase: villagePhases[villageId] } }));
+      const updatedPhase = Math.min(villagesToUpdate[villageId], VillagePhase.IMAGINE);
+      promises.push(
+        updateVillages.mutateAsync({
+          id: villageId,
+          villageData: { activePhase: updatedPhase },
+        }),
+      );
+      promises.push(
+        postPhaseHistory({
+          villageId,
+          phase: updatedPhase,
+        }),
+      );
+      promises.push(softDeletePhaseHistory(villageId, updatedPhase - 1));
     }
-    await Promise.allSettled(promises);
+    try {
+      await Promise.allSettled(promises);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   useEffect(() => {
@@ -35,6 +54,7 @@ export function SavePhasesModal({ villagePhases, isModalOpen, setIsModalOpen }: 
       });
       setIsModalOpen(false);
       setIsModalLoading(false);
+      window.location.reload();
     }
     if (updateVillages.isError) {
       enqueueSnackbar("Une erreur s'est produite lors de la modifications !", {
@@ -51,7 +71,7 @@ export function SavePhasesModal({ villagePhases, isModalOpen, setIsModalOpen }: 
       noCloseButton={true}
       maxWidth="sm"
       title="Es-tu sûr ?"
-      onConfirm={async () => handleConfirm(villagePhases)}
+      onConfirm={async () => handleConfirm(villagesToUpdate)}
       onClose={() => {
         setIsModalOpen(false);
       }}

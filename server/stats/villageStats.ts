@@ -1,38 +1,89 @@
+import { PhaseHistory } from '../entities/phaseHistory';
 import { Student } from '../entities/student';
 import { User } from '../entities/user';
+import { Village, VillagePhase } from '../entities/village';
 import { AppDataSource } from '../utils/data-source';
 
 const userRepository = AppDataSource.getRepository(User);
 const studentRepository = AppDataSource.getRepository(Student);
+const phaseHistoryRepository = AppDataSource.getRepository(PhaseHistory);
+const villageRepository = AppDataSource.getRepository(Village);
 
-export const getChildrenCodesCount = async (villageId?: number) => {
+const getPhasePeriod = async (villageId: number, phase: number): Promise<{ debut: Date | undefined; end: Date | undefined }> => {
+  // Getting the debut and end dates for the given phase
+  const query = phaseHistoryRepository
+    .createQueryBuilder('phaseHistory')
+    .withDeleted()
+    .where('phaseHistory.villageId = :villageId', { villageId })
+    .andWhere('phaseHistory.phase = :phase', { phase });
+  query.select(['phaseHistory.startingOn', 'phaseHistory.endingOn']);
+  const result = await query.getOne();
+  const debut = result?.startingOn;
+  const end = result?.endingOn;
+  return {
+    debut,
+    end,
+  };
+};
+
+const phaseWasSelected = (phase: number | undefined): boolean => {
+  return phase !== undefined && Object.values(VillagePhase).includes(+phase);
+};
+
+export const getChildrenCodesCount = async (villageId?: number, phase?: number) => {
   const query = studentRepository.createQueryBuilder('student').innerJoin('student.classroom', 'classroom').innerJoin('classroom.village', 'village');
-
-  if (villageId) query.where('classroom.villageId = :villageId', { villageId });
+  const village = await villageRepository.findOne({ where: { id: villageId } });
+  if (villageId) {
+    query.andWhere('classroom.villageId = :villageId', { villageId });
+    if (phaseWasSelected(phase)) {
+      const phaseValue = phase as number;
+      const { debut, end } = await getPhasePeriod(villageId, phaseValue);
+      query.andWhere('student.createdAt >= :debut', { debut });
+      if (phaseValue != village?.activePhase) query.andWhere('student.createdAt <= :end', { end });
+    }
+  }
   const childrenCodeCount = await query.getCount();
   return childrenCodeCount;
 };
 
-export const getFamilyAccountsCount = async (villageId?: number) => {
+export const getFamilyAccountsCount = async (villageId?: number, phase?: number) => {
+  const village = await villageRepository.findOne({ where: { id: villageId } });
   const query = userRepository
     .createQueryBuilder('user')
     .innerJoin('user.village', 'village')
     .innerJoin('classroom', 'classroom', 'classroom.villageId = village.id')
     .innerJoin('student', 'student', 'student.classroomId = classroom.id');
 
-  if (villageId) query.where('classroom.villageId = :villageId', { villageId });
+  if (villageId) {
+    query.andWhere('classroom.villageId = :villageId', { villageId });
+    if (phaseWasSelected(phase)) {
+      const phaseValue = phase as number;
+      const { debut, end } = await getPhasePeriod(villageId, phaseValue);
+      query.andWhere('user.createdAt >= :debut', { debut });
+      if (phaseValue != village?.activePhase) query.andWhere('student.createdAt <= :end', { end });
+    }
+  }
 
   query.groupBy('user.id');
   const familyAccountsCount = await query.getCount();
   return familyAccountsCount;
 };
 
-export const getConnectedFamiliesCount = async (villageId?: number) => {
+export const getConnectedFamiliesCount = async (villageId?: number, phase?: number) => {
+  const village = await villageRepository.findOne({ where: { id: villageId } });
   const query = studentRepository
     .createQueryBuilder('student')
     .innerJoin('classroom', 'classroom', 'classroom.id = student.classroomId')
-    .where('student.numLinkedAccount >= 1');
-  if (villageId) query.andWhere('classroom.villageId = :villageId', { villageId });
+    .andWhere('student.numLinkedAccount >= 1');
+  if (villageId) {
+    query.andWhere('classroom.villageId = :villageId', { villageId });
+    if (phaseWasSelected(phase)) {
+      const phaseValue = phase as number;
+      const { debut, end } = await getPhasePeriod(villageId, phaseValue);
+      query.andWhere('student.createdAt >= :debut', { debut });
+      if (phaseValue != village?.activePhase) query.andWhere('student.createdAt <= :end', { end });
+    }
+  }
 
   const connectedFamiliesCount = await query.getCount();
 

@@ -63,10 +63,11 @@ statisticsController.get({ path: '/onevillage' }, async (_req, res) => {
 
 statisticsController.get({ path: '/villages/:villageId' }, async (_req, res) => {
   const villageId = parseInt(_req.params.villageId);
+  const phase = _req.query.phase as unknown as number;
   res.sendJSON({
-    familyAccountsCount: await getFamilyAccountsCount(villageId),
-    childrenCodesCount: await getChildrenCodesCount(villageId),
-    connectedFamiliesCount: await getConnectedFamiliesCount(villageId),
+    familyAccountsCount: await getFamilyAccountsCount(villageId, phase),
+    childrenCodesCount: await getChildrenCodesCount(villageId, phase),
+    connectedFamiliesCount: await getConnectedFamiliesCount(villageId, phase),
     familiesWithoutAccount: await getFamiliesWithoutAccount(villageId),
     floatingAccounts: await getFloatingAccounts(villageId),
   });
