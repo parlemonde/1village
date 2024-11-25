@@ -181,11 +181,11 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
     setErrorModalOpen(false);
     setIsReset(true);
 
-    if (currentStep + 1 === getOneGameById?.content?.game?.length) {
+    if (currentStep + 1 === getOneGameById?.games.length) {
       setIsLastGameModalOpen(true);
       return;
     }
-  }, [currentStep, getOneGameById?.content?.game?.length]);
+  }, [currentStep, getOneGameById?.games.length]);
 
   const userMap = useMemo(
     () =>
@@ -203,14 +203,15 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
     const {
       id,
       content,
-      content: { game: steps, labelPresentation, radio, language, monney, type },
+      content: { labelPresentation, radio, language, monney, type },
       createDate,
       villageId,
+      games: steps,
     } = getOneGameById || {};
 
     const responses: { signification: string | undefined; isSuccess: boolean; value: number }[] = [];
     const euro = content.monney;
-    const media = getOneGameById.content.game[currentStep].video as string;
+    const media = getOneGameById.games[currentStep]?.video as string;
 
     if (steps[currentStep]) {
       const significationWithEuro = `${steps[currentStep].signification} ${euro}`;
@@ -263,7 +264,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       if (playContent.responses.length === 0) {
         return;
       }
-      const apiResponse = await sendNewGameResponse(getOneGameById?.content?.game[currentStep].id || 0, selection, playContent.villageId || 0);
+      const apiResponse = await sendNewGameResponse(getOneGameById?.games[currentStep].id || 0, selection, playContent.villageId || 0);
       if (!apiResponse) {
         console.error('Error reaching server');
         return;
@@ -273,7 +274,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       setIsReset(false);
       setErrorModalOpen(!isSuccess);
       if (isSuccess || tryCount === 1) {
-        setGameResponses(await getGameStats(getOneGameById?.content?.game[currentStep].id || 0));
+        setGameResponses(await getGameStats(getOneGameById?.games[currentStep].id || 0));
       }
       setTryCount(tryCount + 1);
     },
@@ -288,7 +289,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       tryCount,
       playContent.villageId,
       currentStep,
-      getOneGameById?.content?.game,
+      getOneGameById?.games,
     ],
   );
 
@@ -300,11 +301,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
   if (playContent.responses.length === 0 || !gameCreator) {
     return (
       <Base>
-        <AlreadyPlayedModal
-          handleSuccessClick={handleConfirmModal}
-          isOpen={isGameModalOpen}
-          gameId={getOneGameById?.content?.game[currentStep].id || 0}
-        />
+        <AlreadyPlayedModal handleSuccessClick={handleConfirmModal} isOpen={isGameModalOpen} gameId={getOneGameById?.games[currentStep]?.id || 0} />
       </Base>
     );
   }
@@ -458,7 +455,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
         <AlreadyPlayedModal
           handleSuccessClick={handleConfirmModal}
           isOpen={isGameModalOpen}
-          gameId={getOneGameById?.content?.game[currentStep].id as number}
+          gameId={getOneGameById?.games[currentStep].id as number}
         />
         <Grid container justifyContent="space-between">
           <Grid item xs={6}>

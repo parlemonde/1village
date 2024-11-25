@@ -3,7 +3,6 @@ export interface ActivityContent {
   id: number; // needed to sort content.
   type: ActivityContentType;
   value: string;
-  game?: unknown;
 }
 
 export type AnyData = Record<string, unknown>;
@@ -62,6 +61,7 @@ export interface Activity<T extends AnyData = AnyData> {
   responseActivityId?: number | null;
   responseType?: number | null;
   isVisibleToParent?: boolean;
+  game?: object | null;
 }
 
 // For activity Reaction, click is not allowed in the images in the Card

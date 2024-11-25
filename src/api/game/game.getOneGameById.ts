@@ -37,6 +37,7 @@ export type DataUse = {
   userId: number;
   villageId: number;
   subType: number;
+  games: GameItem[];
 };
 
 type GetOneGameByIdProps = {

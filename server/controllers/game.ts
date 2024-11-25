@@ -412,7 +412,8 @@ gameController.get({ path: '/standardGame/:id', userType: UserType.TEACHER }, as
     .orderBy('game.createDate', 'ASC')
     .getMany();
 
-  activity.content.game = games;
+  activity.games = games;
+
   res.sendJSON(activity);
 });
 
