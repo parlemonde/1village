@@ -7,8 +7,10 @@ import MenuItem from '@mui/material/MenuItem';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import Select from '@mui/material/Select';
 
+import type { Classroom } from 'types/classroom.type';
+
 interface ClassroomDropdownProps {
-  classrooms: number[];
+  classrooms: Classroom[];
   onClassroomChange: (classrooms: string) => void;
 }
 
@@ -27,8 +29,8 @@ export default function ClassroomDropdown({ classrooms, onClassroomChange }: Cla
         <InputLabel id="classroom-menu-select">Classe</InputLabel>
         <Select labelId="classroom-menu-select" id="classroom-select" value={classroom} label="Classe" onChange={handleChange}>
           {classrooms.map((classroom) => (
-            <MenuItem key={classroom} value={classroom}>
-              {classroom}
+            <MenuItem key={classroom.id} value={classroom.id}>
+              {classroom.name}
             </MenuItem>
           ))}
         </Select>
