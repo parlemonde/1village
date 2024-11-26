@@ -15,8 +15,9 @@ import { VillagePhase } from 'types/village.type';
 const Phases = () => {
   const { user } = React.useContext(UserContext);
   const hasAccess = user !== null && user.type in [UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN];
-  const [villagePhases, setVillagePhases] = useState<{ [villageId: number]: VillagePhase }>({});
   const villages = useGetVillages();
+  const [villagePhases, setVillagePhases] = useState<{ [villageId: number]: VillagePhase }>({});
+  const [villagesToUpdate, setVillagesToUpdate] = useState<{ [villageId: number]: VillagePhase }>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -51,7 +52,8 @@ const Phases = () => {
 
   const handleHeaderCheckboxChange = (phase: VillagePhase, checked: boolean) => {
     for (const key in villagePhases) {
-      if (villagePhases[key] <= phase) {
+      const village = villages.data.find((vil) => vil.id == +key);
+      if (village && villagePhases[key] <= phase && village.activePhase < phase) {
         villagePhases[key] = VillagePhase.DISCOVER;
         setVillagePhases((prevState) => ({
           ...prevState,
@@ -62,6 +64,15 @@ const Phases = () => {
   };
 
   const handleLogCheckboxStates = () => {
+    for (const key in villagePhases) {
+      const village = villages.data.find((village) => +village.id === +key);
+      if (village && village.activePhase < villagePhases[key]) {
+        setVillagesToUpdate((prevState) => ({
+          ...prevState,
+          [key]: villagePhases[key],
+        }));
+      }
+    }
     setIsModalOpen(true);
   };
 
@@ -77,7 +88,7 @@ const Phases = () => {
         <Button variant="outlined" onClick={handleLogCheckboxStates}>
           Enregistrer les paramètres
         </Button>
-        <SavePhasesModal villagePhases={villagePhases} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+        <SavePhasesModal villagesToUpdate={villagesToUpdate} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
       </div>
       <div style={{ overflowX: 'auto' }}>
         <Paper>
@@ -113,6 +124,7 @@ const Phases = () => {
                   <TableCell align="left">
                     <Checkbox
                       checked={Object.values(villagePhases).every((phase) => phase >= VillagePhase.EXCHANGE)}
+                      disabled={villages.data.every((village) => village.activePhase > VillagePhase.EXCHANGE)}
                       onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                         handleHeaderCheckboxChange(VillagePhase.EXCHANGE, event.target.checked)
                       }
@@ -122,6 +134,7 @@ const Phases = () => {
                   <TableCell align="left">
                     <Checkbox
                       checked={Object.values(villagePhases).every((phase) => phase === VillagePhase.IMAGINE)}
+                      disabled={villages.data.every((village) => village.activePhase >= VillagePhase.IMAGINE)}
                       onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                         handleHeaderCheckboxChange(VillagePhase.IMAGINE, event.target.checked)
                       }
@@ -137,7 +150,8 @@ const Phases = () => {
                     {[1, 2, 3].map((phase) => (
                       <TableCell align="left" key={phase}>
                         <Checkbox
-                          checked={villagePhases[village.id] >= phase ? true : false}
+                          disabled={phase <= village.activePhase}
+                          checked={villagePhases[village.id] >= phase}
                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleCheckboxChange(village.id, phase, event.target.checked)}
                         />
                       </TableCell>
