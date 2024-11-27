@@ -8,6 +8,7 @@ import { OneVillageTable } from '../OneVillageTable';
 import TabPanel from './TabPanel';
 import StatsCard from './cards/StatsCard/StatsCard';
 import CountriesDropdown from './filters/CountriesDropdown';
+import PhaseDropdown from './filters/PhaseDropdown';
 import VillageDropdown from './filters/VillageDropdown';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
@@ -24,11 +25,12 @@ const VillageStats = () => {
   const [selectedVillage, setSelectedVillage] = useState<string>('');
   const [options, setOptions] = useState<VillageFilter>({ countryIsoCode: '' });
   const [value, setValue] = React.useState(0);
+  const [selectedPhase, setSelectedPhase] = React.useState<number>(0);
 
   const { countries } = useCountries();
 
   const { villages } = useVillages(options);
-  const villagesStats = useGetVillagesStats(+selectedVillage);
+  const villagesStats = useGetVillagesStats(+selectedVillage, selectedPhase);
   React.useEffect(() => {
     setOptions({
       countryIsoCode: selectedCountry,
@@ -51,6 +53,10 @@ const VillageStats = () => {
     setSelectedVillage(village);
   };
 
+  const handlePhaseChange = (phase: string) => {
+    setSelectedPhase(+phase);
+  };
+
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -70,6 +76,9 @@ const VillageStats = () => {
           gap: 2,
         }}
       >
+        <div className={styles.countryFilter}>
+          <PhaseDropdown onPhaseChange={handlePhaseChange} />
+        </div>
         <div className={styles.countryFilter}>
           <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} />
         </div>
