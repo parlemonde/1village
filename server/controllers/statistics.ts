@@ -5,6 +5,9 @@ import {
   getConnectedClassroomsCount,
   getContributedClassroomsCount,
   getRegisteredClassroomsCount,
+  getChildrenCodesCount as getChildrenCodesCountForClassroom,
+  getConnectedFamiliesCount as getConnectedFamiliesCountForClassroom,
+  getFamiliesWithoutAccount as getFamiliesWithoutAccountForClassroom,
 } from '../stats/classroomStats';
 import {
   getAverageConnections,
@@ -70,5 +73,15 @@ statisticsController.get({ path: '/villages/:villageId' }, async (_req, res) => 
     connectedFamiliesCount: await getConnectedFamiliesCount(villageId, phase),
     familiesWithoutAccount: await getFamiliesWithoutAccount(villageId),
     floatingAccounts: await getFloatingAccounts(villageId),
+  });
+});
+
+statisticsController.get({ path: '/classrooms/:classroomId' }, async (_req, res) => {
+  const classroomId = parseInt(_req.params.classroomId);
+  const phase = _req.query.phase as unknown as number;
+  res.sendJSON({
+    childrenCodesCount: await getChildrenCodesCountForClassroom(classroomId, phase),
+    connectedFamiliesCount: await getConnectedFamiliesCountForClassroom(classroomId, phase),
+    familiesWithoutAccount: await getFamiliesWithoutAccountForClassroom(classroomId),
   });
 });

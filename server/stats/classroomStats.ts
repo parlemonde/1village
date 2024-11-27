@@ -1,9 +1,14 @@
 import { UserType } from '../../types/user.type';
 import { Activity } from '../entities/activity';
 import { Classroom } from '../entities/classroom';
+import { Student } from '../entities/student';
+import { Village } from '../entities/village';
 import { AppDataSource } from '../utils/data-source';
+import { getPhasePeriod, phaseWasSelected } from './villageStats';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
+const studentRepository = AppDataSource.getRepository(Student);
+const villageRepository = AppDataSource.getRepository(Village);
 
 const teacherType = UserType.TEACHER;
 
@@ -85,4 +90,77 @@ export const getContributedClassroomsCount = async (phase: number | null) => {
   //   .getRawOne();
   // return parseInt(result.contributedUsersCount);
   return 10;
+};
+
+export const getChildrenCodesCount = async (classroomId?: number, phase?: number) => {
+  const classroom = await classroomRepository
+    .createQueryBuilder('classroom')
+    .innerJoin('classroom.village', 'village')
+    .where('classroom.id = :classroomId', { classroomId })
+    .getOne();
+  const villageId = classroom?.villageId;
+  const query = studentRepository.createQueryBuilder('student').innerJoin('student.classroom', 'classroom').innerJoin('classroom.village', 'village');
+  if (classroomId) {
+    query.andWhere('classroom.id = :classroomId', { classroomId });
+    if (phaseWasSelected(phase) && villageId) {
+      const village = await villageRepository.findOne({ where: { id: villageId } });
+      const phaseValue = phase as number;
+      const { debut, end } = await getPhasePeriod(villageId, phaseValue);
+      query.andWhere('student.createdAt >= :debut', { debut });
+      if (phaseValue != village?.activePhase) query.andWhere('student.createdAt <= :end', { end });
+    }
+  }
+  const childrenCodeCount = await query.getCount();
+  return childrenCodeCount;
+};
+
+export const getConnectedFamiliesCount = async (classroomId?: number, phase?: number) => {
+  const classroom = await classroomRepository
+    .createQueryBuilder('classroom')
+    .innerJoin('classroom.village', 'village')
+    .where('classroom.id = :classroomId', { classroomId })
+    .getOne();
+  const villageId = classroom?.villageId;
+  const village = await villageRepository.findOne({ where: { id: villageId } });
+  const query = studentRepository
+    .createQueryBuilder('student')
+    .innerJoin('classroom', 'classroom', 'classroom.id = student.classroomId')
+    .andWhere('classroom.id = :classroomId', { classroomId })
+    .andWhere('student.numLinkedAccount >= 1');
+  if (villageId) {
+    query.andWhere('classroom.villageId = :villageId', { villageId });
+    if (phaseWasSelected(phase)) {
+      const phaseValue = phase as number;
+      const { debut, end } = await getPhasePeriod(villageId, phaseValue);
+      query.andWhere('student.createdAt >= :debut', { debut });
+      if (phaseValue != village?.activePhase) query.andWhere('student.createdAt <= :end', { end });
+    }
+  }
+
+  const connectedFamiliesCount = await query.getCount();
+
+  return connectedFamiliesCount;
+};
+
+export const getFamiliesWithoutAccount = async (classroomId?: number) => {
+  const query = studentRepository
+    .createQueryBuilder('student')
+    .innerJoin('student.classroom', 'classroom')
+    .innerJoin('classroom.user', 'user')
+    .innerJoin('user.village', 'village')
+    .where('student.numLinkedAccount < 1');
+  if (classroomId) query.andWhere('classroom.id = :classroomId', { classroomId });
+
+  query.select([
+    'classroom.name AS classroom_name',
+    'classroom.countryCode as classroom_country',
+    'student.firstname AS student_firstname',
+    'student.lastname AS student_lastname',
+    'student.id AS student_id',
+    'student.createdAt as student_creation_date',
+    'village.name AS village_name',
+  ]);
+
+  const familiesWithoutAccount = query.getRawMany();
+  return familiesWithoutAccount;
 };

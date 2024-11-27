@@ -13,7 +13,7 @@ import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeaders';
-import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
+import { useGetClassroomsStats } from 'src/api/statistics/statistics.get';
 import { useClassrooms } from 'src/services/useClassrooms';
 import { useCountries } from 'src/services/useCountries';
 import { useVillages } from 'src/services/useVillages';
@@ -24,7 +24,7 @@ import type { VillageFilter } from 'types/village.type';
 const ClassroomStats = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [selectedVillage, setSelectedVillage] = useState<string>('');
-  const [selectedClassroom, setSelectedClassroom] = useState<string>();
+  const [selectedClassroom, setSelectedClassroom] = useState<string>('');
   const [selectedPhase, setSelectedPhase] = useState<string>('4');
   const [villageFilter, setVillageFilter] = useState<VillageFilter>({ countryIsoCode: '' });
   const [classroomFilter, setClassroomFilter] = useState<ClassroomFilter>({ villageId: '' });
@@ -34,7 +34,7 @@ const ClassroomStats = () => {
 
   const { countries } = useCountries();
   const { villages } = useVillages(villageFilter);
-  const villagesStats = useGetVillagesStats(+selectedVillage, +selectedPhase);
+  const classroomsStats = useGetClassroomsStats(+selectedClassroom, +selectedPhase);
   const { classrooms } = useClassrooms(classroomFilter);
 
   const handleCountryChange = (country: string) => {
@@ -54,10 +54,10 @@ const ClassroomStats = () => {
 
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
   React.useEffect(() => {
-    if (villagesStats.data?.familiesWithoutAccount) {
-      setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(villagesStats.data?.familiesWithoutAccount));
+    if (classroomsStats.data?.familiesWithoutAccount) {
+      setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(classroomsStats.data?.familiesWithoutAccount));
     }
-  }, [villagesStats.data?.familiesWithoutAccount]);
+  }, [classroomsStats.data?.familiesWithoutAccount]);
 
   const handleVillageChange = (village: string) => {
     setSelectedVillage(village);
@@ -124,8 +124,8 @@ const ClassroomStats = () => {
                 gap: 2,
               }}
             >
-              <StatsCard data={villagesStats.data?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
-              <StatsCard data={villagesStats.data?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
+              <StatsCard data={classroomsStats.data?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
+              <StatsCard data={classroomsStats.data?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
             </Box>
           </>
         )}

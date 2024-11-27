@@ -9,7 +9,7 @@ const studentRepository = AppDataSource.getRepository(Student);
 const phaseHistoryRepository = AppDataSource.getRepository(PhaseHistory);
 const villageRepository = AppDataSource.getRepository(Village);
 
-const getPhasePeriod = async (villageId: number, phase: number): Promise<{ debut: Date | undefined; end: Date | undefined }> => {
+export const getPhasePeriod = async (villageId: number, phase: number): Promise<{ debut: Date | undefined; end: Date | undefined }> => {
   // Getting the debut and end dates for the given phase
   const query = phaseHistoryRepository
     .createQueryBuilder('phaseHistory')
@@ -26,10 +26,9 @@ const getPhasePeriod = async (villageId: number, phase: number): Promise<{ debut
   };
 };
 
-const phaseWasSelected = (phase: number | undefined): boolean => {
+export const phaseWasSelected = (phase: number | undefined): boolean => {
   return phase !== undefined && Object.values(VillagePhase).includes(+phase);
 };
-
 export const getChildrenCodesCount = async (villageId?: number, phase?: number) => {
   const query = studentRepository.createQueryBuilder('student').innerJoin('student.classroom', 'classroom').innerJoin('classroom.village', 'village');
   const village = await villageRepository.findOne({ where: { id: villageId } });

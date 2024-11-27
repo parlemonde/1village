@@ -34,6 +34,8 @@ export interface VillageStats {
   floatingAccounts: FloatingAccount[];
 }
 
+export type ClassroomStats = Omit<VillageStats, 'floatingAccounts' | 'familyAccountsCount'>;
+
 export interface FamiliesWithoutAccount {
   student_id: number;
   student_firstname: string;
