@@ -390,6 +390,8 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
   user.countryCode = valueOrDefault(data.countryCode, user.countryCode);
   user.avatar = valueOrDefault(data.avatar, user.avatar) || null;
   user.displayName = valueOrDefault(data.displayName, user.displayName) || null;
+  user.firstname = valueOrDefault(data.firstname, user.firstname);
+  user.lastname = valueOrDefault(data.lastname, user.lastname);
   user.firstLogin = valueOrDefault(data.firstLogin, user.firstLogin);
   if (req.user !== undefined && req.user.type <= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, user.type);

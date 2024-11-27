@@ -75,6 +75,8 @@ export const FirstPhase = () => {
       address: newUser.address,
       pseudo: newUser.pseudo,
       email: newUser.email,
+      firstname: newUser.firstname,
+      lastname: newUser.lastname,
       firstLogin: 1,
       displayName: newUser.displayName || '',
     };
