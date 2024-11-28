@@ -76,10 +76,18 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
   const [usePagination, setUsePagination] = React.useState(withPagination);
 
   React.useEffect(() => {
+    const isArchiveMode = process.env.NEXT_PUBLIC_ARCHIVE_MODE === 'true';
+    if (isArchiveMode) {
+      setUsePagination(false);
+      return;
+    }
+
     if (!router.isReady) {
       return;
     }
-    setUsePagination(!('nopagination' in router.query));
+    const urlParams = new URLSearchParams(window.location.search);
+    const noPagination = urlParams.has('nopagination');
+    setUsePagination(!noPagination);
   }, [router.isReady, router.query, withPagination]);
 
   React.useEffect(() => {

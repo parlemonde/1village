@@ -1,4 +1,4 @@
-import type { NextFunction, Request, RequestHandler, Response } from 'express';
+import type { NextFunction, Request, Response, RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
 
 import { getNewAccessToken } from '../authentication/lib/tokens';
@@ -10,7 +10,7 @@ import { AppDataSource } from '../utils/data-source';
 const secret: string = process.env.APP_SECRET || '';
 
 export function authenticate(userType: UserType | undefined = undefined): RequestHandler {
-  return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     let token: string;
     if (req.cookies && req.cookies['access-token']) {
       if (!req.isCsrfValid && req.method !== 'GET') {

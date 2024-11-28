@@ -6,6 +6,10 @@ const BUILD_VERSION = process.env.BUILD_VERSION;
 
 // eslint-disable-next-line no-undef
 module.exports = withTM({
+  env: {
+    // eslint-disable-next-line no-undef
+    ARCHIVE_MODE: process.env.ARCHIVE_MODE || 'false',
+  },
   distDir: './dist/next',
   poweredByHeader: false,
   webpack: (config) => {
