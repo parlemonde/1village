@@ -25,11 +25,10 @@ classroomController.get({ path: '', userType: UserType.ADMIN }, async (_req: Req
     const classroomRepository = AppDataSource.getRepository(Classroom);
     let classrooms;
     if (villageId) {
-      const query = classroomRepository.createQueryBuilder('classroom');
+      const query = classroomRepository.createQueryBuilder('classroom').leftJoinAndSelect('classroom.user', 'user');
       query.where('classroom.villageId = :villageId', { villageId });
 
       classrooms = await query.getMany();
-      //classrooms = await classroomRepository.find({ where: { villageId: +villageId } });
     } else {
       classrooms = await classroomRepository.find();
     }
