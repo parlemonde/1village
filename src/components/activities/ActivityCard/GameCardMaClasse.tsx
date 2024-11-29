@@ -181,7 +181,6 @@ export const GameCardMaClasse = ({
                 <p style={{ marginBottom: '2rem' }}>Vous avez créé un jeu des {typeOfGame}s</p>
                 {activity.subType === 0 && (
                   <p>
-                    Vous avez choisi de faire deviner la mimique suivante : {responseToDisplay}
                     <br />
                     {origine.lenght > 1 && <span>Et voici son origine : {origine}</span>}
                   </p>

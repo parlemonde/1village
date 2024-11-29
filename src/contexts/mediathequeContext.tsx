@@ -116,20 +116,9 @@ export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ childr
           }
         }
         if (content.game) {
-          content.game.map(({ inputs }: { inputs: Array<{ type: number; selectedValue: string }> }) =>
-            inputs.map((input) => {
-              if (input.type === 3 || input.type === 4) {
-                result.content.push({ type: input.type === 3 ? 'image' : 'video', value: input.selectedValue });
-              }
-            }),
-          );
-        } else {
-          content.map(({ type, value }: { type: string; value: string }) => {
-            const wantedTypes = ['image', 'video', 'sound'];
-            if (wantedTypes.includes(type)) {
-              result.content.push({ type, value });
-            }
-          });
+          if (content.game.type === 3 || content.game.type === 4) {
+            result.content.push({ type: content.game.type === 3 ? 'image' : 'video', value: content.game.video });
+          }
         }
         return result;
       });

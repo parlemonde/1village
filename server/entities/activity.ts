@@ -60,7 +60,7 @@ export class Activity implements ActivityInterface<AnyData> {
   public deleteDate: Date;
 
   @Column({ type: 'json', nullable: false })
-  public data: AnyData & { draftUrl?: string };
+  public data: AnyData & { draftUrl?: string; game?: { video?: string } };
 
   @Column({ type: 'json', nullable: false })
   public content: ActivityContent[];
