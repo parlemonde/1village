@@ -45,7 +45,7 @@ const List = ({ subType, villageId }: SubTypeProps) => {
               item: {
                 id: number;
                 content: {
-                  game: { inputs: { selectedValue: string | undefined }[] }[];
+                  game: { video: string };
                   labelPresentation: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
                 };
               },
@@ -57,19 +57,13 @@ const List = ({ subType, villageId }: SubTypeProps) => {
                     <Link href={`/creer-un-jeu/${typeOfGame}/jouer/${item.id}`}>
                       {subType === 0 ? (
                         <div style={{ height: '250px', width: '250px' }}>
-                          <ReactPlayer
-                            width="100%"
-                            height="100%"
-                            light
-                            url={item.content.game[0].inputs[0].selectedValue}
-                            style={{ backgroundColor: 'black' }}
-                          />
+                          <ReactPlayer width="100%" height="100%" light url={item?.content?.game?.video} style={{ backgroundColor: 'black' }} />
                         </div>
                       ) : (
                         <CardMedia
                           component="img"
                           alt="Game Image"
-                          image={item.content.game[0].inputs[0].selectedValue}
+                          image={item.content.game.video}
                           sx={{ height: '250px', width: '250px', objectFit: 'contain' }}
                         />
                       )}

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 
 import { Button, Stack, Typography } from '@mui/material';
 
@@ -12,6 +12,7 @@ type ResponseButtonProps = {
   onClick: (value: number, isSuccess?: boolean) => Promise<void>;
   isCorrect?: boolean;
   mimicOrigine?: string;
+  isReset?: boolean;
 };
 
 const ResponseButton = ({
@@ -21,15 +22,27 @@ const ResponseButton = ({
   signification = '',
   disabled = false,
   isCorrect,
+  isReset = false,
 }: // mimicOrigine,
 ResponseButtonProps) => {
   const [hasBeenSelected, setHasBeenSelected] = useState<boolean>(false);
+  const [isResetResponse, setIsResetResponse] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (isReset) {
+      setIsResetResponse(isReset);
+    }
+  }, [isReset]);
+
+  if (isResetResponse && hasBeenSelected) {
+    setHasBeenSelected(false);
+  }
   const handleClick = useCallback(() => {
     if (hasBeenSelected) return;
     setHasBeenSelected(true);
+    setIsResetResponse(false);
     return onClick(value, isSuccess);
-  }, [hasBeenSelected, isSuccess, value, setHasBeenSelected, onClick]);
+  }, [hasBeenSelected, onClick, value, isSuccess]);
 
   const color = isSuccess ? 'success' : 'error';
 

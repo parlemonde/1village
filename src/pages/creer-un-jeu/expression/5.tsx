@@ -3,34 +3,34 @@ import React, { useContext } from 'react';
 
 import { Button, Tooltip, Backdrop, CircularProgress } from '@mui/material';
 
-import { postGameDataMonneyOrExpression } from 'src/api/game/game.post';
+//import { postGameDataMonneyOrExpression } from 'src/api/game/game.post';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import CreateGame from 'src/components/game/CreateGame';
 import Previsualisation from 'src/components/game/Previsualisation';
 import { GameContext } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
-import { VillageContext } from 'src/contexts/villageContext';
-import { getUserDisplayName } from 'src/utils';
-import { ActivityType } from 'types/activity.type';
-import type { StepsTypes, GameDataMonneyOrExpression } from 'types/game.type';
-import { GameType } from 'types/game.type';
+//import { VillageContext } from 'src/contexts/villageContext';
+//import { getUserDisplayName } from 'src/utils';
+//import { ActivityType } from 'types/activity.type';
+import type { StepsTypes } from 'types/game.type';
+//import { GameType } from 'types/game.type';
 import { UserType } from 'types/user.type';
 
 const ExpressionStep5 = () => {
   const router = useRouter();
   const { user } = React.useContext(UserContext);
-  const { village } = React.useContext(VillageContext);
+  //const { village } = React.useContext(VillageContext);
   const isObservator = user?.type === UserType.OBSERVATOR;
-  const { selectedPhase } = React.useContext(VillageContext);
-  const labelPresentation = user ? getUserDisplayName(user, false) : '';
+  //const { selectedPhase } = React.useContext(VillageContext);
+  //const labelPresentation = user ? getUserDisplayName(user, false) : '';
   const [isLoading, setIsLoading] = React.useState(false);
 
   const { inputSelectedValue } = useContext(GameContext);
   const { gameConfig } = useContext(GameContext);
 
   const onPublish = async () => {
-    const data: GameDataMonneyOrExpression = {
+    /* const data: GameDataMonneyOrExpression = {
       userId: user?.id || 0,
       villageId: village?.id || 0,
       type: ActivityType.GAME,
@@ -54,10 +54,10 @@ const ExpressionStep5 = () => {
         radio: gameConfig?.[0]?.[1]?.inputs?.[0]?.selectedValue,
       },
       selectedPhase: selectedPhase,
-    };
+    };*/
 
     setIsLoading(true);
-    await postGameDataMonneyOrExpression(data);
+    // await postGameDataMonneyOrExpression(data);
     localStorage.removeItem('gameConfig');
     router.push('/creer-un-jeu/expression/success');
     setIsLoading(false);

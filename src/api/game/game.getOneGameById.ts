@@ -10,7 +10,13 @@ type Input = {
 };
 
 type GameItem = {
-  inputs: Input[];
+  inputs?: Input[];
+  video?: string;
+  origine?: string;
+  signification?: string;
+  fakeSignification1?: string;
+  fakeSignification2?: string;
+  id?: number;
 };
 
 type Data = {
@@ -19,6 +25,7 @@ type Data = {
   language?: string;
   monney?: string;
   radio: string;
+  type?: number;
 };
 
 export type DataUse = {
@@ -30,6 +37,7 @@ export type DataUse = {
   userId: number;
   villageId: number;
   subType: number;
+  games: GameItem[];
 };
 
 type GetOneGameByIdProps = {
@@ -37,7 +45,7 @@ type GetOneGameByIdProps = {
   id: number;
 };
 
-export async function getOneGameById({ subType, id }: GetOneGameByIdProps) {
+export async function getGameByActivityId({ subType, id }: GetOneGameByIdProps) {
   const path = `/standardGame/${id}${serializeToQueryUrl({
     subType,
   })}`;
@@ -48,6 +56,6 @@ export async function getOneGameById({ subType, id }: GetOneGameByIdProps) {
   return response.error ? undefined : (response.data as DataUse);
 }
 
-export function useOneGameById(subType: number, id: number) {
-  return useQuery(['getOneGameById', { subType, id }], () => getOneGameById({ subType, id }));
+export function useGameByActivityId(subType: number, id: number) {
+  return useQuery(['getGameByActivityId', { subType, id }], () => getGameByActivityId({ subType, id }));
 }
