@@ -11,7 +11,6 @@ import { deleteActivity } from 'src/api/activities/activities.admin.delete';
 import { useGetChildrenActivitiesById } from 'src/api/activities/activities.adminGetChildren';
 import { usePublishActivity } from 'src/api/activities/activities.put';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
-import { htmlToText } from 'src/utils';
 
 export default function ActivityCard({
   activity,
@@ -35,14 +34,7 @@ export default function ActivityCard({
   const queryClient = useQueryClient();
   const router = useRouter();
   const title: string = activity?.data?.title ? (activity.data.title as string) : '';
-  const isImageUrl = activity.content.find((e) => e.type === 'image')?.value;
-  const imageUrl: string = isImageUrl ? isImageUrl : 'https://placehold.co/600x400?text=No Picture';
-  const content: string = activity.content.reduce((acc, curr) => {
-    if (curr.type === 'text') {
-      acc += curr.value;
-    }
-    return acc;
-  }, '');
+  const imageUrl = activity?.data?.game?.video ? activity?.data?.game?.video : 'https://placehold.co/600x400?text=No Picture';
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -136,9 +128,7 @@ export default function ActivityCard({
             overflow: 'clip',
             whiteSpace: 'break-spaces',
           }}
-        >
-          {htmlToText(content)}
-        </Typography>
+        ></Typography>
       </CardContent>
       {activity.status !== 0 && (
         <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>

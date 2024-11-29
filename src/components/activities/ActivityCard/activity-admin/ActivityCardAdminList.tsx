@@ -17,7 +17,6 @@ type Props = {
 
 export default function ActivityCardAdminList({ title, activities, svgNoData, noDataText, buttonAction, modifiedDisabled }: Props) {
   const isMobile = useMediaQuery('(max-width: 768px)');
-
   return (
     <Paper
       sx={{
