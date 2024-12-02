@@ -72,7 +72,7 @@ const ClassroomStats = () => {
     setSelectedPhase(phase);
   };
 
-  const noDataFoundMessage = 'Pas de données pour le Village-Monde sélectionné';
+  const noDataFoundMessage = 'Pas de données pour la classe sélectionnée';
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -80,7 +80,17 @@ const ClassroomStats = () => {
 
   return (
     <>
-      <Box className={styles.filtersContainer}>
+      <Box
+        className={styles.filtersContainer}
+        sx={{
+          display: 'flex',
+          flexDirection: {
+            xs: 'column',
+            md: 'row',
+          },
+          gap: 2,
+        }}
+      >
         <div className={styles.phaseFilter}>
           <PhaseDropdown onPhaseChange={handlePhaseChange} />
         </div>
