@@ -1,3 +1,5 @@
+import type { VillagePhase } from './village.type';
+
 export interface ClassroomsStats {
   classroomId: number;
   classroomCountryCode: string;
@@ -59,3 +61,9 @@ export interface OneVillageTableRow {
   id: string | number;
   [key: string]: string | boolean | number | React.ReactNode;
 }
+
+export type StatsFilterParams = {
+  villageId: number | undefined;
+  classroomId: number | undefined;
+  phase: VillagePhase | undefined;
+};

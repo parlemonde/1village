@@ -14,6 +14,7 @@ import { languageController } from './languages';
 import { mediathequeController } from './mediatheque';
 import { notificationsController } from './notifications';
 import { pelicoController } from './pelicoPresentation';
+import { phaseHistoryController } from './phaseHistory';
 import { statisticsController } from './statistics';
 import { storyController } from './story';
 import { studentController } from './student';
@@ -51,6 +52,7 @@ const controllers = [
   pelicoController,
   mediathequeController,
   notificationsController,
+  phaseHistoryController,
 ];
 
 for (let i = 0, n = controllers.length; i < n; i++) {
