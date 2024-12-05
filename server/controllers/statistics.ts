@@ -97,8 +97,8 @@ statisticsController.get({ path: '/countries/:countryId' }, async (_req, res) =>
     familyAccountsCount: await getFamilyAccountsCountForCountry(countryId, phase),
     childrenCodesCount: await getChildrenCodesCountForCountry(countryId, phase),
     connectedFamiliesCount: await getConnectedFamiliesCountForCountry(countryId, phase),
-    //familiesWithoutAccount: await getFamiliesWithoutAccountForCountry(countryId),
-    //floatingAccounts: await getFloatingAccountsForCountry(countryId),
+    familiesWithoutAccount: await getFamiliesWithoutAccountForCountry(countryId),
+    floatingAccounts: await getFloatingAccountsForCountry(countryId),
   });
 });
 

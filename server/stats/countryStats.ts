@@ -28,7 +28,7 @@ export const getConnectedFamiliesCountForCountry = async (countryId: string, pha
 };
 
 export const getFamiliesWithoutAccountForCountry = async (countryId: string) => {
-  return getFamiliesWithoutAccount('classroom.villageId = :villageId', { countryId });
+  return getFamiliesWithoutAccount('classroom.countryCode = :countryId', { countryId });
 };
 
 export const getFloatingAccountsForCountry = async (countryId: string) => {

@@ -67,10 +67,11 @@ export const getConnectedFamiliesCount = async (filterParams: StatsFilterParams)
 };
 
 export const getFloatingAccounts = async (filterParams: StatsFilterParams) => {
-  const { villageId } = filterParams;
+  const { villageId, countryId } = filterParams;
   const query = userRepository.createQueryBuilder('user').where('user.hasStudentLinked = 0').andWhere('user.type = 4');
 
   if (villageId) query.andWhere('user.villageId = :villageId', { villageId });
+  if (countryId) query.andWhere('user.countryCode = :countryId', { countryId });
 
   query.select(['user.id', 'user.firstname', 'user.lastname', 'user.language', 'user.email', 'user.createdAt']);
   const floatingAccounts = await query.getMany();

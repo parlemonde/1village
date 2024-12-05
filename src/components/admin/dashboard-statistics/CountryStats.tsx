@@ -20,8 +20,8 @@ import { mockClassroomsStats, mockConnectionsStats } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { sumContribution } from './utils/sumData';
-import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
-import { FamiliesWithoutAccountHeaders } from './utils/tableHeaders';
+import { createFamiliesWithoutAccountRows, createFloatingAccountsRows } from './utils/tableCreator';
+import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from './utils/tableHeaders';
 import { useGetCountriesStats } from 'src/api/statistics/statistics.get';
 import { useCountries } from 'src/services/useCountries';
 import type { OneVillageTableRow } from 'types/statistics.type';
@@ -48,11 +48,16 @@ const CountryStats = () => {
   const countriesStats = useGetCountriesStats(selectedCountry, selectedPhase);
 
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
+  const [floatingAccountsRows, setFloatingAccountsRows] = React.useState<Array<OneVillageTableRow>>([]);
   React.useEffect(() => {
     if (countriesStats.data?.familiesWithoutAccount) {
       setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(countriesStats.data?.familiesWithoutAccount));
     }
-  }, [countriesStats.data?.familiesWithoutAccount]);
+    if (countriesStats.data?.floatingAccounts) {
+      setFloatingAccountsRows([]);
+      setFloatingAccountsRows(createFloatingAccountsRows(countriesStats.data?.floatingAccounts));
+    }
+  }, [countriesStats.data?.familiesWithoutAccount, countriesStats.data?.floatingAccounts]);
 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
@@ -223,6 +228,13 @@ const CountryStats = () => {
               data={familiesWithoutAccountRows}
               columns={FamiliesWithoutAccountHeaders}
               titleContent={`À surveiller : comptes non créés (${familiesWithoutAccountRows.length})`}
+            />
+            <OneVillageTable
+              admin={false}
+              emptyPlaceholder={<p>{'Pas de données'}</p>}
+              data={floatingAccountsRows}
+              columns={FloatingAccountsHeaders}
+              titleContent={`À surveiller : comptes flottants (${floatingAccountsRows.length})`}
             />
             <Box
               className={styles.classroomStats}
