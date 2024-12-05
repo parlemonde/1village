@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { Button, Divider, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { Autocomplete, Button, Divider, FormControl } from '@mui/material';
 import TextField from '@mui/material/TextField';
 
 import type { EditorProps } from '../content.types';
@@ -13,6 +13,7 @@ import { Modal } from 'src/components/Modal';
 import H5pPlayer from 'src/components/h5p/H5pPlayer';
 import { UserContext } from 'src/contexts/userContext';
 import { fontDetailColor } from 'src/styles/variables.const';
+import { normalizeString } from 'src/utils/isNormalizedStringEqual';
 import { UserType } from 'types/user.type';
 
 const IFRAME_REGEX = /<\s*iframe([^>]*)>.*?<\s*\/\s*iframe>/im;
@@ -87,22 +88,22 @@ export const H5pEditor = ({ id, value = '', onChange = () => {}, onDelete = () =
             <h3>Choisissez le contenu H5P :</h3>
             {h5pContent && h5pContent.length > 0 ? (
               <FormControl fullWidth>
-                <InputLabel id="select-h5p">Contenu H5P</InputLabel>
-                <Select
-                  labelId="select-h5p"
+                <Autocomplete
                   id="select-h5p"
-                  label="Contenu H5P"
-                  onChange={(event) => {
-                    onChange(`/h5p/data/${event.target.value}/play`);
+                  onChange={(_e, value) => {
+                    if (!value) return;
+                    onChange(`/h5p/data/${value.contentId}/play`);
                     setIsModalOpen(false);
                   }}
-                >
-                  {h5pContent.map((h5p) => (
-                    <MenuItem key={h5p.contentId} value={h5p.contentId}>
-                      {h5p.title}
-                    </MenuItem>
-                  ))}
-                </Select>
+                  options={h5pContent.sort((a, b) => (a.title > b.title ? 1 : -1))}
+                  getOptionLabel={(option) => option.title}
+                  filterOptions={(options, state) => {
+                    return options.filter((option) =>
+                      normalizeString(option.title).toLowerCase().includes(normalizeString(state.inputValue).toLowerCase()),
+                    );
+                  }}
+                  renderInput={(params) => <TextField {...params} label="Contenu H5P" />}
+                />
               </FormControl>
             ) : (
               <>
@@ -167,3 +168,24 @@ export const H5pEditor = ({ id, value = '', onChange = () => {}, onDelete = () =
     </EditorContainer>
   );
 };
+
+// INITIAL COMPONENT CHANGED TO line 90
+
+// <FormControl fullWidth>
+//   <InputLabel id="select-h5p">Contenu H5P</InputLabel>
+//   <Select
+//     labelId="select-h5p"
+//     id="select-h5p"
+//     label="Contenu H5P"
+//     onChange={(event) => {
+//       onChange(`/h5p/data/${event.target.value}/play`);
+//       setIsModalOpen(false);
+//     }}
+//   >
+//     {h5pContent.map((h5p) => (
+//       <MenuItem key={h5p.contentId} value={h5p.contentId}>
+//         {h5p.title}
+//       </MenuItem>
+//     ))}
+//   </Select>
+// </FormControl>
