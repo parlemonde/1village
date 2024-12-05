@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -8,10 +8,12 @@ import { Box, Button, Checkbox, FormControlLabel, Grid, IconButton, InputAdornme
 import LanguageFilter from 'src/components/LanguageFilter';
 import { Modal } from 'src/components/Modal';
 import { ParentsCGU } from 'src/components/ParentsCGU';
+import PasswordMessagesDisplayer from 'src/components/PasswordMessagesDisplayer';
 import { useLanguages } from 'src/services/useLanguages';
 import { useUserRequests } from 'src/services/useUsers';
 import ArrowBack from 'src/svg/arrow_back.svg';
 import Logo from 'src/svg/logo_1village_famille.svg';
+import { invalidPasswordMessageBuilder } from 'src/utils/invalidPasswordMessageBuilder';
 import { UserType } from 'types/user.type';
 import type { UserForm } from 'types/user.type';
 
@@ -22,7 +24,7 @@ const Inscription = () => {
   const [lastname, setLastname] = useState<string>('');
   const [isLastnameValid, setIsLastnameValid] = useState<boolean>(true);
   const [password, setPassword] = useState<string>('');
-  const passwordMessageRef = useRef<string>('');
+  const [passwordMessages, setPasswordMessages] = useState<{ badLength: string; missingDigits: string }>({ badLength: '', missingDigits: '' });
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(true);
   const [isPasswordMatch, setIsPasswordMatch] = useState<boolean>(true);
@@ -56,38 +58,13 @@ const Inscription = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (password !== '') {
-      passwordMessageRef.current = '';
-      setIsPasswordValid(false);
-
-      if (!password.match(/\d/)) {
-        passwordMessageRef.current = 'Le mot de passe doit contenir un chiffre';
-      }
-      if (!password.match(/[A-Z]/)) {
-        if (passwordMessageRef.current) {
-          passwordMessageRef.current += ' et ';
-        }
-        passwordMessageRef.current += ' une lettre majuscule';
-      }
-      if (password.length < 8) {
-        if (passwordMessageRef.current) {
-          passwordMessageRef.current += ' et ';
-        }
-        passwordMessageRef.current += 'faire au moins 8 caractères';
-      }
-
-      if (!password.match(/\d/) || !password.match(/[A-Z]/) || password.length < 8) {
-        setIsPasswordValid(false);
-      } else {
-        setIsPasswordValid(true);
-      }
+      const invalidPasswordMessage = invalidPasswordMessageBuilder(password);
+      setPasswordMessages({ badLength: invalidPasswordMessage.badLengthMessage, missingDigits: invalidPasswordMessage.missingDigitMessage });
+      setIsPasswordValid(invalidPasswordMessage.badLengthMessage === '' && invalidPasswordMessage.missingDigitMessage === '');
     }
 
     if (confirmPassword !== '') {
-      if (password !== confirmPassword) {
-        setIsPasswordMatch(false);
-      } else {
-        setIsPasswordMatch(true);
-      }
+      setIsPasswordMatch(password === confirmPassword);
     }
 
     if (email !== '') {
@@ -193,8 +170,6 @@ const Inscription = () => {
   const handleClickShowConfirmationPassword = () => {
     setIsConfirmationPasswordVisible(!isConfirmationPasswordVisible);
   };
-
-  const passwordMessage = passwordMessageRef.current;
 
   return (
     <Grid
@@ -352,7 +327,13 @@ const Inscription = () => {
                     }}
                     type={isPasswordVisible === false ? 'password' : 'text'}
                     error={isPasswordValid === false}
-                    helperText={isPasswordValid === true ? '8 lettres minimum, une majuscule et un chiffre' : passwordMessage}
+                    helperText={
+                      <PasswordMessagesDisplayer
+                        isErrors={!isPasswordValid}
+                        badLengthMessage={passwordMessages.badLength}
+                        missingDigitsMessage={passwordMessages.missingDigits}
+                      />
+                    }
                     InputLabelProps={{ shrink: true }}
                     onChange={(event) => {
                       setPassword(event.target.value);
