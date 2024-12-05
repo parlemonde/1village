@@ -36,7 +36,7 @@ export const getFamiliesWithoutAccount = async (condition?: string, conditionVal
 };
 
 export const getConnectedFamiliesCount = async (filterParams: StatsFilterParams) => {
-  const { villageId, classroomId, phase } = filterParams;
+  const { villageId, classroomId, countryId, phase } = filterParams;
   const query = studentRepository
     .createQueryBuilder('student')
     .innerJoin('classroom', 'classroom', 'classroom.id = student.classroomId')
@@ -44,6 +44,10 @@ export const getConnectedFamiliesCount = async (filterParams: StatsFilterParams)
 
   if (classroomId) {
     query.andWhere('classroom.id = :classroomId', { classroomId });
+  }
+
+  if (countryId) {
+    query.andWhere('classroom.countryCode = :countryId', { countryId });
   }
 
   if (villageId) {
@@ -73,8 +77,8 @@ export const getFloatingAccounts = async (filterParams: StatsFilterParams) => {
   return floatingAccounts;
 };
 
-export const getFamilyAccountsCount = async (filterParams: { villageId: number | undefined; phase: VillagePhase | undefined }) => {
-  const { villageId, phase } = filterParams;
+export const getFamilyAccountsCount = async (filterParams: StatsFilterParams) => {
+  const { villageId, countryId, phase } = filterParams;
   const village = await villageRepository.findOne({ where: { id: villageId } });
   const query = userRepository
     .createQueryBuilder('user')
@@ -82,6 +86,7 @@ export const getFamilyAccountsCount = async (filterParams: { villageId: number |
     .innerJoin('classroom', 'classroom', 'classroom.villageId = village.id')
     .innerJoin('student', 'student', 'student.classroomId = classroom.id')
     .where('user.type = 3');
+  if (countryId) query.where('classroom.countryCode = :countryId', { countryId });
 
   if (villageId) {
     query.andWhere('classroom.villageId = :villageId', { villageId });
@@ -102,6 +107,7 @@ export const generateEmptyFilterParams = (): StatsFilterParams => {
   const filterParams: { [K in keyof StatsFilterParams]: StatsFilterParams[K] } = {
     villageId: undefined,
     classroomId: undefined,
+    countryId: undefined,
     phase: undefined,
   };
 
