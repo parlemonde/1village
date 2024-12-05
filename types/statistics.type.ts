@@ -1,3 +1,5 @@
+import type { VillagePhase } from './village.type';
+
 export interface ClassroomsStats {
   classroomId: number;
   classroomCountryCode: string;
@@ -34,6 +36,8 @@ export interface VillageStats {
   floatingAccounts: FloatingAccount[];
 }
 
+export type ClassroomStats = Omit<VillageStats, 'floatingAccounts' | 'familyAccountsCount'>;
+
 export interface FamiliesWithoutAccount {
   student_id: number;
   student_firstname: string;
@@ -57,3 +61,9 @@ export interface OneVillageTableRow {
   id: string | number;
   [key: string]: string | boolean | number | React.ReactNode;
 }
+
+export type StatsFilterParams = {
+  villageId: number | undefined;
+  classroomId: number | undefined;
+  phase: VillagePhase | undefined;
+};

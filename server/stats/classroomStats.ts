@@ -1,7 +1,9 @@
 import { UserType } from '../../types/user.type';
 import { Activity } from '../entities/activity';
 import { Classroom } from '../entities/classroom';
+import type { VillagePhase } from '../entities/village';
 import { AppDataSource } from '../utils/data-source';
+import { generateEmptyFilterParams, getChildrenCodesCount, getConnectedFamiliesCount, getFamiliesWithoutAccount } from './queryStatsByFilter';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
 
@@ -85,4 +87,37 @@ export const getContributedClassroomsCount = async (phase: number | null) => {
   //   .getRawOne();
   // return parseInt(result.contributedUsersCount);
   return 10;
+};
+
+export const getChildrenCodesCountForClassroom = async (classroomId: number, phase: VillagePhase) => {
+  const classroom = await classroomRepository
+    .createQueryBuilder('classroom')
+    .innerJoin('classroom.village', 'village')
+    .where('classroom.id = :classroomId', { classroomId })
+    .getOne();
+
+  const villageId = classroom?.villageId;
+
+  if (!classroomId || !villageId) return 0;
+  let filterParams = generateEmptyFilterParams();
+  filterParams = { ...filterParams, villageId, classroomId, phase };
+  const whereClause = { clause: 'classroom.id = :classroomId', value: { classroomId } };
+  return await getChildrenCodesCount(filterParams, whereClause);
+};
+
+export const getConnectedFamiliesCountForClassroom = async (classroomId: number, phase: VillagePhase) => {
+  const classroom = await classroomRepository
+    .createQueryBuilder('classroom')
+    .innerJoin('classroom.village', 'village')
+    .where('classroom.id = :classroomId', { classroomId })
+    .getOne();
+
+  const villageId = classroom?.villageId;
+  let filterParams = generateEmptyFilterParams();
+  filterParams = { ...filterParams, villageId, classroomId, phase };
+  return await getConnectedFamiliesCount(filterParams);
+};
+
+export const getFamiliesWithoutAccountForClassroom = async (classroomId: number) => {
+  return getFamiliesWithoutAccount('classroom.id = :classroomId', { classroomId });
 };

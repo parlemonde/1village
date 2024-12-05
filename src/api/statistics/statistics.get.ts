@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { ClassroomsStats, SessionsStats, VillageStats } from 'types/statistics.type';
+import type { ClassroomStats, SessionsStats, VillageStats } from 'types/statistics.type';
 
 async function getSessionsStats(phase: number | null): Promise<SessionsStats> {
   return (
@@ -46,16 +46,18 @@ export const useGetVillagesStats = (villageId: number | null, phase: number) => 
   });
 };
 
-async function getClassroomsStats(): Promise<ClassroomsStats[]> {
+async function getClassroomsStats(classroomId: number | null, phase: number): Promise<ClassroomStats> {
   return (
     await axiosRequest({
       method: 'GET',
       baseURL: '/api',
-      url: '/statistics/classrooms',
+      url: phase ? `/statistics/classrooms/${classroomId}?phase=${phase}` : `/statistics/classrooms/${classroomId}`,
     })
   ).data;
 }
 
-export const useGetClassroomsStats = () => {
-  return useQuery(['classrooms-stats'], () => getClassroomsStats());
+export const useGetClassroomsStats = (classroomId: number | null, phase: number) => {
+  return useQuery(['classrooms-stats', classroomId, phase], () => getClassroomsStats(classroomId, phase), {
+    enabled: classroomId !== null,
+  });
 };
