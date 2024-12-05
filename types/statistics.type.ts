@@ -68,3 +68,8 @@ export type StatsFilterParams = {
   countryId: string | undefined;
   phase: VillagePhase | undefined;
 };
+
+export type WhereClause = {
+  clause: string;
+  value: object;
+};

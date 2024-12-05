@@ -1,14 +1,13 @@
-import type { StatsFilterParams } from '../../types/statistics.type';
-import { PhaseHistory } from '../entities/phaseHistory';
+import type { StatsFilterParams, WhereClause } from '../../types/statistics.type';
 import { Student } from '../entities/student';
 import { User } from '../entities/user';
-import { VillagePhase, Village } from '../entities/village';
+import { Village } from '../entities/village';
 import { AppDataSource } from '../utils/data-source';
+import { createFamilyAccountQuery, getPhasePeriod, phaseWasSelected } from './helpers';
 
 const studentRepository = AppDataSource.getRepository(Student);
 const villageRepository = AppDataSource.getRepository(Village);
 const userRepository = AppDataSource.getRepository(User);
-const phaseHistoryRepository = AppDataSource.getRepository(PhaseHistory);
 
 export const getFamiliesWithoutAccount = async (condition?: string, conditionValue?: object) => {
   const query = studentRepository
@@ -80,44 +79,28 @@ export const getFloatingAccounts = async (filterParams: StatsFilterParams) => {
 
 export const getFamilyAccountsCount = async (filterParams: StatsFilterParams) => {
   const { villageId, countryId, phase } = filterParams;
-  const village = await villageRepository.findOne({ where: { id: villageId } });
-  const query = userRepository
-    .createQueryBuilder('user')
-    .innerJoin('user.village', 'village')
-    .innerJoin('classroom', 'classroom', 'classroom.villageId = village.id')
-    .innerJoin('student', 'student', 'student.classroomId = classroom.id')
-    .where('user.type = 3');
-  if (countryId) query.where('classroom.countryCode = :countryId', { countryId });
+  let familyAccountsCount = 0;
 
   if (villageId) {
-    query.andWhere('classroom.villageId = :villageId', { villageId });
-    if (phaseWasSelected(phase)) {
-      const phaseValue = phase as number;
-      const { debut, end } = await getPhasePeriod(villageId, phaseValue);
-      query.andWhere('user.createdAt >= :debut', { debut });
-      if (phaseValue != village?.activePhase) query.andWhere('student.createdAt <= :end', { end });
-    }
+    const query = await createFamilyAccountQuery(villageId, phase);
+    familyAccountsCount = await query.getCount();
+  } else if (countryId) {
+    const villages = await villageRepository
+      .createQueryBuilder('village')
+      .where('village.countryCodes LIKE :countryId', { countryId: `%${countryId}%` })
+      .getMany();
+    const countPromises = villages.map(async (vil) => {
+      const query = await createFamilyAccountQuery(vil.id, phase);
+      return query.getCount();
+    });
+
+    const results = await Promise.all(countPromises);
+    familyAccountsCount = results.reduce((total, count) => total + count, 0);
   }
 
-  query.groupBy('user.id');
-  const familyAccountsCount = await query.getCount();
   return familyAccountsCount;
 };
 
-export const generateEmptyFilterParams = (): StatsFilterParams => {
-  const filterParams: { [K in keyof StatsFilterParams]: StatsFilterParams[K] } = {
-    villageId: undefined,
-    classroomId: undefined,
-    countryId: undefined,
-    phase: undefined,
-  };
-
-  return filterParams;
-};
-export type WhereClause = {
-  clause: string;
-  value: object;
-};
 export const getChildrenCodesCount = async (filterParams: StatsFilterParams, whereClause?: WhereClause) => {
   const { villageId, phase } = filterParams;
   const village = await villageRepository.findOne({ where: { id: villageId } });
@@ -132,25 +115,4 @@ export const getChildrenCodesCount = async (filterParams: StatsFilterParams, whe
   }
 
   return await query.getCount();
-};
-
-export const getPhasePeriod = async (villageId: number, phase: number): Promise<{ debut: Date | undefined; end: Date | undefined }> => {
-  // Getting the debut and end dates for the given phase
-  const query = phaseHistoryRepository
-    .createQueryBuilder('phaseHistory')
-    .withDeleted()
-    .where('phaseHistory.villageId = :villageId', { villageId })
-    .andWhere('phaseHistory.phase = :phase', { phase });
-  query.select(['phaseHistory.startingOn', 'phaseHistory.endingOn']);
-  const result = await query.getOne();
-  const debut = result?.startingOn;
-  const end = result?.endingOn;
-  return {
-    debut,
-    end,
-  };
-};
-
-export const phaseWasSelected = (phase: number | undefined): boolean => {
-  return phase !== undefined && Object.values(VillagePhase).includes(+phase);
 };
