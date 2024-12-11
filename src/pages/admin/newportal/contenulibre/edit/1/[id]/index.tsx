@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Layout from '../../../layout';
 import { useGetOneActivityById } from 'src/api/activities/activities.getOneById';
@@ -11,13 +11,17 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import type { ActivityContent } from 'types/activity.type';
 
 const ContenuLibreStep1: React.FC = () => {
-  const { updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
+  const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
   const router = useRouter();
   const { id } = router.query;
 
-  const { data: activity } = useGetOneActivityById({ id: Number(id) });
+  const { data: fetchedActivity } = useGetOneActivityById({ id: Number(id) });
 
-  // useEffect(() => {}, [activity, router]);
+  useEffect(() => {
+    if (fetchedActivity && (!activity || activity.id !== fetchedActivity.id)) {
+      updateActivity(fetchedActivity);
+    }
+  }, [fetchedActivity, activity, updateActivity]);
 
   const updateContent = (content: ActivityContent[]): void => {
     if (!activity) return;

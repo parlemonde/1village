@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useQueryClient } from 'react-query';
@@ -351,6 +352,8 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
           success: false,
         };
       }
+
+      const queryKey = ['activityById', activityRef.current.id];
       if (activityRef.current.status !== ActivityStatus.DRAFT && !publish) {
         return {
           success: false,
@@ -366,6 +369,10 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
         result = await createActivity(publish);
       } else {
         result = await editActivity(publish);
+      }
+
+      if (result.success) {
+        queryClient.setQueryData(queryKey, result.activity);
       }
 
       if (!publish) {

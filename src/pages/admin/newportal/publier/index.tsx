@@ -49,7 +49,7 @@ const Publier = () => {
           noDataText="Il n'y a aucune activitées non publiée"
           svgNoData={<PelicoStar style={{ height: '6rem', width: '6rem' }} />}
           buttonAction={() => router.push('/admin/newportal/publier/draft')}
-          modifiedDisabled={true}
+          modifiedDisabled={false}
         />
       </div>
       <div style={{ margin: 10 }}>

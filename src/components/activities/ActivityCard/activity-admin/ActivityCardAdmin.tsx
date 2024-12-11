@@ -113,7 +113,7 @@ export default function ActivityCard({
               }}
             >
               <MenuItem onClick={handleModified} disabled={modifiedDisabled}>
-                Modifier
+                Configurer
               </MenuItem>
               <MenuItem onClick={handleDelete}>Supprimer</MenuItem>
             </Menu>

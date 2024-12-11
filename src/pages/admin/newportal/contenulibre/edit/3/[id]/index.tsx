@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
@@ -20,11 +20,17 @@ import { useActivity } from 'src/hooks/useActivity';
 const ContenuLibre = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data: activity } = useGetOneActivityById({ id: Number(id) });
+  const { data: fetchedActivity } = useGetOneActivityById({ id: Number(id) });
 
-  const { save, setDraft } = useActivity();
+  const { activity, updateActivity, save, setDraft } = useActivity();
   const { user } = React.useContext(UserContext);
   const [isLoading, setIsLoading] = React.useState(false);
+
+  useEffect(() => {
+    if (fetchedActivity && (!activity || activity.id !== fetchedActivity.id)) {
+      updateActivity(fetchedActivity);
+    }
+  }, [fetchedActivity, activity, updateActivity]);
 
   const onModified = async () => {
     setIsLoading(true);
