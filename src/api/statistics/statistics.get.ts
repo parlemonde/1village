@@ -33,9 +33,13 @@ async function getVillagesStats(villageId: number | null, phase: number): Promis
   ).data;
 }
 
-export const useGetSessionsStats = (phase: number | null) => {
-  return useQuery(['sessions-stats'], () => getSessionsStats(phase));
+export const useGetSessionsStats = () => {
+  return useQuery(['sessions-stats'], () => getSessionsStats());
 };
+export const useGetOneVillageStats = () => {
+  return useQuery(['1v-stats'], () => getOneVillageStats());
+};
+
 export const useGetOneVillageStats = () => {
   return useQuery(['1v-stats'], () => getOneVillageStats());
 };
