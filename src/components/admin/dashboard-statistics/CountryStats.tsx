@@ -11,7 +11,7 @@ import DashboardTable from './charts/DashboardTable';
 import HorizontalBarsChart from './charts/HorizontalChart';
 import PieCharts from './charts/PieCharts';
 import CountriesDropdown from './filters/CountriesDropdown';
-import PhaseDropdown from './filters/PhaseDropdown';
+// import PhaseDropdown from './filters/PhaseDropdown';
 import PhaseDetails from './menu/PhaseDetails';
 import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
