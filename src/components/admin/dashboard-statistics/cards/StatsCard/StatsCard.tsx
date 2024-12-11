@@ -4,7 +4,7 @@ import styles from './StatsCard.module.css';
 
 interface StatsCardProps {
   children: React.ReactNode;
-  data: number;
+  data: number | undefined;
 }
 const StatsCard = ({ children, data }: StatsCardProps) => {
   return (
