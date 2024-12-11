@@ -33,7 +33,7 @@ const ContributionBarChartTitle = 'Contribution des classes';
 
 const CountryStats = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
-  const [selectedPhase, setSelectedPhase] = useState<number>(0);
+  // const [selectedPhase, setSelectedPhase] = useState<number>(0);
   const pelicoMessage = 'Merci de sélectionner un pays pour analyser ses statistiques ';
   const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
   const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(null, 'FR', null);
@@ -43,16 +43,14 @@ const CountryStats = () => {
     setSelectedCountry(country);
   };
 
-  const handlePhaseChange = (phase: string) => {
-    setSelectedPhase(+phase);
-  };
+  // const handlePhaseChange = (phase: string) => {
+  //   setSelectedPhase(+phase);
+  // };
 
   return (
     <>
       <div className={styles.filtersContainer}>
-        <div className={styles.smallFilter}>
-          <PhaseDropdown onPhaseChange={handlePhaseChange} />
-        </div>
+        <div className={styles.smallFilter}>{/* <PhaseDropdown onPhaseChange={handlePhaseChange} /> */}</div>
         <div className={styles.medFilter}>
           <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} />
         </div>

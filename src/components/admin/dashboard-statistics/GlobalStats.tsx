@@ -11,7 +11,6 @@ import ClassesContributionCard from './cards/ClassesContributionCard/ClassesCont
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
 import BarCharts from './charts/BarCharts';
-import PhaseDropdown from './filters/PhaseDropdown';
 import DashboardWorldMap from './map/DashboardWorldMap/DashboardWorldMap';
 import PhaseDetails from './menu/PhaseDetails';
 import { mockDataByMonth } from './mocks/mocks';
@@ -26,7 +25,7 @@ const BarChartTitle = 'Evolution des connexions';
 
 const GlobalStats = () => {
   const [value, setValue] = useState(0);
-  const [selectedPhase, setSelectedPhase] = useState<number>(0);
+  // const [selectedPhase, setSelectedPhase] = useState<number>(0);
   const oneVillageStats = useGetOneVillageStats();
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
   const [floatingAccountsRows, setFloatingAccountsRows] = React.useState<Array<OneVillageTableRow>>([]);
@@ -49,9 +48,9 @@ const GlobalStats = () => {
     setValue(newValue);
   };
 
-  const handlePhaseChange = (phase: string) => {
-    setSelectedPhase(+phase);
-  };
+  // const handlePhaseChange = (phase: string) => {
+  //   setSelectedPhase(+phase);
+  // };
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -59,14 +58,14 @@ const GlobalStats = () => {
 
   return (
     <>
-      <div className={styles.filtersContainer}>
+      {/* <div className={styles.filtersContainer}>
         <div className={styles.smallFilter}>
           <PhaseDropdown onPhaseChange={handlePhaseChange} />
         </div>
         <div className={styles.medFilter} />
         <div className={styles.medFilter} />
         <div className={styles.medFilter} />
-      </div>
+      </div> */}
       <TeamComments />
       <DashboardWorldMap />
       <Tabs value={value} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
