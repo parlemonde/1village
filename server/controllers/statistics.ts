@@ -2,12 +2,20 @@ import type { Request } from 'express';
 
 import { Classroom } from '../entities/classroom';
 import {
-  getClassroomsInfos,
   getConnectedClassroomsCount,
-  getContributedClassroomsCount,
   getRegisteredClassroomsCount,
+  getChildrenCodesCountForClassroom,
+  getConnectedFamiliesCountForClassroom,
+  getFamiliesWithoutAccountForClassroom,
   normalizeForCountry,
 } from '../stats/classroomStats';
+import {
+  getChildrenCodesCountForGlobal,
+  getConnectedFamiliesCountForGlobal,
+  getFamiliesWithoutAccountForGlobal,
+  getFamilyAccountsCountForGlobal,
+  getFloatingAccountsForGlobal,
+} from '../stats/globalStats';
 import {
   getAverageConnections,
   getAverageDuration,
@@ -19,6 +27,13 @@ import {
   getMinDuration,
   getUserConnectionsList,
 } from '../stats/sessionStats';
+import {
+  getChildrenCodesCountForVillage,
+  getConnectedFamiliesCountForVillage,
+  getFamiliesWithoutAccountForVillage,
+  getFamilyAccountsCountForVillage,
+  getFloatingAccountsForVillage,
+} from '../stats/villageStats';
 import { AppDataSource } from '../utils/data-source';
 import { Controller } from './controller';
 
@@ -64,6 +79,24 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
     console.error('Error fetching statistics:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
+});
+
+statisticsController.get({ path: '/sessions/:phase' }, async (req: Request, res) => {
+  // const phase = req.params.phase ? parseInt(req.params.phase) : null;
+
+  res.sendJSON({
+    minDuration: await getMinDuration(), // TODO - add phase
+    maxDuration: await getMaxDuration(), // TODO - add phase
+    averageDuration: await getAverageDuration(), // TODO - add phase
+    medianDuration: await getMedianDuration(), // TODO - add phase
+    minConnections: await getMinConnections(), // TODO - add phase
+    maxConnections: await getMaxConnections(), // TODO - add phase
+    averageConnections: await getAverageConnections(), // TODO - add phase
+    medianConnections: await getMedianConnections(), // TODO - add phase
+    registeredClassroomsCount: await getRegisteredClassroomsCount(),
+    connectedClassroomsCount: await getConnectedClassroomsCount(), // TODO - add phase
+    // contributedClassroomsCount: await getContributedClassroomsCount(phase),
+  });
 });
 
 statisticsController.get({ path: '/classrooms' }, async (req, res) => {
@@ -173,6 +206,16 @@ statisticsController.get({ path: '/classrooms' }, async (req, res) => {
   //     videosCount: parseInt(classroom.videosCount, 10),
   //   })),
   // );
+});
+
+statisticsController.get({ path: '/onevillage' }, async (_req, res) => {
+  res.sendJSON({
+    familyAccountsCount: await getFamilyAccountsCountForGlobal(),
+    childrenCodesCount: await getChildrenCodesCountForGlobal(),
+    connectedFamiliesCount: await getConnectedFamiliesCountForGlobal(),
+    familiesWithoutAccount: await getFamiliesWithoutAccountForGlobal(),
+    floatingAccounts: await getFloatingAccountsForGlobal(),
+  });
 });
 
 statisticsController.get({ path: '/onevillage' }, async (_req, res) => {
