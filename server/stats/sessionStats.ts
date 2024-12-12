@@ -1,10 +1,7 @@
 import { AnalyticSession } from '../entities/analytic';
-import { UserType } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';
 
 const analyticSessionRepository = AppDataSource.getRepository(AnalyticSession);
-const durationThreshold = 60;
-const teacherType = UserType.TEACHER;
 
 export const getMinDuration = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
   const queryBuilder = analyticSessionRepository
