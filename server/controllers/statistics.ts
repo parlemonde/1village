@@ -7,7 +7,6 @@ import {
   getChildrenCodesCountForClassroom,
   getConnectedFamiliesCountForClassroom,
   getFamiliesWithoutAccountForClassroom,
-  normalizeForCountry,
 } from '../stats/classroomStats';
 import {
   getChildrenCodesCountForGlobal,
@@ -174,48 +173,30 @@ statisticsController.get({ path: '/classrooms' }, async (req, res) => {
 
   const classroomsData = await queryBuilder.getRawMany();
 
-  const transformedData = classroomsData.map((classroom) => ({
-    classroomId: classroom.classroomId,
-    classroomName: classroom.classroomName,
-    classroomCountryCode: classroom.classroomCountryCode,
-    villageId: classroom.villageId,
-    villageName: classroom.villageName,
-    commentsCount: parseInt(classroom.commentsCount, 10),
-    videosCount: parseInt(classroom.videosCount, 10),
-    userFirstName: classroom.userFirstname,
-    userLastName: classroom.userLastname,
-    activities: classroom.activitiesCount
-      ? classroom.activitiesCount.flatMap((phaseObj: { activities: any[]; phase: string }) =>
-          phaseObj.activities.map((activity) => ({
-            count: activity.count,
-            type: activity.type,
-            phase: phaseObj.phase,
-          })),
-        )
-      : [], // Si activitiesCount est null, retourner une liste vide
-  }));
+  // const transformedData = classroomsData.map((classroom) => ({
+  //   classroomId: classroom.classroomId,
+  //   classroomName: classroom.classroomName,
+  //   classroomCountryCode: classroom.classroomCountryCode,
+  //   villageId: classroom.villageId,
+  //   villageName: classroom.villageName,
+  //   commentsCount: parseInt(classroom.commentsCount, 10),
+  //   videosCount: parseInt(classroom.videosCount, 10),
+  //   userFirstName: classroom.userFirstname,
+  //   userLastName: classroom.userLastname,
+  //   activities: classroom.activitiesCount
+  //     ? classroom.activitiesCount.flatMap((phaseObj: { activities: any[]; phase: string }) =>
+  //         phaseObj.activities.map((activity) => ({
+  //           count: activity.count,
+  //           type: activity.type,
+  //           phase: phaseObj.phase,
+  //         })),
+  //       )
+  //     : [],
+  // }));
 
-  const result = { data: [...transformedData], phases: normalizeForCountry(transformedData) };
+  // const result = { data: [...transformedData], phases: normalizeForCountry(transformedData) };
 
   res.sendJSON(classroomsData);
-
-  // res.sendJSON(
-  //   classroomsData.map((classroom) => ({
-  //     ...classroom,
-  //     commentsCount: parseInt(classroom.commentsCount, 10),
-  //     videosCount: parseInt(classroom.videosCount, 10),
-  //   })),
-  // );
-});
-
-statisticsController.get({ path: '/onevillage' }, async (_req, res) => {
-  res.sendJSON({
-    familyAccountsCount: await getFamilyAccountsCountForGlobal(),
-    childrenCodesCount: await getChildrenCodesCountForGlobal(),
-    connectedFamiliesCount: await getConnectedFamiliesCountForGlobal(),
-    familiesWithoutAccount: await getFamiliesWithoutAccountForGlobal(),
-    floatingAccounts: await getFloatingAccountsForGlobal(),
-  });
 });
 
 statisticsController.get({ path: '/onevillage' }, async (_req, res) => {
