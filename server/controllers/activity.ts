@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 import { IsNull } from 'typeorm';

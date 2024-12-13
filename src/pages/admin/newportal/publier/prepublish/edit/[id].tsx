@@ -157,7 +157,7 @@ const ModifPrepublish = () => {
         const villagesToAdd = selectedVillages.filter((villageId) => !publishedVillageIds.includes(villageId));
         const villagesToDelete = publishedVillageIds.filter((villageId) => !selectedVillages.includes(villageId));
 
-        if (Number(selectedPhase) !== childrenActivities[0].phase) {
+        if (childrenActivities.length > 0 && Number(selectedPhase) !== childrenActivities[0].phase) {
           await Promise.all(
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
@@ -201,19 +201,17 @@ const ModifPrepublish = () => {
   const isModificationDisabled = () => {
     if (isLoading) return true;
 
-    const publishedVillageIds = childrenActivities.map((activity: Activity) => activity.villageId).filter((id: number) => id !== undefined); // Exclude undefined IDs
-
     const hasPublishedVillages = publishedVillageIds.length > 0;
     const hasSelectedVillages = selectedVillages.length > 0;
 
-    // Check if published and selected have the same numbers
     const areVillagesTheSame =
-      hasPublishedVillages &&
-      hasSelectedVillages &&
-      publishedVillageIds.length === selectedVillages.length &&
-      publishedVillageIds.every((id: number) => selectedVillages.includes(id));
+      publishedVillageIds.length === selectedVillages.length && publishedVillageIds.every((id: number) => selectedVillages.includes(id));
 
-    return (selectedVillages.length < 1 && publishedVillageIds.length === 0) || areVillagesTheSame;
+    const phaseChanged = childrenActivities.length > 0 && childrenActivities[0]?.phase !== Number(selectedPhase);
+
+    const noChangesMade = areVillagesTheSame && !phaseChanged;
+
+    return (!hasSelectedVillages && !hasPublishedVillages) || noChangesMade;
   };
 
   return (
