@@ -13,9 +13,10 @@ type Props = {
   noDataText: string;
   buttonAction: () => void;
   modifiedDisabled?: boolean;
+  actions?: ('configure' | 'update' | 'delete')[];
 };
 
-export default function ActivityCardAdminList({ title, activities, svgNoData, noDataText, buttonAction, modifiedDisabled }: Props) {
+export default function ActivityCardAdminList({ title, activities, svgNoData, noDataText, buttonAction, modifiedDisabled, actions }: Props) {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   return (
@@ -48,7 +49,7 @@ export default function ActivityCardAdminList({ title, activities, svgNoData, no
               <div key={activity.id} style={{ width: isMobile ? '100%' : '50%' }}>
                 {/* eslint-disable-next-line */}
                 {/* @ts-ignore */}
-                <ActivityCardAdmin activity={activity} modifiedDisabled={modifiedDisabled} />
+                <ActivityCardAdmin actions={actions} activity={activity} modifiedDisabled={modifiedDisabled} />
               </div>
             ))}
           </div>

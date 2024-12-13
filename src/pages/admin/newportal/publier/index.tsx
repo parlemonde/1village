@@ -50,6 +50,7 @@ const Publier = () => {
           svgNoData={<PelicoStar style={{ height: '6rem', width: '6rem' }} />}
           buttonAction={() => router.push('/admin/newportal/publier/draft')}
           modifiedDisabled={false}
+          actions={['update', 'delete']}
         />
       </div>
       <div style={{ margin: 10 }}>

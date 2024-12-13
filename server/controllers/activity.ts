@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 import { IsNull } from 'typeorm';
@@ -450,6 +451,11 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   activity.data = data.data ?? activity.data;
   activity.content = data.content ?? activity.content;
 
+  // update activity children
+  if (!activity.parentActivityId && activity.status === ActivityStatus.PUBLISHED) {
+    await updateActivityChildren(activity, data as UpdateActivity);
+  }
+
   // logic to create a activity game
   if (activity.type === ActivityType.GAME && activity.status === ActivityStatus.PUBLISHED && activity.data) {
     const gamesData = activity.data as GamesData;
@@ -485,6 +491,21 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   await AppDataSource.getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });
+
+// --- update activity children ---
+async function updateActivityChildren(activity: Activity, data: UpdateActivity): Promise<void> {
+  const children = await AppDataSource.getRepository(Activity).find({ where: { parentActivityId: activity.id } });
+
+  for (const child of children) {
+    child.responseActivityId = data.responseActivityId ?? child.responseActivityId ?? null;
+    child.responseType = data.responseType ?? child.responseType ?? null;
+    child.isPinned = data.isPinned ?? child.isPinned;
+    child.displayAsUser = data.displayAsUser ?? child.displayAsUser;
+    child.data = data.data ?? child.data;
+    child.content = data.content ?? child.content;
+    await AppDataSource.getRepository(Activity).save(child);
+  }
+}
 
 // --- create a game ---
 const createGame = async (data: GameData, activity: Activity): Promise<Game> => {

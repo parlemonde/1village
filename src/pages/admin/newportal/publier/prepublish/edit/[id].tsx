@@ -198,6 +198,24 @@ const ModifPrepublish = () => {
     }
   };
 
+  const isModificationDisabled = () => {
+    if (isLoading) return true;
+
+    const publishedVillageIds = childrenActivities.map((activity: Activity) => activity.villageId).filter((id: number) => id !== undefined); // Exclude undefined IDs
+
+    const hasPublishedVillages = publishedVillageIds.length > 0;
+    const hasSelectedVillages = selectedVillages.length > 0;
+
+    // Check if published and selected have the same numbers
+    const areVillagesTheSame =
+      hasPublishedVillages &&
+      hasSelectedVillages &&
+      publishedVillageIds.length === selectedVillages.length &&
+      publishedVillageIds.every((id: number) => selectedVillages.includes(id));
+
+    return (selectedVillages.length < 1 && publishedVillageIds.length === 0) || areVillagesTheSame;
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80vw' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '10px' }}>
@@ -208,7 +226,7 @@ const ModifPrepublish = () => {
           <h1>{activityParent?.data?.title}</h1>
         </div>
         <div>
-          <Button variant="contained" color="primary" onClick={handlePublish} disabled={isLoading || selectedVillages.length < 1}>
+          <Button variant="contained" color="primary" onClick={handlePublish} disabled={isModificationDisabled()}>
             Modifier
             {isLoading && (
               <Box sx={{ display: 'flex', paddingLeft: '1rem' }}>

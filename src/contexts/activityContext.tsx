@@ -354,11 +354,6 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
       }
 
       const queryKey = ['activityById', activityRef.current.id];
-      if (activityRef.current.status !== ActivityStatus.DRAFT && !publish) {
-        return {
-          success: false,
-        }; // don't save draft for already published activities.
-      }
       if (!publish) {
         clearTimeout(draftStepTimeout.current);
         setDraftStep(1);

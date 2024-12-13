@@ -34,7 +34,7 @@ const ContenuLibre = () => {
 
   const onModified = async () => {
     setIsLoading(true);
-    const { success } = await save(false);
+    const { success } = await save(activity?.status === 0 ? true : false);
     if (success) {
       setDraft(null);
       router.push('/admin/newportal/contenulibre/success');
