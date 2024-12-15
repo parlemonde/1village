@@ -24,7 +24,8 @@ const ContenuLibreStep1: React.FC = () => {
 
   const updateContent = (content: ActivityContent[]): void => {
     if (!activity) return;
-    updateActivity({ content });
+    const newActivity = { ...activity, content, villageId: undefined };
+    updateActivity(newActivity);
   };
 
   const onNext = async (): Promise<void> => {

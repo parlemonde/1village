@@ -23,7 +23,7 @@ function CustomTabPanel(props: TabPanelProps) {
   return (
     <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other}>
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: 0 }}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -47,7 +47,7 @@ const DashboardStatsNav = () => {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box sx={{ borderBottom: 1 }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="1Village" {...a11yProps(0)} />
           <Tab label="Pays" {...a11yProps(1)} />

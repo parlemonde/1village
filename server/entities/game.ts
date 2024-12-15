@@ -39,7 +39,7 @@ export class Game implements GameInterface {
   @JoinColumn({ name: 'villageId' })
   public village: Village | null;
   @Column({ nullable: false })
-  public villageId: number;
+  public villageId: number | undefined;
 
   @ManyToOne(() => Activity, (activity: Activity) => activity.games, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'activityId' })

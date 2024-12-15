@@ -9,15 +9,9 @@
 
 .filtersContainer {
   display: flex;
-  padding-bottom: 5%;
-}
-
-.phaseFilter {
-  flex: 1;
-}
-
-.countryFilter {
-  flex: 2;
+  justify-content: flex-start;
+  gap: 20px;
+  padding: 5% 0;
 }
 
 .horizontalBars {
@@ -40,6 +34,7 @@
   flex-direction: row;
   justify-content: space-between;
   padding-top: 5%;
+  align-items: stretch;
 }
 
 .averageStatsContainer {
@@ -93,6 +88,7 @@
 .exchangesConnectionsContainer {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   padding-top: 5%;
 }
 
@@ -102,4 +98,9 @@
 
 .connectionsChart {
   width: 30%;
+}
+
+.customLegend {
+  display: flex;
+  flex-direction: row-reverse;
 }

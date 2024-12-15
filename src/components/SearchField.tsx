@@ -54,7 +54,7 @@ const SearchField = ({ wrapperSx, setter }: Props) => {
       <SearchIconWrapper>
         <SearchIcon />
       </SearchIconWrapper>
-      <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} onChange={setter} />
+      <StyledInputBase placeholder="Rechercher…" inputProps={{ 'aria-label': 'search' }} onChange={setter} />
     </Search>
   );
 };

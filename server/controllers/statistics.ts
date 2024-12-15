@@ -1,110 +1,94 @@
-import { AnalyticSession } from '../entities/analytic';
-import { Classroom } from '../entities/classroom';
-import { AppDataSource } from '../utils/data-source';
+import type { Request } from 'express';
+
+import {
+  getClassroomsInfos,
+  getConnectedClassroomsCount,
+  getContributedClassroomsCount,
+  getRegisteredClassroomsCount,
+  getChildrenCodesCountForClassroom,
+  getConnectedFamiliesCountForClassroom,
+  getFamiliesWithoutAccountForClassroom,
+} from '../stats/classroomStats';
+import {
+  getChildrenCodesCountForGlobal,
+  getConnectedFamiliesCountForGlobal,
+  getFamiliesWithoutAccountForGlobal,
+  getFamilyAccountsCountForGlobal,
+  getFloatingAccountsForGlobal,
+} from '../stats/globalStats';
+import {
+  getAverageConnections,
+  getAverageDuration,
+  getMaxConnections,
+  getMaxDuration,
+  getMedianConnections,
+  getMedianDuration,
+  getMinConnections,
+  getMinDuration,
+} from '../stats/sessionStats';
+import {
+  getChildrenCodesCountForVillage,
+  getConnectedFamiliesCountForVillage,
+  getFamiliesWithoutAccountForVillage,
+  getFloatingAccountsForVillage,
+  getFamilyAccountsCountForVillage,
+} from '../stats/villageStats';
 import { Controller } from './controller';
 
 export const statisticsController = new Controller('/statistics');
 
-const classroomRepository = AppDataSource.getRepository(Classroom);
-const analyticSessionRepository = AppDataSource.getRepository(AnalyticSession);
+statisticsController.get({ path: '/sessions/:phase' }, async (req: Request, res) => {
+  const phase = req.params.phase ? parseInt(req.params.phase) : null;
 
-statisticsController.get({ path: '/classrooms' }, async (_req, res) => {
-  const classroomsData = await classroomRepository
-    .createQueryBuilder('classroom')
-    .leftJoin('classroom.village', 'village')
-    .leftJoin('classroom.user', 'user')
-    .addSelect('classroom.id', 'classroomId')
-    .addSelect('classroom.name', 'classroomName')
-    .addSelect('classroom.countryCode', 'classroomCountryCode')
-    .addSelect('village.id', 'villageId')
-    .addSelect('village.name', 'villageName')
-    .addSelect('user.id', 'userId')
-    .addSelect('user.firstname', 'userFirstname')
-    .addSelect('user.lastname', 'userLastname')
-    .addSelect(
-      `(SELECT COUNT(comment.id)
-      FROM comment
-      WHERE comment.userId = user.id) AS commentsCount`,
-    )
-    .addSelect(
-      `(SELECT COUNT(video.id)
-      FROM video
-      WHERE video.userId = user.id) AS videosCount`,
-    )
-    .addSelect(
-      `(SELECT JSON_ARRAYAGG(
-        JSON_OBJECT(
-          'phase', ac.phase,
-          'activities', ac.activities
-        )
-      )
-      FROM (
-        SELECT 
-          activity.phase,
-          JSON_ARRAYAGG(
-            JSON_OBJECT(
-              'type', activity.type,
-              'count', activity.totalActivities
-            )
-          ) AS activities
-        FROM (
-          SELECT 
-            activity.phase,
-            activity.type,
-            COUNT(activity.id) AS totalActivities
-          FROM activity
-          WHERE activity.userId = user.id
-            AND activity.villageId = classroom.villageId
-            AND activity.deleteDate IS NULL
-          GROUP BY activity.phase, activity.type
-        ) AS activity
-        GROUP BY activity.phase
-      ) AS ac
-    ) AS activitiesCount`,
-    )
-    .groupBy('classroom.id')
-    .addGroupBy('user.id')
-    .getRawMany();
-
-  res.sendJSON(
-    classroomsData.map((classroom) => ({
-      ...classroom,
-      commentsCount: parseInt(classroom.commentsCount, 10),
-      videosCount: parseInt(classroom.videosCount, 10),
-    })),
-  );
+  res.sendJSON({
+    minDuration: await getMinDuration(), // TODO - add phase
+    maxDuration: await getMaxDuration(), // TODO - add phase
+    averageDuration: await getAverageDuration(), // TODO - add phase
+    medianDuration: await getMedianDuration(), // TODO - add phase
+    minConnections: await getMinConnections(), // TODO - add phase
+    maxConnections: await getMaxConnections(), // TODO - add phase
+    averageConnections: await getAverageConnections(), // TODO - add phase
+    medianConnections: await getMedianConnections(), // TODO - add phase
+    registeredClassroomsCount: await getRegisteredClassroomsCount(),
+    connectedClassroomsCount: await getConnectedClassroomsCount(), // TODO - add phase
+    contributedClassroomsCount: await getContributedClassroomsCount(phase),
+  });
 });
 
-statisticsController.get({ path: '/connections' }, async (_req, res) => {
-  const durationThreshold = 60;
-  const connectionsStats = await analyticSessionRepository
-    .createQueryBuilder('analytic_session')
-    .select('MIN(DISTINCT(analytic_session.duration))', 'minDuration')
-    .addSelect('COUNT(DISTINCT uniqueId)', 'connectedClassroomsCount')
-    .addSelect('(SELECT COUNT(DISTINCT id) FROM classroom)', 'registeredClassroomsCount')
-    .addSelect('(SELECT COUNT(DISTINCT userId) FROM activity)', 'contributedClassroomsCount')
-    .addSelect('MAX(DISTINCT(analytic_session.duration))', 'maxDuration')
-    .addSelect('ROUND(AVG(CASE WHEN analytic_session.duration >= :minDuration THEN analytic_session.duration ELSE NULL END), 0)', 'averageDuration')
-    .addSelect(
-      `(SELECT duration FROM (SELECT duration, ROW_NUMBER() OVER (ORDER BY duration) AS medianIdx FROM (SELECT DISTINCT duration FROM analytic_session WHERE duration IS NOT NULL AND duration >= :minDuration) AS sub) AS d, (SELECT COUNT(DISTINCT duration) AS cnt FROM analytic_session WHERE duration IS NOT NULL AND duration >= :minDuration) AS total_count WHERE d.medianIdx = (total_count.cnt DIV 2))`,
-      'medianDuration',
-    )
-    .addSelect('MIN(sub.occurrence_count)', 'minConnections')
-    .addSelect('MAX(sub.occurrence_count)', 'maxConnections')
-    .addSelect('ROUND(AVG(sub.occurrence_count), 0)', 'averageConnections')
-    .addSelect(
-      `(SELECT connection_count FROM (SELECT connection_count, ROW_NUMBER() OVER (ORDER BY connection_count) AS medianIdx FROM (SELECT COUNT(*) AS connection_count FROM analytic_session GROUP BY uniqueId) AS sub) AS d, (SELECT COUNT(*) AS cnt FROM (SELECT COUNT(*) AS connection_count FROM analytic_session GROUP BY uniqueId) AS sub_count) AS total_count WHERE d.medianIdx = (total_count.cnt DIV 2))`,
-      'medianConnections',
-    )
-    .from((subQuery) => {
-      return subQuery.subQuery().select('COUNT(*)', 'occurrence_count').from(AnalyticSession, 'analytic_session').groupBy('uniqueId');
-    }, 'sub')
-    .where('analytic_session.duration >= :minDuration', { minDuration: durationThreshold })
-    .getRawOne();
+statisticsController.get({ path: '/classrooms' }, async (_req, res) => {
+  res.sendJSON({
+    classrooms: await getClassroomsInfos(),
+  });
+});
 
-  for (const property in connectionsStats) {
-    connectionsStats[property] = typeof connectionsStats[property] === 'string' ? parseInt(connectionsStats[property]) : connectionsStats[property];
-  }
+statisticsController.get({ path: '/onevillage' }, async (_req, res) => {
+  res.sendJSON({
+    familyAccountsCount: await getFamilyAccountsCountForGlobal(),
+    childrenCodesCount: await getChildrenCodesCountForGlobal(),
+    connectedFamiliesCount: await getConnectedFamiliesCountForGlobal(),
+    familiesWithoutAccount: await getFamiliesWithoutAccountForGlobal(),
+    floatingAccounts: await getFloatingAccountsForGlobal(),
+  });
+});
 
-  res.sendJSON(connectionsStats);
+statisticsController.get({ path: '/villages/:villageId' }, async (_req, res) => {
+  const villageId = parseInt(_req.params.villageId);
+  const phase = _req.query.phase as unknown as number;
+  res.sendJSON({
+    familyAccountsCount: await getFamilyAccountsCountForVillage(villageId, phase),
+    childrenCodesCount: await getChildrenCodesCountForVillage(villageId, phase),
+    connectedFamiliesCount: await getConnectedFamiliesCountForVillage(villageId, phase),
+    familiesWithoutAccount: await getFamiliesWithoutAccountForVillage(villageId),
+    floatingAccounts: await getFloatingAccountsForVillage(villageId),
+  });
+});
+
+statisticsController.get({ path: '/classrooms/:classroomId' }, async (_req, res) => {
+  const classroomId = parseInt(_req.params.classroomId);
+  const phase = _req.query.phase as unknown as number;
+  res.sendJSON({
+    childrenCodesCount: await getChildrenCodesCountForClassroom(classroomId, phase),
+    connectedFamiliesCount: await getConnectedFamiliesCountForClassroom(classroomId, phase),
+    familiesWithoutAccount: await getFamiliesWithoutAccountForClassroom(classroomId),
+  });
 });

@@ -18,9 +18,9 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
     steps: [
       [
         {
-          title: 'Présentez en vidéo une 1ère mimique à vos Pélicopains',
+          title: 'Présentez en vidéo une 1ère mimique à vos pélicopains',
           description:
-            'Votre vidéo est un plan unique tourné à l’horizontal, qui montre un élève faisant la mimique et la situation dans laquelle on l’utilise.. Gardez le mystère, et ne révélez pas à l’oral sa signification !',
+            'Votre vidéo est un plan unique tourné à l’horizontal, qui montre un enfant faisant la mimique et la situation dans laquelle on l’utilise. Gardez le mystère, et ne révélez pas à l’oral sa signification !',
           inputs: [
             {
               id: 0,
@@ -52,7 +52,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
         {
           title: 'Inventez deux significations fausses à cette mimique',
           description:
-            'Vos Pélicopains verront la vidéo de votre mimique, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut inventer :',
+            'Vos pélicopains verront la vidéo de votre mimique et devront trouver sa vraie signification parmi 3 propositions. A vous d’inventer 2 fausses significations :',
           inputs: [
             {
               id: 3,
@@ -77,9 +77,9 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       ],
       [
         {
-          title: 'Présentez en vidéo une 2ème mimique à vos Pélicopains',
+          title: 'Présentez en vidéo une 2ème mimique à vos pélicopains',
           description:
-            'Votre vidéo est un plan unique tourné à l’horizontal, qui montre un élève faisant la mimique et la situation dans laquelle on l’utilise.. Gardez le mystère, et ne révélez pas à l’oral sa signification !',
+            'Votre vidéo est un plan unique tourné à l’horizontal, qui montre un enfant faisant la mimique et la situation dans laquelle on l’utilise. Gardez le mystère, et ne révélez pas à l’oral sa signification !',
           inputs: [
             {
               id: 5,
@@ -111,7 +111,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
         {
           title: 'Inventez deux significations fausses à cette mimique',
           description:
-            'Vos Pélicopains verront la vidéo de votre mimique, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut inventer :',
+            'Vos pélicopains verront la vidéo de votre mimique et devront trouver sa vraie signification parmi 3 propositions. A vous d’inventer 2 fausses significations :',
           inputs: [
             {
               id: 8,
@@ -136,9 +136,9 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       ],
       [
         {
-          title: 'Présentez en vidéo une 3ème mimique à vos Pélicopains',
+          title: 'Présentez en vidéo une 3ème mimique à vos pélicopains',
           description:
-            'Votre vidéo est un plan unique tourné à l’horizontal, qui montre un élève faisant la mimique et la situation dans laquelle on l’utilise.. Gardez le mystère, et ne révélez pas à l’oral sa signification !',
+            'Votre vidéo est un plan unique tourné à l’horizontal, qui montre un enfant faisant la mimique et la situation dans laquelle on l’utilise. Gardez le mystère, et ne révélez pas à l’oral sa signification !',
           inputs: [
             {
               id: 10,
@@ -170,7 +170,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
         {
           title: 'Inventez deux significations fausses à cette mimique',
           description:
-            'Vos Pélicopains verront la vidéo de votre mimique, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut inventer :',
+            'Vos pélicopains verront la vidéo de votre mimique et devront trouver sa vraie signification parmi 3 propositions. A vous d’inventer 2 fausses significations :',
           inputs: [
             {
               id: 13,
@@ -244,7 +244,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             {
               id: 3,
               type: InputTypeEnum.INPUT,
-              label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
+              label: 'Quel est son prix moyen ? (Écrire la valeur en nombre)',
               selectedValue: '',
               response: true,
               isDisplayedInRecap: true,
@@ -263,7 +263,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
         {
           title: 'Inventez deux prix faux à cet objet',
           description:
-            'Vos Pélicopains verront l’image de votre objet, et devront trouver son prix parmi le vrai, et les deux faux, qu’il faut inventer :',
+            'Vos pélicopains verront l’image de votre objet et devront trouver son vrai prix parmi 3 propositions. A vous d’inventer 2 faux prix :',
           inputs: [
             {
               id: 5,
@@ -308,7 +308,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             {
               id: 9,
               type: InputTypeEnum.INPUT,
-              label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
+              label: 'Quel est son prix moyen ? (Écrire la valeur en nombre)',
               selectedValue: '',
               response: true,
               isDisplayedInRecap: true,
@@ -327,7 +327,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
         {
           title: 'Inventez deux prix faux à cet objet',
           description:
-            'Vos Pélicopains verront l’image de votre objet, et devront trouver son prix parmi le vrai, et les deux faux, qu’il faut inventer :',
+            'Vos pélicopains verront l’image de votre objet et devront trouver son vrai prix parmi 3 propositions. A vous d’inventer 2 faux prix :',
           inputs: [
             {
               id: 11,
@@ -372,7 +372,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             {
               id: 15,
               type: InputTypeEnum.INPUT,
-              label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
+              label: 'Quel est son prix moyen ? (Écrire la valeur en nombre)',
               selectedValue: '',
               response: true,
               isDisplayedInRecap: true,
@@ -391,7 +391,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
         {
           title: 'Inventez deux prix faux à cet objet',
           description:
-            'Vos Pélicopains verront l’image de votre objet, et devront trouver son prix parmi le vrai, et les deux faux, qu’il faut inventer :',
+            'Vos pélicopains verront l’image de votre objet et devront trouver son vrai prix parmi 3 propositions. A vous d’inventer 2 faux prix :',
           inputs: [
             {
               id: 17,
@@ -448,8 +448,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               id: 1,
               type: InputTypeEnum.RADIO,
               values: [
-                'maternelle chez tous les élèves',
-                'maternelle chez certains élèves',
+                'maternelle chez tous les enfants',
+                'maternelle chez certains enfants',
                 'utilisée pour faire cours',
                 'apprise comme langue étrangère',
               ],
@@ -505,7 +505,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
         {
           title: 'Inventez deux significations fausses à cette expression',
           description:
-            'Vos Pélicopains verront le dessin de votre expression, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut inventer :',
+            'Vos pélicopains verront  le dessin de votre expression et devront trouver sa vraie signification parmi 3 propositions. A vous d’inventer 2 fausses significations :',
           inputs: [
             {
               id: 6,
@@ -574,7 +574,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
         {
           title: 'Inventez deux significations fausses à cette expression',
           description:
-            'Vos Pélicopains verront le dessin de votre expression, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut inventer :',
+            'Vos pélicopains verront  le dessin de votre expression et devront trouver sa vraie signification parmi 3 propositions. A vous d’inventer 2 fausses significations :',
           inputs: [
             {
               id: 12,
@@ -643,7 +643,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
         {
           title: 'Inventez deux significations fausses à cette expression',
           description:
-            'Vos Pélicopains verront le dessin de votre expression, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut inventer :',
+            'Vos pélicopains verront  le dessin de votre expression et devront trouver sa vraie signification parmi 3 propositions. A vous d’inventer 2 fausses significations :',
           inputs: [
             {
               id: 18,

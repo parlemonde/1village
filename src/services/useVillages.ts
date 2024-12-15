@@ -3,29 +3,47 @@ import React from 'react';
 import type { QueryFunction } from 'react-query';
 import { useQueryClient, useQuery } from 'react-query';
 
+import { postPhaseHistory } from 'src/api/phaseHistory/phaseHistory.post';
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { Village } from 'types/village.type';
+import type { Village, VillageFilter } from 'types/village.type';
+import { VillagePhase } from 'types/village.type';
 
-export const useVillages = (): { villages: Village[]; setVillages(newVillages: Village[]): void } => {
+export const useVillages = (options?: VillageFilter): { villages: Village[]; setVillages(newVillages: Village[]): void } => {
   const queryClient = useQueryClient();
+  const buildUrl = () => {
+    if (!options) return '/villages';
+    const { countryIsoCode } = options;
+    const queryParams = [];
 
+    if (countryIsoCode) queryParams.push(`countryIsoCode=${countryIsoCode}`);
+
+    return queryParams.length ? `/villages?${queryParams.join('&')}` : '/villages';
+  };
+
+  const url = buildUrl();
+  // The query function for fetching villages, memoized with useCallback
   const getVillages: QueryFunction<Village[]> = React.useCallback(async () => {
     const response = await axiosRequest({
       method: 'GET',
-      url: '/villages',
+      url,
     });
     if (response.error) {
       return [];
     }
     return response.data;
-  }, []);
-  const { data, isLoading, error } = useQuery<Village[], unknown>(['villages'], getVillages);
+  }, [url]);
+
+  // Notice that we include `countryIsoCode` in the query key so that the query is refetched
+  const { data, isLoading, error } = useQuery<Village[], unknown>(
+    ['villages', options], // Include countryIsoCode in the query key to trigger refetching
+    getVillages,
+  );
 
   const setVillages = React.useCallback(
     (newVillages: Village[]) => {
-      queryClient.setQueryData(['villages'], newVillages);
+      queryClient.setQueryData(['villages', options], newVillages); // Ensure that the query key includes countryIsoCode
     },
-    [queryClient],
+    [queryClient, options],
   );
 
   return {
@@ -48,6 +66,10 @@ export const useVillageRequests = () => {
           name: newVillage.name,
           countries: newVillage.countries.map((c) => c.isoCode),
         },
+      });
+      await postPhaseHistory({
+        villageId: response.data.id,
+        phase: VillagePhase.DISCOVER,
       });
       if (response.error) {
         enqueueSnackbar('Une erreur est survenue...', {

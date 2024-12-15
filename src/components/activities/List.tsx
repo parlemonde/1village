@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 import type { SelectChangeEvent } from '@mui/material';
 import { Button } from '@mui/material';
@@ -59,6 +60,7 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
     responseActivityId: null,
   });
   const { activity: responseActivity } = useActivity(responseActivityId ?? -1);
+  const router = useRouter();
   const { user } = React.useContext(UserContext);
   const { users } = useVillageUsers();
   const userMap = React.useMemo(
@@ -69,8 +71,24 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
       }, {}),
     [users],
   );
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = React.useState<number>(1);
   const [activitiesPerPage, setActivitiesPerPage] = React.useState(25);
+  const [usePagination, setUsePagination] = React.useState(withPagination);
+
+  React.useEffect(() => {
+    const isArchiveMode = process.env.NEXT_PUBLIC_ARCHIVE_MODE === 'true';
+    if (isArchiveMode) {
+      setUsePagination(false);
+      return;
+    }
+
+    if (!router.isReady) {
+      return;
+    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const noPagination = urlParams.has('nopagination');
+    setUsePagination(!noPagination);
+  }, [router.isReady, router.query, withPagination]);
 
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -96,7 +114,9 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
     onSelect,
   };
 
-  const currentPageActivities = activities.filter((activity) => !isAnthem(activity)).slice(startIdx, endIdx);
+  const currentPageActivities = usePagination
+    ? activities.filter((activity) => !isAnthem(activity)).slice(startIdx, endIdx)
+    : activities.filter((activity) => !isAnthem(activity));
 
   return (
     <div>
@@ -180,7 +200,7 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
           <Card key={index} activity={activity} index={index} {...cardProps} />
         ),
       )}
-      {withPagination && (
+      {usePagination && (
         <PaginationNav
           page={page}
           itemsPerPage={activitiesPerPage}

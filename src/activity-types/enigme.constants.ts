@@ -16,7 +16,7 @@ export const ENIGME_TYPES = [
     titleStep1: 'Choisissez votre objet mystère',
     titleStep2: 'Décrivez votre objet mystère',
     titleStep2Short: 'objet',
-    description: `La classe choisit de présenter un "objet mystère", à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Cet objet peut-être...`,
+    description: `Choisissez un "objet mystère" à présenter aux pélicopains à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Cet objet peut-être...`,
     subCategories: [
       {
         label: 'Un jouet',
@@ -52,7 +52,7 @@ export const ENIGME_TYPES = [
     titleStep1: 'Choisissez votre événement mystère',
     titleStep2: 'Décrivez votre événement mystère',
     titleStep2Short: 'événement',
-    description: `La classe choisit de présenter un "événement mystère", à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Cet événement peut-être une fête de l’école, un festival, un fait historique s'étant déroulé localement, une fête nationale...`,
+    description: `Choisissez un "événement mystère" à présenter aux pélicopains à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Cet événement peut-être...`,
     subCategories: [
       {
         label: 'Une fête de l’école',
@@ -83,7 +83,7 @@ export const ENIGME_TYPES = [
     titleStep1: 'Choisissez votre personnalité mystère',
     titleStep2: 'Décrivez votre personnalité mystère',
     titleStep2Short: 'personnalité',
-    description: `La classe choisit de présenter une "personnalité mystère", à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Cette personnalité peut-être...`,
+    description: `Choisissez une "personnalité mystère" à présenter aux pélicopains à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Cette personnalité peut-être...`,
     subCategories: [
       {
         label: 'Un personnage historique',
@@ -109,7 +109,7 @@ export const ENIGME_TYPES = [
     titleStep1: 'Choisissez votre lieu mystère',
     titleStep2: 'Décrivez votre lieu mystère',
     titleStep2Short: 'lieu',
-    description: `La classe choisit de présenter un "lieu mystère", à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Ce lieu peut-être...`,
+    description: `Choisissez un "lieu mystère" à présenter aux pélicopains à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Ce lieu peut-être...`,
     subCategories: [
       {
         label: 'Un monument commémoratif',

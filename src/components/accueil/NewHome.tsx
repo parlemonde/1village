@@ -120,7 +120,7 @@ export const NewHome = () => {
               },
             }}
           >
-            <LoginBox title="Professeur des écoles" subTitle="1Village en classe" route="login" Icon={School} />
+            <LoginBox title="Professionnel de l'éducation" subTitle="1Village en classe" route="login" Icon={School} />
           </Grid>
 
           <Box
@@ -138,7 +138,7 @@ export const NewHome = () => {
           ></Box>
 
           <Grid item xs={12} sm={6} spacing={2}>
-            <LoginBox title="Parent d'élève" subTitle="1Village en famille" route="connexion" Icon={Home} />
+            <LoginBox title="Famille" subTitle="1Village en famille" route="connexion" Icon={Home} />
           </Grid>
         </Grid>
       </Box>

@@ -4,6 +4,7 @@ import { ActivityCard } from '../ActivityCard';
 import StoriesDataCardView from '../ActivityView/StoriesDataCardView';
 import { AddComment } from './AddComment';
 import { CommentCard } from './CommentCard';
+import type { DataUse } from 'src/api/game/game.getOneGameById';
 import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
@@ -15,7 +16,7 @@ import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 interface ActivityCommentsProps {
-  activity: Activity<AnyData>;
+  activity: Activity<AnyData> | DataUse;
   usersMap: { [key: number]: User };
 }
 export const ActivityComments = ({ activity, usersMap }: ActivityCommentsProps) => {
@@ -58,7 +59,7 @@ export const ActivityComments = ({ activity, usersMap }: ActivityCommentsProps) 
     <div>
       <div className="activity__divider">
         <div className="activity__divider--text">
-          <h2>Réaction des Pélicopains</h2>
+          <h2>Réaction des pélicopains</h2>
         </div>
       </div>
       {/* Stories space */}

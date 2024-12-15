@@ -81,10 +81,12 @@ const StoryStep4 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Illustrez et écrivez l’histoire de votre visite dans le village idéal</h1>
+          <h1>Illustrez et décrivez votre visite dans le village-monde idéal</h1>
           <p className="text">
-            Racontez à vos pélicopains comment le village-idéal et l’objet magique nous permettent d’atteindre l’objectif du développement durable que
-            vous avez choisi ! Illustrez votre histoire avec un dessin de votre visite dans le village-idéal.
+            Racontez à vos pélicopains comment votre objet magique et votre lieu extraordinaire vous permettent d’atteindre l’objectif du
+            développement durable que vous avez choisi.
+            <br />
+            Illustrez votre histoire avec un dessin représentant votre village-monde idéal !
           </p>
           <Grid container>
             <Grid item xs={12} md={6}>
@@ -133,7 +135,7 @@ const StoryStep4 = () => {
             </Grid>
             <TextField
               id="standard-multiline-static"
-              label="Écrivez votre histoire du Village idéal"
+              label="Ecrivez l’histoire de votre village-monde idéal"
               rows={8}
               multiline
               value={data.tale?.tale || ''}

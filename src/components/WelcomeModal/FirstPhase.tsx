@@ -3,7 +3,7 @@ import React from 'react';
 
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import { Checkbox } from '@mui/material';
+import { Checkbox, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import MobileStepper from '@mui/material/MobileStepper';
 
@@ -63,7 +63,7 @@ export const FirstPhase = () => {
   };
 
   const updateUser = async () => {
-    if (!newUser.city || !newUser.address || !newUser.pseudo || !newUser.school || !newUser.email || !newUser.postalCode) {
+    if (!newUser.firstname || !newUser.lastname || !newUser.school || !newUser.level || !newUser.address || !newUser.city || !newUser.postalCode) {
       return;
     }
     setIsLoading(true);
@@ -75,6 +75,8 @@ export const FirstPhase = () => {
       address: newUser.address,
       pseudo: newUser.pseudo,
       email: newUser.email,
+      firstname: newUser.firstname,
+      lastname: newUser.lastname,
       firstLogin: 1,
       displayName: newUser.displayName || '',
     };
@@ -136,7 +138,7 @@ export const FirstPhase = () => {
   return (
     <Modal
       open={true}
-      title="Bienvenue à 1Village !"
+      title="Bienvenue sur 1Village !"
       cancelLabel="Continuer"
       maxWidth="lg"
       fullWidth
@@ -159,7 +161,17 @@ export const FirstPhase = () => {
                 color={currentStep === 2 || currentStep === 4 ? 'primary' : 'inherit'}
                 variant={currentStep === 2 || currentStep === 4 ? 'contained' : 'text'}
                 sx={currentStep === 2 || currentStep === 4 ? undefined : defaultTextButtonStyle}
-                disabled={(currentStep === 3 && (!newUser.city || !newUser.address || !newUser.postalCode)) || (currentStep === 2 && !cguChecked)}
+                disabled={
+                  (currentStep === 3 &&
+                    (!newUser.firstname ||
+                      !newUser.lastname ||
+                      !newUser.school ||
+                      !newUser.level ||
+                      !newUser.address ||
+                      !newUser.city ||
+                      !newUser.postalCode)) ||
+                  (currentStep === 2 && !cguChecked)
+                }
                 onClick={() => {
                   if (currentStep === 3) {
                     getNewUserPosition().catch();
@@ -263,12 +275,42 @@ export const FirstPhase = () => {
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
               <PelicoSearch style={{ width: '4rem', height: 'auto', marginRight: '1rem' }} />
               <span className="text text--bold">
-                Suite à votre première connection, Pelico a récupéré les informations suivantes sur votre classe. Pouvez les mettre à jour si
-                nécessaire ?
+                Comme c’est votre première connexion, Pélico a besoin de récupérer certaines informations sur votre classe. Pouvez-vous les compléter
+                ?
               </span>
             </div>
             <div style={{ display: 'flex', alignItems: 'stretch' }}>
               <div style={{ flex: 1, marginRight: '1rem', minWidth: 0 }}>
+                <Typography variant="h3" mx={1} mb={2}>
+                  Professionnel de l&apos;éducation
+                </Typography>
+                <PanelInput
+                  value={newUser.lastname || ''}
+                  defaultValue={'non renseignée'}
+                  label="Nom : "
+                  placeholder="Nom : "
+                  hasError={!newUser.lastname}
+                  isEditMode
+                  isRequired
+                  onChange={(lastname) => {
+                    setNewUser((u) => ({ ...u, lastname }));
+                  }}
+                />
+                <PanelInput
+                  value={newUser.firstname || ''}
+                  defaultValue={'non renseignée'}
+                  label="Prénom : "
+                  placeholder="Prénom : "
+                  hasError={!newUser.firstname}
+                  isEditMode
+                  isRequired
+                  onChange={(firstname) => {
+                    setNewUser((u) => ({ ...u, firstname }));
+                  }}
+                />
+                <Typography variant="h3" mx={1} my={2}>
+                  Établissement
+                </Typography>
                 <PanelInput
                   value={newUser.school || ''}
                   defaultValue={'non renseignée'}
@@ -333,10 +375,10 @@ export const FirstPhase = () => {
                   <PanelInput value={user.country.name} defaultValue={''} label="Pays :" placeholder="Pays" isEditMode={false} />
                 )}
                 <PanelInput
-                  style={{ marginTop: '2rem' }}
+                  style={{ marginTop: '1rem' }}
                   value={newUser.displayName || ''}
                   defaultValue={'non renseigné'}
-                  label="Nom affiché : "
+                  label="Pseudo : "
                   placeholder={getUserDisplayName({ ...user, ...newUser, type: user?.type }, false)}
                   isEditMode
                   onChange={(displayName) => {
@@ -345,7 +387,7 @@ export const FirstPhase = () => {
                 />
               </div>
               <div style={{ flex: 1, backgroundColor: bgPage, padding: '0.5rem 1rem', minWidth: 0 }}>
-                <span className="text text--bold">Une activité de votre classe apparaîtra comme suit:</span>
+                <span className="text text--bold">Les activités de votre classe apparaîtront comme ci-dessous :</span>
                 <ActivityCard
                   activity={{
                     id: 0,

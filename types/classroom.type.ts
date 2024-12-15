@@ -36,3 +36,7 @@ export interface InitialStateOptionsProps {
   ownClass: StateOptions;
   ownClassTimeDelay: StateOptions;
 }
+
+export interface ClassroomFilter {
+  villageId: string;
+}

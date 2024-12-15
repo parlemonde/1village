@@ -18,6 +18,7 @@ import { LightBox } from 'src/components/lightbox/Lightbox';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { primaryColor } from 'src/styles/variables.const';
+import { UserType } from 'types/user.type';
 
 const ContenuLibre = () => {
   const router = useRouter();
@@ -26,6 +27,7 @@ const ContenuLibre = () => {
   const [selectedImageUrl, setSelectedImageUrl] = React.useState<string | undefined>(undefined);
   const [isAllImagesModalOpen, setIsAllImagesModalOpen] = React.useState(false);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
+  const isTeacher = user !== null && user.type === UserType.TEACHER;
 
   const data = (activity?.data as FreeContentData) || null;
   const errorSteps = React.useMemo(() => {
@@ -103,14 +105,18 @@ const ContenuLibre = () => {
             }}
             style={{ width: '100%', marginBottom: '1rem' }}
           />
-          <div>
-            Épingler la publication ?
-            <Switch checked={activity.isPinned} onChange={handlePinnedChange} value={activity.isPinned} color="primary" />
-          </div>
-          <div>
-            Publier sous votre nom la publication ? (Pas Pelico)
-            <Switch checked={activity.displayAsUser} onChange={handleUserChange} value={activity.displayAsUser} color="primary" />
-          </div>
+          {!isTeacher && (
+            <>
+              <div>
+                Épingler la publication ?
+                <Switch checked={activity.isPinned} onChange={handlePinnedChange} value={activity.isPinned} color="primary" />
+              </div>
+              <div>
+                Publier sous votre nom la publication ? (Pas Pélico)
+                <Switch checked={activity.displayAsUser} onChange={handleUserChange} value={activity.displayAsUser} color="primary" />
+              </div>
+            </>
+          )}
           <p className="text">Image à la une :</p>
           <div className="editor" style={{ marginTop: 0 }}>
             <div className="image-editor editor__container">

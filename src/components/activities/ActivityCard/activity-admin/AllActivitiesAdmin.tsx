@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import type { Activity } from 'server/entities/activity';
 
 import type { SelectChangeEvent } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
 
 import PelicoNoContent from 'src/components/NoContentPelico';
 import PaginationNav from 'src/components/PaginationNav/PaginationNav';
@@ -15,6 +16,8 @@ type Props = {
 const AllActivitiesAdmin = ({ activities, search }: Props) => {
   const [page, setPage] = useState(1);
   const [activitiesPerPage, setActivitiesPerPage] = useState(10);
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
   const handleActivitiesPerPage = (e: SelectChangeEvent<string>) => {
     setPage(1);
     setActivitiesPerPage(parseInt(e.target.value));
@@ -53,9 +56,18 @@ const AllActivitiesAdmin = ({ activities, search }: Props) => {
   }, [activities, activitiesPerPage, page, search]);
   return (
     <div>
-      <div className="admin-activity-card-list">
+      <div
+        className="admin-activity-card-list"
+        style={{
+          display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
+          flexWrap: isMobile ? 'nowrap' : 'wrap',
+        }}
+      >
         {filteredActivities().map((activity) => (
-          <ActivityCardAdmin key={activity.id} {...activity} />
+          <div key={activity.id} style={{ width: isMobile ? '100%' : '50%' }}>
+            <ActivityCardAdmin activity={activity} />
+          </div>
         ))}
       </div>
       {filteredActivities().length ? (

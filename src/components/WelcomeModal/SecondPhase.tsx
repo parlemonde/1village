@@ -38,7 +38,7 @@ export const SecondPhase = () => {
     <div style={{ width: '100%' }}>
       <Modal
         open={isModalOpen}
-        title="La phase 2 est active, et l'identité de vos Pélicopains est dévoilée !"
+        title="La phase 2 est active, et l'identité de vos pélicopains est dévoilée !"
         maxWidth="md"
         fullWidth
         onClose={() => {}}
@@ -49,9 +49,15 @@ export const SecondPhase = () => {
           <>
             <div
               id="new-user-desc"
-              style={{ minHeight: '15rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginTop: '2rem' }}
+              style={{ minHeight: '15rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}
             >
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem' }}>
+              <div>
+                <p>Avant de passer à la phase suivante, prenez 5 minutes pour nous faire vos retours sur la phase 1 :</p>
+                <a href={urlForm} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: '#4c3ed9' }}>
+                  Vos retours sur la phase 1 d&apos;1Village 2024/25
+                </a>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginTop: '2rem' }}>
                 <div>
                   <p>Si vous n&apos;avez pas encore résolu l&apos;énigme avec votre classe, retournez sur la phase 1.</p>
                   <Button
@@ -74,7 +80,7 @@ export const SecondPhase = () => {
                   </Button>
                 </div>
                 <div>
-                  <p>Si vous souhaitez débuter les échanges avec vos Pélicopains, poursuivez sur la phase 2.</p>
+                  <p>Si vous souhaitez débuter les échanges avec vos pélicopains, poursuivez sur la phase 2.</p>
                   <Button
                     component="a"
                     onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -95,13 +101,6 @@ export const SecondPhase = () => {
                     Poursuivre sur la phase 2
                   </Button>
                 </div>
-              </div>
-
-              <div style={{ marginTop: '2rem' }}>
-                Avant de passer à la phase suivante, prenez 5 minutes pour nous faire vos retours sur la phase 1 :{' '}
-                <a href={urlForm} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: '#4c3ed9' }}>
-                  Vos retours sur la phase 1 d&apos;1Village 2024/25
-                </a>
               </div>
             </div>
           </>

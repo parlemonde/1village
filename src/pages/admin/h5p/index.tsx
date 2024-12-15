@@ -13,8 +13,8 @@ import MaterialLink from '@mui/material/Link';
 import { useDeleteH5pContentMutation } from 'src/api/h5p/h5p-content.delete';
 import { useH5pContentList } from 'src/api/h5p/h5p-content.list';
 import { Modal } from 'src/components/Modal';
-import { AdminTable } from 'src/components/admin/AdminTable';
 import { AdminTile } from 'src/components/admin/AdminTile';
+import { OneVillageTable } from 'src/components/admin/OneVillageTable';
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 
 const H5pList = () => {
@@ -74,7 +74,8 @@ const H5pList = () => {
           </Link>
         }
       >
-        <AdminTable
+        <OneVillageTable
+          admin
           emptyPlaceholder={
             <>
               {"Vous n'avez pas encore de contenu H5P ! "}

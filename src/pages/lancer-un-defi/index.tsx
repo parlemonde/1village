@@ -44,7 +44,7 @@ const Defi = () => {
         <div className="width-900">
           <h1>Choisissez le défi que vous souhaitez réaliser</h1>
           <p className="text" style={{ fontSize: '1rem' }}>
-            {'Dans cette activité, nous vous proposons de lancer un défi aux Pélicopains. Cela peut être un défi linguistique, culinaire ou même '}
+            {'Dans cette activité, nous vous proposons de lancer un défi aux pélicopains. Cela peut être un défi linguistique, culinaire ou même '}
             écologique. Par exemple, vous pouvez partager une action en vous filmant en train de la réaliser et ensuite demander aux autres classes de
             la réaliser à leur tour !
           </p>

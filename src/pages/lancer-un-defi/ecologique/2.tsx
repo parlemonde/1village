@@ -57,7 +57,7 @@ const DefiEcoStep2 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Expliquez aux Pélicopains votre action et pourquoi vous l’avez choisie.</h1>
+          <h1>Expliquez aux pélicopains votre action et pourquoi vous l’avez choisie.</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
             {"Pour l'illustrer, vous pouvez ajouter des photos ou tout expliquer en vidéo !"}
           </p>

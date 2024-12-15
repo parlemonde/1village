@@ -13,7 +13,7 @@ import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import ActivityLink from 'src/components/activities/Link';
+// import ActivityLink from 'src/components/activities/Link';
 import { Activities } from 'src/components/activities/List';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { REACTIONS } from 'src/components/activities/utils';
@@ -121,7 +121,7 @@ const ReactionStep3 = () => {
             </div>
           )}
 
-          {!isEdit && activity?.responseActivityId === null && <ActivityLink url={`/reagir-a-une-activite/1?edit`} />}
+          {/* {!isEdit && activity?.responseActivityId === null && <ActivityLink url={`/reagir-a-une-activite/1?edit`} />} */}
           {responseActivity !== null && (
             <>
               <span className="text text--small text--success">En réaction à {REACTIONS[responseActivity.type]}</span>

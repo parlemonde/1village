@@ -229,7 +229,7 @@ const SongStep4 = () => {
           <p>Avez-vous bien chanté en rythme ? 😀</p>
           <p>
             Pour le savoir, importez le fichier son contenant vos voix, et déplacez-le avec votre souris pour le caler sur l&apos;hymne ! Vous pouvez
-            changer réduire ou augmenter le volume du son pour que vos voix s’entendent suffisamment.
+            réduire ou augmenter le volume du son pour que vos voix s’entendent suffisamment.
           </p>
           {!verseRecordAudio ? (
             <AddAudioButton

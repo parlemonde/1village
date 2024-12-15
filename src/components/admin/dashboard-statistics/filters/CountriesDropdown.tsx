@@ -7,21 +7,43 @@ import MenuItem from '@mui/material/MenuItem';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import Select from '@mui/material/Select';
 
-export default function CountriesDropdown() {
-  const [country, setCountry] = React.useState('');
+import type { Country } from 'types/country.type';
+
+interface CountriesDropdownProps {
+  countries: Country[];
+  onCountryChange: (country: string) => void;
+}
+
+export default function CountriesDropdown({ countries, onCountryChange }: CountriesDropdownProps) {
+  const [country, setCountry] = React.useState<string>('');
 
   const handleChange = (event: SelectChangeEvent) => {
-    setCountry(event.target.value as string);
+    const selectedCountry = event.target.value as string;
+    setCountry(selectedCountry);
+    onCountryChange(selectedCountry);
   };
 
-  //countries list requests to add
-
   return (
-    <Box sx={{ maxWidth: 120 }}>
+    <Box
+      sx={{
+        minWidth: {
+          xs: 'none',
+          md: 150,
+        },
+        maxWidth: {
+          xs: 'none',
+          md: 200,
+        },
+      }}
+    >
       <FormControl fullWidth size="small">
         <InputLabel id="country-menu-select">Pays</InputLabel>
-        <Select labelId="demo-simple-select-label" id="demo-simple-select" value={country} label="Pays" onChange={handleChange}>
-          <MenuItem value={0}>Tous les pays</MenuItem>
+        <Select labelId="country-menu-select" id="country-select" value={country} label="Pays" onChange={handleChange}>
+          {countries.map((c) => (
+            <MenuItem key={c.isoCode} value={c.isoCode}>
+              {c.name}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </Box>

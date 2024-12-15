@@ -1,3 +1,4 @@
+import { useSnackbar } from 'notistack';
 import React from 'react';
 import { useQueryClient } from 'react-query';
 
@@ -5,21 +6,28 @@ import { isMascotte } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { PageLayout } from 'src/components/PageLayout';
+import { VideoTable } from 'src/components/VideoTable';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { GameCardMaClasse } from 'src/components/activities/ActivityCard/GameCardMaClasse';
 import { MascotteTemplate } from 'src/components/activities/content/MascotteTemplate';
+import { VideoView } from 'src/components/activities/content/views/VideoView';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { useActivityRequests } from 'src/services/useActivity';
+import { useVideos } from 'src/services/useVideos';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity } from 'types/activity.type';
 import { ActivityStatus } from 'types/activity.type';
+import type { Video } from 'types/video.type';
 
 const MaClasse = () => {
   const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
   const { user, setUser } = React.useContext(UserContext);
   const { setActivity } = React.useContext(ActivityContext);
+  const [selectedVideo, setSelectedVideo] = React.useState<Video | null>(null);
+  const { videos } = useVideos();
   const { activities } = useActivities({
     userId: user?.id ?? 0,
   });
@@ -89,6 +97,23 @@ const MaClasse = () => {
     setDeleteIndex({ index: -1, isDraft: false });
   };
 
+  const deleteVideo = async (id: number) => {
+    const response = await axiosRequest({
+      method: 'DELETE',
+      url: `/videos/${id}`,
+    });
+    if (response.error) {
+      enqueueSnackbar('Une erreur est survenue...', {
+        variant: 'error',
+      });
+    } else {
+      enqueueSnackbar('Vidéo supprimée avec succès !', {
+        variant: 'success',
+      });
+      queryClient.invalidateQueries('videos');
+    }
+  };
+
   const hasNoPublishedActivities = activities.filter((a) => a.userId === user?.id && !isMascotte(a)).length === 0;
   const hasGamesInActivities = activities.filter((a) => a.userId === user?.id && a.type === 4).length > 0;
 
@@ -151,9 +176,21 @@ const MaClasse = () => {
           ) : (
             <p>Vous n&apos;avez pas de jeux publiés.</p>
           )}
+          <h1 style={{ margin: '2rem 0 1rem 0' }}>Mes vidéos</h1>
+          {videos.length > 0 ? (
+            <VideoTable
+              videos={videos}
+              onDelete={deleteVideo}
+              onView={(video) => {
+                setSelectedVideo(video);
+              }}
+            />
+          ) : (
+            <p>Vous n&apos;avez pas encore mis en ligne de vidéos.</p>
+          )}
           <h1 style={{ margin: '2rem 0 1rem 0' }}>Mes activités publiées</h1>
           {hasNoPublishedActivities ? (
-            <p>Vous n&apos;avez pas d&apos;activités publiées.</p>
+            <p>Vous navez pas d&apos;activités publiées.</p>
           ) : (
             activities.map((activity, index) =>
               user && activity.userId === user.id && !isMascotte(activity) && activity.type !== 4 ? (
@@ -187,6 +224,23 @@ const MaClasse = () => {
       >
         <div>Voulez vous vraiment supprimer cette activité ?</div>
         {activityToDelete && user && <ActivityCard activity={activityToDelete} isSelf={true} user={user} noButtons />}
+      </Modal>
+
+      <Modal
+        title={`Vidéo: ${selectedVideo?.name || ''}`}
+        cancelLabel="Fermer"
+        onClose={() => {
+          setSelectedVideo(null);
+        }}
+        open={selectedVideo !== null}
+        ariaDescribedBy="video-desc"
+        ariaLabelledBy="video-title"
+        fullWidth
+        maxWidth="md"
+      >
+        <div>
+          {selectedVideo !== null && <VideoView id={selectedVideo.id} value={`https://player.vimeo.com/video/${selectedVideo.id}`}></VideoView>}
+        </div>
       </Modal>
     </Base>
   );

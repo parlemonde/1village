@@ -10,6 +10,7 @@ interface PanelInputProps {
   placeholder?: string;
   isRequired?: boolean;
   isEditMode?: boolean;
+  isBold?: boolean;
   errorMsg?: string;
   helperText?: string;
   hasError?: boolean;
@@ -26,6 +27,7 @@ export const PanelInput = ({
   placeholder = '',
   isRequired = false,
   isEditMode = true,
+  isBold = false,
   errorMsg,
   helperText,
   type = 'text',
@@ -36,7 +38,7 @@ export const PanelInput = ({
 }: PanelInputProps) => {
   return (
     <div style={{ margin: '0.5rem', display: 'inline-flex', alignItems: 'flex-start', ...style }}>
-      <label className="text text--bold" style={{ flexShrink: 0 }}>
+      <label className={`text ${isBold ? 'text--bold' : ''}`} style={{ flexShrink: 0 }}>
         {label}
         {isRequired && <span style={{ color: 'red' }}>*</span>}
       </label>

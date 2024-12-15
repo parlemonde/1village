@@ -24,15 +24,16 @@ const Mimique = () => {
         <h1>Qu’est-ce qu’une mimique ?</h1>
         <p style={{ marginBottom: '2rem' }}>
           Une mimique est un geste du corps qui exprime une émotion ou une pensée, et que l’on fait dans certaine situation. Par exemple, un signe des
-          mains pour dire bonjour ! Ou bien, un mouvement du visage pour exprimer la colère. Pelico aime beaucoup les mimiques, parce qu’elles sont
-          très parlantes… sans que l’on ait besoin de parler ! Certaines sont les mêmes partout sur terre, quand d’autres ne sont compréhensible que
-          par les habitants d’un seul pays… ou même d’une seule région !
+          mains pour dire bonjour ! Ou bien, un mouvement du visage pour exprimer la colère. Pélico aime beaucoup les mimiques, parce qu’elles sont
+          très parlantes… sans que l’on ait besoin de parler ! Certaines sont les mêmes partout dans le monde, quand d’autres ne sont compréhensibles
+          que par les habitants d’un seul pays… ou même d’une seule région ! … à vos pélicopains de deviner ce que signifient réellement vos mimiques
+          !
         </p>
-        <h1>Faites découvrir vos mimiques aux Pélicopains !</h1>
+        <h1>Faites découvrir vos mimiques aux pélicopains !</h1>
         <p style={{ marginBottom: '2rem' }}>
-          À vous de faire découvrir 3 mimiques que vous utilisez à vos Pélicopains ! À chaque étape, vous pourrez mettre en ligne une courte vidéo
+          À vous de faire découvrir 3 mimiques que vous utilisez à vos pélicopains ! À chaque étape, vous pourrez mettre en ligne une courte vidéo
           illustrant la mimique, une explication de sa signification et de son origine. Pour pimenter le jeu, à chaque étape vous devrez également
-          inventer deux significations fausses … à vos Pélicopains de deviner ce qui signifie réellement vos mimiques !
+          inventer deux significations fausses … à vos pélicopains de deviner ce qui signifie réellement vos mimiques !
         </p>
         <Box display="flex" justifyContent="end">
           <Link href="/creer-un-jeu/mimique/1" passHref>

@@ -2,7 +2,7 @@ import type { JSONSchemaType } from 'ajv';
 import * as argon2 from 'argon2';
 import type { NextFunction, Request, Response } from 'express';
 import type { FindOperator } from 'typeorm';
-import { In, IsNull, LessThan } from 'typeorm';
+import { IsNull, LessThan } from 'typeorm';
 
 import { ActivityStatus, ActivityType } from '../../types/activity.type';
 import { getAccessToken } from '../authentication/lib/tokens';
@@ -10,17 +10,19 @@ import { Email, sendMail } from '../emails';
 import { Activity } from '../entities/activity';
 import { Classroom } from '../entities/classroom';
 import { FeatureFlag } from '../entities/featureFlag';
+import { Notifications } from '../entities/notifications';
 import { Student } from '../entities/student';
 import { User, UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
-import { generateTemporaryToken, valueOrDefault, isPasswordValid, getQueryString } from '../utils';
+import { generateTemporaryToken, valueOrDefault, isPasswordValid, getQueryString, updateVillageData } from '../utils';
 import { AppDataSource } from '../utils/data-source';
 import { getPosition, setUserPosition } from '../utils/get-pos';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { logger } from '../utils/logger';
 import updateHasStudentLinkedForAffectedUsers from '../utils/updateHasStudentLinkedForAffectedUsers';
 import { Controller } from './controller';
+import { EditNotificationPreferences } from './notifications';
 
 const userController = new Controller('/users');
 // --- Get all users. ---
@@ -282,6 +284,11 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   await AppDataSource.getRepository(User).save(user);
   delete user.passwordHash;
   delete user.verificationHash;
+  const notificationRepo = AppDataSource.getRepository(Notifications);
+  const notification = new Notifications();
+  notification.userId = user.id;
+  // Sauvegarder la notification dans la base de données
+  await notificationRepo.save(notification);
   res.sendJSON(user);
 });
 
@@ -292,6 +299,7 @@ type EditUserData = {
   firstname?: string;
   lastname?: string;
   countryCode?: string;
+  createdAt?: string;
   level?: string;
   school?: string;
   city?: string;
@@ -317,6 +325,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
     firstname: { type: 'string', nullable: true },
     lastname: { type: 'string', nullable: true },
     countryCode: { type: 'string', nullable: true },
+    createdAt: { type: 'string', nullable: true },
     level: { type: 'string', nullable: true },
     school: { type: 'string', nullable: true },
     city: { type: 'string', nullable: true },
@@ -358,6 +367,7 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
   const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
   const isAdmin = req.user && req.user.type <= UserType.ADMIN;
+
   if (user === null || (!isSelfProfile && !isAdmin)) {
     next();
     return;
@@ -380,6 +390,8 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
   user.countryCode = valueOrDefault(data.countryCode, user.countryCode);
   user.avatar = valueOrDefault(data.avatar, user.avatar) || null;
   user.displayName = valueOrDefault(data.displayName, user.displayName) || null;
+  user.firstname = valueOrDefault(data.firstname, user.firstname);
+  user.lastname = valueOrDefault(data.lastname, user.lastname);
   user.firstLogin = valueOrDefault(data.firstLogin, user.firstLogin);
   if (req.user !== undefined && req.user.type <= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, user.type);
@@ -389,31 +401,7 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
     user.position = data.position;
   }
   if (data.villageId) {
-    if (user.type === UserType.TEACHER) {
-      const classroom = await AppDataSource.getRepository(Classroom).findOne({ where: { user: { id: user.id } } });
-
-      if (!classroom) return;
-
-      const students = await AppDataSource.getRepository(Student).find({ where: { classroom: { id: classroom.id } } });
-      const studentsId = students.map((student) => student.id);
-
-      const families = await AppDataSource.getRepository(UserToStudent).find({
-        where: { student: { id: In(studentsId) } },
-        relations: ['user', 'student'],
-      });
-
-      const familiesId = families.map((family) => family.user.id);
-
-      const promises = [];
-
-      promises.push(
-        AppDataSource.getRepository(Classroom).update({ user: { id: user.id } }, { villageId: data.villageId }),
-        AppDataSource.getRepository(Activity).update({ userId: user.id }, { villageId: data.villageId }),
-        AppDataSource.getRepository(User).update({ id: In(familiesId) }, { villageId: data.villageId }),
-      );
-
-      await Promise.all(promises);
-    }
+    await updateVillageData(user, { villageId: data.villageId });
   }
   user.hasAcceptedNewsletter = valueOrDefault(data.hasAcceptedNewsletter, user.hasAcceptedNewsletter);
   user.language = valueOrDefault(data.language, user.language);
@@ -520,6 +508,8 @@ userController.delete({ path: '/:id', userType: UserType.OBSERVATOR }, async (re
   }
 
   await AppDataSource.getRepository(User).delete({ id });
+  const notificationRepository = AppDataSource.getRepository(Notifications);
+  await notificationRepository.delete({ userId: id });
 
   // Update the hasStudentLinked field for affected users
   await updateHasStudentLinkedForAffectedUsers(affectedUserIds);
@@ -575,6 +565,18 @@ userController.post({ path: '/verify-email' }, async (req: Request, res: Respons
   user.accountRegistration = 0;
   user.verificationHash = '';
   user.isVerified = true;
+  if (user.type === UserType.TEACHER) {
+    const notificationPreferences = new Notifications();
+    notificationPreferences.commentary = true;
+    notificationPreferences.creationAccountFamily = true;
+    notificationPreferences.openingVillageStep = true;
+    notificationPreferences.publicationFromAdmin = true;
+    notificationPreferences.publicationFromSchool = true;
+    notificationPreferences.reaction = true;
+
+    EditNotificationPreferences({ ...notificationPreferences, userId: user.id });
+  }
+
   await AppDataSource.getRepository(User).save(user);
 
   // login user

@@ -14,7 +14,7 @@ export const CGU = () => {
       </p>
       <p>
         <strong>Je m’engage notamment à respecter la législation relative au droit à l’image</strong>, en particulier, je m’engage à ne mettre en
-        ligne que des photos ou vidéos d’élèves pour lesquelles je possède une autorisation valide et signée d’un parent ou du tuteur légal.
+        ligne que des photos ou vidéos enfants pour lesquelles je possède une autorisation valide et signée d’un parent ou du tuteur légal.
       </p>
       <p>
         Je comprends et j’accepte que l’association Par Le Monde ne peut être considérée comme responsable des contenus illégaux que je mettrais en
@@ -35,7 +35,7 @@ export const CGU = () => {
       <p>
         Je prends connaissance des statuts et du règlement intérieur de l’association Par Le Monde et consens, conformément aux dispositions
         statutaires (articles 5 et 11 des statuts, articles 1 et 2 du règlement intérieur), à devenir membre de droit de l’association l’année suivant
-        leur participation à l’un des programmes porté par l’association.
+        ma participation à l’un des programmes porté par l’association.
       </p>
       <p>Ce statut me donne un droit de vote aux assemblées générales de l’association Par Le Monde.</p>
       <p>

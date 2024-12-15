@@ -3,12 +3,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState, useCallback, useMemo, useContext } from 'react';
 
-// import AccessTimeIcon from '@mui/icons-material/AccessTime';
-// import ShuffleIcon from '@mui/icons-material/Shuffle';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Grid } from '@mui/material';
 
 import { KeepRatio } from '../KeepRatio';
+import { ActivityComments } from '../activities/ActivityComments';
 import { useOneGameById } from 'src/api/game/game.getOneGameById';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
@@ -28,6 +27,7 @@ import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { GameType } from 'types/game.type';
 import type { Game } from 'types/game.type';
 import type { GameResponse } from 'types/gameResponse.type';
+import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 function shuffleArray(size: number) {
@@ -129,6 +129,13 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
   const gameId = parseInt(String(id));
   const { data: getOneGameById } = useOneGameById(subType, gameId || 0);
 
+  const usersMap = React.useMemo(() => {
+    return users.reduce<{ [key: number]: User }>((acc, user) => {
+      acc[user.id] = user;
+      return acc;
+    }, {});
+  }, [users]);
+
   const TYPE_OF_GAME = {
     [GameType.MIMIC]: 'mimique',
     [GameType.MONEY]: 'objet',
@@ -180,7 +187,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
   };
 
   const getNextGame = useCallback(async () => {
-    // [1] Reset game.
     setFound(false);
     setGameResponses([]);
     setTryCount(0);
@@ -250,7 +256,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       inputs.map((input) => {
         if (input.response || input.response === false) {
           if (getOneGameById.subType === GameType.MONEY) {
-            // Utilisation des templates de chaînes de caractères
             const significationWithEuro = `${input.selectedValue} ${euro}`;
             responses.push({ isSuccess: input.response, signification: significationWithEuro, value: input.response ? 0 : fakeSignificationIndex });
           } else {
@@ -286,14 +291,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
   const userIsPelico = user !== null && user.type <= UserType.MEDIATOR;
 
   const choices = React.useMemo(() => (playContent.responses.length > 0 ? shuffleArray(playContent.responses.length) : []), [playContent.responses]);
-
-  // const handleRadioButtonChange = (event: React.SyntheticEvent) => {
-  //   const selected = (event as React.ChangeEvent<HTMLInputElement>).target.value;
-  //   setSelectedValue(selected as RadioBoxValues);
-  //   if (selected === RadioBoxValues.RANDOM) {
-  //     getNextGame();
-  //   }
-  // };
 
   const handleClick = useCallback(
     async (selection: string, isSuccess: boolean = false) => {
@@ -377,21 +374,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
               )}
             </div>
           </div>
-          <Grid container spacing={1} style={{ flex: 1, justifyContent: 'space-around' }}>
-            {/* <RadioGroup row defaultValue={RadioBoxValues.NEW}>
-              {Object.keys(radioListComponentMapper).map((value: string, index: number) => {
-                return (
-                  <RadioNextGame
-                    key={index}
-                    value={value as RadioBoxValues}
-                    Icon={radioListComponentMapper[value as RadioBoxValues]}
-                    onChange={handleRadioButtonChange}
-                    checked={selectedValue === value}
-                  />
-                );
-              })}
-            </RadioGroup> */}
-          </Grid>
           <Grid
             container
             border={1}
@@ -447,7 +429,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
                         signification={signification}
                         disabled={isDisabled}
                         isCorrect={isCorrect || (tryCount > 1 && isSuccess)}
-                        // mimicOrigine={mimicOrigine}
                       />
                     </div>
                   );
@@ -484,7 +465,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
               {found && <p>C’est exact ! Vous avez trouvé {displayPhrasesByType.phraseDelamodal}.</p>}
             </Grid>
           </Grid>
-          <Grid>{/* <ActivityComments activity={activityComment} usersMap={{}} /> */}</Grid>
+          <Grid>{getOneGameById ? <ActivityComments activity={getOneGameById} usersMap={usersMap} /> : null}</Grid>
         </Box>
         <Modal
           open={errorModalOpen}
@@ -521,7 +502,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
           </Grid>
           <Grid item xs={3} display="flex" justifyContent="flex-end">
             <Button variant="outlined" color="primary" onClick={getNextGame}>
-              {/* <Button variant="outlined" color="primary"> */}
               Jeu suivant
             </Button>
           </Grid>

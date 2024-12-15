@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Button } from '@mui/material';
@@ -23,6 +24,22 @@ export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
   const isMediator = user && user.type <= UserType.MEDIATOR;
+  const router = useRouter();
+  const [withPagination, setWithPagination] = React.useState(true);
+
+  //Check if the app is in archive mode
+  React.useEffect(() => {
+    const isArchiveMode = process.env.NEXT_PUBLIC_ARCHIVE_MODE === 'true';
+    if (isArchiveMode) {
+      setWithPagination(false);
+      return;
+    }
+
+    if (!router.isReady) return;
+    const urlParams = new URLSearchParams(window.location.search);
+    const noPagination = urlParams.has('nopagination');
+    setWithPagination(!noPagination);
+  }, [router.isReady]);
 
   //TODO: redo conditions and switchs
   const filterCountries = React.useMemo(() => {
@@ -106,15 +123,15 @@ export const Accueil = () => {
           </KeepRatio>
           <h1 style={{ marginTop: '1rem' }}>Dernières activités</h1>
           <Filters countries={filterCountries} filters={filters} onChange={setFilters} phase={selectedPhase} />
-          <Activities activities={activitiesFiltered} withLinks withPagination />
+          <Activities activities={activitiesFiltered} withLinks withPagination={withPagination} />
         </>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', padding: '0 1rem', alignItems: 'center' }}>
           <h1 style={{ margin: '1rem' }}>
             Un peu de patience, la phase {selectedPhase} n&apos;a pas encore débuté !
             {selectedPhase === 2
-              ? ' Rendez-vous ici une fois que vous aurez fait découvrir et découvert où habitent vos Pélicopains. Vous pourrez alors échanger ensemble !'
-              : ' Rendez-vous ici une fois que vous aurez échangé avec vos Pélicopains. Vous pourrez ensuite imaginer ensemble votre village-idéal !'}
+              ? ' Rendez-vous ici une fois que vous aurez créé votre mascotte et découvert le pays mystère, c’est-à-dire le pays où habitent vos pélicopains !'
+              : ' Rendez-vous ici une fois que vous aurez échangé avec vos pélicopains. Vous pourrez ensuite chanter tous ensemble l’hymne de votre village-monde mais aussi réinventer une histoire à partir de celles de vos pélicopains !'}
           </h1>
           <PelicoReflechit style={{ width: '50%', height: 'auto', maxWidth: '360px' }} />
           <Button

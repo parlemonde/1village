@@ -10,7 +10,7 @@ import { axiosRequest } from 'src/utils/axiosRequest';
 
 const errorMessages = {
   0: `Une erreur inconnue s'est produite`,
-  1: `L'email renseignée est incorrect`,
+  1: `Veuillez renseigner une adresse mail valide`,
 };
 
 const ResetPassword: React.FunctionComponent = () => {
@@ -20,6 +20,8 @@ const ResetPassword: React.FunctionComponent = () => {
   const [isSuccess, setIsSuccess] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
 
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
   const handleEmailInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
     setErrorCode(-1);
@@ -27,7 +29,12 @@ const ResetPassword: React.FunctionComponent = () => {
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setErrorCode(-1);
+
+    if (!emailRegex.test(email)) {
+      setErrorCode(1);
+      return;
+    }
+
     setLoading(true);
     const response = await axiosRequest({
       method: 'POST',
@@ -37,8 +44,8 @@ const ResetPassword: React.FunctionComponent = () => {
       },
     });
     setLoading(false);
-    if (response.error) {
-      setErrorCode(response.status === 400 ? 1 : 0);
+    if (response.status === 400) {
+      setErrorCode(0);
     } else {
       setTimeout(() => {
         setIsSuccess(true);
@@ -144,8 +151,6 @@ const ResetPassword: React.FunctionComponent = () => {
               <Box width="90%" maxWidth="350px" margin="0 auto">
                 <Typography margin="0 auto" align="left">
                   Veuillez renseigner l&apos;email lié à votre compte.
-                  <br />
-                  Nous vous enverrons un email avec un lien qui vous permettra de réinitialiser votre mot de passe.
                 </Typography>
 
                 <Box
@@ -201,9 +206,7 @@ const ResetPassword: React.FunctionComponent = () => {
             ) : (
               <Box textAlign="center" display="block" height="fit-content">
                 <PelicoSouriant style={{ width: '100%', maxWidth: '250px', maxHeight: '250px', cursor: 'pointer' }} />
-                <div>Un email vient de vous être envoyé à l&apos;adresse donnée</div>
-                <br />
-                <div>Vous allez être redirigé(e) vers la page de connexion...</div>
+                <div>Si cette adresse e-mail est enregistrée, nous y avons envoyé les instructions afin de réinitialiser votre mot de passe.</div>
               </Box>
             )}
           </Grid>

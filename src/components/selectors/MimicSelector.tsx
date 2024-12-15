@@ -66,7 +66,7 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
   return (
     <>
       <div className="width-900">
-        <h1>Présentez en vidéo une {mimicNumber} mimique à vos Pélicopains</h1>
+        <h1>Présentez en vidéo une {mimicNumber} mimique à vos pélicopains</h1>
         <p>
           Votre vidéo est un plan unique tourné à l’horizontal, qui montre un élève faisant la mimique et la situation dans laquelle on l’utilise..
           Gardez le mystère, et ne révélez pas à l’oral sa signification !
@@ -172,7 +172,7 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
         </Grid>
         <h1>Inventez deux significations fausses à cette mimique</h1>
         <p>
-          Vos Pélicopains verront la vidéo de votre mimique, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut
+          Vos pélicopains verront la vidéo de votre mimique, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut
           inventer :
         </p>
         <TextField

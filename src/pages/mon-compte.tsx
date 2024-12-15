@@ -16,6 +16,7 @@ import { AvatarEditor } from 'src/components/activities/content/editors/ImageEdi
 import { EditButton } from 'src/components/buttons/EditButton';
 import { QuestionButton } from 'src/components/buttons/QuestionButton';
 import { RedButton } from 'src/components/buttons/RedButton';
+import { NotifCheckbox } from 'src/components/mon-compte/NotifCheckbox';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
 import { useLanguages } from 'src/services/useLanguages';
@@ -276,6 +277,7 @@ const Presentation = () => {
             label="École :"
             placeholder="Nom de votre école"
             isEditMode={editMode === 0}
+            isBold
             onChange={(school) => {
               setNewUser((u) => (!u ? u : { ...u, school }));
             }}
@@ -286,6 +288,7 @@ const Presentation = () => {
             label="Niveau de la classe :"
             placeholder="Niveau de votre classe"
             isEditMode={editMode === 0}
+            isBold
             onChange={(level) => {
               setNewUser((u) => (!u ? u : { ...u, level }));
             }}
@@ -296,6 +299,7 @@ const Presentation = () => {
             label="Adresse de l'école :"
             placeholder="Adresse"
             isEditMode={editMode === 0}
+            isBold
             onChange={(address) => {
               setNewUser((u) => (!u ? u : { ...u, address }));
             }}
@@ -306,6 +310,7 @@ const Presentation = () => {
             label="Ville :"
             placeholder="Ville"
             isEditMode={editMode === 0}
+            isBold
             onChange={(city) => {
               setNewUser((u) => (!u ? u : { ...u, city }));
             }}
@@ -316,6 +321,7 @@ const Presentation = () => {
             label="Code postal :"
             placeholder="Code postal"
             isEditMode={editMode === 0}
+            isBold
             onChange={(postalCode) => {
               setNewUser((u) => (!u ? u : { ...u, postalCode }));
             }}
@@ -323,9 +329,10 @@ const Presentation = () => {
           <PanelInput
             value={newUser.displayName || ''}
             defaultValue={getUserDisplayName(user, false, true)}
-            label="Nom affiché sur vos publications :"
+            label="Pseudo :"
             placeholder={getUserDisplayName(user, false, true)}
             isEditMode={editMode === 0}
+            isBold
             onChange={(displayName) => {
               setNewUser((u) => (!u ? u : { ...u, displayName }));
             }}
@@ -350,10 +357,10 @@ const Presentation = () => {
         </div>
       ) : null}
       <div className="account__panel">
-        <h2>Identifiants de connection</h2>
+        <h2>Identifiants de connexion</h2>
         <div className="account__panel-edit-button">
           {user.accountRegistration === 10 ? (
-            <QuestionButton helpMessage={`Vos identifiants de connection sont gérés par ${SSO_HOSTNAME}`} />
+            <QuestionButton helpMessage={`Vos identifiants de connexion sont gérés par ${SSO_HOSTNAME}`} />
           ) : (
             editMode !== 1 && <EditButton onClick={updateEditMode(1)} />
           )}
@@ -361,14 +368,14 @@ const Presentation = () => {
         {editMode === 1 && (
           <Alert severity="warning" style={{ margin: '0.5rem 0', backgroundColor: 'white', border: `1px solid ${helpColor}` }}>
             <AlertTitle>Attention !</AlertTitle>
-            Votre <strong>pseudo</strong> et votre <strong>email</strong> sont vos identifiants de connection.
+            Votre <strong>email</strong> est votre identifiant de connexion.
           </Alert>
         )}
         {user.type === UserType.TEACHER ? (
           <PanelInput
             value={newUser.pseudo}
             defaultValue={''}
-            label="Pseudo de la classe :"
+            label="Nom et prénom :"
             placeholder="Pseudo de la classe"
             isEditMode={editMode === 1}
             onChange={(pseudo) => {
@@ -382,7 +389,7 @@ const Presentation = () => {
         <PanelInput
           value={newUser.email}
           defaultValue={''}
-          label="Email:"
+          label="Email :"
           placeholder="Adresse Email"
           isEditMode={editMode === 1}
           onChange={(email) => {
@@ -412,6 +419,7 @@ const Presentation = () => {
           </>
         )}
       </div>
+      <NotifCheckbox />
       {user.type === UserType.FAMILY ? (
         <div className="account__panel">
           <h2>Préférence de communication</h2>

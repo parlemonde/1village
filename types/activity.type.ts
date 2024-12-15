@@ -39,7 +39,7 @@ export interface Activity<T extends AnyData = AnyData> {
 
   createDate?: Date | string;
   updateDate?: Date | string;
-  publishDate?: Date | string;
+  publishDate?: Date | string | null;
   deleteDate?: Date | string;
 
   // activity data
@@ -55,7 +55,7 @@ export interface Activity<T extends AnyData = AnyData> {
   displayAsUser?: boolean; // For admins who wants to publish as their own, not Pelico.
 
   // village relation
-  villageId: number;
+  villageId: number | undefined;
 
   // Answer other activity
   responseActivityId?: number | null;

@@ -16,8 +16,8 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { useUsers } from 'src/api/user/user.list';
 import { Modal } from 'src/components/Modal';
-import { AdminTable } from 'src/components/admin/AdminTable';
 import { AdminTile } from 'src/components/admin/AdminTile';
+import { OneVillageTable } from 'src/components/admin/OneVillageTable';
 import { UserContext } from 'src/contexts/userContext';
 import { useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
@@ -222,7 +222,8 @@ const Users = () => {
           </Button>
         </div>
         <Box sx={{ overflow: 'auto' }}>
-          <AdminTable
+          <OneVillageTable
+            admin
             emptyPlaceholder={isLoading ? 'Chargement...' : "Vous n'avez pas encore d'utilisateur !"}
             data={tableData.map((data) => ({ ...data, position: null }))} // remove position attribute from data
             columns={[

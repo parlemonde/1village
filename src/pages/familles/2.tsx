@@ -211,14 +211,14 @@ const ClassroomParamStep2 = () => {
             activeStep={1}
           />
           <div className="width-900">
-            <h1>Ajouter un identifiant par élève</h1>
+            <h1>Ajouter un identifiant par enfant</h1>
             <p className="text">
               Pour sécuriser la connexion des familles, nous allons créer{' '}
-              <span style={{ fontWeight: 'bold' }}>un identifiant unique à chaque élève de votre classe. </span> <br></br>Ensuite chaque famille
-              pourra créer jusqu&apos;à 5 accès avec ce même identifiant unique: ainsi les parents divorcés, les grands-parents, les grands-frères ou
-              les grandes-soeurs pourront accéder à 1Village. <br></br>
-              <br></br>Vous devez donc créer autant d&apos;identifiants qu&apos;il y a d&apos;élèves dans votre classe. Vous pourrez rajouter des
-              identifiants en cours d&apos;années, lorsqu&apos;un nouvel élève arrive dans votre classe.
+              <span style={{ fontWeight: 'bold' }}>un identifiant unique à chaque enfant de votre classe. </span> <br></br>Ensuite chaque famille
+              pourra créer jusqu&apos;à 5 accès avec ce même identifiant unique : ainsi plusieurs personnes de la famille pourront accéder à 1Village.
+              <br></br>
+              <br></br>Vous devez donc créer autant d&apos;identifiants qu&apos;il y a d&apos;enfants dans votre classe. Vous pourrez rajouter des
+              identifiants en cours d&apos;années, lorsqu&apos;un nouvel enfant arrive dans votre classe par exemple.
             </p>
 
             <form onSubmit={handleSubmit}>
@@ -249,7 +249,7 @@ const ClassroomParamStep2 = () => {
                 />
               </label>
               <Button type="submit" variant="outlined" disabled={isDisabled} style={{ marginBottom: '20px' }}>
-                Ajouter un élève
+                Ajouter un enfant
               </Button>
             </form>
             {isDuplicateModalOn && (

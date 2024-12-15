@@ -46,14 +46,14 @@ const SongStep3 = () => {
         <div className={styles.contentContainer}>
           <h1>Enregistrez votre voix</h1>
           <p>
-            À présent, il est temps d’enregistrer votre classe entrain de chanter votre couplet ! Pour vous aider, vous pouvez écouter l’hymne, avec
-            l’introduction, le refrain accompagné des paroles, et le couplet accompagné seulement de la mélodie.
+            À présent, il est temps d’enregistrer votre classe entrain de chanter votre couplet ! Pour vous aider, vous pouvez écouter l’audio
+            ci-dessous..
           </p>
           <p>
             Essayez de diffuser la musique d’un côté de la salle de classe, et de placer votre micro de l’autre côté, afin d’enregistrer surtout vos
             voix.
           </p>
-          <p>Vous pouvez également chanter a cappella, ou en enregistrant un élève portant un casque.</p>
+          <p>Vous pouvez également chanter a cappella, ou en enregistrant un enfant portant un casque.</p>
 
           {data.verseMixUrl ? (
             <AudioPlayer src={data.verseMixWithIntroUrl} isBuildingAudio />

@@ -159,6 +159,13 @@ export const Navigation = (): JSX.Element => {
         disabled: isParent,
       },
       {
+        label: 'Créer une énigme',
+        path: '/creer-une-enigme',
+        icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 2,
+        disabled: isParent,
+      },
+      {
         label: 'Lancer un défi',
         path: '/lancer-un-defi',
         icon: <TargetIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
@@ -169,13 +176,6 @@ export const Navigation = (): JSX.Element => {
         label: 'Jouer ensemble',
         path: '/creer-un-jeu',
         icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-        phase: 2,
-        disabled: isParent,
-      },
-      {
-        label: 'Créer une énigme',
-        path: '/creer-une-enigme',
-        icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 2,
         disabled: isParent,
       },
@@ -215,6 +215,15 @@ export const Navigation = (): JSX.Element => {
         phase: 3,
         disabled: firstStoryCreated === false || isParent,
       },
+      ...(isTeacher
+        ? [
+            {
+              ...FREE_CONTENT,
+              phase: 3,
+              disabled: false,
+            },
+          ]
+        : []),
     ],
     [firstStoryCreated, mascotteActivity, village, isTeacher, isParent],
   );
@@ -223,7 +232,7 @@ export const Navigation = (): JSX.Element => {
     () => [
       ACCUEIL,
       {
-        label: 'Notre classe',
+        label: 'Notre classe et nos activités',
         path: '/ma-classe',
         icon: user && <AvatarImg user={user} size="extra-small" noLink noToolTip />,
         disabled: isParent,

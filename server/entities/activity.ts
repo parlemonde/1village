@@ -80,7 +80,7 @@ export class Activity implements ActivityInterface<AnyData> {
   public village: Village | null;
 
   @Column({ nullable: false })
-  public villageId: number;
+  public villageId: number | undefined;
 
   // Answer other activity
   @ManyToOne(() => Activity, { onDelete: 'SET NULL' })
@@ -113,6 +113,18 @@ export class Activity implements ActivityInterface<AnyData> {
     default: true,
   })
   public isVisibleToParent?: boolean;
+
+  @Column({
+    type: 'tinyint',
+    default: null,
+  })
+  public parentActivityId?: number;
+
+  @Column({
+    type: 'boolean',
+    default: null,
+  })
+  public isDisplayed?: boolean;
 
   public commentCount?: number;
 

@@ -88,25 +88,23 @@ const Anthem = () => {
     <Base>
       <PageLayout>
         <div className="width-900">
-          <h1>Découvrez l&apos;hymne de votre village idéal</h1>
+          <h1>Et si on créait tous ensemble l’hymne du village-monde ?</h1>
           <div style={{ height: '100%', width: '100%', objectFit: 'contain' }}>
-            <p>
-              Que pensez-vous d’accompagner nos Olympiades de Pélico par un hymne ? Avec plusieurs de mes amies, nous avons imaginé un hymne pour le
-              village-idéal et pour les OP. Je vous laisse le découvrir…{' '}
-            </p>
+            <p>Avec plusieurs de mes amies, nous avons imaginé un hymne pour le village-monde. Je vous laisse le découvrir…</p>
+            <p>Notre hymne commence par une introduction, puis vient le refrain, un couplet et une conclusion. </p>
             <AudioPlayer src={anthemActivityData.fullMixUrl} style={{ width: '100%', height: '40px' }} />
             <p>Notre hymne commence par une introduction, puis vient le refrain, un couplet, et la conclusion.</p>
             <p>
               Avez-vous remarqué qu’il manque quelque chose ? <b>Je n&apos;ai pas écrit les paroles du couplet ! </b> Et oui car c’est votre mission !{' '}
               <strong>
-                Chaque classe de votre village-monde ainsi que la vôtre allez pouvoir écrire, chanter et enregistrer son propre couplet.
+                Chaque classe de votre village-monde ainsi que la vôtre allez pouvoir écrire, chanter et enregistrer votre propre couplet.
               </strong>{' '}
-              À vous de raconter votre expérience d&apos;1Village et des OP en chanson 🎵
+              A vous de raconter votre expérience d’1Village et vos souvenirs avec les pélicopains en chanson !
             </p>
             <p>
-              Pour créer votre couplet, je vous propose de commencer par modifier la musique de votre couplet, en modulant le volume sonore de
-              certains instruments. Tendez bien l&apos;oreille, en fonction de ces variations sur un même thème, l&apos;émotion de votre couplet
-              change ! Ensuite, vous pourrez écrire votre couplet, enregistrer votre voix et le mettre en ligne.{' '}
+              Pour créer votre couplet, je vous propose de commencer par le mixer en modifiant le volume de certains instruments. Tendez bien
+              l’oreille, l’émotion de votre couplet change selon votre mix ! Ensuite vous pourrez écrire les paroles de votre couplet, enregistrer
+              votre voix et le mettre en ligne.{' '}
             </p>
             <p>À la fin de l&apos;année, vous pourrez écouter l&apos;hymne composé des couplets de tous les pélicopains !</p>
           </div>

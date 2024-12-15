@@ -131,7 +131,7 @@ const SignInTeacher = () => {
 
         <Grid container mt={2} py={6} bgcolor="white" borderRadius="10px">
           <Grid xs={12} mb={4} textAlign="center" width="100%">
-            <Typography variant="h2">Professeurs des écoles</Typography>
+            <Typography variant="h2">Professionnel de l&apos;éducation</Typography>
           </Grid>
           <Grid
             item
@@ -147,7 +147,7 @@ const SignInTeacher = () => {
             <div className="text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Box
                 component="iframe"
-                src="https://player.vimeo.com/video/868665438"
+                src="https://player.vimeo.com/video/1011259591"
                 width="100%"
                 height={{
                   xs: '100%',
