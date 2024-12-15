@@ -47,7 +47,7 @@ export const LightBox = ({ url, children, isPDF }: LightBoxProps) => {
                   marginBottom: 10,
                 }}
               >
-                <Page width={380} scale={2.0} pageNumber={v + 1} />
+                <Page width={430} scale={2.0} pageNumber={v + 1} />
               </div>
             ))}
           </Document>

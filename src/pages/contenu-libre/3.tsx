@@ -30,7 +30,7 @@ const ContenuLibre = () => {
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
     const data = (activity?.data as FreeContentData) || null;
-    if (activity !== null && activity.content.filter((c) => c.value.length > 0 && c.value !== '<p></p>\n').length === 0) {
+    if (activity !== null && activity.content.filter((c) => c.value?.length > 0 && c.value !== '<p></p>\n').length === 0) {
       errors.push(0);
     }
     if (data !== null && (!data.title || !data.resume)) {
