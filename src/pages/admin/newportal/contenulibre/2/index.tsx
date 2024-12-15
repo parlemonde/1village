@@ -112,7 +112,7 @@ const ContenuLibre = () => {
                       position: 'relative',
                     }}
                   >
-                    <LightBox url={imageUrl} isImage={true}>
+                    <LightBox url={imageUrl}>
                       <Image layout="fill" objectFit="contain" src={imageUrl} unoptimized />
                     </LightBox>
                   </div>

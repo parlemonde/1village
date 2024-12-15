@@ -7,10 +7,10 @@ import { Modal } from '../Modal';
 type LightBoxProps = {
   url: string;
   children: JSX.Element;
-  isImage: boolean;
+  isPDF?: boolean;
 };
 
-export const LightBox = ({ url, children, isImage }: LightBoxProps) => {
+export const LightBox = ({ url, children, isPDF }: LightBoxProps) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   const options = {
@@ -37,7 +37,7 @@ export const LightBox = ({ url, children, isImage }: LightBoxProps) => {
         ariaLabelledBy="lightBox-modal-title"
         ariaDescribedBy="lightBox-modal-description"
       >
-        {isImage == false && (
+        {isPDF ? (
           <Document options={options} file={url} onLoadSuccess={onDocumentLoadSuccess}>
             {Array.from(Array(numPages).keys()).map((v) => (
               <div
@@ -51,8 +51,9 @@ export const LightBox = ({ url, children, isImage }: LightBoxProps) => {
               </div>
             ))}
           </Document>
+        ) : (
+          <Image layout="responsive" objectFit="contain" width="100%" height="70%" alt="" unoptimized src={url} />
         )}
-        {isImage == true && <Image layout="responsive" objectFit="contain" width="100%" height="70%" alt="" unoptimized src={url} />}
       </Modal>
     </>
   );

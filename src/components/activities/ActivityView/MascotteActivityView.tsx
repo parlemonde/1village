@@ -30,7 +30,7 @@ export const MascotteActivityView = ({ activity }: ActivityViewProps<MascotteAct
             </Grid>
             <Grid item xs={12} md={4}>
               <Box display="flex" justifyContent="center" m={4}>
-                <LightBox url={activity.data.mascotteImage} isImage={true}>
+                <LightBox url={activity.data.mascotteImage}>
                   <AvatarImg src={activity.data.mascotteImage} noLink />
                 </LightBox>
               </Box>

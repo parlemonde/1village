@@ -30,7 +30,7 @@ export const DefiActivityView = ({ activity }: ActivityViewProps<DefiActivity>) 
             {activity.data.image && (
               <Grid item xs={12} md={4}>
                 <div style={{ width: '100%', height: '100%', minHeight: '200px', position: 'relative' }}>
-                  <LightBox url={activity.data.image} isImage={true}>
+                  <LightBox url={activity.data.image}>
                     <Image layout="fill" objectFit="contain" alt="image du plat" unoptimized src={activity.data.image} />
                   </LightBox>
                 </div>

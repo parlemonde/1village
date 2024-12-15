@@ -264,7 +264,7 @@ export const ImageModal = ({
                   position: 'relative',
                 }}
               >
-                <LightBox url={preview.url} isImage={true}>
+                <LightBox url={preview.url}>
                   <Image layout="fill" objectFit="contain" src={preview.url} unoptimized />
                 </LightBox>
               </div>
