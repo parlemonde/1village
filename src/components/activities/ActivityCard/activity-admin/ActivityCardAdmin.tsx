@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
@@ -59,8 +60,11 @@ export default function ActivityCard({
     setAnchorEl(null);
   };
   const handleUpdate = () => {
+    console.log(activity);
     if (activity.type === 5) {
       router.push(`/admin/newportal/contenulibre/edit/1/${activity.id}`);
+    } else if (activity.type === 11) {
+      router.push(`/admin/newportal/create/parametrer-hymne/1?edit=true&activity-id=${activity.id}`);
     }
     setAnchorEl(null);
   };
