@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { Button } from '@mui/material';
+
 import { filterActivitiesByTerm, filterActivitiesWithLastGame } from './Filters/FilterActivities';
 import { LinkChild } from './LinkChild';
 import { getUserVisibilityFamilyParams } from 'src/api/user/user.get';
