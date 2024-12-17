@@ -1,6 +1,5 @@
-import React from 'react';
-
 import Box from '@mui/material/Box';
+import React from 'react';
 
 import styles from './StatsCard.module.css';
 

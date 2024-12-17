@@ -40,10 +40,6 @@ export const useGetOneVillageStats = () => {
   return useQuery(['1v-stats'], () => getOneVillageStats());
 };
 
-export const useGetOneVillageStats = () => {
-  return useQuery(['1v-stats'], () => getOneVillageStats());
-};
-
 export const useGetVillagesStats = (villageId: number | null, phase: number) => {
   return useQuery(['villages-stats', villageId, phase], () => getVillagesStats(villageId, phase), {
     enabled: villageId !== null,

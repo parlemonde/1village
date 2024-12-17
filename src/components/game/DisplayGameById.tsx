@@ -1,12 +1,9 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box, Button, Grid } from '@mui/material';
+import { Box, Button, Grid, Box, Button, Grid } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState, useCallback, useMemo, useContext } from 'react';
-
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box, Button, Grid } from '@mui/material';
 
 import { KeepRatio } from '../KeepRatio';
 import { ActivityComments } from '../activities/ActivityComments';

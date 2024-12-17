@@ -1,10 +1,7 @@
-import { Button } from '@mui/material';
+import { Button, Button, useMediaQuery } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import React from 'react';
 import type { Activity } from 'server/entities/activity';
-
-import { Button, useMediaQuery } from '@mui/material';
-import Paper from '@mui/material/Paper';
 
 import ActivityCardAdmin from './ActivityCardAdmin';
 

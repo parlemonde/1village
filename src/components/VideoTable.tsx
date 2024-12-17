@@ -1,7 +1,6 @@
-import React from 'react';
-
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Table, TableBody, TableCell, TableHead, TableRow, Tooltip, IconButton } from '@mui/material';
+import React from 'react';
 
 import { DeleteButton } from './buttons/DeleteButton';
 import { bgPage } from 'src/styles/variables.const';

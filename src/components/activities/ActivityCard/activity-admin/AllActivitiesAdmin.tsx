@@ -1,9 +1,7 @@
-import type { SelectChangeEvent } from '@mui/material';
+import type { SelectChangeEvent, SelectChangeEvent } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import type { Activity } from 'server/entities/activity';
-
-import type { SelectChangeEvent } from '@mui/material';
-import { useMediaQuery } from '@mui/material';
 
 import PelicoNoContent from 'src/components/NoContentPelico';
 import PaginationNav from 'src/components/PaginationNav/PaginationNav';
