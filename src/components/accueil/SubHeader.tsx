@@ -1,6 +1,7 @@
-import { Box, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
+
+import { Box, Typography } from '@mui/material';
 
 import { VillageContext } from 'src/contexts/villageContext';
 import { primaryColor } from 'src/styles/variables.const';

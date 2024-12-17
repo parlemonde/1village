@@ -1,6 +1,7 @@
-import { Box } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
+
+import { Box } from '@mui/material';
 
 import { isIndice } from 'src/activity-types/anyActivity';
 import { getIndice } from 'src/activity-types/indice.constants';

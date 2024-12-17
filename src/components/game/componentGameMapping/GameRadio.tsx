@@ -1,5 +1,6 @@
-import { RadioGroup, Radio, FormControlLabel } from '@mui/material';
 import React, { useContext } from 'react';
+
+import { RadioGroup, Radio, FormControlLabel } from '@mui/material';
 
 import { GameContext } from 'src/contexts/gameContext';
 import type { inputType } from 'types/game.type';

@@ -1,5 +1,6 @@
-import { Box, InputBase } from '@mui/material';
 import React from 'react';
+
+import { Box, InputBase } from '@mui/material';
 
 import { primaryColor } from 'src/styles/variables.const';
 import BacklineIcon from 'src/svg/anthem/backline.svg';

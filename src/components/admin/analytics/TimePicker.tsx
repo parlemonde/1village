@@ -1,8 +1,9 @@
+import React from 'react';
+
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { ButtonGroup, Button, Menu, MenuItem, Divider } from '@mui/material';
-import React from 'react';
 
 import { defaultOutlinedButtonStyle } from 'src/styles/variables.const';
 import { capitalize } from 'src/utils';

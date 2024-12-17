@@ -1,7 +1,8 @@
+import { useRouter } from 'next/router';
+import React from 'react';
+
 import type { SelectChangeEvent } from '@mui/material';
 import { Button } from '@mui/material';
-import { useRouter } from 'next/router';
-import React, { useState } from 'react';
 
 import PaginationNav from '../PaginationNav/PaginationNav';
 import { ActivityCard } from './ActivityCard';

@@ -1,13 +1,13 @@
+import React, { useState } from 'react';
+
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import React, { useState } from 'react';
 
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
 import VillageListCard from './cards/VillageListCard/VillageListCard';
 import BarCharts from './charts/BarCharts';
-import DashboardTable from './charts/DashboardTable';
 import HorizontalBarsChart from './charts/HorizontalChart';
 import PieCharts from './charts/PieCharts';
 import CountriesDropdown from './filters/CountriesDropdown';
@@ -65,9 +65,9 @@ const CountryStats = () => {
             <HorizontalBarsChart highlightCountry="FR"></HorizontalBarsChart>
           </div>
           <VillageListCard></VillageListCard>
-          <div className={styles.monitorTable}>
-            <DashboardTable />
-          </div>
+          {/* <div className={styles.monitorTable}>
+            <DashboardTable data={undefined} />
+          </div> */}
           <div className="statistic--container">
             <StatsCard data={statisticsSessions.registeredClassroomsCount ? statisticsSessions.registeredClassroomsCount : 0}>
               Nombre de classes inscrites

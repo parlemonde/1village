@@ -1,3 +1,6 @@
+import React, { useEffect, useState, useContext, useCallback, useMemo } from 'react';
+import { countries } from 'server/utils/iso-3166-countries-french';
+
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -5,8 +8,6 @@ import type { SelectChangeEvent } from '@mui/material/Select';
 import Select from '@mui/material/Select';
 import { useTheme } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
-import React, { useEffect, useState, useContext, useCallback, useMemo } from 'react';
-import { countries } from 'server/utils/iso-3166-countries-french';
 
 import { activitiesLabel, activityNumberMapper, subThemesMap, subThemeNumberMapper } from 'src/config/mediatheque/dataFilters';
 import type { UserData } from 'src/contexts/mediathequeContext';

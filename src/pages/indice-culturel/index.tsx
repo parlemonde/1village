@@ -1,5 +1,6 @@
-import { Box } from '@mui/material';
 import React from 'react';
+
+import { Box } from '@mui/material';
 
 import { Base } from 'src/components/Base';
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';

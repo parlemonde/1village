@@ -1,6 +1,7 @@
-import { TextField, Box } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
+
+import { TextField, Box } from '@mui/material';
 
 import { isMascotte } from 'src/activity-types/anyActivity';
 import { DEFAULT_MASCOTTE_DATA } from 'src/activity-types/mascotte.constants';

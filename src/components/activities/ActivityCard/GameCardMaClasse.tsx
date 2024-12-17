@@ -1,9 +1,10 @@
-import { Button, Paper } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import router from 'next/router';
 import React from 'react';
 import ReactPlayer from 'react-player';
+
+import { Button, Paper } from '@mui/material';
 
 import { titles, REACTIONS, icons } from '../utils';
 import { CommentIcon } from './CommentIcon';

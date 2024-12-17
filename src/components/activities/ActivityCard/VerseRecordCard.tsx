@@ -1,6 +1,7 @@
-import { Box, Button } from '@mui/material';
 import Link from 'next/link';
 import React from 'react';
+
+import { Box, Button } from '@mui/material';
 
 import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';

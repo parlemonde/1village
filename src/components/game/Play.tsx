@@ -1,4 +1,6 @@
 // import { Grid } from '@mui/material';
+import React from 'react';
+
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import InputLabel from '@mui/material/InputLabel';
@@ -6,7 +8,6 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
-import React from 'react';
 
 import { GAME_FIELDS_CONFIG } from 'src/config/games/game';
 import { InputTypeEnum } from 'types/game.type';

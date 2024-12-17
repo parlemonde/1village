@@ -1,8 +1,9 @@
-import { FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 import Image from 'next/image';
 import router from 'next/router';
 import React, { useContext } from 'react';
 import ReactPlayer from 'react-player';
+
+import { FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 
 import { CustomRadio } from '../buttons/CustomRadio';
 import { EditButton } from '../buttons/EditButton';

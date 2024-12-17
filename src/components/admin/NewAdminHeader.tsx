@@ -1,6 +1,7 @@
-import { Button, AppBar, Toolbar, Typography, useScrollTrigger } from '@mui/material';
 import Link from 'next/link';
 import React from 'react';
+
+import { Button, AppBar, Toolbar, Typography, useScrollTrigger } from '@mui/material';
 
 import { primaryColor } from 'src/styles/variables.const';
 import Logo from 'src/svg/logo.svg';

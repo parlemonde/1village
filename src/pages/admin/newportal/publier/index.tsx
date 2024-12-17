@@ -1,7 +1,8 @@
-import type { GridColDef, GridRowsProp } from '@mui/x-data-grid';
-import { DataGrid } from '@mui/x-data-grid';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
+
+import type { GridColDef, GridRowsProp } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 
 import { useGetActivitiesAdminDraft } from 'src/api/activities/activities.admin.get';
 import ActivityCardAdminList from 'src/components/activities/ActivityCard/activity-admin/ActivityCardAdminList';

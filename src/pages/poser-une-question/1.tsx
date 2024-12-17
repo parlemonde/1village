@@ -1,6 +1,7 @@
-import { Button } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
+
+import { Button } from '@mui/material';
 
 import { isQuestion } from 'src/activity-types/anyActivity';
 import { AvatarImg } from 'src/components/Avatar';

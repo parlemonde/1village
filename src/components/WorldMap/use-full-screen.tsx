@@ -1,8 +1,9 @@
+import * as React from 'react';
+
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
-import * as React from 'react';
 
 export const useFullScreen = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);

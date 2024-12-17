@@ -1,7 +1,8 @@
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 import { useSnackbar } from 'notistack';
 import React, { useContext } from 'react';
+
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
 
 import { usePutNotifications } from 'src/api/notifications/notifications.put';
 import { UserContext } from 'src/contexts/userContext';

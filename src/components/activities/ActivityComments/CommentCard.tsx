@@ -1,6 +1,7 @@
-import { Box, Button, CircularProgress, Paper } from '@mui/material';
 import dynamic from 'next/dynamic';
 import React from 'react';
+
+import { Box, Button, CircularProgress, Paper } from '@mui/material';
 
 import type { DataUse } from 'src/api/game/game.getOneGameById';
 import { AvatarImg } from 'src/components/Avatar';

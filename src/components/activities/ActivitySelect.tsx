@@ -1,6 +1,7 @@
+import React from 'react';
+
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Box, Button, CircularProgress } from '@mui/material';
-import React from 'react';
 
 import { Activities } from './List';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';

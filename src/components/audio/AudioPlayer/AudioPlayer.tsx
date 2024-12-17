@@ -1,6 +1,7 @@
-import { Alert, CircularProgress } from '@mui/material';
 import * as React from 'react';
 import { useQuery } from 'react-query';
+
+import { Alert, CircularProgress } from '@mui/material';
 
 import { primaryColor } from 'src/styles/variables.const';
 import { axiosRequest } from 'src/utils/axiosRequest';

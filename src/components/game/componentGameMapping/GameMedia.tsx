@@ -1,8 +1,9 @@
-import AddIcon from '@mui/icons-material/Add';
-import { ButtonBase } from '@mui/material';
 import Image from 'next/image';
 import React, { useContext } from 'react';
 import ReactPlayer from 'react-player';
+
+import AddIcon from '@mui/icons-material/Add';
+import { ButtonBase } from '@mui/material';
 
 import { KeepRatio } from 'src/components/KeepRatio';
 import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';

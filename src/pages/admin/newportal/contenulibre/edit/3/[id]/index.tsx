@@ -1,9 +1,10 @@
-import Backdrop from '@mui/material/Backdrop';
-import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
 import React from 'react';
+
+import Backdrop from '@mui/material/Backdrop';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import Layout from '../../../layout';
 import { useGetOneActivityById } from 'src/api/activities/activities.getOneById';

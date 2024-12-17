@@ -1,6 +1,7 @@
 import { H5PEditorUI } from '@lumieducation/h5p-react';
-import { Button } from '@mui/material';
 import * as React from 'react';
+
+import { Button } from '@mui/material';
 
 import { getH5pContent } from 'src/api/h5p/h5p-content.get';
 import { patchH5pContent } from 'src/api/h5p/h5p-content.patch';

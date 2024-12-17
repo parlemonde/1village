@@ -1,7 +1,8 @@
-import { Button, Divider, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import TextField from '@mui/material/TextField';
 import Link from 'next/link';
 import React from 'react';
+
+import { Button, Divider, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import TextField from '@mui/material/TextField';
 
 import type { EditorProps } from '../content.types';
 import { EditorContainer } from './EditorContainer';

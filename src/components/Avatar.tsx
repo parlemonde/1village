@@ -1,7 +1,8 @@
-import PersonIcon from '@mui/icons-material/Person';
-import { Avatar, Tooltip } from '@mui/material';
 import Link from 'next/link';
 import React from 'react';
+
+import PersonIcon from '@mui/icons-material/Person';
+import { Avatar, Tooltip } from '@mui/material';
 
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';

@@ -1,8 +1,9 @@
+import React from 'react';
+
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import type { SxProps, Theme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
-import React from 'react';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',

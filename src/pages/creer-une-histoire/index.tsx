@@ -1,6 +1,7 @@
-import { Box, Button } from '@mui/material';
 import Link from 'next/link';
 import React from 'react';
+
+import { Box, Button } from '@mui/material';
 
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';

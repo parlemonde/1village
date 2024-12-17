@@ -1,7 +1,8 @@
+import React, { useContext, useEffect, useState } from 'react';
+
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box, Tab, Tabs } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
 
 import { OneVillageTable } from '../OneVillageTable';
 import TabPanel from './TabPanel';
@@ -11,7 +12,7 @@ import ClassesContributionCard from './cards/ClassesContributionCard/ClassesCont
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
 import BarCharts from './charts/BarCharts';
-import DashboardTable from './charts/DashboardTable';
+// import DashboardTable from './charts/DashboardTable';
 import DualBarChart from './charts/DualBarChart/DualBarChart';
 import PieCharts from './charts/PieCharts';
 import CountriesDropdown from './filters/CountriesDropdown';
@@ -126,7 +127,7 @@ const VillageStats = () => {
       </div>
       <TeamComments />
       <DualBarChart firstTable={firstTable} secondTable={secondTable} />
-      <DashboardTable />
+      {/* <DashboardTable /> */}
       <Tabs value={value} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
         <Tab label="En classe" />
         <Tab label="En famille" />

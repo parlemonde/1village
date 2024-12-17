@@ -1,5 +1,6 @@
-import { Alert, Box, TextField } from '@mui/material';
 import React from 'react';
+
+import { Alert, Box, TextField } from '@mui/material';
 
 import type { DisplayableInstrumentsType } from '../../../../utils/instruments';
 import AudioEditor from '../../content/editors/AudioEditor/AudioEditor';

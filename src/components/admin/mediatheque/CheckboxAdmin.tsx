@@ -1,5 +1,6 @@
-import Checkbox from '@mui/material/Checkbox';
 import React, { useContext } from 'react';
+
+import Checkbox from '@mui/material/Checkbox';
 
 import MediathequeContext from 'src/contexts/mediathequeContext';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';

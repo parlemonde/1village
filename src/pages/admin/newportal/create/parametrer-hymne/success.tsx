@@ -1,6 +1,7 @@
-import { Button } from '@mui/material';
 import Link from 'next/link';
 import React from 'react';
+
+import { Button } from '@mui/material';
 
 import { PageLayout } from 'src/components/PageLayout';
 import { bgPage } from 'src/styles/variables.const';

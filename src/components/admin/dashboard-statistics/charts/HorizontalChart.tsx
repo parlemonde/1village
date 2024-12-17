@@ -2,7 +2,6 @@ import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 import styles from '../styles/charts.module.css';
-import { sumAllData } from '../utils/sumData';
 
 const data = [
   { country: 'FR', total: 80 },

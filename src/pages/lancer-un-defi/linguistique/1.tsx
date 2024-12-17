@@ -1,7 +1,8 @@
-import { TextField, Autocomplete, FormControlLabel, Grid, Radio, RadioGroup, FormControl } from '@mui/material';
 import { useRouter } from 'next/router';
 import type { SyntheticEvent } from 'react';
 import React from 'react';
+
+import { TextField, Autocomplete, FormControlLabel, Grid, Radio, RadioGroup, FormControl } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { DEFI, isLanguage, LANGUAGE_SCHOOL } from 'src/activity-types/defi.constants';

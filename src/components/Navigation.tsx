@@ -1,8 +1,9 @@
-import { Box, Button } from '@mui/material';
-import Switch from '@mui/material/Switch';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
+
+import { Box, Button } from '@mui/material';
+import Switch from '@mui/material/Switch';
 
 import { AvatarImg } from './Avatar';
 import { VillageMonde } from './VillageMonde';

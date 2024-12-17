@@ -1,6 +1,7 @@
-import { PieChart } from '@mui/x-charts/PieChart';
 import classNames from 'classnames';
 import React from 'react';
+
+import { PieChart } from '@mui/x-charts/PieChart';
 
 import styles from '../styles/charts.module.css';
 

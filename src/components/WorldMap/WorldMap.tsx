@@ -1,15 +1,16 @@
 import 'leaflet/dist/leaflet.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
-import RemoveIcon from '@mui/icons-material/Remove';
-import { Button, ButtonGroup, IconButton, Typography } from '@mui/material';
 import L from 'leaflet';
 import {} from 'leaflet.fullscreen';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { useQuery } from 'react-query';
+
+import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
+import RemoveIcon from '@mui/icons-material/Remove';
+import { Button, ButtonGroup, IconButton, Typography } from '@mui/material';
 
 import type { PopoverData } from './Popover';
 import { isUser, Popover } from './Popover';

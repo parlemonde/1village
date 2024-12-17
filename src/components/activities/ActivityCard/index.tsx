@@ -1,7 +1,8 @@
-import { Box } from '@mui/material';
-import Paper from '@mui/material/Paper';
 import Link from 'next/link';
 import React from 'react';
+
+import { Box } from '@mui/material';
+import Paper from '@mui/material/Paper';
 
 import { titles, icons, REACTIONS } from '../utils';
 import { AnthemCard } from './AnthemCard';

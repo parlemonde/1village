@@ -1,6 +1,7 @@
-import { TextField, Grid, Box } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
+
+import { TextField, Grid, Box } from '@mui/material';
 
 import { isMascotte } from 'src/activity-types/anyActivity';
 import type { MascotteData } from 'src/activity-types/mascotte.types';
