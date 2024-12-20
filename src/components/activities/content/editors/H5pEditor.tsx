@@ -168,24 +168,3 @@ export const H5pEditor = ({ id, value = '', onChange = () => {}, onDelete = () =
     </EditorContainer>
   );
 };
-
-// INITIAL COMPONENT CHANGED TO line 90
-
-// <FormControl fullWidth>
-//   <InputLabel id="select-h5p">Contenu H5P</InputLabel>
-//   <Select
-//     labelId="select-h5p"
-//     id="select-h5p"
-//     label="Contenu H5P"
-//     onChange={(event) => {
-//       onChange(`/h5p/data/${event.target.value}/play`);
-//       setIsModalOpen(false);
-//     }}
-//   >
-//     {h5pContent.map((h5p) => (
-//       <MenuItem key={h5p.contentId} value={h5p.contentId}>
-//         {h5p.title}
-//       </MenuItem>
-//     ))}
-//   </Select>
-// </FormControl>
