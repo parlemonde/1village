@@ -14,7 +14,6 @@ export const createFamilyAccountQuery = async (villageId: number, phase: number 
     .innerJoin('student', 'student', 'student.classroomId = classroom.id')
     .where('user.type = 3')
     .andWhere('classroom.villageId = :villageId', { villageId });
-
   if (phaseWasSelected(phase)) {
     const { debut, end } = await getPhasePeriod(villageId, phase as number);
     query.andWhere('user.createdAt >= :debut', { debut });
