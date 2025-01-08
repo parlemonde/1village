@@ -1,7 +1,8 @@
 import React from 'react';
 
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import { Box, Paper, TableContainer, TableSortLabel, useTheme } from '@mui/material';
+import { Box, TableContainer, TableSortLabel, useTheme } from '@mui/material';
 import NoSsr from '@mui/material/NoSsr';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -101,7 +102,7 @@ export const OneVillageTable = ({
 
   return (
     <NoSsr>
-      <TableContainer component={Paper} sx={{ mb: '1rem' }}>
+      <TableContainer sx={{ border: '1px solid blue', borderRadius: '24px' }}>
         {titleContent && (
           <Box sx={{ fontWeight: 'bold', display: 'flex', border: 'none', backgroundColor, p: '8px' }}>
             <RemoveRedEyeIcon sx={{ mr: '6px' }} /> {titleContent}
@@ -119,18 +120,23 @@ export const OneVillageTable = ({
           ) : (
             <>
               <TableHead
-                style={{ borderBottom: '1px solid white' }}
                 sx={{
+                  zIndex: 1000,
                   fontWeight: 'bold',
                   minHeight: 'unset',
                   padding: '8px 8px 8px 16px',
-                  color,
-                  backgroundColor: admin ? backgroundColor : 'white',
+                  color: 'red',
                 }}
               >
-                <TableRow>
+                <TableRow
+                  sx={{
+                    th: {
+                      borderBottom: '1px solid blue',
+                    },
+                  }}
+                >
                   {columns.map((c) => (
-                    <TableCell key={c.key} style={{ color, fontWeight: 'bold' }}>
+                    <TableCell key={c.key} sx={{ fontWeight: 'bold' }}>
                       {c.sortable ? (
                         <TableSortLabel active={options.order === c.key} direction={options.sort} onClick={onSortBy(c.key)}>
                           {c.label}
@@ -158,7 +164,7 @@ export const OneVillageTable = ({
                     </TableCell>
                   ))}
                   {actions && (
-                    <TableCell style={{ color: 'white', fontWeight: 'bold' }} align="right">
+                    <TableCell style={{ fontWeight: 'bold' }} align="right">
                       Actions
                     </TableCell>
                   )}
@@ -166,24 +172,14 @@ export const OneVillageTable = ({
               </TableHead>
               <TableBody>
                 {displayedData.map((d, index) => (
-                  <TableRow
-                    key={d.id}
-                    sx={{
-                      backgroundColor: 'white',
-                      '&:nth-of-type(even)': {
-                        backgroundColor: admin ? 'rgb(224 239 232)' : 'white',
-                      },
-                      '&.sortable-ghost': {
-                        opacity: 0,
-                      },
-                    }}
-                  >
+                  <TableRow key={d.id}>
                     {columns.map((c) => {
                       return <TableCell key={`${d.id}_${c.key}`}>{d[c.key] !== undefined ? d[c.key] : ''}</TableCell>;
                     })}
                     {actions && (
-                      <TableCell align="right" padding="none" style={{ minWidth: '96px' }}>
-                        {actions(d.id, index)}
+                      <TableCell align="center" padding="none" sx={{ minWidth: '96px', color: 'blue' }}>
+                        {/* {actions(d.id, index)} */}
+                        <MoreVertIcon />
                       </TableCell>
                     )}
                   </TableRow>
