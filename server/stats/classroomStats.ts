@@ -48,16 +48,21 @@ export const getRegisteredClassroomsCount = async (villageId?: number | null) =>
 };
 
 // TODO - add phase: number | null
-export const getConnectedClassroomsCount = async (villageId?: number | null) => {
+export const getConnectedClassroomsCount = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
   const queryBuilder = classroomRepository
     .createQueryBuilder('classroom')
     .select('COUNT(classroom.id)', 'classroomsCount')
     .innerJoin('classroom.user', 'user')
-    .where('user.accountRegistration = :accountRegistration', { accountRegistration: 10 });
+    .andWhere('user.accountRegistration = :accountRegistration', { accountRegistration: 10 });
 
-  // Ajouter la condition sur le villageId uniquement si ce n'est pas 0
   if (villageId) {
     queryBuilder.andWhere('classroom.villageId = :villageId', { villageId });
+  }
+  if (countryCode) {
+    queryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
+  }
+  if (classroomId) {
+    queryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
   }
 
   const result = await queryBuilder.getRawOne();
@@ -65,17 +70,33 @@ export const getConnectedClassroomsCount = async (villageId?: number | null) => 
   return parseInt(result.classroomsCount, 10);
 };
 
-export const getContributedClassroomsCount = async (villageId: number) => {
-  const result = await classroomRepository
+export const getContributedClassroomsCount = async (
+  villageId?: number | null,
+  countryCode?: string | null,
+  classroomId?: number | null,
+  nbPhases?: number,
+) => {
+  const queryBuilder = classroomRepository
     .createQueryBuilder('classroom')
-    .select('COUNT(classroom.id)', 'classroomsCount')
-    .innerJoin('classroom.activity', 'activity')
-    .where('classroom.villageId = :villageId', { villageId })
-    .andWhere(`COUNT(DISTINCT (activity.phase)) = :nbPhases`, { nbPhases: 3 })
-    .groupBy('classroom.id')
-    .getRawOne();
+    .select('COUNT(DISTINCT classroom.id)', 'classroomsCount')
+    .innerJoin('activity', 'activity', 'activity.classroomId = classroom.id')
+    .groupBy('classroom.id');
 
-  return parseInt(result.classroomsCount);
+  if (villageId) {
+    queryBuilder.andWhere('classroom.villageId = :villageId', { villageId });
+  }
+  if (countryCode) {
+    queryBuilder.andWhere('classroom.countryCode = :countryCode', { countryCode });
+  }
+  if (classroomId) {
+    queryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
+  }
+  if (nbPhases) {
+    queryBuilder.having('COUNT(DISTINCT activity.phase) = :nbPhases', { nbPhases });
+  }
+
+  const result = await queryBuilder.getRawOne();
+  return parseInt(result.classroomsCount, 10);
 };
 
 export const normalizeForCountry = (inputData: any) => {

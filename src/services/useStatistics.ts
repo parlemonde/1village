@@ -4,16 +4,18 @@ import { useQuery } from 'react-query';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
 
+const generateUrl = (baseUrl: string, params: any): string => {
+  const queryString = Object.keys(params)
+    .filter((key) => params[key] !== undefined) // Exclure les paramètres undefined
+    .map((key) => `${key}=${params[key]}`) // Créer les paires clé=valeur
+    .join('&'); // Joindre avec '&'
+
+  return queryString ? `${baseUrl}?${queryString}` : baseUrl;
+};
+
 export const useStatisticsClassrooms = (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
   const getStatisticsClassrooms = useCallback(async () => {
-    let url = '/statistics/classrooms';
-    if (villageId) {
-      url += `?villageId=${villageId}`;
-    } else if (countryCode) {
-      url += `?countryCode=${countryCode}`;
-    } else if (classroomId) {
-      url += `?classroomId=${classroomId}`;
-    }
+    const url = generateUrl('/statistics/sessions', { villageId, countryCode, classroomId });
     const response = await axiosRequest({
       method: 'GET',
       url: url,
@@ -32,12 +34,21 @@ export const useStatisticsClassrooms = (villageId?: number | null, countryCode?:
 export const useStatisticsSessions = (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
   const getStatisticsSessions = useCallback(async () => {
     let url = '/statistics/sessions';
-    if (villageId) {
-      url += `?villageId=${villageId}`;
-    } else if (countryCode) {
-      url += `?countryCode=${countryCode}`;
-    } else if (classroomId) {
-      url += `?classroomId=${classroomId}`;
+    const params = [];
+    if (villageId !== null && villageId !== undefined) {
+      params.push(`villageId=${villageId}`);
+    }
+    if (countryCode !== null && countryCode !== undefined) {
+      params.push(`countryCode=${countryCode}`);
+    }
+    if (classroomId !== null && classroomId !== undefined) {
+      params.push(`classroomId=${classroomId}`);
+    }
+
+    if (params) {
+      // params.join('&');
+      url += '?';
+      url += params.join('&');
     }
 
     const response = await axiosRequest({

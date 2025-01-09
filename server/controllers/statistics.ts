@@ -7,6 +7,7 @@ import {
   getChildrenCodesCountForClassroom,
   getConnectedFamiliesCountForClassroom,
   getFamiliesWithoutAccountForClassroom,
+  getContributedClassroomsCount,
 } from '../stats/classroomStats';
 import {
   getChildrenCodesCountForGlobal,
@@ -18,6 +19,7 @@ import {
 import {
   getAverageConnections,
   getAverageDuration,
+  getClassroomCount,
   getMaxConnections,
   getMaxDuration,
   getMedianConnections,
@@ -44,7 +46,6 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
   const countryCode = req.query.countryCode ? (req.query.countryCode as string) : null;
   const classroomId = req.query.classroomId ? parseInt(req.query.classroomId as string) : null;
   // const phase = req.params.phase ? parseInt(req.params.phase) : null;
-
   try {
     // Appelez les fonctions avec villageId
     const minDuration = await getMinDuration(villageId, countryCode, classroomId);
@@ -56,9 +57,9 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
     const averageConnections = await getAverageConnections(villageId, countryCode, classroomId);
     const medianConnections = await getMedianConnections(villageId, countryCode, classroomId);
     const testConnections = await getUserConnectionsList();
-    const registeredClassroomsCount = await getRegisteredClassroomsCount(villageId);
-    const connectedClassroomsCount = await getConnectedClassroomsCount(villageId);
-    // const contributedClassroomsCount = await getContributedClassroomsCount(villageId);
+    const registeredClassroomsCount = await getClassroomCount(villageId, countryCode, classroomId);
+    const connectedClassroomsCount = await getConnectedClassroomsCount(villageId, countryCode, classroomId);
+    const contributedClassroomsCount = await getContributedClassroomsCount(villageId, countryCode, classroomId);
 
     return res.sendJSON({
       minDuration,
@@ -72,7 +73,7 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
       testConnections,
       registeredClassroomsCount,
       connectedClassroomsCount,
-      // contributedClassroomsCount,
+      contributedClassroomsCount,
     });
   } catch (error) {
     console.error('Error fetching statistics:', error);

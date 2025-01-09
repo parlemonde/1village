@@ -8,7 +8,7 @@
 
 .filtersContainer {
   display: flex;
-  padding-bottom: 5%;
+  padding: 5% 0;
   width: 100%;
   gap: 25px;
 }
@@ -32,7 +32,7 @@
   align-items: center; */
   padding-right: 20px;
   padding-bottom: 20px;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   margin-bottom: 20px;
   max-width: auto;
   border-radius: 20px;
@@ -69,7 +69,7 @@
   max-width: 400px;
   border-radius: 20px;
   position: relative;
-  flex : 1;
+  flex: 1;
 }
 
 .legend {
@@ -146,22 +146,21 @@
   transition: color 0.2s;
 }
 
-.chart{
+.chart {
   height: 350px;
 }
 
-.minContainer{
+.minContainer {
   flex: 1;
 }
 
-.midContainer{
+.midContainer {
   flex: 3;
 }
 
-.dualBarChart{
+.dualBarChart {
   height: 350px;
   display: flex;
-  flex : 1;
+  flex: 1;
   flex-direction: row;
 }
-

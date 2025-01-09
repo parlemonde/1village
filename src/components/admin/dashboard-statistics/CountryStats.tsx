@@ -36,7 +36,7 @@ const CountryStats = () => {
   // const [selectedPhase, setSelectedPhase] = useState<number>(0);
   const pelicoMessage = 'Merci de sélectionner un pays pour analyser ses statistiques ';
   const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
-  const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(null, 'FR', null);
+  const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(null, selectedCountry, null);
 
   const { countries } = useCountries();
   const handleCountryChange = (country: string) => {

@@ -37,7 +37,6 @@ const VillageStats = () => {
   const EngagementBarChartTitle = 'Évolution des connexions';
 
   const { user } = useContext(UserContext);
-  const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(user?.villageId ?? 0);
 
   const [selectedCountry, setSelectedCountry] = useState<string>('FR');
   const [selectedVillage, setSelectedVillage] = useState<string>('');
@@ -50,6 +49,7 @@ const VillageStats = () => {
   const { villages } = useVillages(options);
   const villagesStats = useGetVillagesStats(+selectedVillage, selectedPhase);
   const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
+  const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(Number(selectedVillage), selectedCountry, null);
 
   useEffect(() => {
     setOptions({
@@ -110,7 +110,6 @@ const VillageStats = () => {
       { name: 'École N', value: 180 },
     ],
   };
-
   return (
     <>
       <div className={styles.filtersContainer}>

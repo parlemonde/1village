@@ -30,10 +30,9 @@ const GlobalStats = () => {
   const oneVillageStats = useGetOneVillageStats();
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
   const [floatingAccountsRows, setFloatingAccountsRows] = React.useState<Array<OneVillageTableRow>>([]);
-  const statisticsClassrooms = useStatisticsClassrooms(null, 'FR', null) as ClassroomsStats;
+  const statisticsClassrooms = useStatisticsClassrooms(null, null, null) as ClassroomsStats;
 
   const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(null, null, null);
-
   useEffect(() => {
     if (oneVillageStats.data?.familiesWithoutAccount) {
       setFamiliesWithoutAccountRows([]);

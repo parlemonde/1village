@@ -1,7 +1,9 @@
 import { AnalyticSession } from '../entities/analytic';
+import { Classroom } from '../entities/classroom';
 import { AppDataSource } from '../utils/data-source';
 
 const analyticSessionRepository = AppDataSource.getRepository(AnalyticSession);
+const classroomRepository = AppDataSource.getRepository(Classroom);
 
 export const getMinDuration = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
   const queryBuilder = analyticSessionRepository
@@ -12,15 +14,15 @@ export const getMinDuration = async (villageId?: number | null, countryCode?: st
     .leftJoin('user.classroom', 'classroom');
 
   if (villageId) {
-    queryBuilder.where('user.villageId = :villageId', { villageId });
+    queryBuilder.andWhere('user.villageId = :villageId', { villageId });
   }
 
   if (countryCode) {
-    queryBuilder.where('user.countryCode = :countryCode', { countryCode });
+    queryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
   }
 
   if (classroomId) {
-    queryBuilder.where('classroom.id = :classroomId', { classroomId });
+    queryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
   }
 
   const result = await queryBuilder.getRawOne();
@@ -37,15 +39,15 @@ export const getMaxDuration = async (villageId?: number | null, countryCode?: st
     .leftJoin('user.classroom', 'classroom');
 
   if (villageId) {
-    queryBuilder.where('user.villageId = :villageId', { villageId });
+    queryBuilder.andWhere('user.villageId = :villageId', { villageId });
   }
 
   if (countryCode) {
-    queryBuilder.where('user.countryCode = :countryCode', { countryCode });
+    queryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
   }
 
   if (classroomId) {
-    queryBuilder.where('classroom.id = :classroomId', { classroomId });
+    queryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
   }
 
   const result = await queryBuilder.getRawOne();
@@ -62,20 +64,42 @@ export const getAverageDuration = async (villageId?: number | null, countryCode?
     .leftJoin('user.classroom', 'classroom');
 
   if (villageId) {
-    queryBuilder.where('user.villageId = :villageId', { villageId });
+    queryBuilder.andWhere('user.villageId = :villageId', { villageId });
   }
 
   if (countryCode) {
-    queryBuilder.where('user.countryCode = :countryCode', { countryCode });
+    queryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
   }
 
   if (classroomId) {
-    queryBuilder.where('classroom.id = :classroomId', { classroomId });
+    queryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
   }
 
   const result = await queryBuilder.getRawOne();
 
   return result.averageDuration ? parseInt(result.averageDuration, 10) : null;
+};
+
+export const getClassroomCount = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null): Promise<number> => {
+  try {
+    const queryBuilder = classroomRepository.createQueryBuilder('classroom');
+
+    if (villageId) {
+      queryBuilder.andWhere('classroom.villageId = :villageId', { villageId });
+    }
+    if (countryCode) {
+      queryBuilder.andWhere('classroom.countryCode = :countryCode', { countryCode });
+    }
+    if (classroomId) {
+      queryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
+    }
+
+    const count = await queryBuilder.getCount();
+    return count;
+  } catch (error) {
+    console.error('Error fetching classroom count:', error);
+    throw new Error('Unable to fetch classroom count.');
+  }
 };
 
 // TODO - add phase: number | null
@@ -92,11 +116,11 @@ export const getMedianDuration = async (villageId?: number | null, countryCode?:
   }
 
   if (countryCode) {
-    queryBuilder.where('user.countryCode = :countryCode', { countryCode });
+    queryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
   }
 
   if (classroomId) {
-    queryBuilder.where('classroom.id = :classroomId', { classroomId });
+    queryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
   }
 
   const durations = await queryBuilder.getRawMany();
@@ -126,15 +150,15 @@ export const getMinConnections = async (villageId?: number | null, countryCode?:
     .groupBy('analytic_session.userId');
 
   if (villageId) {
-    subQueryBuilder.where('user.villageId = :villageId', { villageId });
+    subQueryBuilder.andWhere('user.villageId = :villageId', { villageId });
   }
 
   if (countryCode) {
-    subQueryBuilder.where('user.countryCode = :countryCode', { countryCode });
+    subQueryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
   }
 
   if (classroomId) {
-    subQueryBuilder.where('classroom.id = :classroomId', { classroomId });
+    subQueryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
   }
 
   const result = await analyticSessionRepository
@@ -160,15 +184,15 @@ export const getMaxConnections = async (villageId?: number | null, countryCode?:
     .groupBy('analytic_session.userId');
 
   if (villageId) {
-    subQueryBuilder.where('user.villageId = :villageId', { villageId });
+    subQueryBuilder.andWhere('user.villageId = :villageId', { villageId });
   }
 
   if (countryCode) {
-    subQueryBuilder.where('user.countryCode = :countryCode', { countryCode });
+    subQueryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
   }
 
   if (classroomId) {
-    subQueryBuilder.where('classroom.id = :classroomId', { classroomId });
+    subQueryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
   }
 
   const result = await analyticSessionRepository
@@ -194,15 +218,15 @@ export const getAverageConnections = async (villageId?: number | null, countryCo
     .groupBy('analytic_session.userId');
 
   if (villageId) {
-    subQueryBuilder.where('user.villageId = :villageId', { villageId });
+    subQueryBuilder.andWhere('user.villageId = :villageId', { villageId });
   }
 
   if (countryCode) {
-    subQueryBuilder.where('user.countryCode = :countryCode', { countryCode });
+    subQueryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
   }
 
   if (classroomId) {
-    subQueryBuilder.where('classroom.id = :classroomId', { classroomId });
+    subQueryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
   }
 
   const result = await analyticSessionRepository
@@ -230,15 +254,15 @@ export const getMedianConnections = async (villageId?: number | null, countryCod
     .orderBy('occurrences', 'ASC');
 
   if (villageId) {
-    subQueryBuilder.where('user.villageId = :villageId', { villageId });
+    subQueryBuilder.andWhere('user.villageId = :villageId', { villageId });
   }
 
   if (countryCode) {
-    subQueryBuilder.where('user.countryCode = :countryCode', { countryCode });
+    subQueryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
   }
 
   if (classroomId) {
-    subQueryBuilder.where('classroom.id = :classroomId', { classroomId });
+    subQueryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
   }
 
   const result = await analyticSessionRepository
