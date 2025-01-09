@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -25,7 +25,6 @@ import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
 import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
-import { UserContext } from 'src/contexts/userContext';
 import { useCountries } from 'src/services/useCountries';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import { useVillages } from 'src/services/useVillages';
@@ -35,9 +34,6 @@ import type { VillageFilter } from 'types/village.type';
 const VillageStats = () => {
   const data = { data: [{ label: 'test1', id: 1, value: 1 }] };
   const EngagementBarChartTitle = 'Évolution des connexions';
-
-  const { user } = useContext(UserContext);
-
   const [selectedCountry, setSelectedCountry] = useState<string>('FR');
   const [selectedVillage, setSelectedVillage] = useState<string>('');
   const [options, setOptions] = useState<VillageFilter>({ countryIsoCode: '' });
