@@ -122,6 +122,7 @@ __metadata:
     maplibre-gl: "npm:2.1.9"
     md5: "npm:^2.3.0"
     mime-types: "npm:^2.1.35"
+    moment: "npm:^2.30.1"
     morgan: "npm:^1.10.0"
     multer: "npm:^1.4.5-lts.1"
     mysql2: "npm:^2.3.3"
@@ -12834,6 +12835,13 @@ __metadata:
   bin:
     mkdirp: dist/cjs/src/bin.js
   checksum: 10/4672fadb94dca8d2eafeb6fff53f2c5ea74e885565ef23251791709064f216105167c2387088c61ef068901bd0776648999785e341d74728164fa551b1c65996
+  languageName: node
+  linkType: hard
+
+"moment@npm:^2.30.1":
+  version: 2.30.1
+  resolution: "moment@npm:2.30.1"
+  checksum: 10/ae42d876d4ec831ef66110bdc302c0657c664991e45cf2afffc4b0f6cd6d251dde11375c982a5c0564ccc0fa593fc564576ddceb8c8845e87c15f58aa6baca69
   languageName: node
   linkType: hard
 

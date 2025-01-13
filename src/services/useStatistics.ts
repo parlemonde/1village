@@ -6,9 +6,9 @@ import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
 
 const generateUrl = (baseUrl: string, params: any): string => {
   const queryString = Object.keys(params)
-    .filter((key) => params[key] !== undefined) // Exclure les paramètres undefined
-    .map((key) => `${key}=${params[key]}`) // Créer les paires clé=valeur
-    .join('&'); // Joindre avec '&'
+    .filter((key) => params[key] !== undefined)
+    .map((key) => `${key}=${params[key]}`)
+    .join('&');
 
   return queryString ? `${baseUrl}?${queryString}` : baseUrl;
 };

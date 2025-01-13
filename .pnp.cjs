@@ -140,6 +140,7 @@ const RAW_RUNTIME_STATE =
           ["maplibre-gl", "npm:2.1.9"],\
           ["md5", "npm:2.3.0"],\
           ["mime-types", "npm:2.1.35"],\
+          ["moment", "npm:2.30.1"],\
           ["morgan", "npm:1.10.0"],\
           ["multer", "npm:1.4.5-lts.1"],\
           ["mysql2", "npm:2.3.3"],\
@@ -303,6 +304,7 @@ const RAW_RUNTIME_STATE =
           ["maplibre-gl", "npm:2.1.9"],\
           ["md5", "npm:2.3.0"],\
           ["mime-types", "npm:2.1.35"],\
+          ["moment", "npm:2.30.1"],\
           ["morgan", "npm:1.10.0"],\
           ["multer", "npm:1.4.5-lts.1"],\
           ["mysql2", "npm:2.3.3"],\
@@ -16292,6 +16294,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/mkdirp-classic-npm-0.5.3-3b5c991910-3f4e088208.zip/node_modules/mkdirp-classic/",\
         "packageDependencies": [\
           ["mkdirp-classic", "npm:0.5.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["moment", [\
+      ["npm:2.30.1", {\
+        "packageLocation": "./.yarn/cache/moment-npm-2.30.1-1c51a5c631-ae42d876d4.zip/node_modules/moment/",\
+        "packageDependencies": [\
+          ["moment", "npm:2.30.1"]\
         ],\
         "linkType": "HARD"\
       }]\

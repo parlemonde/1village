@@ -185,8 +185,8 @@ export const mockDataByMonth = [
   {
     month: 'Mars 2023',
     barChartData: [
-      { value: 100000, isSelected: false },
-      { value: 150000, isSelected: false },
+      { value: 100000, isSelected: false }, //1er mars 2023
+      { value: 150000, isSelected: false }, // 2 mars 2023
       { value: 200000, isSelected: true },
       { value: 180000, isSelected: false },
       { value: 220000, isSelected: false },

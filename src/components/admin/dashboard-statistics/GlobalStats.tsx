@@ -14,7 +14,6 @@ import StatsCard from './cards/StatsCard/StatsCard';
 import BarCharts from './charts/BarCharts';
 import DashboardWorldMap from './map/DashboardWorldMap/DashboardWorldMap';
 import PhaseDetails from './menu/PhaseDetails';
-import { mockDataByMonth } from './mocks/mocks';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows, createFloatingAccountsRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from './utils/tableHeader';
@@ -105,9 +104,11 @@ const GlobalStats = () => {
             Nombre de connexions moyen par classe
           </AverageStatsCard>
         </div>
-        <div className="statistic--container">
-          <BarCharts dataByMonth={mockDataByMonth} title={BarChartTitle} />
-        </div>
+        {statisticsSessions.barChartData && (
+          <div className="statistic--container">
+            <BarCharts dataByMonth={statisticsSessions.barChartData} title={BarChartTitle} />
+          </div>
+        )}
         <div className="statistic__average--container">
           <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
           <ClassesContributionCard></ClassesContributionCard>
