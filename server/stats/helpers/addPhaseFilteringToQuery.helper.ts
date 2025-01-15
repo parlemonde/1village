@@ -9,8 +9,8 @@ export const addPhaseFilteringToQuery = async <T extends User | Student>(query: 
   if (phaseWasSelected(phase)) {
     const phaseValue = phase as number;
     const { debut, end } = await getPhasePeriod(village.id, phaseValue);
-    query.andWhere('student.createdAt >= :debut', { debut });
-    if (phaseValue != village?.activePhase) query.andWhere('student.createdAt <= :end', { end });
+    query.andWhere('user.createdAt >= :debut', { debut });
+    if (phaseValue != village?.activePhase) query.andWhere('user.createdAt <= :end', { end });
   }
   return query;
 };
