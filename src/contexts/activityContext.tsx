@@ -32,7 +32,14 @@ interface ActivityContextValue {
   addContent(type: ActivityContentType, value?: string, index?: number): void;
   deleteContent(index: number): void;
   save(publish?: boolean): Promise<ActivitySaveResponse>;
-  createActivityIfNotExist(type: number, selectedPhase: number, subType?: number, initialData?: AnyData, isVillageActivity?: boolean): Promise<void>;
+  createActivityIfNotExist(
+    type: number,
+    selectedPhase: number,
+    subType?: number,
+    initialData?: AnyData,
+    isVillageActivity?: boolean,
+    isParentActivity?: boolean,
+  ): Promise<void>;
   setDraft(draft: Activity | null): void;
 }
 
@@ -173,13 +180,13 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
   );
 
   const createActivityIfNotExist = React.useCallback(
-    async (type: number, selectedPhase: number, subType?: number, initialData?: AnyData, isVillageActivity?: boolean) => {
+    async (type: number, selectedPhase: number, subType?: number, initialData?: AnyData, isVillageActivity?: boolean, isParentActivity?: boolean) => {
       if (user === null || village === null) {
         return;
       }
 
       const userId = isVillageActivity ? undefined : user.id;
-      const villageId = village.id;
+      const villageId = isParentActivity ? undefined : village.id;
       const responsePublished = await axiosRequest({
         method: 'GET',
         url: '/activities' + serializeToQueryUrl({ type, subType, userId, villageId, status: ActivityStatus.PUBLISHED }),
