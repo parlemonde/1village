@@ -45,7 +45,7 @@ export const OneVillageTable = ({
   columns,
   actions,
   titleContent,
-  footerElementsLabel,
+  footerElementsLabel = 'élément',
   usePagination: usePaginationProp,
 }: OneVillageTableProps) => {
   const theme = useTheme();
@@ -104,7 +104,7 @@ export const OneVillageTable = ({
 
   return (
     <NoSsr>
-      <TableContainer sx={{ border: '1px solid blue', borderRadius: '24px' }}>
+      <TableContainer sx={{ border: '1px solid blue', borderRadius: '24px', minHeight: '400px' }}>
         {titleContent && (
           <Box sx={{ fontWeight: 'bold', display: 'flex', border: 'none', backgroundColor, p: '8px' }}>
             <RemoveRedEyeIcon sx={{ mr: '6px' }} /> {titleContent}
@@ -113,7 +113,7 @@ export const OneVillageTable = ({
         <Table size="medium" aria-label={ariaLabel}>
           {data.length === 0 ? (
             <TableBody>
-              <TableRow>
+              <TableRow sx={{ height: '340px' }}>
                 <TableCell colSpan={columns.length + (actions ? 1 : 0)} align="center">
                   {emptyPlaceholder || 'Cette liste est vide !'}
                 </TableCell>
@@ -201,7 +201,9 @@ export const OneVillageTable = ({
             </>
           )}
         </Table>
-        <p style={{ margin: 0, padding: '1rem', textAlign: 'right', fontSize: '14px' }}>{`${data.length} ${footerElementsLabel}`}</p>
+        <p style={{ margin: 0, padding: '1rem', textAlign: 'right', fontSize: '14px' }}>{`${data.length} ${footerElementsLabel}${
+          displayedData.length > 1 ? 's' : ''
+        }`}</p>
       </TableContainer>
     </NoSsr>
   );

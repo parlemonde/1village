@@ -218,7 +218,7 @@ const Users = () => {
         columns={ManageUsersHeaders}
         actions={actions}
         usePagination={tableData.length > TABLE_ENTRIES_BY_PAGE}
-        footerElementsLabel="utilisateurs"
+        footerElementsLabel="utilisateur"
       />
       <NoSsr>
         <Modal
