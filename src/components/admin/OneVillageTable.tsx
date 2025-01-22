@@ -1,6 +1,5 @@
 import React from 'react';
 
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Box, TableContainer, TableSortLabel, useTheme } from '@mui/material';
 import NoSsr from '@mui/material/NoSsr';
@@ -11,6 +10,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
+import OneVillageTableActionMenu from './OneVillageTableActionMenu';
 import { primaryColorLight } from 'src/styles/variables.const';
 
 function paginate<T>(array: T[], pageSize: number, pageNumber: number): T[] {
@@ -47,7 +47,7 @@ export const OneVillageTable = ({
   usePagination: usePaginationProp,
 }: OneVillageTableProps) => {
   const theme = useTheme();
-  const color = admin ? 'white' : 'black';
+  // const color = admin ? 'white' : 'black';
   const backgroundColor = admin ? theme.palette.secondary.main : primaryColorLight;
   const [options, setTableOptions] = React.useState<TableOptions>({
     page: 1,
@@ -178,8 +178,7 @@ export const OneVillageTable = ({
                     })}
                     {actions && (
                       <TableCell align="center" padding="none" sx={{ minWidth: '96px', color: 'blue' }}>
-                        {/* {actions(d.id, index)} */}
-                        <MoreVertIcon />
+                        <OneVillageTableActionMenu>{actions(d.id, index)}</OneVillageTableActionMenu>
                       </TableCell>
                     )}
                   </TableRow>
