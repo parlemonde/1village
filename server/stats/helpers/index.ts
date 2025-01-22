@@ -5,3 +5,4 @@ export * from './phaseWasSelected.helper';
 export * from './createConnectedFamilyQuery.helper';
 export * from './createChildrenCodesQuery.helper';
 export * from './addPhaseFilteringToQuery.helper';
+export * from './counts';

@@ -1,25 +1,15 @@
-import { User } from '../../entities/user';
+import { Classroom } from '../../entities/classroom';
 import { AppDataSource } from '../../utils/data-source';
 
-const userRepository = AppDataSource.getRepository(User);
+const classroomRepository = AppDataSource.getRepository(Classroom);
 
 export const createFamilyAccountQuery = (villageId: number) => {
-  /* const query = userRepository
-    .createQueryBuilder('user')
-    .innerJoin('user.village', 'village')
-    .innerJoin('classroom', 'classroom', 'classroom.villageId = village.id')
-    .innerJoin('student', 'student', 'student.classroomId = classroom.id')
-    .addSelect('village')
-    .addSelect('classroom')
-    .addSelect('student')
-    .where('user.type = 3')
-    .andWhere('classroom.villageId = :villageId', { villageId }); */
-
-  const query = userRepository
-    .createQueryBuilder('user')
-    .leftJoinAndSelect('user.village', 'village')
+  const query = classroomRepository
+    .createQueryBuilder('classroom')
+    .innerJoin('classroom.village', 'village')
+    .innerJoin('classroom.user', 'user')
+    .innerJoin('classroom.students', 'student')
     .where('user.type = :userType', { userType: 3 })
     .andWhere('village.id = :villageId', { villageId });
-
   return query;
 };
