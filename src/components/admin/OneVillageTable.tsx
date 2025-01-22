@@ -1,7 +1,7 @@
 import React from 'react';
 
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import { Box, TableContainer, TableFooter, TableSortLabel, useTheme } from '@mui/material';
+import { Box, TableContainer, TableSortLabel, useTheme } from '@mui/material';
 import NoSsr from '@mui/material/NoSsr';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
