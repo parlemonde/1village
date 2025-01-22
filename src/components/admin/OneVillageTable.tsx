@@ -1,7 +1,7 @@
 import React from 'react';
 
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import { Box, TableContainer, TableSortLabel, useTheme } from '@mui/material';
+import { Box, TableContainer, TableFooter, TableSortLabel, useTheme } from '@mui/material';
 import NoSsr from '@mui/material/NoSsr';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -33,6 +33,7 @@ interface OneVillageTableProps {
   columns: Array<{ key: string; label: string; sortable?: boolean }>;
   actions?(id: string | number, index: number): React.ReactNode | React.ReactNodeArray;
   titleContent?: string;
+  footerElementsLabel?: string;
   usePagination?: boolean;
 }
 
@@ -44,6 +45,7 @@ export const OneVillageTable = ({
   columns,
   actions,
   titleContent,
+  footerElementsLabel,
   usePagination: usePaginationProp,
 }: OneVillageTableProps) => {
   const theme = useTheme();
@@ -199,6 +201,7 @@ export const OneVillageTable = ({
             </>
           )}
         </Table>
+        <p style={{ margin: 0, padding: '1rem', textAlign: 'right', fontSize: '14px' }}>{`${data.length} ${footerElementsLabel}`}</p>
       </TableContainer>
     </NoSsr>
   );
