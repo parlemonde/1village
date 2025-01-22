@@ -6,7 +6,7 @@ export interface UserRow {
   school_name: string;
   village_name: string;
   country: string;
-  role: string;
+  type: string;
 }
 
 interface UserFilterProps {
