@@ -13,7 +13,7 @@ interface UserFilterProps {
   fullname: string;
   email: string;
   villageName: string;
-  countryIsoCode: string;
+  country: string;
   type: string;
 }
 

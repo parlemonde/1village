@@ -62,11 +62,13 @@ const Users = () => {
   const filteredUsers = useMemo(
     () =>
       users.filter((u) => {
+        console.log('FLT COUNTRY', filters.country);
+        console.log('USER COUNTRY', u.country?.name);
         if (filters.fullname)
           return [(u.firstname, u.lastname)].some((field) => filters.fullname && field?.toLowerCase().includes(filters.fullname.toLowerCase()));
         if (filters.email) return u.email.toLowerCase().includes(filters.email.toLowerCase());
         if (filters.villageName && u.villageId) return villageMap[u.villageId].name.toLowerCase().includes(filters.villageName.toLowerCase());
-        if (filters.countryIsoCode) return u.country?.isoCode.toLowerCase().includes(filters.countryIsoCode.toLowerCase());
+        if (filters.country) return u.country?.name.toLowerCase().includes(filters.country.toLowerCase());
         if (filters.type) return u.type === parseInt(filters.type);
 
         return true;
@@ -76,8 +78,8 @@ const Users = () => {
   );
 
   const tableData = useMemo(() => {
-    console.log('FILTER', filters);
-    console.log('FILTERD USERS', filteredUsers);
+    // console.log('FILTER', filters);
+    // console.log('FILTERD USERS', filteredUsers);
     return filteredUsers.map((u) => ({
       ...u,
       country: u.country ? `${countryToFlag(u.country?.isoCode)} ${u.country?.name}` : <span style={{ color: 'grey' }}>Non renseignée</span>,
@@ -198,13 +200,7 @@ const Users = () => {
           variant="outlined"
           size="small"
         />
-        <TextField
-          label="Pays"
-          value={filters.countryIsoCode}
-          onChange={(e) => handleChange({ countryIsoCode: e.target.value })}
-          variant="outlined"
-          size="small"
-        />
+        <TextField label="Pays" value={filters.country} onChange={(e) => handleChange({ country: e.target.value })} variant="outlined" size="small" />
         <TextField label="Rôle" value={filters.type} onChange={(e) => handleChange({ type: e.target.value })} variant="outlined" size="small" />
       </div>
 
