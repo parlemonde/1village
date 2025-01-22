@@ -12,7 +12,7 @@ import { useUsers } from 'src/api/user/user.list';
 import { Modal } from 'src/components/Modal';
 import { OneVillageTable } from 'src/components/admin/OneVillageTable';
 import { ManageUsersHeaders } from 'src/components/admin/manage/utils/tableHeaders';
-import { UserContext } from 'src/contexts/userContext';
+// import { UserContext } from 'src/contexts/userContext';
 import { useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
@@ -25,8 +25,8 @@ import type { Village } from 'types/village.type';
 
 const Users = () => {
   const router = useRouter();
-  const { user } = React.useContext(UserContext);
-  const { data, isLoading } = useUsers();
+  // const { user } = React.useContext(UserContext);
+  const { data } = useUsers();
   const users = React.useMemo(() => data || [], [data]);
   const [filters, setFilters] = useState<UserFilter>({});
   const { villages } = useVillages();
