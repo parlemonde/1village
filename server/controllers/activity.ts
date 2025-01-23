@@ -228,16 +228,6 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
 
   const villageId = req.user.type <= UserType.MEDIATOR ? data.villageId || req.user.villageId || null : req.user.villageId || null;
 
-  // Delete old draft if needed.
-  if (data.status === ActivityStatus.PUBLISHED || data.status === ActivityStatus.DRAFT) {
-    await AppDataSource.getRepository(Activity).delete({
-      userId: req.user.id,
-      type: data.type,
-      subType: data.subType ?? IsNull(),
-      status: ActivityStatus.DRAFT,
-    });
-  }
-
   const activity = new Activity();
   activity.type = data.type;
   activity.subType = data.subType ?? null;
