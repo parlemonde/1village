@@ -96,7 +96,13 @@ export const EnigmeActivityView = ({ activity, isAnswer }: EnigmeActivityViewPro
               <h3>Indice supplémentaire</h3>
               <p className="text" style={{ margin: 0, padding: 0 }}>
                 {`${enigmeType.title2} est `}
-                <strong>{(activity.data.theme === -1 ? activity.data.themeName ?? '' : subCategories[data.theme].label ?? '').toLowerCase()}</strong>!
+                <strong>
+                  {(activity.data.theme === -1 || activity.data.theme === null
+                    ? activity.data.themeName ?? ''
+                    : subCategories[data.theme]?.label ?? ''
+                  ).toLowerCase()}
+                </strong>
+                !
               </p>
             </Card>
           )}
