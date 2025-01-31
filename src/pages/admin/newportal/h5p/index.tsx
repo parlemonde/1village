@@ -62,14 +62,7 @@ const H5pList = () => {
         title="Liste du contenu H5P"
         toolbarButton={
           <Link href="/admin/newportal/h5p/new" passHref>
-            <Button
-              color="inherit"
-              sx={defaultContainedButtonStyle}
-              component="a"
-              variant="contained"
-              style={{ flexShrink: 0 }}
-              startIcon={<AddCircleIcon />}
-            >
+            <Button className="like-button blue" component="a">
               Ajouter un contenu H5P
             </Button>
           </Link>

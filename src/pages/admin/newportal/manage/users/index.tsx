@@ -1,18 +1,18 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import type { SetStateAction } from 'react';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
 import NoSsr from '@mui/material/NoSsr';
 
 import { useUsers } from 'src/api/user/user.list';
 import { Modal } from 'src/components/Modal';
+import { AdminTile } from 'src/components/admin/AdminTile';
 import { OneVillageTable } from 'src/components/admin/OneVillageTable';
 import { ManageUsersHeaders } from 'src/components/admin/manage/utils/tableHeaders';
-// import { UserContext } from 'src/contexts/userContext';
+import { UserContext } from 'src/contexts/userContext';
 import { useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
@@ -25,7 +25,7 @@ import type { Village } from 'types/village.type';
 
 const Users = () => {
   const router = useRouter();
-  // const { user } = React.useContext(UserContext);
+  const { user } = React.useContext(UserContext);
   const { data } = useUsers();
   const users = React.useMemo(() => data || [], [data]);
   const [filters, setFilters] = useState<UserFilter>({});
@@ -37,7 +37,7 @@ const Users = () => {
   const { deleteUser } = useUserRequests();
   const [deleteIndex, setDeleteIndex] = React.useState(-1);
 
-  const TABLE_ENTRIES_BY_PAGE = 6;
+  const TABLE_ENTRIES_BY_PAGE = 5;
 
   const filteredUsers = useMemo(
     () =>
@@ -63,7 +63,7 @@ const Users = () => {
       ) : (
         <span style={{ color: 'grey' }}>Non assigné</span>
       ),
-      type: <Chip size="small" label={userTypeNames[u.type]} />,
+      type: userTypeNames[u.type],
       position: null,
     }));
   }, [filteredUsers, villageMap]);
@@ -139,87 +139,89 @@ const Users = () => {
           <h1 style={{ marginLeft: '10px' }}>Utilisateurs</h1>
         </div>
       </Link>
-
-      <p>Il y a ici la liste complète des utilisateurs de 1Vilage</p>
-
-      {/* {user?.type === UserType.SUPER_ADMIN ||
-        (user?.type === UserType.ADMIN && ( */}
-      <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', margin: '16px 0' }}>
-        <Button
-          className="like-button blue"
-          sx={{ ...defaultContainedButtonStyle, width: 'auto' }}
-          component="a"
-          onClick={handleExportToCSV}
-          disabled={filteredUsers.length === 0}
-        >
-          Exporter en CSV
-        </Button>
-        <Link href="/admin/newportal/manage/users/new" passHref>
-          <Button className="like-button blue" sx={defaultContainedButtonStyle} component="a" href="/admin/newportal/manage/users/new">
-            Ajouter un utilisateur
-          </Button>
-        </Link>
-      </div>
-      {/* ))} */}
-
-      <Box
-        sx={{
-          display: 'flex',
-          gap: '12px',
-          width: '75%',
-          margin: '16px 0',
-          '& > *': {
-            flex: 1,
-          },
-        }}
+      <AdminTile
+        title="Il y a ici la liste complète des utilisateurs de 1Village"
+        toolbarButton={
+          user &&
+          (user.type === UserType.SUPER_ADMIN || user.type === UserType.ADMIN) && (
+            <Box style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', margin: '16px 0' }}>
+              <Button className="like-button blue" component="a" onClick={handleExportToCSV} disabled={filteredUsers.length === 0}>
+                Exporter en CSV
+              </Button>
+              <Link href="/admin/newportal/manage/users/new" passHref>
+                <Button className="like-button blue" sx={defaultContainedButtonStyle} component="a" href="/admin/newportal/manage/users/new">
+                  Ajouter un utilisateur
+                </Button>
+              </Link>
+            </Box>
+          )
+        }
       >
-        <TextField
-          label="Prénom et nom"
-          value={filters.fullname}
-          onChange={(e) => handleChange({ fullname: e.target.value })}
-          variant="outlined"
-          size="small"
-        />
-        <TextField label="Mail" value={filters.email} onChange={(e) => handleChange({ email: e.target.value })} variant="outlined" size="small" />
-        <TextField
-          label="Village Monde"
-          value={filters.villageName}
-          onChange={(e) => handleChange({ villageName: e.target.value })}
-          variant="outlined"
-          size="small"
-        />
-        <TextField label="Pays" value={filters.country} onChange={(e) => handleChange({ country: e.target.value })} variant="outlined" size="small" />
-        <FormControl size="small">
-          <InputLabel id="demo-simple-select-label">Rôle</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+        <Box
+          sx={{
+            display: 'flex',
+            gap: '12px',
+            width: '75%',
+            margin: '16px 0',
+            '& > *': {
+              flex: 1,
+            },
+          }}
+        >
+          <TextField
+            label="Prénom et nom"
+            value={filters.fullname}
+            onChange={(e) => handleChange({ fullname: e.target.value })}
             variant="outlined"
-            value={filters.type}
-            onChange={(e) => {
-              handleChange({ type: e.target.value });
-            }}
-            displayEmpty
-          >
-            <MenuItem value={''}>Tous</MenuItem>
-            {[UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR, UserType.TEACHER, UserType.FAMILY, UserType.OBSERVATOR].map((type) => (
-              <MenuItem key={type} value={type}>
-                {userTypeNames[type]}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
+            size="small"
+          />
+          <TextField label="Mail" value={filters.email} onChange={(e) => handleChange({ email: e.target.value })} variant="outlined" size="small" />
+          <TextField
+            label="Village Monde"
+            value={filters.villageName}
+            onChange={(e) => handleChange({ villageName: e.target.value })}
+            variant="outlined"
+            size="small"
+          />
+          <TextField
+            label="Pays"
+            value={filters.country}
+            onChange={(e) => handleChange({ country: e.target.value })}
+            variant="outlined"
+            size="small"
+          />
+          <FormControl size="small">
+            <InputLabel id="demo-simple-select-label">Rôle</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              variant="outlined"
+              value={filters.type}
+              onChange={(e) => {
+                handleChange({ type: e.target.value });
+              }}
+              displayEmpty
+            >
+              <MenuItem value={''}>Tous</MenuItem>
+              {[UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR, UserType.TEACHER, UserType.FAMILY, UserType.OBSERVATOR].map((type) => (
+                <MenuItem key={type} value={type}>
+                  {userTypeNames[type]}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
 
-      <OneVillageTable
-        admin={true}
-        emptyPlaceholder={undefined}
-        data={tableData}
-        columns={ManageUsersHeaders}
-        actions={actions}
-        usePagination={tableData.length > TABLE_ENTRIES_BY_PAGE}
-        footerElementsLabel="utilisateur"
-      />
+        <OneVillageTable
+          admin={true}
+          emptyPlaceholder={undefined}
+          data={tableData}
+          columns={ManageUsersHeaders}
+          actions={actions}
+          usePagination={tableData.length > TABLE_ENTRIES_BY_PAGE}
+          footerElementsLabel="utilisateur"
+        />
+      </AdminTile>
       <NoSsr>
         <Modal
           title="Confirmer la suppression"

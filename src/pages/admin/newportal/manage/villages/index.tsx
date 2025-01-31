@@ -87,34 +87,27 @@ const Villages = () => {
         </div>
       </Link>
       <AdminTile
-        title="Liste des villages"
+        title="Il y a ici la liste complète des villages de 1Village"
         toolbarButton={
           <Box
             sx={{
               display: 'flex',
+              gap: 1,
               flexDirection: {
                 xs: 'column',
                 md: 'row',
               },
             }}
           >
-            <Button
-              color="inherit"
-              sx={(theme) => ({ ...defaultContainedButtonStyle, [theme.breakpoints.down('md')]: { margin: '0 0 1rem 0' } })}
-              variant="contained"
-              style={{ flexShrink: 0, marginRight: '0.5rem' }}
-              startIcon={<GetAppIcon />}
-              onClick={onImportVillages}
-            >
+            {/* add flex row on media query md */}
+            <Button className="like-button blue" component="a" startIcon={<GetAppIcon />} onClick={onImportVillages}>
               Importer depuis {SSO_HOSTNAME}
             </Button>
             <Link href="/admin/newportal/manage/villages/new">
               <Button
-                color="inherit"
-                sx={defaultContainedButtonStyle}
+                className="like-button blue"
                 component="a"
                 href="/admin/newportal/manage/villages/new"
-                variant="contained"
                 style={{ flexShrink: 0 }}
                 startIcon={<AddCircleIcon />}
               >
@@ -125,17 +118,10 @@ const Villages = () => {
         }
       >
         <Box style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem', marginTop: '1rem' }}>
-          <Typography variant="subtitle1" style={{ marginRight: '1rem', marginLeft: '1rem' }}>
+          {/* <Typography variant="subtitle1" style={{ marginRight: '1rem', marginLeft: '1rem' }}>
             Filtres villages :
-          </Typography>
-          <TextField
-            label="Rechercher par nom de village ou pays"
-            value={search}
-            onChange={handleChange}
-            variant="outlined"
-            size="small"
-            style={{ marginRight: '1rem' }}
-          />
+          </Typography> */}
+          <TextField label="Village ou pays" value={search} onChange={handleChange} variant="outlined" size="small" style={{ marginRight: '1rem' }} />
         </Box>
         <Box sx={{ overflow: 'auto' }}>
           <OneVillageTable
