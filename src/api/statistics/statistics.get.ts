@@ -33,6 +33,16 @@ async function getVillagesStats(villageId: number | null, phase: number): Promis
   ).data;
 }
 
+async function getCountriesStats(countryId: string | null, phase: number): Promise<VillageStats> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: phase ? `/statistics/countries/${countryId}?phase=${phase}` : `/statistics/countries/${countryId}`,
+    })
+  ).data;
+}
+
 export const useGetSessionsStats = (phase: number | null) => {
   return useQuery(['sessions-stats'], () => getSessionsStats(phase));
 };
@@ -43,6 +53,11 @@ export const useGetOneVillageStats = () => {
 export const useGetVillagesStats = (villageId: number | null, phase: number) => {
   return useQuery(['villages-stats', villageId, phase], () => getVillagesStats(villageId, phase), {
     enabled: villageId !== null,
+  });
+};
+export const useGetCountriesStats = (countryId: string | null, phase: number) => {
+  return useQuery(['countries-stats', countryId, phase], () => getCountriesStats(countryId, phase), {
+    enabled: countryId !== null,
   });
 };
 

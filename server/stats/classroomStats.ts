@@ -3,7 +3,8 @@ import { Activity } from '../entities/activity';
 import { Classroom } from '../entities/classroom';
 import type { VillagePhase } from '../entities/village';
 import { AppDataSource } from '../utils/data-source';
-import { generateEmptyFilterParams, getChildrenCodesCount, getConnectedFamiliesCount, getFamiliesWithoutAccount } from './queryStatsByFilter';
+import { generateEmptyFilterParams } from './helpers';
+import { getChildrenCodesCount, getConnectedFamiliesCount, getFamiliesWithoutAccount } from './queryStatsByFilter';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
 
