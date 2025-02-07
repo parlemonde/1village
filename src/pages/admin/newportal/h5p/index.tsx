@@ -4,7 +4,6 @@ import { useSnackbar } from 'notistack';
 import * as React from 'react';
 import { useQueryClient } from 'react-query';
 
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Button, NoSsr, IconButton, Tooltip } from '@mui/material';
@@ -14,7 +13,6 @@ import { useH5pContentList } from 'src/api/h5p/h5p-content.list';
 import { Modal } from 'src/components/Modal';
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { OneVillageTable } from 'src/components/admin/OneVillageTable';
-import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import BackArrow from 'src/svg/back-arrow.svg';
 
 const H5pList = () => {
