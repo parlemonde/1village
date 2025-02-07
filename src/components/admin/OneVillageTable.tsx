@@ -104,13 +104,16 @@ export const OneVillageTable = ({
 
   return (
     <NoSsr>
-      <TableContainer sx={{ border: '1px solid blue', borderRadius: '24px', minHeight: '400px' }}>
+      {/* TODO - Get relative cells width in line 139 */}
+      {/* TODO - Fix pagination on bottom of table */}
+
+      <TableContainer sx={{ border: '1px solid blue', borderRadius: '24px', minHeight: '340px' }}>
         {titleContent && (
           <Box sx={{ fontWeight: 'bold', display: 'flex', border: 'none', backgroundColor, p: '8px' }}>
             <RemoveRedEyeIcon sx={{ mr: '6px' }} /> {titleContent}
           </Box>
         )}
-        <Table size="medium" aria-label={ariaLabel}>
+        <Table size="small" aria-label={ariaLabel} sx={{ tableLayout: 'fixed' }}>
           {data.length === 0 ? (
             <TableBody>
               <TableRow sx={{ height: '340px' }}>
@@ -133,12 +136,18 @@ export const OneVillageTable = ({
                 <TableRow
                   sx={{
                     th: {
+                      width: `122.5px`,
                       borderBottom: '1px solid blue',
                     },
                   }}
                 >
                   {columns.map((c) => (
-                    <TableCell key={c.key} sx={{ fontWeight: 'bold' }}>
+                    <TableCell
+                      key={c.key}
+                      sx={{
+                        fontWeight: 'bold',
+                      }}
+                    >
                       {c.sortable ? (
                         <TableSortLabel active={options.order === c.key} direction={options.sort} onClick={onSortBy(c.key)}>
                           {c.label}
@@ -166,20 +175,33 @@ export const OneVillageTable = ({
                     </TableCell>
                   ))}
                   {actions && (
-                    <TableCell style={{ fontWeight: 'bold' }} align="right">
+                    <TableCell style={{ fontWeight: 'bold', width: '240px' }} align="right">
                       Actions
                     </TableCell>
                   )}
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody
+                sx={{
+                  td: {
+                    display: 'table-cell',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  },
+                }}
+              >
                 {displayedData.map((d, index) => (
                   <TableRow key={d.id}>
                     {columns.map((c) => {
-                      return <TableCell key={`${d.id}_${c.key}`}>{d[c.key] !== undefined ? d[c.key] : ''}</TableCell>;
+                      return (
+                        <TableCell key={`${d.id}_${c.key}`} size="small">
+                          {d[c.key] !== undefined ? d[c.key] : ''}
+                        </TableCell>
+                      );
                     })}
                     {actions && (
-                      <TableCell align="center" padding="none" sx={{ minWidth: '96px', color: 'blue' }}>
+                      <TableCell align="right" padding="none" sx={{ width: '140px', color: 'blue' }}>
                         <OneVillageTableActionMenu>{actions(d.id, index)}</OneVillageTableActionMenu>
                       </TableCell>
                     )}
@@ -188,7 +210,7 @@ export const OneVillageTable = ({
                 {usePagination && (
                   <TableRow>
                     <TablePagination
-                      rowsPerPageOptions={[5, 10, 25]}
+                      rowsPerPageOptions={[5, 10, 25, 50, 100]}
                       count={data.length}
                       rowsPerPage={options.limit || 10}
                       page={(options.page || 1) - 1}
