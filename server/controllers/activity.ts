@@ -252,6 +252,8 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   activity.isPinned = data.isPinned || false;
   activity.displayAsUser = data.displayAsUser || false;
 
+  if (activity.status === ActivityStatus.PUBLISHED) activity.publishDate = new Date();
+
   await AppDataSource.getRepository(Activity).save(activity);
 
   res.sendJSON(activity);
