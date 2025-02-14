@@ -48,7 +48,7 @@ const Users = () => {
         if (filters.email) return u.email.toLowerCase().includes(filters.email.toLowerCase());
         if (filters.villageName && u.villageId) return villageMap[u.villageId].name.toLowerCase().includes(filters.villageName.toLowerCase());
         if (filters.country) return u.country?.name.toLowerCase().includes(filters.country.toLowerCase());
-        if (filters.type || (filters.type && parseInt(filters.type) === 0)) return u.type === parseInt(filters.type);
+        if (filters.type !== undefined || (filters.type && parseInt(filters.type) === 0)) return u.type === parseInt(filters.type);
 
         return true;
       }),
@@ -191,19 +191,20 @@ const Users = () => {
             variant="outlined"
             size="small"
           />
-          <FormControl size="small">
+          <FormControl fullWidth size="small">
             <InputLabel id="demo-simple-select-label">Rôle</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              variant="outlined"
               value={filters.type}
+              label="Rôle" // Ceci est nécessaire pour l'espacement du label
               onChange={(e) => {
                 handleChange({ type: e.target.value });
               }}
-              displayEmpty
             >
-              <MenuItem value={''}>Tous</MenuItem>
+              <MenuItem value="">
+                <em>Aucun</em>
+              </MenuItem>
               {[UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR, UserType.TEACHER, UserType.FAMILY, UserType.OBSERVATOR].map((type) => (
                 <MenuItem key={type} value={type}>
                   {userTypeNames[type]}
