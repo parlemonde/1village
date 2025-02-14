@@ -130,13 +130,13 @@ export const OneVillageTable = ({
                   fontWeight: 'bold',
                   minHeight: 'unset',
                   padding: '8px 8px 8px 16px',
-                  color: 'red',
+                  width: '100%',
                 }}
               >
                 <TableRow
                   sx={{
                     th: {
-                      width: `122.5px`,
+                      width: `150%`,
                       borderBottom: '1px solid blue',
                     },
                   }}
@@ -175,7 +175,7 @@ export const OneVillageTable = ({
                     </TableCell>
                   ))}
                   {actions && (
-                    <TableCell style={{ fontWeight: 'bold', width: '240px' }} align="right">
+                    <TableCell style={{ fontWeight: 'bold', width: '80px' }} align="right">
                       Actions
                     </TableCell>
                   )}
@@ -201,7 +201,7 @@ export const OneVillageTable = ({
                       );
                     })}
                     {actions && (
-                      <TableCell align="right" padding="none" sx={{ width: '140px', color: 'blue' }}>
+                      <TableCell align="right" padding="none" sx={{ width: '20px', color: 'blue' }}>
                         <OneVillageTableActionMenu>{actions(d.id, index)}</OneVillageTableActionMenu>
                       </TableCell>
                     )}
