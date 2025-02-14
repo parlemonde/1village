@@ -11,6 +11,7 @@ import { useUsers } from 'src/api/user/user.list';
 import { Modal } from 'src/components/Modal';
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { OneVillageTable } from 'src/components/admin/OneVillageTable';
+import OneVillageTableActionMenu from 'src/components/admin/OneVillageTableActionMenu';
 import { ManageUsersHeaders } from 'src/components/admin/manage/utils/tableHeaders';
 import { UserContext } from 'src/contexts/userContext';
 import { useUserRequests } from 'src/services/useUsers';
@@ -105,7 +106,7 @@ const Users = () => {
   };
 
   const actions = (id: number) => (
-    <>
+    <OneVillageTableActionMenu>
       <MenuItem
         aria-label="edit"
         onClick={() => {
@@ -128,7 +129,7 @@ const Users = () => {
       >
         Supprimer
       </MenuItem>
-    </>
+    </OneVillageTableActionMenu>
   );
 
   return (

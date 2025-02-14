@@ -56,6 +56,7 @@ const Villages = () => {
     <>
       <Tooltip title="Modifier">
         <IconButton
+          sx={{ color: 'blue' }}
           aria-label="edit"
           onClick={() => {
             router.push(`/admin/newportal/manage/villages/edit/${id}`);
@@ -66,6 +67,7 @@ const Villages = () => {
       </Tooltip>
       <Tooltip title="Supprimer">
         <IconButton
+          sx={{ color: 'blue' }}
           aria-label="delete"
           onClick={() => {
             setDeleteIndex(villages.findIndex((v) => v.id === id));
@@ -133,6 +135,7 @@ const Villages = () => {
                 </Link>
               </>
             }
+            footerElementsLabel="village"
             data={filteredVillages.map((v) => ({
               ...v,
               countries: countriesToText(v.countries),
