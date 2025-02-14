@@ -1,7 +1,7 @@
 import React from 'react';
 
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import { Box, TableContainer, TableSortLabel, useTheme } from '@mui/material';
+import { Box, Paper, TableContainer, TableSortLabel, useTheme } from '@mui/material';
 import NoSsr from '@mui/material/NoSsr';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -104,129 +104,135 @@ export const OneVillageTable = ({
 
   return (
     <NoSsr>
-      {/* TODO - Get relative cells width in line 139 */}
-      {/* TODO - Fix pagination on bottom of table */}
-
-      <TableContainer sx={{ border: '1px solid blue', borderRadius: '24px', minHeight: '340px' }}>
-        {titleContent && (
-          <Box sx={{ fontWeight: 'bold', display: 'flex', border: 'none', backgroundColor, p: '8px' }}>
-            <RemoveRedEyeIcon sx={{ mr: '6px' }} /> {titleContent}
-          </Box>
-        )}
-        <Table size="small" aria-label={ariaLabel} sx={{ tableLayout: 'fixed' }}>
-          {data.length === 0 ? (
-            <TableBody>
-              <TableRow sx={{ height: '340px' }}>
-                <TableCell colSpan={columns.length + (actions ? 1 : 0)} align="center">
-                  {emptyPlaceholder || 'Cette liste est vide !'}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          ) : (
-            <>
-              <TableHead
-                sx={{
-                  zIndex: 1000,
-                  fontWeight: 'bold',
-                  minHeight: 'unset',
-                  padding: '8px 8px 8px 16px',
-                  width: '100%',
-                }}
-              >
-                <TableRow
+      <Paper sx={{ width: '100%', overflow: 'hidden', border: '1px solid blue', borderRadius: '24px', boxShadow: 'none' }}>
+        <TableContainer sx={{ minHeight: '340px' }}>
+          {titleContent && (
+            <Box sx={{ fontWeight: 'bold', display: 'flex', border: 'none', backgroundColor, p: '8px' }}>
+              <RemoveRedEyeIcon sx={{ mr: '6px' }} /> {titleContent}
+            </Box>
+          )}
+          <Table size="small" aria-label={ariaLabel} sx={{ tableLayout: 'fixed' }}>
+            {data.length === 0 ? (
+              <TableBody>
+                <TableRow sx={{ height: '340px' }}>
+                  <TableCell colSpan={columns.length + (actions ? 1 : 0)} align="center">
+                    {emptyPlaceholder || 'Cette liste est vide !'}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            ) : (
+              <>
+                <TableHead
                   sx={{
-                    th: {
-                      width: `150%`,
-                      borderBottom: '1px solid blue',
-                    },
+                    fontWeight: 'bold',
                   }}
                 >
-                  {columns.map((c) => (
-                    <TableCell
-                      key={c.key}
-                      sx={{
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      {c.sortable ? (
-                        <TableSortLabel active={options.order === c.key} direction={options.sort} onClick={onSortBy(c.key)}>
-                          {c.label}
-                          {options.order === c.label ? (
-                            <span
-                              style={{
-                                border: 0,
-                                clip: 'rect(0 0 0 0)',
-                                height: 1,
-                                margin: -1,
-                                overflow: 'hidden',
-                                padding: 0,
-                                position: 'absolute',
-                                top: 20,
-                                width: 1,
-                              }}
-                            >
-                              {options.sort === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                            </span>
-                          ) : null}
-                        </TableSortLabel>
-                      ) : (
-                        c.label
-                      )}
-                    </TableCell>
-                  ))}
-                  {actions && (
-                    <TableCell style={{ fontWeight: 'bold', width: '80px' }} align="right">
-                      Actions
-                    </TableCell>
-                  )}
-                </TableRow>
-              </TableHead>
-              <TableBody
-                sx={{
-                  td: {
-                    display: 'table-cell',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  },
-                }}
-              >
-                {displayedData.map((d, index) => (
-                  <TableRow key={d.id}>
-                    {columns.map((c) => {
-                      return (
-                        <TableCell key={`${d.id}_${c.key}`} size="small">
-                          {d[c.key] !== undefined ? d[c.key] : ''}
-                        </TableCell>
-                      );
-                    })}
+                  <TableRow
+                    sx={{
+                      th: {
+                        paddingY: 2,
+                        borderBottom: '1px solid blue',
+                      },
+                    }}
+                  >
+                    {columns.map((c) => (
+                      <TableCell
+                        key={c.key}
+                        sx={{
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        {c.sortable ? (
+                          <TableSortLabel active={options.order === c.key} direction={options.sort} onClick={onSortBy(c.key)}>
+                            {c.label}
+                            {options.order === c.label ? (
+                              <span
+                                style={{
+                                  border: 0,
+                                  clip: 'rect(0 0 0 0)',
+                                  height: 1,
+                                  margin: -1,
+                                  overflow: 'hidden',
+                                  padding: 0,
+                                  position: 'absolute',
+                                  top: 20,
+                                  width: 1,
+                                }}
+                              >
+                                {options.sort === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                              </span>
+                            ) : null}
+                          </TableSortLabel>
+                        ) : (
+                          c.label
+                        )}
+                      </TableCell>
+                    ))}
                     {actions && (
-                      <TableCell align="right" padding="none" sx={{ width: '20px', color: 'blue' }}>
-                        <OneVillageTableActionMenu>{actions(d.id, index)}</OneVillageTableActionMenu>
+                      <TableCell style={{ fontWeight: 'bold', width: '80px' }} align="right">
+                        Actions
                       </TableCell>
                     )}
                   </TableRow>
-                ))}
-                {usePagination && (
-                  <TableRow>
-                    <TablePagination
-                      rowsPerPageOptions={[5, 10, 25, 50, 100]}
-                      count={data.length}
-                      rowsPerPage={options.limit || 10}
-                      page={(options.page || 1) - 1}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                  </TableRow>
-                )}
-              </TableBody>
-            </>
+                </TableHead>
+                <TableBody
+                  sx={{
+                    td: {
+                      display: 'table-cell',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    },
+                  }}
+                >
+                  {displayedData.map((d, index) => (
+                    <TableRow key={d.id}>
+                      {columns.map((c) => {
+                        return (
+                          <TableCell key={`${d.id}_${c.key}`} size="small">
+                            {d[c.key] !== undefined ? d[c.key] : ''}
+                          </TableCell>
+                        );
+                      })}
+                      {actions && (
+                        <TableCell align="right" padding="none" sx={{ width: '20px', color: 'blue' }}>
+                          <OneVillageTableActionMenu>{actions(d.id, index)}</OneVillageTableActionMenu>
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </>
+            )}
+          </Table>
+        </TableContainer>
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            justifyContent: 'flex-end',
+            borderTop: '1px solid #E0E0E0',
+          }}
+        >
+          {usePagination && data.length > 5 ? (
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25, 50, 100]}
+              count={data.length}
+              rowsPerPage={options.limit || 10}
+              page={(options.page || 1) - 1}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              labelDisplayedRows={({ from, to, count }) => (
+                <span>{`${from} - ${to} sur ${count} ${footerElementsLabel}${data.length > 0 ? 's' : ''}`}</span>
+              )}
+            />
+          ) : (
+            <p style={{ margin: 0, padding: '1rem', textAlign: 'right', fontSize: '14px' }}>{`${data.length} ${footerElementsLabel}${
+              displayedData.length > 1 ? 's' : ''
+            }`}</p>
           )}
-        </Table>
-        <p style={{ margin: 0, padding: '1rem', textAlign: 'right', fontSize: '14px' }}>{`${data.length} ${footerElementsLabel}${
-          displayedData.length > 1 ? 's' : ''
-        }`}</p>
-      </TableContainer>
+        </Box>
+      </Paper>
     </NoSsr>
   );
 };
