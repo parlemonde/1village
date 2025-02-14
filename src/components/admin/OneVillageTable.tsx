@@ -133,7 +133,7 @@ export const OneVillageTable = ({
                       th: {
                         paddingY: 2,
                         borderBottom: '1px solid blue',
-                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
                         whiteSpace: 'nowrap',
                       },
                     }}
