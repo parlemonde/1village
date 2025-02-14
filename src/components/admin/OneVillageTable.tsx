@@ -10,7 +10,6 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
-import OneVillageTableActionMenu from './OneVillageTableActionMenu';
 import { primaryColorLight } from 'src/styles/variables.const';
 
 function paginate<T>(array: T[], pageSize: number, pageNumber: number): T[] {
@@ -35,6 +34,7 @@ interface OneVillageTableProps {
   titleContent?: string;
   footerElementsLabel?: string;
   usePagination?: boolean;
+  minTableHeightInPx?: number;
 }
 
 export const OneVillageTable = ({
@@ -47,6 +47,7 @@ export const OneVillageTable = ({
   titleContent,
   footerElementsLabel = 'élément',
   usePagination: usePaginationProp,
+  minTableHeightInPx = 240,
 }: OneVillageTableProps) => {
   const theme = useTheme();
   // const color = admin ? 'white' : 'black';
@@ -105,7 +106,7 @@ export const OneVillageTable = ({
   return (
     <NoSsr>
       <Paper sx={{ width: '100%', overflow: 'hidden', border: '1px solid blue', borderRadius: '24px', boxShadow: 'none' }}>
-        <TableContainer sx={{ minHeight: '340px' }}>
+        <TableContainer sx={{ minHeight: `${minTableHeightInPx + 2}px` }}>
           {titleContent && (
             <Box sx={{ fontWeight: 'bold', display: 'flex', border: 'none', backgroundColor, p: '8px' }}>
               <RemoveRedEyeIcon sx={{ mr: '6px' }} /> {titleContent}
@@ -114,7 +115,7 @@ export const OneVillageTable = ({
           <Table size="small" aria-label={ariaLabel} sx={{ tableLayout: 'fixed' }}>
             {data.length === 0 ? (
               <TableBody>
-                <TableRow sx={{ height: '340px' }}>
+                <TableRow sx={{ height: '242px' }}>
                   <TableCell colSpan={columns.length + (actions ? 1 : 0)} align="center">
                     {emptyPlaceholder || 'Cette liste est vide !'}
                   </TableCell>
@@ -132,6 +133,8 @@ export const OneVillageTable = ({
                       th: {
                         paddingY: 2,
                         borderBottom: '1px solid blue',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
                       },
                     }}
                   >
@@ -196,7 +199,7 @@ export const OneVillageTable = ({
                       })}
                       {actions && (
                         <TableCell align="right" padding="none" sx={{ width: '20px', color: 'blue' }}>
-                          <OneVillageTableActionMenu>{actions(d.id, index)}</OneVillageTableActionMenu>
+                          {actions(d.id, index)}
                         </TableCell>
                       )}
                     </TableRow>
