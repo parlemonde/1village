@@ -16,24 +16,19 @@ import { htmlToText } from 'src/utils';
 export default function ActivityCard({
   activity,
   modifiedDisabled,
+  actions = ['configure', 'update', 'delete'],
 }: {
-  activity: Pick<Activity, 'images' | 'content' | 'phase' | 'data' | 'id' | 'status'>;
+  activity: Pick<Activity, 'images' | 'content' | 'phase' | 'data' | 'id' | 'status' | 'type'>;
   modifiedDisabled?: boolean;
+  actions?: ('configure' | 'update' | 'delete')[];
 }) {
   const publishActivity = usePublishActivity({ activityId: activity.id });
   const howManyChildren = useGetChildrenActivitiesById({ id: Number(activity.id) });
-  // eslint-disable-next-line
-  // @ts-ignore
-  const publishDate = new Date(activity.publishDate);
-  const formattedDate = new Intl.DateTimeFormat('fr-FR', {
-    year: '2-digit',
-    month: '2-digit',
-    day: '2-digit',
-  }).format(publishDate);
-
-  const subtitle = `Publié le ${formattedDate} dans ${howManyChildren.data?.length} Village-Monde`;
   const queryClient = useQueryClient();
   const router = useRouter();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
   const title: string = activity?.data?.title ? (activity.data.title as string) : '';
   const isImageUrl = activity.content.find((e) => e.type === 'image')?.value;
   const imageUrl: string = isImageUrl ? isImageUrl : 'https://placehold.co/600x400?text=No Picture';
@@ -44,8 +39,16 @@ export default function ActivityCard({
     return acc;
   }, '');
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  // eslint-disable-next-line
+  // @ts-ignore
+  const publishDate = new Date(activity.publishDate);
+  const formattedDate = new Intl.DateTimeFormat('fr-FR', {
+    year: '2-digit',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(publishDate);
+  const subtitle = `Publié le ${formattedDate} dans ${howManyChildren.data?.length} Village-Monde`;
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -55,13 +58,17 @@ export default function ActivityCard({
     router.reload();
     setAnchorEl(null);
   };
-  const handleModified = () => {
-    if (activity.status === 0) {
-      router.push(`/admin/newportal/publier/prepublish/edit/${activity.id}`);
-    } else {
+  const handleUpdate = () => {
+    if (activity.type === 5) {
       router.push(`/admin/newportal/contenulibre/edit/1/${activity.id}`);
+    } else if (activity.type === 11) {
+      router.push(`/admin/newportal/create/parametrer-hymne/1?edit=true&activity-id=${activity.id}`);
     }
     setAnchorEl(null);
+  };
+
+  const handleConfigure = () => {
+    router.push(`/admin/newportal/publier/prepublish/edit/${activity.id}`);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -112,10 +119,13 @@ export default function ActivityCard({
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <MenuItem onClick={handleModified} disabled={modifiedDisabled}>
-                Modifier
-              </MenuItem>
-              <MenuItem onClick={handleDelete}>Supprimer</MenuItem>
+              {actions.includes('configure') && (
+                <MenuItem onClick={handleConfigure} disabled={modifiedDisabled}>
+                  Configurer
+                </MenuItem>
+              )}
+              {actions.includes('delete') && <MenuItem onClick={handleUpdate}>Modifier</MenuItem>}
+              {actions.includes('delete') && <MenuItem onClick={handleDelete}>Supprimer</MenuItem>}
             </Menu>
           </>
         }

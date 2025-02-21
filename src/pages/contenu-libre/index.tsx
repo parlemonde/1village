@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useRouter } from 'next/router';
 import React from 'react';
 
