@@ -1,3 +1,4 @@
+import { orderBy } from 'lodash';
 import React from 'react';
 
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
@@ -69,6 +70,7 @@ export const OneVillageTable = ({
       limit: parseInt(event.target.value, 10),
     }));
   };
+
   const onSortBy = (name: string) => () => {
     setTableOptions((prevOptions) => {
       if (prevOptions.order === name) {
@@ -78,7 +80,7 @@ export const OneVillageTable = ({
           sort: prevOptions.sort === 'asc' ? 'desc' : 'asc',
         };
       } else {
-        return { ...prevOptions, page: 1, order: name };
+        return { ...prevOptions, page: 1, order: name.toLowerCase() };
       }
     });
   };
@@ -88,8 +90,16 @@ export const OneVillageTable = ({
     const useSort = options.sort !== undefined && options.order !== undefined;
     const sortedData = useSort
       ? [...data].sort((a, b) => {
-          const aValue = a[options.order || ''] || '';
-          const bValue = b[options.order || ''] || '';
+          let aValue = a[options.order || ''] || '';
+          let bValue = b[options.order || ''] || '';
+
+          if (options.order === 'country' && typeof aValue === 'string' && typeof bValue === 'string') {
+            aValue = aValue.replace(/^.*?\s/, '');
+            bValue = bValue.replace(/^.*?\s/, '');
+          }
+
+          if (typeof aValue === 'string') aValue = aValue.toLowerCase();
+          if (typeof bValue === 'string') bValue = bValue.toLowerCase();
 
           if (aValue > bValue) {
             return options.sort === 'asc' ? 1 : -1;
