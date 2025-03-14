@@ -119,9 +119,6 @@ const Villages = () => {
         }
       >
         <Box style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem', marginTop: '1rem' }}>
-          {/* <Typography variant="subtitle1" style={{ marginRight: '1rem', marginLeft: '1rem' }}>
-            Filtres villages :
-          </Typography> */}
           <TextField label="Village ou pays" value={search} onChange={handleChange} variant="outlined" size="small" style={{ marginRight: '1rem' }} />
         </Box>
         <Box sx={{ overflow: 'auto' }}>
@@ -144,7 +141,7 @@ const Villages = () => {
             }))}
             columns={[
               { key: 'name', label: 'Nom du village', sortable: true },
-              { key: 'countries', label: 'Pays' },
+              { key: 'countries', label: 'Pays', sortable: true },
               { key: 'userCount', label: 'Nombre de classes', sortable: true },
               { key: 'postCount', label: 'Nombre de posts', sortable: true },
             ]}
