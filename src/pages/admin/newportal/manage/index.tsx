@@ -21,8 +21,8 @@ const Gerer = () => {
     return <h1>Vous n&apos;avez pas accès à cette page, vous devez être super admin.</h1>;
   }
   const links: Link[] = [
-    { name: 'Les villages-mondes', link: '/admin/newportal/manage/villages', rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
-    { name: 'Les utilisateurs', link: '/admin/newportal/manage/users', rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
+    { name: 'Les villages-mondes', link: '/admin/newportal/manage/villages', rights: [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.MEDIATOR] },
+    { name: 'Les utilisateurs', link: '/admin/newportal/manage/users', rights: [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.MEDIATOR] },
     {
       name: 'Les consignes des activités',
       link: '/admin/newportal/manage/activities',
