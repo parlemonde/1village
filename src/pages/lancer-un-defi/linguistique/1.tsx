@@ -19,7 +19,7 @@ import { useActivity } from 'src/services/useActivity';
 import { useLanguages } from 'src/services/useLanguages';
 import { capitalize } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
-import { normalizeString } from 'src/utils/isNormalizedStringEqual';
+import { normalizeString } from 'src/utils/string';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const getArticle = (language: string) => {
