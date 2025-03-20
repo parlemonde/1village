@@ -12,6 +12,7 @@ import TableRow from '@mui/material/TableRow';
 
 import removeCountryFlagFromText from './manage/utils/removeCountryFlagFromText';
 import { primaryColorLight } from 'src/styles/variables.const';
+import { normalizeString } from 'src/utils/isNormalizedStringEqual';
 
 function paginate<T>(array: T[], pageSize: number, pageNumber: number): T[] {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
@@ -97,8 +98,8 @@ export const OneVillageTable = ({
             aValue = removeCountryFlagFromText(aValue as string);
             bValue = removeCountryFlagFromText(bValue as string);
           }
-          if (typeof aValue === 'string') aValue = aValue.toLowerCase();
-          if (typeof bValue === 'string') bValue = bValue.toLowerCase();
+          if (typeof aValue === 'string') aValue = normalizeString(aValue.toLowerCase());
+          if (typeof bValue === 'string') bValue = normalizeString(bValue.toLowerCase());
 
           if (aValue > bValue) {
             return options.sort === 'asc' ? 1 : -1;
