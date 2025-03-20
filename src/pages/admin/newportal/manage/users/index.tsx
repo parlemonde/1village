@@ -20,6 +20,7 @@ import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import BackArrow from 'src/svg/back-arrow.svg';
 import { countryToFlag } from 'src/utils';
 import { exportJsonToCsv } from 'src/utils/csv-export';
+import { normalizeString } from 'src/utils/string';
 import type { UserFilter } from 'types/manage.type';
 import { UserType, userTypeNames } from 'types/user.type';
 import type { Village } from 'types/village.type';
@@ -43,12 +44,31 @@ const Users = () => {
   const filteredUsers = useMemo(
     () =>
       users.filter((u) => {
-        if (filters.fullname)
-          return [(u.firstname, u.lastname)].some((field) => filters.fullname && field?.toLowerCase().includes(filters.fullname.toLowerCase()));
-        if (filters.email) return u.email.toLowerCase().includes(filters.email.toLowerCase());
-        if (filters.villageName && u.villageId) return villageMap[u.villageId].name.toLowerCase().includes(filters.villageName.toLowerCase());
-        if (filters.country) return u.country?.name.toLowerCase().includes(filters.country.toLowerCase());
-        if (filters.type !== undefined || (filters.type && parseInt(filters.type) === 0)) return u.type === parseInt(filters.type);
+        const normalizedFullname = filters.fullname ? normalizeString(filters.fullname.toLowerCase()) : '';
+        const normalizedEmail = filters.email ? normalizeString(filters.email.toLowerCase()) : '';
+        const normalizedVillageName = filters.villageName ? normalizeString(filters.villageName.toLowerCase()) : '';
+        const normalizedCountry = filters.country ? normalizeString(filters.country.toLowerCase()) : '';
+
+        if (filters.fullname) {
+          const normalizedFirstname = normalizeString(u.firstname.toLowerCase());
+          const normalizedLastname = normalizeString(u.lastname.toLowerCase());
+          return [normalizedFirstname, normalizedLastname].some((field) => field.includes(normalizedFullname));
+        }
+        if (filters.email) {
+          const normalizedEmailValue = normalizeString(u.email.toLowerCase());
+          return normalizedEmailValue.includes(normalizedEmail);
+        }
+        if (filters.villageName && u.villageId) {
+          const normalizedVillage = normalizeString(villageMap[u.villageId].name.toLowerCase());
+          return normalizedVillage.includes(normalizedVillageName);
+        }
+        if (filters.country) {
+          const normalizedCountryName = u.country ? normalizeString(u.country?.name.toLowerCase()) : '';
+          return normalizedCountryName.includes(normalizedCountry);
+        }
+        if (filters.type !== undefined || (filters.type && parseInt(filters.type) === 0)) {
+          return u.type === parseInt(filters.type);
+        }
 
         return true;
       }),
