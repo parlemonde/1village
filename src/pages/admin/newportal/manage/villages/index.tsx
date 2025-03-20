@@ -15,14 +15,19 @@ import Tooltip from '@mui/material/Tooltip';
 import { Modal } from 'src/components/Modal';
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { OneVillageTable } from 'src/components/admin/OneVillageTable';
+import { UserContext } from 'src/contexts/userContext';
 import { useVillages, useVillageRequests } from 'src/services/useVillages';
 import BackArrow from 'src/svg/back-arrow.svg';
 import { countryToFlag } from 'src/utils';
 import { SSO_HOSTNAME } from 'src/utils/sso';
+import { normalizeString } from 'src/utils/string';
 import type { Country } from 'types/country.type';
+import { UserType } from 'types/user.type';
 
 const Villages = () => {
   const router = useRouter();
+  const { user } = React.useContext(UserContext);
+
   const { villages } = useVillages();
   const { deleteVillage, importVillages } = useVillageRequests();
   const [isLoading, setIsLoading] = React.useState(false);
@@ -32,7 +37,12 @@ const Villages = () => {
   const filteredVillages = useMemo(
     () =>
       villages.filter((v) => {
-        const searchMatch = [v.name, ...v.countries.map((c) => c.name)].some((field) => field.toLowerCase().includes(search.toLowerCase()));
+        const normalizedSearch = normalizeString(search.toLowerCase());
+        const normalizedName = normalizeString(v.name.toLowerCase());
+        const normalizedCountries = v.countries.map((c) => normalizeString(c.name.toLowerCase()));
+
+        const searchMatch = normalizedName.includes(normalizedSearch) || normalizedCountries.some((country) => country.includes(normalizedSearch));
+
         return searchMatch;
       }),
     [villages, search],
@@ -101,20 +111,25 @@ const Villages = () => {
             }}
           >
             {/* add flex row on media query md */}
-            <Button className="like-button blue" component="a" startIcon={<GetAppIcon />} onClick={onImportVillages}>
-              Importer depuis {SSO_HOSTNAME}
-            </Button>
-            <Link href="/admin/newportal/manage/villages/new">
-              <Button
-                className="like-button blue"
-                component="a"
-                href="/admin/newportal/manage/villages/new"
-                style={{ flexShrink: 0 }}
-                startIcon={<AddCircleIcon />}
-              >
-                Ajouter un village
-              </Button>
-            </Link>
+
+            {user && user.type === UserType.SUPER_ADMIN && (
+              <>
+                <Button className="like-button blue" component="a" startIcon={<GetAppIcon />} onClick={onImportVillages}>
+                  Importer depuis {SSO_HOSTNAME}
+                </Button>
+                <Link href="/admin/newportal/manage/villages/new">
+                  <Button
+                    className="like-button blue"
+                    component="a"
+                    href="/admin/newportal/manage/villages/new"
+                    style={{ flexShrink: 0 }}
+                    startIcon={<AddCircleIcon />}
+                  >
+                    Ajouter un village
+                  </Button>
+                </Link>
+              </>
+            )}
           </Box>
         }
       >
@@ -149,7 +164,7 @@ const Villages = () => {
               { key: 'userCount', label: 'Nombre de classes', sortable: true },
               { key: 'postCount', label: 'Nombre de posts', sortable: true },
             ]}
-            actions={actions}
+            actions={user?.type === UserType.SUPER_ADMIN ? actions : undefined}
           />
         </Box>
       </AdminTile>

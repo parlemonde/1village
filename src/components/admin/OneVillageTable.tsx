@@ -12,7 +12,7 @@ import TableRow from '@mui/material/TableRow';
 
 import removeCountryFlagFromText from './manage/utils/removeCountryFlagFromText';
 import { primaryColorLight } from 'src/styles/variables.const';
-import { normalizeString } from 'src/utils/isNormalizedStringEqual';
+import { normalizeString } from 'src/utils/string';
 
 function paginate<T>(array: T[], pageSize: number, pageNumber: number): T[] {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
