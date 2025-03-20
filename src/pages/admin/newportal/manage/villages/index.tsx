@@ -136,12 +136,16 @@ const Villages = () => {
             data={filteredVillages.map((v) => ({
               ...v,
               countries: countriesToText(v.countries),
+              registeredClassrooms: 0,
+              connectedClassrooms: 0,
               userCount: 0,
               postCount: 0,
             }))}
             columns={[
               { key: 'name', label: 'Nom du village', sortable: true },
               { key: 'countries', label: 'Pays', sortable: true },
+              { key: 'registeredClassrooms', label: 'Classes inscrites', sortable: true },
+              { key: 'connectedClassrooms', label: 'Classes connectées', sortable: true },
               { key: 'userCount', label: 'Nombre de classes', sortable: true },
               { key: 'postCount', label: 'Nombre de posts', sortable: true },
             ]}
