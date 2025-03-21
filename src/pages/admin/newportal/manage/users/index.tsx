@@ -46,7 +46,7 @@ const Users = () => {
       users.filter((u) => {
         const normalizedFullname = filters.fullname ? normalizeString(filters.fullname.toLowerCase()) : '';
         const normalizedEmail = filters.email ? normalizeString(filters.email.toLowerCase()) : '';
-        const normalizedVillageName = filters.villageName ? normalizeString(filters.villageName.toLowerCase()) : '';
+        const normalizedVillageName = filters.villageName && u.villageId ? normalizeString(villageMap[u.villageId].name.toLowerCase()) : '';
         const normalizedCountry = filters.country ? normalizeString(filters.country.toLowerCase()) : '';
 
         if (filters.fullname) {
@@ -58,9 +58,13 @@ const Users = () => {
           const normalizedEmailValue = normalizeString(u.email.toLowerCase());
           return normalizedEmailValue.includes(normalizedEmail);
         }
-        if (filters.villageName && u.villageId) {
-          const normalizedVillage = normalizeString(villageMap[u.villageId].name.toLowerCase());
-          return normalizedVillage.includes(normalizedVillageName);
+        if (filters.villageName) {
+          const searchTerm = normalizeString(filters.villageName.toLowerCase());
+
+          if (!u.villageId || !villageMap[u.villageId]) {
+            return false;
+          }
+          return normalizedVillageName.includes(searchTerm);
         }
         if (filters.country) {
           const normalizedCountryName = u.country ? normalizeString(u.country?.name.toLowerCase()) : '';
