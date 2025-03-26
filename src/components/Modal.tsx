@@ -108,7 +108,6 @@ export const Modal = ({
 }: React.PropsWithChildren<ModalProps>) => {
   return (
     <Dialog
-      disableEnforceFocus
       disablePortal
       open={open}
       onClose={noCloseOutsideModal ? () => {} : onClose}
