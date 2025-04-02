@@ -201,27 +201,56 @@ const Users = () => {
             size="small"
           />
           <TextField label="Mail" value={filters.email} onChange={(e) => handleChange({ email: e.target.value })} variant="outlined" size="small" />
-          <TextField
-            label="Village Monde"
-            value={filters.villageName}
-            onChange={(e) => handleChange({ villageName: e.target.value })}
-            variant="outlined"
-            size="small"
-          />
-          <TextField
-            label="Pays"
-            value={filters.country}
-            onChange={(e) => handleChange({ country: e.target.value })}
-            variant="outlined"
-            size="small"
-          />
+
           <FormControl fullWidth size="small">
-            <InputLabel id="demo-simple-select-label">Rôle</InputLabel>
+            <InputLabel id="village-label">Village Monde</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
+              labelId="village-label"
+              id="village-select"
+              value={filters.villageName}
+              label="Village Monde" // fix display bug label
+              onChange={(e) => {
+                handleChange({ villageName: e.target.value });
+              }}
+            >
+              <MenuItem value="">
+                <em>Aucun</em>
+              </MenuItem>
+              {villages.map((village) => (
+                <MenuItem key={village.name} value={village.name}>
+                  {village.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth size="small">
+            <InputLabel id="country-label">Pays</InputLabel>
+            <Select
+              labelId="country-label"
+              id="country-select"
+              value={filters.country}
+              label="Pays" // fix display bug label
+              onChange={(e) => {
+                handleChange({ country: e.target.value });
+              }}
+            >
+              <MenuItem value="">
+                <em>Aucun</em>
+              </MenuItem>
+              {[...new Set(users.map((user) => user.country?.name))].map((countryName) => (
+                <MenuItem key={countryName} value={countryName}>
+                  {countryName}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth size="small">
+            <InputLabel id="role-label">Rôle</InputLabel>
+            <Select
+              labelId="role-label"
               id="demo-simple-select"
               value={filters.type}
-              label="Rôle" // Ceci est nécessaire pour l'espacement du label
+              label="Rôle" // vix bug display label
               onChange={(e) => {
                 handleChange({ type: e.target.value });
               }}
