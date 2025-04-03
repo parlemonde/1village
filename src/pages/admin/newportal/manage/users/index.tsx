@@ -250,7 +250,7 @@ const Users = () => {
               labelId="role-label"
               id="demo-simple-select"
               value={filters.type}
-              label="Rôle" // vix bug display label
+              label="Rôle" // fix bug display label
               onChange={(e) => {
                 handleChange({ type: e.target.value });
               }}

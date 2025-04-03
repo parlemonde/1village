@@ -114,7 +114,7 @@ const Villages = () => {
 
             {user && user.type === UserType.SUPER_ADMIN && (
               <>
-                <Button className="like-button blue" component="a" startIcon={<GetAppIcon />} onClick={onImportVillages}>
+                <Button className="like-button blue" component="a" startIcon={<GetAppIcon />} onClick={onImportVillages} sx={{ fontSize: '0.85rem' }}>
                   Importer depuis {SSO_HOSTNAME}
                 </Button>
                 <Link href="/admin/newportal/manage/villages/new">
@@ -124,6 +124,7 @@ const Villages = () => {
                     href="/admin/newportal/manage/villages/new"
                     style={{ flexShrink: 0 }}
                     startIcon={<AddCircleIcon />}
+                    sx={{ fontSize: '0.85rem' }}
                   >
                     Ajouter un village
                   </Button>

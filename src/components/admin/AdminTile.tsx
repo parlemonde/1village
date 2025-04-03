@@ -23,10 +23,11 @@ export const AdminTile = ({
         sx={{
           color: 'black',
           minHeight: 'unset',
-          padding: '8px 8px 8px 16px',
+          padding: '8px 0',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
         }}
+        disableGutters
       >
         <p style={{ flexBasis: '50%', padding: '6px 0' }}>
           {title} {selectLanguage}
