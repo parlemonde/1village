@@ -15,6 +15,7 @@ import TextField from '@mui/material/TextField';
 
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { CountrySelector } from 'src/components/selectors/CountrySelector';
+import { UserContext } from 'src/contexts/userContext';
 import { useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
 import { defaultOutlinedButtonStyle } from 'src/styles/variables.const';
@@ -33,6 +34,7 @@ const Required = (label: string) => (
 
 const NewUser = () => {
   const router = useRouter();
+  const { user } = React.useContext(UserContext);
   const { villages } = useVillages();
   const { addUser } = useUserRequests();
   const { enqueueSnackbar } = useSnackbar();
@@ -181,11 +183,13 @@ const NewUser = () => {
                 setNewUser((u) => ({ ...u, type: event.target.value as number }));
               }}
             >
-              {[UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN].map((type) => (
-                <MenuItem key={type} value={type}>
-                  {userTypeNames[type]}
-                </MenuItem>
-              ))}
+              {[UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR, UserType.TEACHER, UserType.FAMILY, UserType.OBSERVATOR]
+                .filter((type) => (type !== UserType.SUPER_ADMIN && type !== UserType.ADMIN ? true : user && user.type === UserType.SUPER_ADMIN))
+                .map((type) => (
+                  <MenuItem key={type} value={type}>
+                    {userTypeNames[type]}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
           <FormControl variant="standard" style={{ width: '100%', marginBottom: '1rem' }}>

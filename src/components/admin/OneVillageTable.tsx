@@ -10,7 +10,9 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
+import removeCountryFlagFromText from './manage/utils/removeCountryFlagFromText';
 import { primaryColorLight } from 'src/styles/variables.const';
+import { normalizeString } from 'src/utils/string';
 
 function paginate<T>(array: T[], pageSize: number, pageNumber: number): T[] {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
@@ -32,7 +34,9 @@ interface OneVillageTableProps {
   columns: Array<{ key: string; label: string; sortable?: boolean }>;
   actions?(id: string | number, index: number): React.ReactNode | React.ReactNodeArray;
   titleContent?: string;
+  footerElementsLabel?: string;
   usePagination?: boolean;
+  minTableHeightInPx?: number;
 }
 
 export const OneVillageTable = ({
@@ -43,10 +47,12 @@ export const OneVillageTable = ({
   columns,
   actions,
   titleContent,
+  footerElementsLabel = 'élément',
   usePagination: usePaginationProp,
+  minTableHeightInPx = 240,
 }: OneVillageTableProps) => {
   const theme = useTheme();
-  const color = admin ? 'white' : 'black';
+  // const color = admin ? 'white' : 'black';
   const backgroundColor = admin ? theme.palette.secondary.main : primaryColorLight;
   const [options, setTableOptions] = React.useState<TableOptions>({
     page: 1,
@@ -65,6 +71,7 @@ export const OneVillageTable = ({
       limit: parseInt(event.target.value, 10),
     }));
   };
+
   const onSortBy = (name: string) => () => {
     setTableOptions((prevOptions) => {
       if (prevOptions.order === name) {
@@ -74,7 +81,7 @@ export const OneVillageTable = ({
           sort: prevOptions.sort === 'asc' ? 'desc' : 'asc',
         };
       } else {
-        return { ...prevOptions, page: 1, order: name };
+        return { ...prevOptions, page: 1, order: name.toLowerCase() };
       }
     });
   };
@@ -84,8 +91,15 @@ export const OneVillageTable = ({
     const useSort = options.sort !== undefined && options.order !== undefined;
     const sortedData = useSort
       ? [...data].sort((a, b) => {
-          const aValue = a[options.order || ''] || '';
-          const bValue = b[options.order || ''] || '';
+          let aValue = a[options.order || ''] || '';
+          let bValue = b[options.order || ''] || '';
+
+          if (options.order === 'country' || options.order === 'countries') {
+            aValue = removeCountryFlagFromText(aValue as string);
+            bValue = removeCountryFlagFromText(bValue as string);
+          }
+          if (typeof aValue === 'string') aValue = normalizeString(aValue.toLowerCase());
+          if (typeof bValue === 'string') bValue = normalizeString(bValue.toLowerCase());
 
           if (aValue > bValue) {
             return options.sort === 'asc' ? 1 : -1;
@@ -101,110 +115,136 @@ export const OneVillageTable = ({
 
   return (
     <NoSsr>
-      <TableContainer component={Paper} sx={{ mb: '1rem' }}>
-        {titleContent && (
-          <Box sx={{ fontWeight: 'bold', display: 'flex', border: 'none', backgroundColor, p: '8px' }}>
-            <RemoveRedEyeIcon sx={{ mr: '6px' }} /> {titleContent}
-          </Box>
-        )}
-        <Table size="medium" aria-label={ariaLabel}>
-          {data.length === 0 ? (
-            <TableBody>
-              <TableRow>
-                <TableCell colSpan={columns.length + (actions ? 1 : 0)} align="center">
-                  {emptyPlaceholder || 'Cette liste est vide !'}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          ) : (
-            <>
-              <TableHead
-                style={{ borderBottom: '1px solid white' }}
-                sx={{
-                  fontWeight: 'bold',
-                  minHeight: 'unset',
-                  padding: '8px 8px 8px 16px',
-                  color,
-                  backgroundColor: admin ? backgroundColor : 'white',
-                }}
-              >
-                <TableRow>
-                  {columns.map((c) => (
-                    <TableCell key={c.key} style={{ color, fontWeight: 'bold' }}>
-                      {c.sortable ? (
-                        <TableSortLabel active={options.order === c.key} direction={options.sort} onClick={onSortBy(c.key)}>
-                          {c.label}
-                          {options.order === c.label ? (
-                            <span
-                              style={{
-                                border: 0,
-                                clip: 'rect(0 0 0 0)',
-                                height: 1,
-                                margin: -1,
-                                overflow: 'hidden',
-                                padding: 0,
-                                position: 'absolute',
-                                top: 20,
-                                width: 1,
-                              }}
-                            >
-                              {options.sort === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                            </span>
-                          ) : null}
-                        </TableSortLabel>
-                      ) : (
-                        c.label
-                      )}
-                    </TableCell>
-                  ))}
-                  {actions && (
-                    <TableCell style={{ color: 'white', fontWeight: 'bold' }} align="right">
-                      Actions
-                    </TableCell>
-                  )}
-                </TableRow>
-              </TableHead>
+      <Paper sx={{ width: '100%', overflow: 'hidden', border: '1px solid blue', borderRadius: '24px', boxShadow: 'none' }}>
+        <TableContainer sx={{ minHeight: `${minTableHeightInPx + 2}px` }}>
+          {titleContent && (
+            <Box sx={{ fontWeight: 'bold', display: 'flex', border: 'none', backgroundColor, p: '8px' }}>
+              <RemoveRedEyeIcon sx={{ mr: '6px' }} /> {titleContent}
+            </Box>
+          )}
+          <Table size="small" aria-label={ariaLabel} sx={{ tableLayout: 'fixed' }}>
+            {data.length === 0 ? (
               <TableBody>
-                {displayedData.map((d, index) => (
+                <TableRow sx={{ height: '242px' }}>
+                  <TableCell colSpan={columns.length + (actions ? 1 : 0)} align="center">
+                    {emptyPlaceholder || 'Cette liste est vide !'}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            ) : (
+              <>
+                <TableHead
+                  sx={{
+                    fontWeight: 'bold',
+                  }}
+                >
                   <TableRow
-                    key={d.id}
                     sx={{
-                      backgroundColor: 'white',
-                      '&:nth-of-type(even)': {
-                        backgroundColor: admin ? 'rgb(224 239 232)' : 'white',
-                      },
-                      '&.sortable-ghost': {
-                        opacity: 0,
+                      th: {
+                        paddingY: 2,
+                        borderBottom: '1px solid blue',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
                       },
                     }}
                   >
-                    {columns.map((c) => {
-                      return <TableCell key={`${d.id}_${c.key}`}>{d[c.key] !== undefined ? d[c.key] : ''}</TableCell>;
-                    })}
+                    {columns.map((c) => (
+                      <TableCell
+                        key={c.key}
+                        sx={{
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        {c.sortable ? (
+                          <TableSortLabel active={options.order === c.key} direction={options.sort} onClick={onSortBy(c.key)}>
+                            {c.label}
+                            {options.order === c.label ? (
+                              <span
+                                style={{
+                                  border: 0,
+                                  clip: 'rect(0 0 0 0)',
+                                  height: 1,
+                                  margin: -1,
+                                  overflow: 'hidden',
+                                  padding: 0,
+                                  position: 'absolute',
+                                  top: 20,
+                                  width: 1,
+                                }}
+                              >
+                                {options.sort === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                              </span>
+                            ) : null}
+                          </TableSortLabel>
+                        ) : (
+                          c.label
+                        )}
+                      </TableCell>
+                    ))}
                     {actions && (
-                      <TableCell align="right" padding="none" style={{ minWidth: '96px' }}>
-                        {actions(d.id, index)}
+                      <TableCell style={{ fontWeight: 'bold', width: '80px' }} align="right">
+                        Actions
                       </TableCell>
                     )}
                   </TableRow>
-                ))}
-                {usePagination && (
-                  <TableRow>
-                    <TablePagination
-                      rowsPerPageOptions={[5, 10, 25]}
-                      count={data.length}
-                      rowsPerPage={options.limit || 10}
-                      page={(options.page || 1) - 1}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                  </TableRow>
-                )}
-              </TableBody>
-            </>
+                </TableHead>
+                <TableBody
+                  sx={{
+                    td: {
+                      display: 'table-cell',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    },
+                  }}
+                >
+                  {displayedData.map((d, index) => (
+                    <TableRow key={d.id}>
+                      {columns.map((c) => {
+                        return (
+                          <TableCell key={`${d.id}_${c.key}`} size="small" title={typeof d[c.key] === 'string' ? (d[c.key] as string) : ''}>
+                            {d[c.key] !== undefined ? d[c.key] : ''}
+                          </TableCell>
+                        );
+                      })}
+                      {actions && (
+                        <TableCell align="right" padding="none" sx={{ width: '20px', color: 'blue' }}>
+                          {actions(d.id, index)}
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </>
+            )}
+          </Table>
+        </TableContainer>
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            justifyContent: 'flex-end',
+          }}
+        >
+          {usePagination && data.length > 5 ? (
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25, 50, 100]}
+              count={data.length}
+              rowsPerPage={options.limit || 10}
+              page={(options.page || 1) - 1}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              labelDisplayedRows={({ from, to, count }) => (
+                <span>{`${from} - ${to} sur ${count} ${footerElementsLabel}${data.length > 0 ? 's' : ''}`}</span>
+              )}
+            />
+          ) : (
+            <p style={{ margin: 0, padding: '1rem', textAlign: 'right', fontSize: '14px' }}>{`${data.length} ${footerElementsLabel}${
+              displayedData.length > 1 ? 's' : ''
+            }`}</p>
           )}
-        </Table>
-      </TableContainer>
+        </Box>
+      </Paper>
     </NoSsr>
   );
 };

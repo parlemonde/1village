@@ -15,6 +15,7 @@ import TextField from '@mui/material/TextField';
 
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { CountrySelector } from 'src/components/selectors/CountrySelector';
+import { UserContext } from 'src/contexts/userContext';
 import { useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
 import { getQueryString } from 'src/utils';
@@ -35,11 +36,13 @@ const Required = (label: string) => (
 const EditUser = () => {
   const router = useRouter();
 
+  const { user } = React.useContext(UserContext);
+
   const { villages } = useVillages();
   const { editUser } = useUserRequests();
   const { enqueueSnackbar } = useSnackbar();
-  const userId = React.useMemo(() => parseInt(getQueryString(router.query.id), 10) || 0, [router]);
-  const [user, setUser] = React.useState<User | null>(null);
+  const userToEditId = React.useMemo(() => parseInt(getQueryString(router.query.id), 10) || 0, [router]);
+  const [userToEdit, setUserToEdit] = React.useState<User | null>(null);
   const initialPseudo = React.useRef('');
 
   const [errors, setErrors] = React.useState({
@@ -50,44 +53,44 @@ const EditUser = () => {
   const getUser = React.useCallback(async () => {
     const response = await axiosRequest({
       method: 'GET',
-      url: `/users/${userId}`,
+      url: `/users/${userToEditId}`,
     });
     if (response.error) {
       router.push('/admin/newportal/manage/users');
     } else {
-      setUser(response.data);
+      setUserToEdit(response.data);
       initialPseudo.current = response.data.pseudo || '';
     }
-  }, [router, userId]);
+  }, [router, userToEditId]);
 
   React.useEffect(() => {
     getUser().catch((e) => console.error(e));
   }, [getUser]);
 
   const checkEmailAndPseudo = async () => {
-    if (user === null) {
+    if (userToEdit === null) {
       return;
     }
-    const pseudoValid = await isPseudoValid(user.pseudo, initialPseudo.current);
+    const pseudoValid = await isPseudoValid(userToEdit.pseudo, initialPseudo.current);
     setErrors((e) => ({
       ...e,
-      email: user.email !== undefined && !isEmailValid(user.email),
-      pseudo: user.pseudo !== undefined && !pseudoValid,
+      email: userToEdit.email !== undefined && !isEmailValid(userToEdit.email),
+      pseudo: userToEdit.pseudo !== undefined && !pseudoValid,
     }));
   };
 
-  if (user === null) {
+  if (userToEdit === null) {
     return <div></div>;
   }
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const requiredFields: Extract<keyof User, string>[] = ['email', 'pseudo', 'country'];
-    if (user.type === UserType.TEACHER) {
+    if (userToEdit.type === UserType.TEACHER) {
       requiredFields.push('villageId');
     }
     for (const field of requiredFields) {
-      if (!user[field]) {
+      if (!userToEdit[field]) {
         enqueueSnackbar('Certain champs requis (*) sont non remplis!', {
           variant: 'warning',
         });
@@ -102,15 +105,15 @@ const EditUser = () => {
       return;
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { position: _ignore, ...updatedValues } = user;
-    const result = await editUser({ ...updatedValues, villageId: user.villageId || null });
+    const { position: _ignore, ...updatedValues } = userToEdit;
+    const result = await editUser({ ...updatedValues, villageId: userToEdit.villageId || null });
     if (result !== null) {
       router.push('/admin/newportal/manage/users');
     }
   };
 
   const updateUserField = (field: Extract<keyof User, string>) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUser((u) => (!u ? null : { ...u, [field]: event.target.value }));
+    setUserToEdit((u) => (!u ? null : { ...u, [field]: event.target.value }));
   };
 
   return (
@@ -121,7 +124,7 @@ const EditUser = () => {
             <h1>Utilisateurs</h1>
           </MaterialLink>
         </Link>
-        <h1>{user.email}</h1>
+        <h1>{userToEdit.email}</h1>
       </Breadcrumbs>
       <AdminTile title="Modifier un utilisateur">
         <form autoComplete="off" style={{ width: '100%', padding: '1rem' }} onSubmit={onSubmit}>
@@ -129,7 +132,7 @@ const EditUser = () => {
             className="full-width"
             variant="standard"
             label={Required('Email')}
-            value={user.email}
+            value={userToEdit.email}
             onChange={updateUserField('email')}
             style={{ marginBottom: '1rem' }}
             helperText={errors.email ? 'Email invalide' : ''}
@@ -140,7 +143,7 @@ const EditUser = () => {
             className="full-width"
             variant="standard"
             label={Required('Pseudo')}
-            value={user.pseudo}
+            value={userToEdit.pseudo}
             onChange={updateUserField('pseudo')}
             style={{ marginBottom: '1rem' }}
             helperText={errors.pseudo ? 'Pseudo indisponible' : ''}
@@ -151,7 +154,7 @@ const EditUser = () => {
             className="full-width"
             variant="standard"
             label="Adresse de l'école"
-            value={user.address}
+            value={userToEdit.address}
             onChange={updateUserField('address')}
             style={{ marginBottom: '1rem' }}
           />
@@ -159,7 +162,7 @@ const EditUser = () => {
             className="full-width"
             variant="standard"
             label="Ville de l'école"
-            value={user.city}
+            value={userToEdit.city}
             onChange={updateUserField('city')}
             style={{ marginBottom: '1rem' }}
           />
@@ -167,7 +170,7 @@ const EditUser = () => {
             className="full-width"
             variant="standard"
             label="Code postal"
-            value={user.postalCode}
+            value={userToEdit.postalCode}
             onChange={updateUserField('postalCode')}
             style={{ marginBottom: '1rem' }}
           />
@@ -175,7 +178,7 @@ const EditUser = () => {
             className="full-width"
             variant="standard"
             label="École"
-            value={user.school}
+            value={userToEdit.school}
             onChange={updateUserField('school')}
             style={{ marginBottom: '1rem' }}
           />
@@ -183,7 +186,7 @@ const EditUser = () => {
             className="full-width"
             variant="standard"
             label="Niveau de la classe"
-            value={user.level}
+            value={userToEdit.level}
             onChange={updateUserField('level')}
             style={{ marginBottom: '1rem' }}
           />
@@ -193,27 +196,29 @@ const EditUser = () => {
               variant="standard"
               labelId="type-select"
               id="type-simple-select"
-              value={user.type}
+              value={userToEdit.type}
               onChange={(event) => {
-                setUser((u) => (!u ? null : { ...u, type: event.target.value as number }));
+                setUserToEdit((u) => (!u ? null : { ...u, type: event.target.value as number }));
               }}
             >
-              {[UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR, UserType.TEACHER, UserType.FAMILY, UserType.OBSERVATOR].map((type) => (
-                <MenuItem key={type} value={type}>
-                  {userTypeNames[type]}
-                </MenuItem>
-              ))}
+              {[UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR, UserType.TEACHER, UserType.FAMILY, UserType.OBSERVATOR]
+                .filter((type) => (type !== UserType.SUPER_ADMIN && type !== UserType.ADMIN ? true : user && user.type === UserType.SUPER_ADMIN))
+                .map((type) => (
+                  <MenuItem key={type} value={type}>
+                    {userTypeNames[type]}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
           <FormControl variant="standard" style={{ width: '100%', marginBottom: '1rem' }}>
-            <InputLabel id="village-select">{user.type === UserType.TEACHER ? Required('Village') : 'Village'}</InputLabel>
+            <InputLabel id="village-select">{userToEdit.type === UserType.TEACHER ? Required('Village') : 'Village'}</InputLabel>
             <Select
               variant="standard"
               labelId="village-select"
               id="village-simple-select"
-              value={user.villageId}
+              value={userToEdit.villageId}
               onChange={(event) => {
-                setUser((u) => (!u ? null : { ...u, villageId: event.target.value as number }));
+                setUserToEdit((u) => (!u ? null : { ...u, villageId: event.target.value as number }));
               }}
             >
               <MenuItem value={0}>Aucun</MenuItem>
@@ -226,12 +231,12 @@ const EditUser = () => {
           </FormControl>
           <CountrySelector
             label={Required('Pays')}
-            value={user.country?.isoCode}
+            value={userToEdit.country?.isoCode}
             onChange={(countryCode) => {
-              setUser((u) => (!u ? null : { ...u, country: { isoCode: countryCode, name: '' } }));
+              setUserToEdit((u) => (!u ? null : { ...u, country: { isoCode: countryCode, name: '' } }));
             }}
             filterCountries={
-              user.villageId ? villages.find((v) => v.id === user.villageId)?.countries?.map((c) => c.isoCode) || undefined : undefined
+              userToEdit.villageId ? villages.find((v) => v.id === userToEdit.villageId)?.countries?.map((c) => c.isoCode) || undefined : undefined
             }
             style={{ width: '100%', marginBottom: '1rem' }}
           />

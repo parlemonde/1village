@@ -6,7 +6,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import GetAppIcon from '@mui/icons-material/GetApp';
-import { Box, Button, NoSsr, TextField, Typography } from '@mui/material';
+import { Box, Button, NoSsr, TextField } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
@@ -15,15 +15,19 @@ import Tooltip from '@mui/material/Tooltip';
 import { Modal } from 'src/components/Modal';
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { OneVillageTable } from 'src/components/admin/OneVillageTable';
+import { UserContext } from 'src/contexts/userContext';
 import { useVillages, useVillageRequests } from 'src/services/useVillages';
-import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import BackArrow from 'src/svg/back-arrow.svg';
 import { countryToFlag } from 'src/utils';
 import { SSO_HOSTNAME } from 'src/utils/sso';
+import { normalizeString } from 'src/utils/string';
 import type { Country } from 'types/country.type';
+import { UserType } from 'types/user.type';
 
 const Villages = () => {
   const router = useRouter();
+  const { user } = React.useContext(UserContext);
+
   const { villages } = useVillages();
   const { deleteVillage, importVillages } = useVillageRequests();
   const [isLoading, setIsLoading] = React.useState(false);
@@ -33,7 +37,12 @@ const Villages = () => {
   const filteredVillages = useMemo(
     () =>
       villages.filter((v) => {
-        const searchMatch = [v.name, ...v.countries.map((c) => c.name)].some((field) => field.toLowerCase().includes(search.toLowerCase()));
+        const normalizedSearch = normalizeString(search.toLowerCase());
+        const normalizedName = normalizeString(v.name.toLowerCase());
+        const normalizedCountries = v.countries.map((c) => normalizeString(c.name.toLowerCase()));
+
+        const searchMatch = normalizedName.includes(normalizedSearch) || normalizedCountries.some((country) => country.includes(normalizedSearch));
+
         return searchMatch;
       }),
     [villages, search],
@@ -57,6 +66,7 @@ const Villages = () => {
     <>
       <Tooltip title="Modifier">
         <IconButton
+          sx={{ color: 'blue' }}
           aria-label="edit"
           onClick={() => {
             router.push(`/admin/newportal/manage/villages/edit/${id}`);
@@ -67,6 +77,7 @@ const Villages = () => {
       </Tooltip>
       <Tooltip title="Supprimer">
         <IconButton
+          sx={{ color: 'blue' }}
           aria-label="delete"
           onClick={() => {
             setDeleteIndex(villages.findIndex((v) => v.id === id));
@@ -87,55 +98,44 @@ const Villages = () => {
         </div>
       </Link>
       <AdminTile
-        title="Liste des villages"
+        title="Il y a ici la liste complète des villages de 1Village"
         toolbarButton={
           <Box
             sx={{
               display: 'flex',
+              gap: 1,
               flexDirection: {
                 xs: 'column',
                 md: 'row',
               },
             }}
           >
-            <Button
-              color="inherit"
-              sx={(theme) => ({ ...defaultContainedButtonStyle, [theme.breakpoints.down('md')]: { margin: '0 0 1rem 0' } })}
-              variant="contained"
-              style={{ flexShrink: 0, marginRight: '0.5rem' }}
-              startIcon={<GetAppIcon />}
-              onClick={onImportVillages}
-            >
-              Importer depuis {SSO_HOSTNAME}
-            </Button>
-            <Link href="/admin/newportal/manage/villages/new">
-              <Button
-                color="inherit"
-                sx={defaultContainedButtonStyle}
-                component="a"
-                href="/admin/newportal/manage/villages/new"
-                variant="contained"
-                style={{ flexShrink: 0 }}
-                startIcon={<AddCircleIcon />}
-              >
-                Ajouter un village
-              </Button>
-            </Link>
+            {/* add flex row on media query md */}
+
+            {user && user.type === UserType.SUPER_ADMIN && (
+              <>
+                <Button className="like-button blue" component="a" startIcon={<GetAppIcon />} onClick={onImportVillages} sx={{ fontSize: '0.85rem' }}>
+                  Importer depuis {SSO_HOSTNAME}
+                </Button>
+                <Link href="/admin/newportal/manage/villages/new">
+                  <Button
+                    className="like-button blue"
+                    component="a"
+                    href="/admin/newportal/manage/villages/new"
+                    style={{ flexShrink: 0 }}
+                    startIcon={<AddCircleIcon />}
+                    sx={{ fontSize: '0.85rem' }}
+                  >
+                    Ajouter un village
+                  </Button>
+                </Link>
+              </>
+            )}
           </Box>
         }
       >
         <Box style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem', marginTop: '1rem' }}>
-          <Typography variant="subtitle1" style={{ marginRight: '1rem', marginLeft: '1rem' }}>
-            Filtres villages :
-          </Typography>
-          <TextField
-            label="Rechercher par nom de village ou pays"
-            value={search}
-            onChange={handleChange}
-            variant="outlined"
-            size="small"
-            style={{ marginRight: '1rem' }}
-          />
+          <TextField label="Village ou pays" value={search} onChange={handleChange} variant="outlined" size="small" style={{ marginRight: '1rem' }} />
         </Box>
         <Box sx={{ overflow: 'auto' }}>
           <OneVillageTable
@@ -148,19 +148,24 @@ const Villages = () => {
                 </Link>
               </>
             }
+            footerElementsLabel="village"
             data={filteredVillages.map((v) => ({
               ...v,
               countries: countriesToText(v.countries),
+              registeredClassrooms: 0,
+              connectedClassrooms: 0,
               userCount: 0,
               postCount: 0,
             }))}
             columns={[
               { key: 'name', label: 'Nom du village', sortable: true },
-              { key: 'countries', label: 'Pays' },
+              { key: 'countries', label: 'Pays', sortable: true },
+              { key: 'registeredClassrooms', label: 'Classes inscrites', sortable: true },
+              { key: 'connectedClassrooms', label: 'Classes connectées', sortable: true },
               { key: 'userCount', label: 'Nombre de classes', sortable: true },
               { key: 'postCount', label: 'Nombre de posts', sortable: true },
             ]}
-            actions={actions}
+            actions={user?.type === UserType.SUPER_ADMIN ? actions : undefined}
           />
         </Box>
       </AdminTile>

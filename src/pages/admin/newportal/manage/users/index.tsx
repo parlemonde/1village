@@ -1,23 +1,18 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useCallback, useMemo, useState } from 'react';
+import type { SetStateAction } from 'react';
+import React, { useMemo, useState } from 'react';
 
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DownloadIcon from '@mui/icons-material/Download';
-import EditIcon from '@mui/icons-material/Edit';
-import type { SelectChangeEvent } from '@mui/material';
-import { Box, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
-import IconButton from '@mui/material/IconButton';
 import NoSsr from '@mui/material/NoSsr';
-import Tooltip from '@mui/material/Tooltip';
 
 import { useUsers } from 'src/api/user/user.list';
 import { Modal } from 'src/components/Modal';
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { OneVillageTable } from 'src/components/admin/OneVillageTable';
+import OneVillageTableActionMenu from 'src/components/admin/OneVillageTableActionMenu';
+import { ManageUsersHeaders } from 'src/components/admin/manage/utils/tableHeaders';
 import { UserContext } from 'src/contexts/userContext';
 import { useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
@@ -25,14 +20,17 @@ import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import BackArrow from 'src/svg/back-arrow.svg';
 import { countryToFlag } from 'src/utils';
 import { exportJsonToCsv } from 'src/utils/csv-export';
-import { userTypeNames } from 'types/user.type';
+import { normalizeString } from 'src/utils/string';
+import type { UserFilter } from 'types/manage.type';
+import { UserType, userTypeNames } from 'types/user.type';
 import type { Village } from 'types/village.type';
 
 const Users = () => {
   const router = useRouter();
   const { user } = React.useContext(UserContext);
-  const { data, isLoading } = useUsers();
+  const { data } = useUsers();
   const users = React.useMemo(() => data || [], [data]);
+  const [filters, setFilters] = useState<UserFilter>({});
   const { villages } = useVillages();
   const villageMap = villages.reduce<{ [key: number]: Village }>((acc, village) => {
     acc[village.id] = village;
@@ -40,47 +38,64 @@ const Users = () => {
   }, {});
   const { deleteUser } = useUserRequests();
   const [deleteIndex, setDeleteIndex] = React.useState(-1);
-  const [search, setSearch] = useState('');
-  const [userTypeFilter, setUserTypeFilter] = useState('');
-  const [countrySearch, setCountrySearch] = useState('');
+
+  const TABLE_ENTRIES_BY_PAGE = 5;
 
   const filteredUsers = useMemo(
     () =>
       users.filter((u) => {
-        const searchMatch = [u.pseudo, u.email].some((field) => field?.toLowerCase().includes(search.toLowerCase()));
-        const countryMatch = u.country?.isoCode.toLowerCase().includes(countrySearch.toLowerCase());
-        const userTypeMatch = userTypeFilter ? u.type === parseInt(userTypeFilter) : true;
+        const normalizedFullname = filters.fullname ? normalizeString(filters.fullname.toLowerCase()) : '';
+        const normalizedEmail = filters.email ? normalizeString(filters.email.toLowerCase()) : '';
+        const normalizedVillageName = filters.villageName && u.villageId ? normalizeString(villageMap[u.villageId].name.toLowerCase()) : '';
+        const normalizedCountry = filters.country ? normalizeString(filters.country.toLowerCase()) : '';
 
-        return searchMatch && userTypeMatch && countryMatch;
+        if (filters.fullname) {
+          const normalizedFirstname = normalizeString(u.firstname.toLowerCase());
+          const normalizedLastname = normalizeString(u.lastname.toLowerCase());
+          return [normalizedFirstname, normalizedLastname].some((field) => field.includes(normalizedFullname));
+        }
+        if (filters.email) {
+          const normalizedEmailValue = normalizeString(u.email.toLowerCase());
+          return normalizedEmailValue.includes(normalizedEmail);
+        }
+        if (filters.villageName) {
+          const searchTerm = normalizeString(filters.villageName.toLowerCase());
+
+          if (!u.villageId || !villageMap[u.villageId]) {
+            return false;
+          }
+          return normalizedVillageName.includes(searchTerm);
+        }
+        if (filters.country) {
+          const normalizedCountryName = u.country ? normalizeString(u.country?.name.toLowerCase()) : '';
+          return normalizedCountryName.includes(normalizedCountry);
+        }
+        if (filters.type !== undefined || (filters.type && parseInt(filters.type) === 0)) {
+          return u.type === parseInt(filters.type);
+        }
+
+        return true;
       }),
-    [users, search, userTypeFilter, countrySearch],
-  );
-  const tableData = useMemo(
-    () =>
-      filteredUsers.map((u) => ({
-        ...u,
-        country: u.country ? `${countryToFlag(u.country?.isoCode)} ${u.country?.name}` : <span style={{ color: 'grey' }}>Non renseignée</span>,
-        village: u.villageId ? (
-          villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
-        ) : (
-          <span style={{ color: 'grey' }}>Non assigné</span>
-        ),
-        type: <Chip size="small" label={userTypeNames[u.type]} />,
-      })),
-    [filteredUsers, villageMap],
+    [users, filters.type, filters.fullname, filters.email, filters.villageName, filters.country, villageMap],
   );
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-  }, []);
+  const tableData = useMemo(() => {
+    return filteredUsers.map((u) => ({
+      ...u,
+      country: u.country ? `${countryToFlag(u.country?.isoCode)} ${u.country?.name}` : <span style={{ color: 'grey' }}>Non renseignée</span>,
+      village: u.villageId ? (
+        villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
+      ) : (
+        <span style={{ color: 'grey' }}>Non assigné</span>
+      ),
+      type: userTypeNames[u.type],
+      position: null,
+    }));
+  }, [filteredUsers, villageMap]);
 
-  const handleCountryChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setCountrySearch(e.target.value);
-  }, []);
-
-  const handleSelect = useCallback((e: SelectChangeEvent<string>) => {
-    setUserTypeFilter(e.target.value);
-  }, []);
+  const handleChange = (updatedFilter: SetStateAction<UserFilter>) => {
+    setFilters({ ...filters, ...updatedFilter });
+  };
 
   const handleExportToCSV = () => {
     if (filteredUsers.length === 0) {
@@ -104,7 +119,7 @@ const Users = () => {
     let userLabel = 'liste-utilisateurs-';
 
     for (const [key, value] of Object.entries(userTypeNames)) {
-      if (key === userTypeFilter) {
+      if (key === filters.type) {
         userLabel = 'liste-' + value.toLowerCase().replaceAll(' ', '-') + 's-';
       }
     }
@@ -115,30 +130,30 @@ const Users = () => {
   };
 
   const actions = (id: number) => (
-    <>
-      <Tooltip title="Modifier">
-        <IconButton
-          aria-label="edit"
-          onClick={() => {
-            router.push(`/admin/newportal/manage/users/edit/${id}`);
-          }}
-        >
-          <EditIcon />
-        </IconButton>
-      </Tooltip>
-      {user && user.id !== id && (
-        <Tooltip title="Supprimer">
-          <IconButton
-            aria-label="delete"
-            onClick={() => {
-              setDeleteIndex(users.findIndex((u) => u.id === id));
-            }}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </>
+    <OneVillageTableActionMenu>
+      <MenuItem
+        aria-label="edit"
+        onClick={() => {
+          router.push(`/admin/newportal/manage/users/edit/${id}`);
+        }}
+      >
+        Modifier
+      </MenuItem>
+      <MenuItem aria-label="analyse" onClick={() => {}} disabled>
+        Analyser
+      </MenuItem>
+      <MenuItem aria-label="unblock" onClick={() => {}} disabled>
+        Débloquer
+      </MenuItem>
+      <MenuItem
+        aria-label="delete"
+        onClick={() => {
+          setDeleteIndex(users.findIndex((u) => u.id === id));
+        }}
+      >
+        Supprimer
+      </MenuItem>
+    </OneVillageTableActionMenu>
   );
 
   return (
@@ -150,94 +165,117 @@ const Users = () => {
         </div>
       </Link>
       <AdminTile
-        title="Liste des utilisateurs"
+        title="Il y a ici la liste complète des utilisateurs de 1Village"
         toolbarButton={
-          <Link href="/admin/newportal/manage/users/new" passHref>
-            <Button
-              color="inherit"
-              sx={defaultContainedButtonStyle}
-              component="a"
-              href="/admin/newportal/manage/users/new"
-              variant="contained"
-              style={{ flexShrink: 0 }}
-              startIcon={<AddCircleIcon />}
-            >
-              Ajouter un utilisateur
-            </Button>
-          </Link>
+          user &&
+          (user.type === UserType.SUPER_ADMIN || user.type === UserType.ADMIN) && (
+            <Box style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', margin: '16px 0' }}>
+              <Button className="like-button blue" component="a" onClick={handleExportToCSV} disabled={filteredUsers.length === 0}>
+                Exporter en CSV
+              </Button>
+              <Link href="/admin/newportal/manage/users/new" passHref>
+                <Button className="like-button blue" sx={defaultContainedButtonStyle} component="a" href="/admin/newportal/manage/users/new">
+                  Ajouter un utilisateur
+                </Button>
+              </Link>
+            </Box>
+          )
         }
       >
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', marginBottom: '1rem', marginTop: '1rem', gap: '5px' }}>
-          <Typography variant="subtitle1" style={{ marginRight: '1rem', marginLeft: '1rem' }}>
-            Filtres utilisateurs :
-          </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            gap: '12px',
+            width: '75%',
+            margin: '16px 0',
+            '& > *': {
+              flex: 1,
+            },
+          }}
+        >
           <TextField
-            label="Rechercher par email ou pseudo"
-            value={search}
-            onChange={handleChange}
+            label="Prénom et nom"
+            value={filters.fullname}
+            onChange={(e) => handleChange({ fullname: e.target.value })}
             variant="outlined"
             size="small"
-            style={{ marginRight: '1rem' }}
           />
-          <TextField
-            label="Rechercher par code pays"
-            value={countrySearch}
-            onChange={handleCountryChange}
-            variant="outlined"
-            size="small"
-            style={{ marginRight: '1rem' }}
-          />
-          <FormControl variant="outlined" size="small" sx={{ minWidth: '10rem' }}>
-            <InputLabel htmlFor="user-type-filter">Filtrer par rôle</InputLabel>
+          <TextField label="Mail" value={filters.email} onChange={(e) => handleChange({ email: e.target.value })} variant="outlined" size="small" />
+
+          <FormControl fullWidth size="small">
+            <InputLabel id="village-label">Village Monde</InputLabel>
             <Select
-              label="Filtrer par rôle"
-              value={userTypeFilter}
-              onChange={handleSelect}
-              inputProps={{
-                name: 'user-type-filter',
-                id: 'user-type-filter',
+              labelId="village-label"
+              id="village-select"
+              value={filters.villageName}
+              label="Village Monde" // fix display bug label
+              onChange={(e) => {
+                handleChange({ villageName: e.target.value });
               }}
             >
               <MenuItem value="">
-                <em>Tous les rôles</em>
+                <em>Aucun</em>
               </MenuItem>
-              {Object.entries(userTypeNames).map(([value, label]) => (
-                <MenuItem key={value} value={value}>
-                  {label}
+              {villages.map((village) => (
+                <MenuItem key={village.name} value={village.name}>
+                  {village.name}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-          <Button
-            color="inherit"
-            sx={defaultContainedButtonStyle}
-            component="a"
-            onClick={handleExportToCSV}
-            variant="contained"
-            style={{ flexShrink: 0, marginLeft: '1rem' }}
-            startIcon={<DownloadIcon />}
-            disabled={filteredUsers.length === 0}
-          >
-            Exporter en CSV
-          </Button>
-        </div>
-        <Box sx={{ overflow: 'auto' }}>
-          <OneVillageTable
-            admin
-            emptyPlaceholder={isLoading ? 'Chargement...' : "Vous n'avez pas encore d'utilisateur !"}
-            data={tableData.map((data) => ({ ...data, position: null }))} // remove position attribute from data
-            columns={[
-              { key: 'firstname', label: 'Prénom', sortable: true },
-              { key: 'lastname', label: 'Nom', sortable: true },
-              { key: 'email', label: 'Email', sortable: true },
-              { key: 'school', label: 'École', sortable: true },
-              { key: 'village', label: 'Village', sortable: true },
-              { key: 'country', label: 'Pays', sortable: true },
-              { key: 'type', label: 'Rôle', sortable: true },
-            ]}
-            actions={actions}
-          />
+          <FormControl fullWidth size="small">
+            <InputLabel id="country-label">Pays</InputLabel>
+            <Select
+              labelId="country-label"
+              id="country-select"
+              value={filters.country}
+              label="Pays" // fix display bug label
+              onChange={(e) => {
+                handleChange({ country: e.target.value });
+              }}
+            >
+              <MenuItem value="">
+                <em>Aucun</em>
+              </MenuItem>
+              {[...new Set(users.map((user) => user.country?.name))].map((countryName) => (
+                <MenuItem key={countryName} value={countryName}>
+                  {countryName}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth size="small">
+            <InputLabel id="role-label">Rôle</InputLabel>
+            <Select
+              labelId="role-label"
+              id="demo-simple-select"
+              value={filters.type}
+              label="Rôle" // fix bug display label
+              onChange={(e) => {
+                handleChange({ type: e.target.value });
+              }}
+            >
+              <MenuItem value="">
+                <em>Aucun</em>
+              </MenuItem>
+              {[UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR, UserType.TEACHER, UserType.FAMILY, UserType.OBSERVATOR].map((type) => (
+                <MenuItem key={type} value={type}>
+                  {userTypeNames[type]}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Box>
+
+        <OneVillageTable
+          admin={true}
+          emptyPlaceholder={undefined}
+          data={tableData}
+          columns={ManageUsersHeaders}
+          actions={actions}
+          usePagination={tableData.length > TABLE_ENTRIES_BY_PAGE}
+          footerElementsLabel="utilisateur"
+        />
       </AdminTile>
       <NoSsr>
         <Modal
