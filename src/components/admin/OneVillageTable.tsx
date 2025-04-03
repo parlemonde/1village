@@ -202,7 +202,7 @@ export const OneVillageTable = ({
                     <TableRow key={d.id}>
                       {columns.map((c) => {
                         return (
-                          <TableCell key={`${d.id}_${c.key}`} size="small">
+                          <TableCell key={`${d.id}_${c.key}`} size="small" title={typeof d[c.key] === 'string' ? (d[c.key] as string) : ''}>
                             {d[c.key] !== undefined ? d[c.key] : ''}
                           </TableCell>
                         );
