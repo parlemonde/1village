@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { TextField, Switch, Button } from '@mui/material';
 
@@ -22,32 +22,28 @@ import { primaryColor } from 'src/styles/variables.const';
 const ContenuLibre = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { updateActivity, save } = useActivity();
-  const { data: activity } = useGetOneActivityById({ id: Number(id) });
+  const { activity, updateActivity, save } = useActivity();
+  const { data: fetchedActivity } = useGetOneActivityById({ id: Number(id) });
   const { user } = React.useContext(UserContext);
   const [selectedImageUrl, setSelectedImageUrl] = React.useState<string | undefined>(undefined);
   const [isAllImagesModalOpen, setIsAllImagesModalOpen] = React.useState(false);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
 
+  useEffect(() => {
+    if (fetchedActivity && (!activity || activity.id !== fetchedActivity.id)) {
+      updateActivity(fetchedActivity);
+    }
+  }, [fetchedActivity, activity, updateActivity]);
+
   const data = (activity?.data as FreeContentData) || null;
 
   const hasContentImages = React.useMemo(() => activity !== null && activity.content.some((c: { type: string }) => c.type === 'image'), [activity]);
   const imageUrl = React.useMemo(() => getImage(activity?.content ?? [], data), [activity, data]);
-  const [localData, setLocalData] = React.useState<FreeContentData | null>(null);
-
-  React.useEffect(() => {
-    if (activity && activity.data) {
-      setLocalData(activity.data as FreeContentData);
-    }
-  }, [activity]);
 
   const dataChange = (key: keyof FreeContentData) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.slice(0, 400);
-
-    setLocalData((prevData) => {
-      const newData = { ...prevData, [key]: value } as FreeContentData;
-      return newData;
-    });
+    const newData = { ...data, [key]: value };
+    updateActivity({ data: newData });
   };
 
   if (!activity || !user) {
@@ -63,8 +59,10 @@ const ContenuLibre = () => {
   };
 
   const onNext = async () => {
-    save().catch(console.error);
-    router.push(`/admin/newportal/contenulibre/edit/3/${id}`);
+    const success = await save();
+    if (success) {
+      router.push(`/admin/newportal/contenulibre/edit/3/${id}`);
+    }
   };
 
   return (
@@ -78,7 +76,7 @@ const ContenuLibre = () => {
             Vous pouvez également décider de mettre votre publication à l&apos;avant, tout en haut du fil d&apos;actualité.
           </p>
           <TextField
-            value={localData?.title || ''}
+            value={data.title}
             onChange={dataChange('title')}
             label="Titre de votre publication"
             variant="outlined"
@@ -89,7 +87,7 @@ const ContenuLibre = () => {
           />
 
           <TextField
-            value={localData?.resume || ''}
+            value={data.resume}
             onChange={dataChange('resume')}
             label="Extrait votre publication"
             variant="outlined"
