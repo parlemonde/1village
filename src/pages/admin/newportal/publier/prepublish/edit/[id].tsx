@@ -157,7 +157,7 @@ const ModifPrepublish = () => {
         const villagesToAdd = selectedVillages.filter((villageId) => !publishedVillageIds.includes(villageId));
         const villagesToDelete = publishedVillageIds.filter((villageId) => !selectedVillages.includes(villageId));
 
-        if (Number(selectedPhase) !== childrenActivities[0].phase) {
+        if (childrenActivities.length > 0 && Number(selectedPhase) !== childrenActivities[0].phase) {
           await Promise.all(
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
@@ -198,6 +198,22 @@ const ModifPrepublish = () => {
     }
   };
 
+  const isModificationDisabled = () => {
+    if (isLoading) return true;
+
+    const hasPublishedVillages = publishedVillageIds.length > 0;
+    const hasSelectedVillages = selectedVillages.length > 0;
+
+    const areVillagesTheSame =
+      publishedVillageIds.length === selectedVillages.length && publishedVillageIds.every((id: number) => selectedVillages.includes(id));
+
+    const phaseChanged = childrenActivities.length > 0 && childrenActivities[0]?.phase !== Number(selectedPhase);
+
+    const noChangesMade = areVillagesTheSame && !phaseChanged;
+
+    return (!hasSelectedVillages && !hasPublishedVillages) || noChangesMade;
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80vw' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '10px' }}>
@@ -208,7 +224,7 @@ const ModifPrepublish = () => {
           <h1>{activityParent?.data?.title}</h1>
         </div>
         <div>
-          <Button variant="contained" color="primary" onClick={handlePublish} disabled={isLoading || selectedVillages.length < 1}>
+          <Button variant="contained" color="primary" onClick={handlePublish} disabled={isModificationDisabled()}>
             Modifier
             {isLoading && (
               <Box sx={{ display: 'flex', paddingLeft: '1rem' }}>
