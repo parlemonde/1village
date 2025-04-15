@@ -465,6 +465,11 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
               {found && <p>C’est exact ! Vous avez trouvé {displayPhrasesByType.phraseDelamodal}.</p>}
             </Grid>
           </Grid>
+          <Grid style={{ textAlign: 'right' }}>
+            <Button variant="outlined" color="primary" onClick={getNextGame}>
+              Jeu suivant
+            </Button>
+          </Grid>
           <Grid>{getOneGameById ? <ActivityComments activity={getOneGameById} usersMap={usersMap} /> : null}</Grid>
         </Box>
         <Modal
@@ -483,28 +488,21 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
           )}
         </Modal>
         <AlreadyPlayedModal handleSuccessClick={handleConfirmModal} isOpen={isGameModalOpen} gameId={gameId} />
-        <Grid container justifyContent="space-between">
-          <Grid item xs={6}>
-            {(found || tryCount > 1) && (
-              <div style={{ textAlign: 'left' }}>
-                <p
-                  style={{
-                    margin: '0.5rem 1rem',
-                    textDecorationLine: 'underline',
-                  }}
-                >
-                  <Link href="/" passHref>
-                    {"Revenir à l'accueil"}
-                  </Link>
-                </p>
-              </div>
-            )}
-          </Grid>
-          <Grid item xs={3} display="flex" justifyContent="flex-end">
-            <Button variant="outlined" color="primary" onClick={getNextGame}>
-              Jeu suivant
-            </Button>
-          </Grid>
+        <Grid item xs={6}>
+          {(found || tryCount > 1 || true) && (
+            <div style={{ textAlign: 'left' }}>
+              <p
+                style={{
+                  margin: '0.5rem 1rem',
+                  textDecorationLine: 'underline',
+                }}
+              >
+                <Link href="/" passHref>
+                  {"Revenir à l'accueil"}
+                </Link>
+              </p>
+            </div>
+          )}
         </Grid>
       </div>
     </Base>
