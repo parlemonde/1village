@@ -278,6 +278,20 @@ a.text--success:hover {
 .button-error {
   border-color: $error-color;
 }
+
+.warning-button {
+  border: solid 1px $primary-color;
+  color: $error-color;
+  border-radius: 5px;
+  padding: 0.5rem;
+  background-color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: rgba($error-color, 0.15);
+  }
+}
 .bg-success {
   background-color: $success-color;
 }
