@@ -139,6 +139,6 @@ export class Activity implements ActivityInterface<AnyData> {
   @JoinColumn({ name: 'classroomId' })
   public classroom: Classroom;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   public classroomId: number;
 }

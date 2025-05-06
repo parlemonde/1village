@@ -96,7 +96,7 @@ export const getContributedClassroomsCount = async (
   }
 
   const result = await queryBuilder.getRawOne();
-  return parseInt(result.classroomsCount, 10);
+  return parseInt(result?.classroomsCount, 10);
 };
 
 export const normalizeForCountry = (inputData: any) => {
