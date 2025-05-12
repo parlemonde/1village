@@ -22,12 +22,8 @@ const Gerer = () => {
   }
   const links: Link[] = [
     { name: 'Les villages-mondes', link: '/admin/newportal/manage/villages', rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
-    { name: 'Les utilisateurs', link: '/admin/newportal/manage/users', rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
-    {
-      name: 'Les consignes des activités',
-      link: '/admin/newportal/manage/activities',
-      rights: [UserType.SUPER_ADMIN],
-    },
+    { name: 'Les utilisateurs', link: '/admin/newportal/manage/users', rights: [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.MEDIATOR] },
+    { name: 'Les consignes des activités', link: '/admin/newportal/manage/activities', rights: [UserType.SUPER_ADMIN] },
     { name: 'Paramétrer 1Village', link: '/admin/newportal/manage/settings', rights: [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.MEDIATOR] },
     { name: "Les droits d'accès", link: '/admin/newportal/manage/access', rights: [UserType.SUPER_ADMIN] },
   ];

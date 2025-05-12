@@ -225,6 +225,18 @@ statisticsController.get({ path: '/villages/:villageId' }, async (_req, res) => 
   });
 });
 
+statisticsController.get({ path: '/countries/:countryId' }, async (_req, res) => {
+  const countryId = _req.params.countryId;
+  const phase = _req.query.phase as unknown as number;
+  res.sendJSON({
+    familyAccountsCount: await getFamilyAccountsCountForCountry(countryId, phase),
+    childrenCodesCount: await getChildrenCodesCountForCountry(countryId, phase),
+    connectedFamiliesCount: await getConnectedFamiliesCountForCountry(countryId, phase),
+    familiesWithoutAccount: await getFamiliesWithoutAccountForCountry(countryId),
+    floatingAccounts: await getFloatingAccountsForCountry(countryId),
+  });
+});
+
 statisticsController.get({ path: '/classrooms/:classroomId' }, async (_req, res) => {
   const classroomId = parseInt(_req.params.classroomId);
   const phase = _req.query.phase as unknown as number;

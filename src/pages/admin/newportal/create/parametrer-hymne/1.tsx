@@ -46,10 +46,10 @@ const AnthemStep1 = () => {
     if (!created.current) {
       if (!('activity-id' in router.query) && !('edit' in router.query)) {
         created.current = true;
-        createActivityIfNotExist(ActivityType.ANTHEM, selectedPhase, undefined, DEFAULT_ANTHEM_DATA, true);
+        createActivityIfNotExist(ActivityType.ANTHEM, selectedPhase, undefined, DEFAULT_ANTHEM_DATA, true, true);
       } else if (activity && !isAnthem(activity)) {
         created.current = true;
-        createActivityIfNotExist(ActivityType.ANTHEM, selectedPhase, undefined, DEFAULT_ANTHEM_DATA, true);
+        createActivityIfNotExist(ActivityType.ANTHEM, selectedPhase, undefined, DEFAULT_ANTHEM_DATA, true, true);
       }
     }
 

@@ -2,7 +2,6 @@ import React from 'react';
 
 import Paper from '@mui/material/Paper';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 
 interface AdminTileProps {
   title: string;
@@ -19,22 +18,21 @@ export const AdminTile = ({
   style = {},
 }: React.PropsWithChildren<AdminTileProps>) => {
   return (
-    <Paper style={{ ...style }}>
+    <Paper style={{ ...style, boxShadow: 'none' }}>
       <Toolbar
         sx={{
-          backgroundColor: (theme) => theme.palette.secondary.main,
-          color: 'white',
-          fontWeight: 'bold',
+          color: 'black',
           minHeight: 'unset',
-          padding: '8px 8px 8px 16px',
+          padding: '8px 0',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
         }}
+        disableGutters
       >
-        <Typography variant="h2" id="themetabletitle" component="div" sx={{ flexBasis: '50%', padding: '6px 0' }}>
+        <p style={{ flexBasis: '50%', padding: '6px 0' }}>
           {title} {selectLanguage}
-        </Typography>
-        {toolbarButton}
+        </p>
+        <div style={{ marginLeft: 'auto' }}>{toolbarButton}</div>
       </Toolbar>
       {children}
     </Paper>
