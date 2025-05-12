@@ -7,9 +7,57 @@ import TooltipMouseTracker from '../TooltipMouseTracker/TooltipMouseTracker';
 import { countryToFlag } from 'src/utils';
 import styles from './DashboardWorldMap.module.css';
 
+type CountryStatus = 'active' | 'observer' | 'ghost' | 'absent';
+
+interface CountryData {
+  iso2: string;
+  status: CountryStatus;
+}
+
+const testData: CountryData[] = [
+  { iso2: 'FR', status: 'active' }, // France
+  { iso2: 'DE', status: 'observer' }, // Allemagne
+  { iso2: 'ES', status: 'ghost' }, // Espagne
+  { iso2: 'IT', status: 'absent' }, // Italie
+  { iso2: 'GB', status: 'active' }, // Royaume-Uni
+  { iso2: 'PT', status: 'observer' }, // Portugal
+  { iso2: 'GR', status: 'ghost' }, // Grèce
+  { iso2: 'BE', status: 'active' }, // Belgique
+];
+
+const getCountryColor = (status: CountryStatus) => {
+  switch (status) {
+    case 'active':
+      return '#4CC64A';
+    case 'observer':
+      return '#6082FC';
+    case 'ghost':
+      return '#FFD678';
+    case 'absent':
+      return '#D11818';
+    default:
+      return '#FFF';
+  }
+};
+
+const getStatusLabel = (status: CountryStatus) => {
+  switch (status) {
+    case 'active':
+      return 'Actif';
+    case 'observer':
+      return 'Observateur';
+    case 'ghost':
+      return 'Fantôme';
+    case 'absent':
+      return 'Absent';
+    default:
+      return '';
+  }
+};
+
 const DashboardWorldMap = () => {
   const [isTooltipVisible, setIsTooltipVisible] = React.useState(false);
-  const [tooltipData, setTooltipData] = React.useState('');
+  const [tooltipData, setTooltipData] = React.useState<React.ReactNode>('');
 
   return (
     <div className={styles.mapContainer}>
@@ -17,41 +65,56 @@ const DashboardWorldMap = () => {
         <ZoomableGroup center={[0, 0]} zoom={0.9}>
           <Geographies geography="/earth/countries.geo.json">
             {({ geographies }) =>
-              geographies.map((geo) => (
-                <Geography
-                  onMouseOver={() => {
-                    const countryName = geo.properties.nameFR || geo.properties.name;
-                    const flag = countryToFlag(geo.properties.iso2);
-                    setTooltipData(`${flag} ${countryName}`);
-                    setIsTooltipVisible(true);
-                  }}
-                  onMouseLeave={() => setIsTooltipVisible(false)}
-                  key={geo.rsmKey}
-                  geography={geo}
-                  style={{
-                    default: {
-                      fill: '#FFF',
-                      stroke: '#000',
-                      strokeWidth: '.2',
-                      outline: 'none',
-                      transition: 'ease .2s',
-                    },
-                    hover: {
-                      fill: '#edf2fb',
-                      stroke: '#000',
-                      strokeWidth: '.2',
-                      outline: 'none',
-                      cursor: 'pointer',
-                    },
-                    pressed: {
-                      fill: 'white',
-                      stroke: '#000',
-                      strokeWidth: '.2',
-                      outline: 'none',
-                    },
-                  }}
-                />
-              ))
+              geographies.map((geo) => {
+                const countryData = testData.find((data) => data.iso2 === geo.properties.iso2);
+                return (
+                  <Geography
+                    onMouseOver={() => {
+                      const countryName = geo.properties.nameFR || geo.properties.name;
+                      const flag = countryToFlag(geo.properties.iso2);
+                      const status = countryData ? getStatusLabel(countryData.status) : '';
+                      setTooltipData(
+                        <div>
+                          {flag} {countryName}
+                          {status && (
+                            <>
+                              <br />
+                              <strong>{status}</strong>
+                            </>
+                          )}
+                        </div>,
+                      );
+                      setIsTooltipVisible(true);
+                    }}
+                    onMouseLeave={() => setIsTooltipVisible(false)}
+                    key={geo.rsmKey}
+                    geography={geo}
+                    style={{
+                      default: {
+                        fill: countryData ? getCountryColor(countryData.status) : '#FFF',
+                        stroke: '#000',
+                        strokeWidth: '.2',
+                        outline: 'none',
+                        transition: 'ease .2s',
+                      },
+                      hover: {
+                        fill: countryData ? getCountryColor(countryData.status) : '#edf2fb',
+                        stroke: '#000',
+                        strokeWidth: '.2',
+                        outline: 'none',
+                        cursor: 'pointer',
+                        opacity: 0.8,
+                      },
+                      pressed: {
+                        fill: countryData ? getCountryColor(countryData.status) : 'white',
+                        stroke: '#000',
+                        strokeWidth: '.2',
+                        outline: 'none',
+                      },
+                    }}
+                  />
+                );
+              })
             }
           </Geographies>
         </ZoomableGroup>
