@@ -1,12 +1,12 @@
 import type { VillagePhase } from '../entities/village';
-import { generateEmptyFilterParams } from './helpers';
 import {
+  generateEmptyFilterParams,
   getChildrenCodesCount,
   getConnectedFamiliesCount,
   getFamiliesWithoutAccount,
   getFamilyAccountsCount,
   getFloatingAccounts,
-} from './queryStatsByFilter';
+} from './queryStatsByFilters';
 
 export const getChildrenCodesCountForVillage = async (villageId: number, phase: VillagePhase) => {
   let filterParams = generateEmptyFilterParams();

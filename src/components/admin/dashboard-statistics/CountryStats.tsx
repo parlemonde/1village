@@ -3,27 +3,29 @@ import React, { useState } from 'react';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Tab, Tabs } from '@mui/material';
-import Box from '@mui/material/Box';
 
 import { OneVillageTable } from '../OneVillageTable';
 import TabPanel from './TabPanel';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
+import VillageListCard from './cards/VillageListCard/VillageListCard';
 import BarCharts from './charts/BarCharts';
-import HorizontalBars from './charts/HorizontalChart';
+import HorizontalBarsChart from './charts/HorizontalChart';
 import PieCharts from './charts/PieCharts';
 import CountriesDropdown from './filters/CountriesDropdown';
+// import PhaseDropdown from './filters/PhaseDropdown';
 import PhaseDropdown from './filters/PhaseDropdown';
 import PhaseDetails from './menu/PhaseDetails';
-import { mockClassroomsStats, mockConnectionsStats } from './mocks/mocks';
+import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
-import { sumContribution } from './utils/sumData';
 import { createFamiliesWithoutAccountRows, createFloatingAccountsRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from './utils/tableHeaders';
 import { useGetCountriesStats } from 'src/api/statistics/statistics.get';
 import { useCountries } from 'src/services/useCountries';
+import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
+import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
 import type { OneVillageTableRow } from 'types/statistics.type';
 
 const pieChartData = {
@@ -34,15 +36,18 @@ const pieChartData = {
   ],
 };
 
-const barChartData = [{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }];
 const EngagementBarChartTitle = 'Évolution des connexions';
 const ContributionBarChartTitle = 'Contribution des classes';
 
 const CountryStats = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
+  // const [selectedPhase, setSelectedPhase] = useState<number>(0);
   const [selectedPhase, setSelectedPhase] = React.useState<number>(0);
   const [value, setValue] = React.useState(0);
   const pelicoMessage = 'Merci de sélectionner un pays pour analyser ses statistiques ';
+  const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
+  const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(null, selectedCountry, null);
+
   const noDataFoundMessage = 'Pas de données pour le Pays sélectionné';
   const { countries } = useCountries();
   const countriesStats = useGetCountriesStats(selectedCountry, selectedPhase);
@@ -67,27 +72,9 @@ const CountryStats = () => {
     setValue(newValue);
   };
 
-  const filteredVillage = mockClassroomsStats.filter((village) => village.classroomCountryCode === selectedCountry);
-  const countryData = sumContribution[selectedCountry];
-
-  const { totalActivities = 0, totalComments = 0, totalVideos = 0 } = countryData || {};
-
-  const classStats = mockConnectionsStats.map((classroom) => ({
-    registered: classroom.registeredClassroomsCount,
-    connected: classroom.connectedClassroomsCount,
-    contributed: classroom.contributedClassroomsCount,
-  }));
-
-  const connectStats = mockConnectionsStats.map((connect) => ({
-    averageConnection: connect.averageConnections,
-    averageDuration: connect.averageDuration,
-    minDuration: connect.minDuration,
-    maxDuration: connect.maxDuration,
-    medianDuration: connect.medianDuration,
-    minConnections: connect.minConnections,
-    maxConnections: connect.maxConnections,
-    medianConnections: connect.medianConnections,
-  }));
+  // const handlePhaseChange = (phase: string) => {
+  //   setSelectedPhase(+phase);
+  // };
 
   const handlePhaseChange = (phase: string) => {
     setSelectedPhase(+phase);
@@ -114,7 +101,7 @@ const CountryStats = () => {
         </div>
       </Box>
       <Tabs value={value} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
-        <Tab label="En classe" />
+        <Tab label="En classe 1" />
         <Tab label="En famille" />
       </Tabs>
       <TabPanel value={value} index={0}>
