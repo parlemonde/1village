@@ -4,6 +4,7 @@ import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simp
 import CircleIcon from '@mui/icons-material/Circle';
 
 import TooltipMouseTracker from '../TooltipMouseTracker/TooltipMouseTracker';
+import { countryToFlag } from 'src/utils';
 import styles from './DashboardWorldMap.module.css';
 
 const DashboardWorldMap = () => {
@@ -19,7 +20,9 @@ const DashboardWorldMap = () => {
               geographies.map((geo) => (
                 <Geography
                   onMouseOver={() => {
-                    setTooltipData(geo.properties.name);
+                    const countryName = geo.properties.nameFR || geo.properties.name;
+                    const flag = countryToFlag(geo.properties.iso2);
+                    setTooltipData(`${flag} ${countryName}`);
                     setIsTooltipVisible(true);
                   }}
                   onMouseLeave={() => setIsTooltipVisible(false)}
