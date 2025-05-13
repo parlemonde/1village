@@ -108,6 +108,7 @@ export const Modal = ({
 }: React.PropsWithChildren<ModalProps>) => {
   return (
     <Dialog
+      disablePortal
       open={open}
       onClose={noCloseOutsideModal ? () => {} : onClose}
       aria-labelledby={ariaLabelledBy}

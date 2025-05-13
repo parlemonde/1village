@@ -3,19 +3,15 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 
 import { Box, Button } from '@mui/material';
-import Switch from '@mui/material/Switch';
 
 import { AvatarImg } from './Avatar';
 import { VillageMonde } from './VillageMonde';
-import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-import { useVillageRequests } from 'src/services/useVillages';
 import AnthemIcon from 'src/svg/navigation/anthem-icon.svg';
 import FreeContentIcon from 'src/svg/navigation/free-content-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
-// import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import MusicIcon from 'src/svg/navigation/music-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
@@ -23,7 +19,6 @@ import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import ReportageIcon from 'src/svg/navigation/reportage-icon.svg';
 import RouletteIcon from 'src/svg/navigation/roulette-icon.svg';
 import StoryIcon from 'src/svg/navigation/story-icon.svg';
-// import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { serializeToQueryUrl } from 'src/utils';
@@ -67,9 +62,6 @@ export const Navigation = (): JSX.Element => {
     (user !== null && user.type === UserType.SUPER_ADMIN);
   const isTeacher = user !== null && user.type === UserType.TEACHER;
   const isParent = user !== null && user.type === UserType.FAMILY;
-  const { editVillage } = useVillageRequests();
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
   const [firstStoryCreated, setFirstStoryCreated] = React.useState(false);
   const [mascotteActivity, setMascotteActivity] = React.useState<Activity | null>(null);
 
@@ -288,13 +280,6 @@ export const Navigation = (): JSX.Element => {
             ))}
           </div>
         ))}
-        {village && isPelico && selectedPhase >= 2 && (
-          <div className="with-shadow" style={{ padding: '0 0.6rem', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-            {village.activePhase >= selectedPhase ? 'Désactiver' : 'Activer'} la phase{' '}
-            <strong style={{ marginLeft: '0.25rem' }}>{selectedPhase}</strong>
-            <Switch checked={village.activePhase >= selectedPhase} onChange={() => setIsModalOpen(true)} color="primary" />
-          </div>
-        )}
         <div
           style={{
             textAlign: 'center',
@@ -306,33 +291,6 @@ export const Navigation = (): JSX.Element => {
           </Link>
         </div>
       </div>
-      <Modal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onConfirm={async () => {
-          if (!village) {
-            return;
-          }
-          setLoading(true);
-          await editVillage({
-            id: village.id,
-            activePhase: village.activePhase >= selectedPhase ? selectedPhase - 1 : selectedPhase,
-          });
-          setLoading(false);
-          setIsModalOpen(false);
-          window.location.reload();
-        }}
-        noCloseButton
-        noCloseOutsideModal={loading}
-        ariaDescribedBy={'activate-phase-desc'}
-        ariaLabelledBy={'activate-phase'}
-        title={`Êtes vous sûr de vouloir ${
-          (village?.activePhase || 0) >= selectedPhase ? 'désactiver' : 'activer'
-        } la phase numéro ${selectedPhase} ?`}
-        cancelLabel="Annuler"
-        confirmLabel="Confirmer"
-        loading={loading}
-      />
     </nav>
   );
 };
