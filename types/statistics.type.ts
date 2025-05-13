@@ -76,7 +76,6 @@ export interface OneVillageTableRow {
 export type StatsFilterParams = {
   villageId: number | undefined;
   classroomId: number | undefined;
-  countryId: string | undefined;
   phase: VillagePhase | undefined;
 };
 
