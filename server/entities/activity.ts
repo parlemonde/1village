@@ -137,7 +137,7 @@ export class Activity implements ActivityInterface<AnyData> {
 
   @ManyToOne(() => Classroom, (classroom) => classroom.activities)
   @JoinColumn({ name: 'classroomId' })
-  public classroom: Classroom;
+  public classroom: Classroom; // TEST kmn
 
   @Column({ nullable: true })
   public classroomId: number;
