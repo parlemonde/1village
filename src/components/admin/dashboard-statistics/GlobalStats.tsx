@@ -51,10 +51,6 @@ const GlobalStats = () => {
   //   setSelectedPhase(+phase);
   // };
 
-  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
-
   return (
     <>
       {/* <div className={styles.filtersContainer}>
