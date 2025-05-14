@@ -1,10 +1,10 @@
 import React from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
-
 import CircleIcon from '@mui/icons-material/Circle';
-
+import { useQuery } from 'react-query';
 import TooltipMouseTracker from '../TooltipMouseTracker/TooltipMouseTracker';
 import { countryToFlag } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import styles from './DashboardWorldMap.module.css';
 
 type CountryStatus = 'active' | 'observer' | 'ghost' | 'absent';
@@ -13,17 +13,6 @@ interface CountryData {
   iso2: string;
   status: CountryStatus;
 }
-
-const testData: CountryData[] = [
-  { iso2: 'FR', status: 'active' }, // France
-  { iso2: 'DE', status: 'observer' }, // Allemagne
-  { iso2: 'ES', status: 'ghost' }, // Espagne
-  { iso2: 'IT', status: 'absent' }, // Italie
-  { iso2: 'GB', status: 'active' }, // Royaume-Uni
-  { iso2: 'PT', status: 'observer' }, // Portugal
-  { iso2: 'GR', status: 'ghost' }, // Grèce
-  { iso2: 'BE', status: 'active' }, // Belgique
-];
 
 const getCountryColor = (status: CountryStatus) => {
   switch (status) {
@@ -55,9 +44,24 @@ const getStatusLabel = (status: CountryStatus) => {
   }
 };
 
+const fetchCountriesStatus = async (): Promise<{ statuses: CountryData[] }> => {
+  const response = await axiosRequest({
+    method: 'GET',
+    baseURL: '/api',
+    url: '/statistics/countries/status',
+  });
+  return response.data;
+};
+
 const DashboardWorldMap = () => {
   const [isTooltipVisible, setIsTooltipVisible] = React.useState(false);
   const [tooltipData, setTooltipData] = React.useState<React.ReactNode>('');
+
+  const { data: countriesData, isLoading } = useQuery(['countries-status'], fetchCountriesStatus);
+
+  if (isLoading) {
+    return <div>Chargement...</div>;
+  }
 
   return (
     <div className={styles.mapContainer}>
@@ -66,7 +70,7 @@ const DashboardWorldMap = () => {
           <Geographies geography="/earth/countries.geo.json">
             {({ geographies }) =>
               geographies.map((geo) => {
-                const countryData = testData.find((data) => data.iso2 === geo.properties.iso2);
+                const countryData = countriesData?.statuses?.find((data) => data.iso2 === geo.properties.iso2);
                 return (
                   <Geography
                     onMouseOver={() => {
