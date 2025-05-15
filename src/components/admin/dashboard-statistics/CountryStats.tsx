@@ -75,6 +75,9 @@ const CountryStats = () => {
     setSelectedPhase(+phase);
   };
 
+  const countryData = sumContribution[selectedCountry];
+  const { totalActivities = 0, totalComments = 0, totalVideos = 0 } = countryData || {};
+
   return (
     <>
       <Box
@@ -173,7 +176,7 @@ const CountryStats = () => {
               <BarCharts className={styles.midContainer} dataByMonth={mockDataByMonth} title={EngagementBarChartTitle} />
             </div>
             <div className={styles.exchangesConnectionsContainer}>
-              <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
+              <ClassesExchangesCard totalPublications={totalActivities} totalComments={totalComments} totalVideos={totalVideos} />
               <BarCharts dataByMonth={mockDataByMonth} title={ContributionBarChartTitle} />
             </div>
             {statisticsClassrooms && statisticsClassrooms.phases && (
