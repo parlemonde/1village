@@ -18,24 +18,21 @@ export const classroomController = new Controller('/classrooms');
  * @param {object} res Express response object
  * @return {object} Route API JSON response
  */
-
-classroomController.get({ path: '', userType: UserType.ADMIN }, async (_req: Request, res: Response) => {
-  const villageId = _req.query.villageId as string;
+classroomController.get({ path: '/', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const classroomRepository = AppDataSource.getRepository(Classroom);
-    let classrooms;
-    if (villageId) {
-      const query = classroomRepository.createQueryBuilder('classroom').leftJoinAndSelect('classroom.user', 'user');
-      query.where('classroom.villageId = :villageId', { villageId });
+    const classrooms = await AppDataSource.getRepository(Classroom).find({
+      relations: {
+        user: true,
+      },
+    });
 
-      classrooms = await query.getMany();
-    } else {
-      classrooms = await classroomRepository.find();
+    if (!classrooms) {
+      return res.status(404).json({ message: 'No classrooms found' });
     }
-    res.sendJSON(classrooms);
-  } catch (e) {
-    console.error(e);
-    res.status(500).sendJSON({ message: 'An error occurred while fetching classrooms' });
+
+    res.json(classrooms);
+  } catch (error) {
+    next(error);
   }
 });
 
