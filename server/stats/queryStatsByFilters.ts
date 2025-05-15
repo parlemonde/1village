@@ -102,6 +102,7 @@ export const generateEmptyFilterParams = (): StatsFilterParams => {
   const filterParams: { [K in keyof StatsFilterParams]: StatsFilterParams[K] } = {
     villageId: undefined,
     classroomId: undefined,
+    countryId: undefined,
     phase: undefined,
   };
 
