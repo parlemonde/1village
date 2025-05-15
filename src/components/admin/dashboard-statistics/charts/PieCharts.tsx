@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 
 import { PieChart } from '@mui/x-charts/PieChart';
@@ -16,13 +17,14 @@ type PieChartData = {
 
 interface Props {
   pieChartData: PieChartData;
+  className?: string;
 }
 
-const PieCharts: React.FC<Props> = ({ pieChartData }) => {
+const PieCharts: React.FC<Props> = ({ pieChartData, className }) => {
   const labels = pieChartData.data.map((item) => item.label);
 
   return (
-    <div className={styles.pieContainer}>
+    <div className={classNames(styles.pieContainer, className)}>
       <div className={styles.title}>Niveau engagement</div>
       <PieChart series={[{ data: pieChartData.data }]} width={400} height={200} />
       <div className={`${styles.legend}`}>

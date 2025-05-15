@@ -6,7 +6,7 @@ import {
   getFamiliesWithoutAccount,
   getFamilyAccountsCount,
   getFloatingAccounts,
-} from './queryStatsByFilter';
+} from './queryStatsByFilters';
 
 export const getChildrenCodesCountForVillage = async (villageId: number, phase: VillagePhase) => {
   let filterParams = generateEmptyFilterParams();
