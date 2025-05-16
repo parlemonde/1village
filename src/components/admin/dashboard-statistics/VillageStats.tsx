@@ -35,6 +35,11 @@ const VillageStats = () => {
   const villagesStats = useGetVillagesStats(+selectedVillage, selectedPhase);
   const mediatheque = useGetMediatheque();
 
+  // Update options when selectedCountry changes
+  React.useEffect(() => {
+    setOptions({ countryIsoCode: selectedCountry });
+  }, [selectedCountry]);
+
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
   React.useEffect(() => {
     if (villagesStats.data?.familiesWithoutAccount) {

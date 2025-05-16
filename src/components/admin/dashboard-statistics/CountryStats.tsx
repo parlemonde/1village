@@ -72,7 +72,7 @@ const CountryStats = () => {
   const filteredVillage = mockClassroomsStats.filter((village) => village.classroomCountryCode === selectedCountry);
   const countryData = sumContribution[selectedCountry];
 
-  const { totalActivities = 0, totalComments = 0, totalVideos = 0 } = countryData || {};
+  const { totalComments = 0, totalVideos = 0 } = countryData || {};
 
   const classStats = mockConnectionsStats.map((classroom) => ({
     registered: classroom.registeredClassroomsCount,
@@ -98,7 +98,7 @@ const CountryStats = () => {
   const countryPublications = React.useMemo(() => {
     if (!mediatheque.data || !selectedCountry) return 0;
     return mediatheque.data.filter(
-      (activity: any) => activity.village?.countries?.some(country => country.isoCode === selectedCountry) && !!activity.displayAsUser && activity.user.type === 3
+      (activity: any) => activity.village?.countries?.some((country: any) => country.isoCode === selectedCountry) && !!activity.displayAsUser && activity.user.type === 3
     ).length;
   }, [mediatheque.data, selectedCountry]);
 

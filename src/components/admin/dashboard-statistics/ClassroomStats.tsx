@@ -80,12 +80,16 @@ const ClassroomStats = () => {
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
   const classroomPublications = React.useMemo(() => {
-    if (!mediatheque.data || !selectedClassroom) return 0;
-    return mediatheque.data.filter((activity: any) => 
-       activity.userId === selectedClassroom.user.id && !!activity.displayAsUser && activity.user.type === 3
-    ).length;
+    if (!mediatheque.data || !selectedClassroom || !selectedClassroom.user?.id) return 0;
+    
+    return mediatheque.data.filter((activity: any) => {
+      // Make sure all the properties exist before comparing
+      if (!activity || !activity.userId || !selectedClassroom?.user?.id) return false;
+      return activity.userId === selectedClassroom.user.id &&
+             !!activity.displayAsUser &&
+             activity.user?.type === 3;
+    }).length;
   }, [mediatheque.data, selectedClassroom]);
 
   return (
