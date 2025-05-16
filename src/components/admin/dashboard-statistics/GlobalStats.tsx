@@ -14,9 +14,9 @@ import DashboardWorldMap from './map/DashboardWorldMap/DashboardWorldMap';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows, createFloatingAccountsRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from './utils/tableHeaders';
+import { useGetMediatheque } from 'src/api/mediatheque/mediatheque.get';
 import { useGetOneVillageStats, useGetSessionsStats } from 'src/api/statistics/statistics.get';
 import type { OneVillageTableRow } from 'types/statistics.type';
-import { useGetMediatheque } from 'src/api/mediatheque/mediatheque.get';
 
 const GlobalStats = () => {
   const [value, setValue] = React.useState(0);
@@ -58,14 +58,17 @@ const GlobalStats = () => {
       <TabPanel value={value} index={0}>
         <Grid container spacing={4} direction={{ xs: 'column', md: 'row' }}>
           <Grid item xs={12} lg={4}>
-            <StatsCard data={10}>Nombre de classes
-              inscrites</StatsCard>
+            <StatsCard data={10}>Nombre de classes inscrites</StatsCard>
           </Grid>
           <Grid item xs={12} lg={4}>
-            <StatsCard data={10}>Nombre de classes <br /> connectées</StatsCard>
+            <StatsCard data={10}>
+              Nombre de classes <br /> connectées
+            </StatsCard>
           </Grid>
           <Grid item xs={12} lg={4}>
-            <StatsCard data={10}>Nombre de classes <br /> contributrices</StatsCard>
+            <StatsCard data={10}>
+              Nombre de classes <br /> contributrices
+            </StatsCard>
           </Grid>
           <Grid item xs={12} lg={6}>
             <AverageStatsCard
@@ -77,7 +80,6 @@ const GlobalStats = () => {
               }}
               unit="min"
               icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}
-              
             >
               Temps de connexion moyen par classe
             </AverageStatsCard>
@@ -96,11 +98,7 @@ const GlobalStats = () => {
             </AverageStatsCard>
           </Grid>
           <Grid item xs={12} lg={6}>
-            <ClassesExchangesCard 
-              totalPublications={totalPublications} 
-              totalComments={100} 
-              totalVideos={100} 
-            />
+            <ClassesExchangesCard totalPublications={totalPublications} totalComments={100} totalVideos={100} />
           </Grid>
           {/* <div>
           <PhaseDetails

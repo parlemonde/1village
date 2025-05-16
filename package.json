@@ -49,7 +49,10 @@
     },
     "moduleNameMapper": {
       "\\.svg": "<rootDir>/__mocks__/svg.js"
-    }
+    },
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.ts"
+    ]
   },
   "resolutions": {
     "react-is": "^17.0.1",

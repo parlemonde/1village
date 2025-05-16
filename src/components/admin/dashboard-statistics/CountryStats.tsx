@@ -22,10 +22,10 @@ import styles from './styles/charts.module.css';
 import { sumContribution } from './utils/sumData';
 import { createFamiliesWithoutAccountRows, createFloatingAccountsRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from './utils/tableHeaders';
+import { useGetMediatheque } from 'src/api/mediatheque/mediatheque.get';
 import { useGetCountriesStats } from 'src/api/statistics/statistics.get';
 import { useCountries } from 'src/services/useCountries';
 import type { OneVillageTableRow } from 'types/statistics.type';
-import { useGetMediatheque } from 'src/api/mediatheque/mediatheque.get';
 
 const pieChartData = {
   data: [
@@ -98,7 +98,10 @@ const CountryStats = () => {
   const countryPublications = React.useMemo(() => {
     if (!mediatheque.data || !selectedCountry) return 0;
     return mediatheque.data.filter(
-      (activity: any) => activity.village?.countries?.some((country: any) => country.isoCode === selectedCountry) && !!activity.displayAsUser && activity.user.type === 3
+      (activity: any) =>
+        activity.village?.countries?.some((country: any) => country.isoCode === selectedCountry) &&
+        !!activity.displayAsUser &&
+        activity.user.type === 3,
     ).length;
   }, [mediatheque.data, selectedCountry]);
 
@@ -193,11 +196,7 @@ const CountryStats = () => {
               <BarCharts barChartData={barChartData} title={EngagementBarChartTitle} />
             </div>
             <div className={styles.exchangesConnectionsContainer}>
-              <ClassesExchangesCard 
-                totalPublications={countryPublications} 
-                totalComments={totalComments} 
-                totalVideos={totalVideos} 
-              />
+              <ClassesExchangesCard totalPublications={countryPublications} totalComments={totalComments} totalVideos={totalVideos} />
               <BarCharts className={styles.connectionsChart} barChartData={barChartData} title={ContributionBarChartTitle} />
             </div>
             <div>

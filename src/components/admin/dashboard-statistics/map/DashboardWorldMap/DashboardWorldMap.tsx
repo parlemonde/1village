@@ -53,26 +53,24 @@ const DashboardWorldMap = () => {
           </Geographies>
         </ZoomableGroup>
       </ComposableMap>
-      <TooltipMouseTracker isVisible={isTooltipVisible}>
-        {tooltipData}
-      </TooltipMouseTracker>
+      <TooltipMouseTracker isVisible={isTooltipVisible}>{tooltipData}</TooltipMouseTracker>
       <div className={styles.legendContainer}>
         <h2>Légende:</h2>
         <ul>
           <li>
-            <CircleIcon fontSize="small" sx={{ color: '#4CC64A', verticalAlign: 'middle' }} /> 
+            <CircleIcon fontSize="small" sx={{ color: '#4CC64A', verticalAlign: 'middle' }} />
             <span>Actif</span>: la majorité des classes ont posté ces 3 dernières semaines
           </li>
           <li>
-            <CircleIcon fontSize="small" sx={{ color: '#6082FC', verticalAlign: 'middle' }} /> 
+            <CircleIcon fontSize="small" sx={{ color: '#6082FC', verticalAlign: 'middle' }} />
             <span>Observateur</span>: la majorité des classes ont pas posté depuis 3 semaines
           </li>
           <li>
-            <CircleIcon fontSize="small" sx={{ color: '#FFD678', verticalAlign: 'middle' }} /> 
+            <CircleIcon fontSize="small" sx={{ color: '#FFD678', verticalAlign: 'middle' }} />
             <span>Fantôme</span>: la majorité des classes ne se sont pas connectées depuis 3 semaines
           </li>
           <li>
-            <CircleIcon fontSize="small" sx={{ color: '#D11818', verticalAlign: 'middle' }} /> 
+            <CircleIcon fontSize="small" sx={{ color: '#D11818', verticalAlign: 'middle' }} />
             <span>Absent</span>: la majorité des classes ne se sont jamais connectées
           </li>
         </ul>

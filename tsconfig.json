@@ -35,7 +35,9 @@
     "incremental": true,
     "types": [
       "react",
-      "react-dom"
+      "react-dom",
+      "jest",
+      "node"
     ]
   },
   "include": [

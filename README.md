@@ -13,6 +13,20 @@ Use docker to run the app:
 docker-compose up
 ```
 
+## Database Setup
+
+For new developers, we provide comprehensive documentation on setting up and importing data into the database:
+
+- [Database Setup and Import Guide](./db/README.md)
+- [Database Structure Diagram](./db/database-diagram.md)
+
+To import sample data into your local database:
+
+```bash
+chmod +x db/import-db.sh
+./db/import-db.sh
+```
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

@@ -21,9 +21,9 @@ export default function ClassroomDropdown({ classrooms, onClassroomChange }: Cla
   const handleChange = (event: SelectChangeEvent) => {
     const selectedClassroomId = event.target.value as string;
     setClassroomId(selectedClassroomId);
-    
+
     // Find the full classroom object by ID
-    const selectedClassroom = classrooms.find(classroom => classroom.id === Number(selectedClassroomId));
+    const selectedClassroom = classrooms.find((classroom) => classroom.id === Number(selectedClassroomId));
     if (selectedClassroom) {
       onClassroomChange(selectedClassroom);
     }
@@ -35,7 +35,7 @@ export default function ClassroomDropdown({ classrooms, onClassroomChange }: Cla
         <FormControl fullWidth size="small">
           <InputLabel id="classroom-menu-select">Classe</InputLabel>
           <Select labelId="classroom-menu-select" id="classroom-select" value={classroomId} label="Classe" onChange={handleChange}>
-            {classrooms.map((classroom) => (
+            {classrooms.map(classroom => (
               <MenuItem key={classroom.id} value={classroom.id}>
                 {classroom.user && getUserDisplayName(classroom.user, false, true)}
               </MenuItem>
