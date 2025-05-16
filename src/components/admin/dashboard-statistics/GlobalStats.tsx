@@ -16,11 +16,13 @@ import { createFamiliesWithoutAccountRows, createFloatingAccountsRows } from './
 import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from './utils/tableHeaders';
 import { useGetOneVillageStats, useGetSessionsStats } from 'src/api/statistics/statistics.get';
 import type { OneVillageTableRow } from 'types/statistics.type';
+import { useGetMediatheque } from 'src/api/mediatheque/mediatheque.get';
 
 const GlobalStats = () => {
   const [value, setValue] = React.useState(0);
   const sessionsStats = useGetSessionsStats(null);
   const oneVillageStats = useGetOneVillageStats();
+  const mediatheque = useGetMediatheque();
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
   const [floatingAccountsRows, setFloatingAccountsRows] = React.useState<Array<OneVillageTableRow>>([]);
   React.useEffect(() => {
@@ -34,6 +36,10 @@ const GlobalStats = () => {
     }
   }, [oneVillageStats.data?.familiesWithoutAccount, oneVillageStats.data?.floatingAccounts]);
 
+  const totalPublications = React.useMemo(() => {
+    return mediatheque.data?.filter((activity: any) => !!activity.displayAsUser).length || 0;
+  }, [mediatheque.data]);
+
   if (sessionsStats.isError) return <p>Error!</p>;
   if (sessionsStats.isLoading || sessionsStats.isIdle) return <p>Loading...</p>;
 
@@ -42,7 +48,7 @@ const GlobalStats = () => {
   };
 
   return (
-    <>
+    <div>
       <TeamComments />
       <DashboardWorldMap />
       <Tabs value={value} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
@@ -52,20 +58,14 @@ const GlobalStats = () => {
       <TabPanel value={value} index={0}>
         <Grid container spacing={4} direction={{ xs: 'column', md: 'row' }}>
           <Grid item xs={12} lg={4}>
-            <StatsCard data={10}>
-              Nombre de classes <br />
-              inscrites
-            </StatsCard>
+            <StatsCard data={10}>Nombre de classes
+              inscrites</StatsCard>
           </Grid>
           <Grid item xs={12} lg={4}>
-            <StatsCard data={10}>
-              Nombre de classes <br /> connectées
-            </StatsCard>
+            <StatsCard data={10}>Nombre de classes <br /> connectées</StatsCard>
           </Grid>
           <Grid item xs={12} lg={4}>
-            <StatsCard data={10}>
-              Nombre de classes <br /> contributrices
-            </StatsCard>
+            <StatsCard data={10}>Nombre de classes <br /> contributrices</StatsCard>
           </Grid>
           <Grid item xs={12} lg={6}>
             <AverageStatsCard
@@ -77,6 +77,7 @@ const GlobalStats = () => {
               }}
               unit="min"
               icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}
+              
             >
               Temps de connexion moyen par classe
             </AverageStatsCard>
@@ -95,7 +96,11 @@ const GlobalStats = () => {
             </AverageStatsCard>
           </Grid>
           <Grid item xs={12} lg={6}>
-            <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
+            <ClassesExchangesCard 
+              totalPublications={totalPublications} 
+              totalComments={100} 
+              totalVideos={100} 
+            />
           </Grid>
           {/* <div>
           <PhaseDetails
@@ -130,14 +135,14 @@ const GlobalStats = () => {
         <>
           <OneVillageTable
             admin={false}
-            emptyPlaceholder={<p>{'Pas de données'}</p>}
+            emptyPlaceholder={<div>Pas de données</div>}
             data={familiesWithoutAccountRows}
             columns={FamiliesWithoutAccountHeaders}
             titleContent={`À surveiller : comptes non créés (${familiesWithoutAccountRows.length})`}
           />
           <OneVillageTable
             admin={false}
-            emptyPlaceholder={<p>{'Pas de données'}</p>}
+            emptyPlaceholder={<div>Pas de données</div>}
             data={floatingAccountsRows}
             columns={FloatingAccountsHeaders}
             titleContent={`À surveiller : comptes flottants (${floatingAccountsRows.length})`}
@@ -159,7 +164,7 @@ const GlobalStats = () => {
           </Box>
         </>
       </TabPanel>
-    </>
+    </div>
   );
 };
 

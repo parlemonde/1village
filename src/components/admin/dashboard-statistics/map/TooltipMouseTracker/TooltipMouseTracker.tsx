@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface MouseTrackerProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   offset?: { x: number; y: number };
   isVisible: boolean;
 }

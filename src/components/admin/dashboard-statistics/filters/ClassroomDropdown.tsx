@@ -12,16 +12,21 @@ import type { Classroom } from 'types/classroom.type';
 
 interface ClassroomDropdownProps {
   classrooms: Classroom[];
-  onClassroomChange: (classrooms: string) => void;
+  onClassroomChange: (classroom: Classroom) => void;
 }
 
 export default function ClassroomDropdown({ classrooms, onClassroomChange }: ClassroomDropdownProps) {
-  const [classroom, setClassroom] = React.useState('');
+  const [classroomId, setClassroomId] = React.useState('');
 
   const handleChange = (event: SelectChangeEvent) => {
-    const selectedClassroom = event.target.value as string;
-    setClassroom(selectedClassroom);
-    onClassroomChange(selectedClassroom);
+    const selectedClassroomId = event.target.value as string;
+    setClassroomId(selectedClassroomId);
+    
+    // Find the full classroom object by ID
+    const selectedClassroom = classrooms.find(classroom => classroom.id === Number(selectedClassroomId));
+    if (selectedClassroom) {
+      onClassroomChange(selectedClassroom);
+    }
   };
 
   return (
@@ -29,7 +34,7 @@ export default function ClassroomDropdown({ classrooms, onClassroomChange }: Cla
       <Box sx={{ minWidth: 150, maxWidth: 200 }}>
         <FormControl fullWidth size="small">
           <InputLabel id="classroom-menu-select">Classe</InputLabel>
-          <Select labelId="classroom-menu-select" id="classroom-select" value={classroom} label="Classe" onChange={handleChange}>
+          <Select labelId="classroom-menu-select" id="classroom-select" value={classroomId} label="Classe" onChange={handleChange}>
             {classrooms.map((classroom) => (
               <MenuItem key={classroom.id} value={classroom.id}>
                 {classroom.user && getUserDisplayName(classroom.user, false, true)}

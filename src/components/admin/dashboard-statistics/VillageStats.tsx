@@ -19,6 +19,8 @@ import { useCountries } from 'src/services/useCountries';
 import { useVillages } from 'src/services/useVillages';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import type { VillageFilter } from 'types/village.type';
+import { useGetMediatheque } from 'src/api/mediatheque/mediatheque.get';
+import ClassesExchangesCard  from './cards/ClassesExchangesCard/ClassesExchangesCard';
 
 const VillageStats = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
@@ -31,11 +33,7 @@ const VillageStats = () => {
 
   const { villages } = useVillages(options);
   const villagesStats = useGetVillagesStats(+selectedVillage, selectedPhase);
-  React.useEffect(() => {
-    setOptions({
-      countryIsoCode: selectedCountry,
-    });
-  }, [selectedCountry]);
+  const mediatheque = useGetMediatheque();
 
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
   React.useEffect(() => {
@@ -43,6 +41,13 @@ const VillageStats = () => {
       setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(villagesStats.data?.familiesWithoutAccount));
     }
   }, [villagesStats.data?.familiesWithoutAccount]);
+
+  const villagePublications = React.useMemo(() => {
+    if (!mediatheque.data || !selectedVillage) return 0;
+    return mediatheque.data.filter(
+      (activity: any) => activity.villageId === parseInt(selectedVillage) && !!activity.displayAsUser  && activity.user.type === 3
+    ).length;
+  }, [mediatheque.data, selectedVillage]);
 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
@@ -92,6 +97,17 @@ const VillageStats = () => {
       </Tabs>
       <TabPanel value={value} index={0}>
         <p>Statistiques - En classe</p>
+        {!selectedVillage ? (
+          <PelicoCard message={pelicoMessage} />
+        ) : (
+          <div className={styles.exchangesConnectionsContainer}>
+            <ClassesExchangesCard 
+              totalPublications={villagePublications} 
+              totalComments={0} 
+              totalVideos={0} 
+            />
+          </div>
+        )}
       </TabPanel>
       <TabPanel value={value} index={1}>
         {!selectedVillage ? (

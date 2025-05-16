@@ -25,6 +25,7 @@ import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from './utils/
 import { useGetCountriesStats } from 'src/api/statistics/statistics.get';
 import { useCountries } from 'src/services/useCountries';
 import type { OneVillageTableRow } from 'types/statistics.type';
+import { useGetMediatheque } from 'src/api/mediatheque/mediatheque.get';
 
 const pieChartData = {
   data: [
@@ -46,6 +47,7 @@ const CountryStats = () => {
   const noDataFoundMessage = 'Pas de données pour le Pays sélectionné';
   const { countries } = useCountries();
   const countriesStats = useGetCountriesStats(selectedCountry, selectedPhase);
+  const mediatheque = useGetMediatheque();
 
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
   const [floatingAccountsRows, setFloatingAccountsRows] = React.useState<Array<OneVillageTableRow>>([]);
@@ -92,6 +94,13 @@ const CountryStats = () => {
   const handlePhaseChange = (phase: string) => {
     setSelectedPhase(+phase);
   };
+
+  const countryPublications = React.useMemo(() => {
+    if (!mediatheque.data || !selectedCountry) return 0;
+    return mediatheque.data.filter(
+      (activity: any) => activity.village?.countries?.some(country => country.isoCode === selectedCountry) && !!activity.displayAsUser && activity.user.type === 3
+    ).length;
+  }, [mediatheque.data, selectedCountry]);
 
   return (
     <>
@@ -184,7 +193,11 @@ const CountryStats = () => {
               <BarCharts barChartData={barChartData} title={EngagementBarChartTitle} />
             </div>
             <div className={styles.exchangesConnectionsContainer}>
-              <ClassesExchangesCard totalPublications={totalActivities} totalComments={totalComments} totalVideos={totalVideos} />
+              <ClassesExchangesCard 
+                totalPublications={countryPublications} 
+                totalComments={totalComments} 
+                totalVideos={totalVideos} 
+              />
               <BarCharts className={styles.connectionsChart} barChartData={barChartData} title={ContributionBarChartTitle} />
             </div>
             <div>
