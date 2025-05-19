@@ -47,6 +47,13 @@ export interface VillageStats {
   connectedFamiliesCount: number;
   familiesWithoutAccount: FamiliesWithoutAccount[];
   floatingAccounts: FloatingAccount[];
+  exchanges: Exchanges;
+}
+
+export interface Exchanges {
+  publicationsCount: number;
+  commentsCount: number;
+  videosCount: number;
 }
 
 export interface FamiliesWithoutAccount {
