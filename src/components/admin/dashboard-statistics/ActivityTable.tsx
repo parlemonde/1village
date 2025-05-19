@@ -24,6 +24,9 @@ const getCountryColor = (status: CountryStatus) => {
   }
 };
 
+
+// Même structure de données que dans la table villages-mondes (manage/villages)
+
 const fakeData = [
   {
     id: 1,
