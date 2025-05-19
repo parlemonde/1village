@@ -101,6 +101,7 @@ export const getFamilyAccountsCount = async (filterParams: StatsFilterParams) =>
 export const getChildrenCodesCount = async (filterParams: StatsFilterParams, whereClause?: WhereClause) => {
   const { villageId, countryId, phase } = filterParams;
   let childrenCodesCount = 0;
+
   if (villageId) {
     const village = await villageRepository.findOne({ where: { id: villageId } });
     if (village) childrenCodesCount = await countChildrenCodes(village, phase, whereClause);

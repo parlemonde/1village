@@ -71,6 +71,7 @@ export class VimeoClass {
     if (!this.initialized) {
       return '';
     }
+
     // upload video
     const uri = await new Promise<string>((resolve) => {
       this.client.upload(
@@ -97,6 +98,7 @@ export class VimeoClass {
         },
       );
     });
+
     if (!uri) {
       return '';
     }

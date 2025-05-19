@@ -1,7 +1,7 @@
 import type { Request } from 'express';
 
-import type { StatsFilterParams } from '../../types/statistics.type';
-import { Classroom } from '../entities/classroom';
+import type { StatsFilterParams } from '../../../types/statistics.type';
+import { Classroom } from '../../entities/classroom';
 import {
   getConnectedClassroomsCount,
   getRegisteredClassroomsCount,
@@ -9,23 +9,23 @@ import {
   getConnectedFamiliesCountForClassroom,
   getFamiliesWithoutAccountForClassroom,
   getContributedClassroomsCount,
-} from '../stats/classroomStats';
-import { getBarChartData } from '../stats/connectionStats';
+} from '../../stats/classroomStats';
+import { getBarChartData } from '../../stats/connectionStats';
 import {
   getChildrenCodesCountForCountry,
   getConnectedFamiliesCountForCountry,
   getFamiliesWithoutAccountForCountry,
   getFamilyAccountsCountForCountry,
   getFloatingAccountsForCountry,
-} from '../stats/countryStats';
+} from '../../stats/countryStats';
 import {
   getChildrenCodesCountForGlobal,
   getConnectedFamiliesCountForGlobal,
   getFamiliesWithoutAccountForGlobal,
   getFamilyAccountsCountForGlobal,
   getFloatingAccountsForGlobal,
-} from '../stats/globalStats';
-import { getChildrenCodesCount, getConnectedFamiliesCount, getFamilyAccountsCount } from '../stats/queryStatsByFilter';
+} from '../../stats/globalStats';
+import { getChildrenCodesCount, getConnectedFamiliesCount, getFamilyAccountsCount } from '../../stats/queryStatsByFilter';
 import {
   getAverageConnections,
   getAverageDuration,
@@ -37,16 +37,18 @@ import {
   getMinConnections,
   getMinDuration,
   getUserConnectionsList,
-} from '../stats/sessionStats';
+} from '../../stats/sessionStats';
 import {
   getChildrenCodesCountForVillage,
   getConnectedFamiliesCountForVillage,
   getFamiliesWithoutAccountForVillage,
   getFamilyAccountsCountForVillage,
   getFloatingAccountsForVillage,
-} from '../stats/villageStats';
-import { AppDataSource } from '../utils/data-source';
-import { Controller } from './controller';
+} from '../../stats/villageStats';
+import { AppDataSource } from '../../utils/data-source';
+import { Controller } from '../controller';
+import type { StatisticsDto } from './statistics.dto';
+import { getActivityTypeCountByVillages } from './statistics.repository';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
 export const statisticsController = new Controller('/statistics');
@@ -222,18 +224,29 @@ statisticsController.get({ path: '/classrooms' }, async (req, res) => {
 });
 
 statisticsController.get({ path: '/onevillage' }, async (_req, res) => {
-  res.sendJSON({
-    familyAccountsCount: await getFamilyAccountsCountForGlobal(),
-    childrenCodesCount: await getChildrenCodesCountForGlobal(),
-    connectedFamiliesCount: await getConnectedFamiliesCountForGlobal(),
-    familiesWithoutAccount: await getFamiliesWithoutAccountForGlobal(),
-    floatingAccounts: await getFloatingAccountsForGlobal(),
-  });
+  const familyAccountsCount = await getFamilyAccountsCountForGlobal();
+  const childrenCodesCount = await getChildrenCodesCountForGlobal();
+  const connectedFamiliesCount = await getConnectedFamiliesCountForGlobal();
+  const familiesWithoutAccount = await getFamiliesWithoutAccountForGlobal();
+  const floatingAccounts = await getFloatingAccountsForGlobal();
+  const activityCountDetails = await getActivityTypeCountByVillages();
+
+  const response: StatisticsDto = {
+    familyAccountsCount,
+    childrenCodesCount,
+    connectedFamiliesCount,
+    familiesWithoutAccount,
+    floatingAccounts,
+    activityCountDetails,
+  };
+
+  res.sendJSON(response);
 });
 
 statisticsController.get({ path: '/villages/:villageId' }, async (_req, res) => {
   const villageId = parseInt(_req.params.villageId);
   const phase = _req.query.phase as unknown as number;
+
   res.sendJSON({
     familyAccountsCount: await getFamilyAccountsCountForVillage(villageId, phase),
     childrenCodesCount: await getChildrenCodesCountForVillage(villageId, phase),
@@ -246,6 +259,7 @@ statisticsController.get({ path: '/villages/:villageId' }, async (_req, res) => 
 statisticsController.get({ path: '/countries/:countryId' }, async (_req, res) => {
   const countryId = _req.params.countryId;
   const phase = _req.query.phase as unknown as number;
+
   res.sendJSON({
     familyAccountsCount: await getFamilyAccountsCountForCountry(countryId, phase),
     childrenCodesCount: await getChildrenCodesCountForCountry(countryId, phase),
@@ -258,6 +272,7 @@ statisticsController.get({ path: '/countries/:countryId' }, async (_req, res) =>
 statisticsController.get({ path: '/classrooms/:classroomId' }, async (_req, res) => {
   const classroomId = parseInt(_req.params.classroomId);
   const phase = _req.query.phase as unknown as number;
+
   res.sendJSON({
     childrenCodesCount: await getChildrenCodesCountForClassroom(classroomId, phase),
     connectedFamiliesCount: await getConnectedFamiliesCountForClassroom(classroomId, phase),

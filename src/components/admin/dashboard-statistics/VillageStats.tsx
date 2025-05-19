@@ -12,7 +12,6 @@ import ClassesContributionCard from './cards/ClassesContributionCard/ClassesCont
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
 import BarCharts from './charts/BarCharts';
-// import DashboardTable from './charts/DashboardTable';
 import DualBarChart from './charts/DualBarChart/DualBarChart';
 import PieCharts from './charts/PieCharts';
 import CountriesDropdown from './filters/CountriesDropdown';
@@ -106,6 +105,7 @@ const VillageStats = () => {
       { name: 'École N', value: 180 },
     ],
   };
+
   return (
     <>
       <div className={styles.filtersContainer}>
@@ -122,7 +122,6 @@ const VillageStats = () => {
       </div>
       <TeamComments />
       <DualBarChart firstTable={firstTable} secondTable={secondTable} />
-      {/* <DashboardTable /> */}
       <Tabs value={value} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
         <Tab label="En classe" />
         <Tab label="En famille" />
