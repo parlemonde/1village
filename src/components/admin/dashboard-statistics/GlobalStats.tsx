@@ -16,7 +16,6 @@ import { createFamiliesWithoutAccountRows, createFloatingAccountsRows } from './
 import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from './utils/tableHeaders';
 import { useGetOneVillageStats, useGetSessionsStats } from 'src/api/statistics/statistics.get';
 import type { OneVillageTableRow } from 'types/statistics.type';
-import Link from 'next/link';
 import ActivityTable from './ActivityTable';
 
 const GlobalStats = () => {
