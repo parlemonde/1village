@@ -17,6 +17,7 @@ import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from './utils/
 import { useGetOneVillageStats, useGetSessionsStats } from 'src/api/statistics/statistics.get';
 import type { OneVillageTableRow } from 'types/statistics.type';
 
+
 const GlobalStats = () => {
   const [value, setValue] = React.useState(0);
   const sessionsStats = useGetSessionsStats(null);

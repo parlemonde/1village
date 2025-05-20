@@ -25,6 +25,7 @@ const testData: CountryData[] = [
   { iso2: 'BE', status: 'active' }, // Belgique
 ];
 
+// Même structure de données que dans la table villages-mondes (manage/villages)
 const getCountryColor = (status: CountryStatus) => {
   switch (status) {
     case 'active':
@@ -40,6 +41,7 @@ const getCountryColor = (status: CountryStatus) => {
   }
 };
 
+// Même structure de données que dans la table villages-mondes (manage/villages)
 const getStatusLabel = (status: CountryStatus) => {
   switch (status) {
     case 'active':
