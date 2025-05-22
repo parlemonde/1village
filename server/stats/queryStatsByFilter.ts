@@ -18,7 +18,7 @@ const getVillagesFromCountryId = async (countryId: string | undefined): Promise<
     .createQueryBuilder('village')
     .where('village.countryCodes LIKE :countryId', { countryId: `%${countryId}%` })
     .getMany();
-}
+};
 
 export const getFamiliesWithoutAccount = async (condition?: string, conditionValue?: object) => {
   const query = studentRepository
