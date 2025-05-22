@@ -1,6 +1,5 @@
 .title {
   text-align: left;
-  margin-bottom: 20px;
   font-size: 18px;
   font-weight: 400;
   line-height: 27px;
@@ -9,20 +8,36 @@
 
 .filtersContainer {
   display: flex;
-  justify-content: flex-start;
-  gap: 20px;
   padding: 5% 0;
+  width: 100%;
+  gap: 25px;
+}
+
+.simpleContainer {
+  margin-bottom: 25px;
+}
+
+.smallFilter {
+  flex: 2;
+}
+
+.medFilter {
+  flex: 3;
 }
 
 .horizontalBars {
   display: flex;
-  flex-direction: column;
-  padding: 20px;
-  background-color: #f3f3f3;
+  border-radius: 15px;
+  /* flex-direction: column;
+  align-items: center; */
+  padding-right: 20px;
+  padding-bottom: 20px;
+  background-color: #f5f5f5;
   margin-bottom: 20px;
   max-width: auto;
   border-radius: 20px;
   position: relative;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .monitorTable {
@@ -50,10 +65,11 @@
   flex-direction: column;
   padding: 20px;
   background-color: #f3f3f3;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   max-width: 400px;
   border-radius: 20px;
   position: relative;
+  flex: 1;
 }
 
 .legend {
@@ -68,13 +84,14 @@
 
 .barContainer {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex: 3;
+  flex-direction: column;
+  /* flex-wrap: wrap; */
   padding: 20px;
   background-color: #f3f3f3;
-  margin-left: 20px;
-  max-width: 648px;
-  max-height: 289px;
+  /* margin-left: 20px; */
+  /* max-width: 648px; */
+  max-height: 318px;
   border-radius: 20px;
 }
 
@@ -101,6 +118,49 @@
 }
 
 .customLegend {
+  font-size: 14px;
+  color: #666;
+  text-align: right;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.selector {
   display: flex;
-  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 500;
+  /* position: sticky; */
+  width: 100%;
+
+  /* color: #4339F2; */
+}
+
+.selector button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 30px;
+  transition: color 0.2s;
+}
+
+.chart {
+  height: 350px;
+}
+
+.minContainer {
+  flex: 1;
+}
+
+.midContainer {
+  flex: 3;
+}
+
+.dualBarChart {
+  height: 350px;
+  display: flex;
+  flex: 1;
+  flex-direction: row;
 }

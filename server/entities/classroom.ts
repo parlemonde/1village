@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, ManyToOne,
 
 import type { Country } from '../../types/country.type';
 import { countriesMap } from '../utils/countries-map';
+import { Activity } from './activity';
 import { Student } from './student';
 import { User } from './user';
 import { Village } from './village';
@@ -49,4 +50,7 @@ export class Classroom {
 
   @OneToMany(() => Student, (student: Student) => student.classroom, { onDelete: 'CASCADE' })
   public students: Student[];
+
+  @OneToMany(() => Activity, (activity) => activity.classroom)
+  public activities: Activity[];
 }

@@ -1,0 +1,37 @@
+.commentCard {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    background-color: #f4f4fe;
+    border: 1px solid #d0cffe;
+    border-radius: 20px;
+    padding: 10px 20px;
+    width: 100%;
+    min-height: 80px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .commentText {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .editIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background-color: #f4f4fe;
+    border: 1px solid #d0cffe;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .editIcon:hover {
+    background-color: #e0dffe;
+  }
+  

@@ -3,7 +3,8 @@
     text-align: center;
     padding: 16px;
     border-radius: 1rem;
-    width: auto;
+    width: 300px;
+    flex-wrap: wrap;
     color: #FFF;
     flex: 1;
     display: flex;
@@ -21,7 +22,7 @@
 
 .cardContainer>p {
     margin: 0;
-    padding: 0;
+    padding: 0 1rem;
 }
 
 .cardContainer>p:first-child {

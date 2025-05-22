@@ -10,6 +10,19 @@ export interface ClassroomsStats {
   commentsCount: number;
   videosCount: number;
   activities: { count: number; type: number; phase: number }[];
+  phases?: Phases[];
+}
+
+export type ClassroomStats = Omit<VillageStats, 'floatingAccounts' | 'familyAccountsCount'>;
+
+export interface Phases {
+  data: Record<string, string | number>[];
+  phase: string;
+}
+
+export interface ClassroomStat {
+  data: ClassroomsStats[];
+  phases: Phases[];
 }
 
 export interface SessionsStats {
@@ -35,8 +48,6 @@ export interface VillageStats {
   familiesWithoutAccount: FamiliesWithoutAccount[];
   floatingAccounts: FloatingAccount[];
 }
-
-export type ClassroomStats = Omit<VillageStats, 'floatingAccounts' | 'familyAccountsCount'>;
 
 export interface FamiliesWithoutAccount {
   student_id: number;
