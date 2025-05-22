@@ -44,7 +44,7 @@ async function getCountriesStats(countryId: string | null, phase: number): Promi
 }
 
 export const useGetSessionsStats = (phase: number | null) => {
-  return useQuery(['sessions-stats'], () => getSessionsStats(phase));
+  return useQuery(['sessions-stats', phase], () => getSessionsStats(phase));
 };
 export const useGetOneVillageStats = () => {
   return useQuery(['1v-stats'], () => getOneVillageStats());

@@ -25,7 +25,7 @@ import type { ClassroomsStats, OneVillageTableRow } from 'types/statistics.type'
 
 const GlobalStats = () => {
   const [value, setValue] = useState(0);
-  const [selectedPhase, setSelectedPhase] = useState<number>(7);
+  const [selectedPhase, setSelectedPhase] = useState<number>(0);
   const oneVillageStats = useGetOneVillageStats();
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
   const [floatingAccountsRows, setFloatingAccountsRows] = React.useState<Array<OneVillageTableRow>>([]);
