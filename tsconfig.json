@@ -32,14 +32,21 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "incremental": true
+    "incremental": true,
+    "types": [
+      "react",
+      "react-dom",
+      "jest",
+      "node"
+    ]
   },
   "include": [
     "next-env.d.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "types/**/*.ts"
-, "src/components/admin/dashboard-statistics/map/TooltipMouseTracker"  ],
+    "types/**/*.ts",
+    "src/components/admin/dashboard-statistics/map/TooltipMouseTracker"
+  ],
   "exclude": [
     "node_modules"
   ]

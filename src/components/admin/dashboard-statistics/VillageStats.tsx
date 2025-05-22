@@ -6,6 +6,7 @@ import Tabs from '@mui/material/Tabs';
 
 import { OneVillageTable } from '../OneVillageTable';
 import TabPanel from './TabPanel';
+import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
 import CountriesDropdown from './filters/CountriesDropdown';
 import PhaseDropdown from './filters/PhaseDropdown';
@@ -14,6 +15,7 @@ import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeaders';
+import { useGetMediatheque } from 'src/api/mediatheque/mediatheque.get';
 import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
 import { useCountries } from 'src/services/useCountries';
 import { useVillages } from 'src/services/useVillages';
@@ -31,10 +33,11 @@ const VillageStats = () => {
 
   const { villages } = useVillages(options);
   const villagesStats = useGetVillagesStats(+selectedVillage, selectedPhase);
+  const mediatheque = useGetMediatheque();
+
+  // Update options when selectedCountry changes
   React.useEffect(() => {
-    setOptions({
-      countryIsoCode: selectedCountry,
-    });
+    setOptions({ countryIsoCode: selectedCountry });
   }, [selectedCountry]);
 
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
@@ -43,6 +46,13 @@ const VillageStats = () => {
       setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(villagesStats.data?.familiesWithoutAccount));
     }
   }, [villagesStats.data?.familiesWithoutAccount]);
+
+  const villagePublications = React.useMemo(() => {
+    if (!mediatheque.data || !selectedVillage) return 0;
+    return mediatheque.data.filter(
+      (activity: any) => activity.villageId === parseInt(selectedVillage) && !!activity.displayAsUser && activity.user.type === 3,
+    ).length;
+  }, [mediatheque.data, selectedVillage]);
 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
@@ -92,6 +102,13 @@ const VillageStats = () => {
       </Tabs>
       <TabPanel value={value} index={0}>
         <p>Statistiques - En classe</p>
+        {!selectedVillage ? (
+          <PelicoCard message={pelicoMessage} />
+        ) : (
+          <div className={styles.exchangesConnectionsContainer}>
+            <ClassesExchangesCard totalPublications={villagePublications} totalComments={0} totalVideos={0} />
+          </div>
+        )}
       </TabPanel>
       <TabPanel value={value} index={1}>
         {!selectedVillage ? (

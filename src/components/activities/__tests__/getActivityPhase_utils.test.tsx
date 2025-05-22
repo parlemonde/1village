@@ -10,7 +10,7 @@ describe('Test function getActivityPhase', () => {
       it('should return activePhase for ANTHEM', () => {
         expect(getActivityPhase(ActivityType.ANTHEM, activePhase, selectedPhase)).toEqual(activePhase);
       });
-      it.each(activitiesArray)('should return phase 1 for Mascotte, Presentation, Contenu Libre, Indice, Symbol', (type) => {
+      it.each(activitiesArray)('should return phase 1 for Mascotte, Presentation, Contenu Libre, Indice, Symbol', (type: string) => {
         switch (Number(type)) {
           case ActivityType.PRESENTATION:
           case ActivityType.CONTENU_LIBRE:
@@ -23,7 +23,7 @@ describe('Test function getActivityPhase', () => {
       });
       it.each(activitiesArray)(
         'Mascotte, Presentation, Contenu Libre, Indice, Symbol should have selectedPhase in specificActivityPhase',
-        (type, ...phaseArray) => {
+        (type: string, ...phaseArray: number[][]) => {
           const [phases] = phaseArray;
           switch (Number(type)) {
             case ActivityType.PRESENTATION:
@@ -37,7 +37,7 @@ describe('Test function getActivityPhase', () => {
         },
       );
 
-      it.each(activitiesArray)('should throw error for the other activities', (type) => {
+      it.each(activitiesArray)('should throw error for the other activities', (type: string) => {
         switch (Number(type)) {
           case ActivityType.ENIGME:
           case ActivityType.DEFI:
@@ -54,7 +54,7 @@ describe('Test function getActivityPhase', () => {
             break;
         }
       });
-      it.each(activitiesArray)('the other activities should not have selectedPhase in array', (type, ...phaseArray) => {
+      it.each(activitiesArray)('the other activities should not have selectedPhase in array', (type: string, ...phaseArray: number[][]) => {
         const [phases] = phaseArray;
         switch (Number(type)) {
           case ActivityType.ENIGME:
@@ -76,7 +76,7 @@ describe('Test function getActivityPhase', () => {
       it('should return activePhase for ANTHEM', () => {
         expect(getActivityPhase(ActivityType.ANTHEM, activePhase, selectedPhase)).toEqual(activePhase);
       });
-      it.each(activitiesArray)('should throw error for the other activities except ANTHEM', (type) => {
+      it.each(activitiesArray)('should throw error for the other activities except ANTHEM', (type: string) => {
         switch (Number(type)) {
           case ActivityType.PRESENTATION:
           case ActivityType.ENIGME:
@@ -104,7 +104,7 @@ describe('Test function getActivityPhase', () => {
       it('should return activePhase for ANTHEM', () => {
         expect(getActivityPhase(ActivityType.ANTHEM, activePhase, selectedPhase)).toEqual(activePhase);
       });
-      it.each(activitiesArray)('should throw error for the other activities except ANTHEM', (type) => {
+      it.each(activitiesArray)('should throw error for the other activities except ANTHEM', (type: string) => {
         switch (Number(type)) {
           case ActivityType.PRESENTATION:
           case ActivityType.ENIGME:
@@ -136,7 +136,7 @@ describe('Test function getActivityPhase', () => {
       it('should return activePhase for ANTHEM', () => {
         expect(getActivityPhase(ActivityType.ANTHEM, activePhase, selectedPhase)).toEqual(activePhase);
       });
-      it.each(activitiesArray)('should return phase 1 for Mascotte, Presentation, Contenu Libre, Indice, Symbol', (type) => {
+      it.each(activitiesArray)('should return phase 1 for Mascotte, Presentation, Contenu Libre, Indice, Symbol', (type: string) => {
         switch (Number(type)) {
           case ActivityType.PRESENTATION:
           case ActivityType.CONTENU_LIBRE:
@@ -149,7 +149,7 @@ describe('Test function getActivityPhase', () => {
       });
       it.each(activitiesArray)(
         'Mascotte, Presentation, Contenu Libre, Indice, Symbol should have selectedPhase in specificActivityPhase',
-        (type, ...phaseArray) => {
+        (type: string, ...phaseArray: number[][]) => {
           const [phases] = phaseArray;
           switch (Number(type)) {
             case ActivityType.PRESENTATION:
@@ -163,7 +163,7 @@ describe('Test function getActivityPhase', () => {
         },
       );
 
-      it.each(activitiesArray)('should throw error for the other activities', (type) => {
+      it.each(activitiesArray)('should throw error for the other activities', (type: string) => {
         switch (Number(type)) {
           case ActivityType.ENIGME:
           case ActivityType.DEFI:
@@ -180,7 +180,7 @@ describe('Test function getActivityPhase', () => {
             break;
         }
       });
-      it.each(activitiesArray)('the other activities should not have selectedPhase in array', (type, ...phaseArray) => {
+      it.each(activitiesArray)('the other activities should not have selectedPhase in array', (type: string, ...phaseArray: number[][]) => {
         const [phases] = phaseArray;
         switch (Number(type)) {
           case ActivityType.ENIGME:
@@ -204,7 +204,7 @@ describe('Test function getActivityPhase', () => {
       });
       it.each(activitiesArray)(
         'should return phase 2 for Mascotte, Presentation, Contenu Libre, Enigme, Defi, Question, Game, Reportage, Reaction, Story ',
-        (type) => {
+        (type: string) => {
           switch (Number(type)) {
             case ActivityType.PRESENTATION:
             case ActivityType.ENIGME:
@@ -223,7 +223,7 @@ describe('Test function getActivityPhase', () => {
       );
       it.each(activitiesArray)(
         'Mascotte, Presentation, Contenu Libre, Enigme, Defi, Question, Game, Reportage, Reaction should have selectedPhase in specificActivityPhase',
-        (type, ...phaseArray) => {
+        (type: string, ...phaseArray: number[][]) => {
           const [phases] = phaseArray;
           switch (Number(type)) {
             case ActivityType.INDICE:
@@ -235,7 +235,7 @@ describe('Test function getActivityPhase', () => {
           }
         },
       );
-      it.each(activitiesArray)('should throw error for the other activities', (type) => {
+      it.each(activitiesArray)('should throw error for the other activities', (type: string) => {
         switch (Number(type)) {
           case ActivityType.INDICE:
           case ActivityType.SYMBOL:
@@ -253,8 +253,7 @@ describe('Test function getActivityPhase', () => {
       it('should return activePhase for ANTHEM', () => {
         expect(getActivityPhase(ActivityType.ANTHEM, activePhase, selectedPhase)).toEqual(activePhase);
       });
-
-      it.each(activitiesArray)('should throw error for the other activities except ANTHEM', (type) => {
+      it.each(activitiesArray)('should throw error for the other activities except ANTHEM', (type: string) => {
         switch (Number(type)) {
           case ActivityType.PRESENTATION:
           case ActivityType.ENIGME:
@@ -286,7 +285,7 @@ describe('Test function getActivityPhase', () => {
       it('should return activePhase for ANTHEM', () => {
         expect(getActivityPhase(ActivityType.ANTHEM, activePhase, selectedPhase)).toEqual(activePhase);
       });
-      it.each(activitiesArray)('should return phase 1 for Mascotte, Presentation, Contenu Libre, Indice, Symbol', (type) => {
+      it.each(activitiesArray)('should return phase 1 for Mascotte, Presentation, Contenu Libre, Indice, Symbol', (type: string) => {
         switch (Number(type)) {
           case ActivityType.PRESENTATION:
           case ActivityType.CONTENU_LIBRE:
@@ -299,7 +298,7 @@ describe('Test function getActivityPhase', () => {
       });
       it.each(activitiesArray)(
         'Mascotte, Presentation, Contenu Libre, Indice, Symbol should have selectedPhase in specificActivityPhase',
-        (type, ...phaseArray) => {
+        (type: string, ...phaseArray: number[][]) => {
           const [phases] = phaseArray;
           switch (Number(type)) {
             case ActivityType.PRESENTATION:
@@ -313,7 +312,7 @@ describe('Test function getActivityPhase', () => {
         },
       );
 
-      it.each(activitiesArray)('should throw error for the other activities', (type) => {
+      it.each(activitiesArray)('should throw error for the other activities', (type: string) => {
         switch (Number(type)) {
           case ActivityType.ENIGME:
           case ActivityType.DEFI:
@@ -330,7 +329,7 @@ describe('Test function getActivityPhase', () => {
             break;
         }
       });
-      it.each(activitiesArray)('the other activities should not have selectedPhase in array', (type, ...phaseArray) => {
+      it.each(activitiesArray)('the other activities should not have selectedPhase in array', (type: string, ...phaseArray: number[][]) => {
         const [phases] = phaseArray;
         switch (Number(type)) {
           case ActivityType.ENIGME:
@@ -354,7 +353,7 @@ describe('Test function getActivityPhase', () => {
       });
       it.each(activitiesArray)(
         'should return phase 2 for Mascotte, Presentation, Contenu Libre, Enigme, Defi, Question, Game, Reportage, Reaction, Story ',
-        (type) => {
+        (type: string) => {
           switch (Number(type)) {
             case ActivityType.PRESENTATION:
             case ActivityType.ENIGME:
@@ -373,7 +372,7 @@ describe('Test function getActivityPhase', () => {
       );
       it.each(activitiesArray)(
         'Mascotte, Presentation, Contenu Libre, Enigme, Defi, Question, Game, Reportage, Reaction should have selectedPhase in specificActivityPhase',
-        (type, ...phaseArray) => {
+        (type: string, ...phaseArray: number[][]) => {
           const [phases] = phaseArray;
           switch (Number(type)) {
             case ActivityType.INDICE:
@@ -385,7 +384,7 @@ describe('Test function getActivityPhase', () => {
           }
         },
       );
-      it.each(activitiesArray)('should throw error for the other activities', (type) => {
+      it.each(activitiesArray)('should throw error for the other activities', (type: string) => {
         switch (Number(type)) {
           case ActivityType.INDICE:
           case ActivityType.SYMBOL:
@@ -403,21 +402,24 @@ describe('Test function getActivityPhase', () => {
       it('should return activePhase for ANTHEM', () => {
         expect(getActivityPhase(ActivityType.ANTHEM, activePhase, selectedPhase)).toEqual(activePhase);
       });
-      it.each(activitiesArray)('should return phase 3 for Mascotte, Presentation, Contenu Libre, Question, Reinvent story, Vers record ', (type) => {
-        switch (Number(type)) {
-          case ActivityType.PRESENTATION:
-          case ActivityType.QUESTION:
-          case ActivityType.CONTENU_LIBRE:
-          case ActivityType.MASCOTTE:
-          case ActivityType.RE_INVENT_STORY:
-          case ActivityType.CLASS_ANTHEM:
-            expect(getActivityPhase(Number(type), activePhase, selectedPhase)).toEqual(selectedPhase);
-            break;
-        }
-      });
+      it.each(activitiesArray)(
+        'should return phase 3 for Mascotte, Presentation, Contenu Libre, Question, Reinvent story, Vers record ',
+        (type: string) => {
+          switch (Number(type)) {
+            case ActivityType.PRESENTATION:
+            case ActivityType.QUESTION:
+            case ActivityType.CONTENU_LIBRE:
+            case ActivityType.MASCOTTE:
+            case ActivityType.RE_INVENT_STORY:
+            case ActivityType.CLASS_ANTHEM:
+              expect(getActivityPhase(Number(type), activePhase, selectedPhase)).toEqual(selectedPhase);
+              break;
+          }
+        },
+      );
       it.each(activitiesArray)(
         'Mascotte, Presentation, Contenu Libre, Question, Story, Reinvent story, Vers record should have selectedPhase in specificActivityPhase',
-        (type, ...phaseArray) => {
+        (type: string, ...phaseArray: number[][]) => {
           const [phases] = phaseArray;
           switch (Number(type)) {
             case ActivityType.ENIGME:
@@ -432,7 +434,7 @@ describe('Test function getActivityPhase', () => {
           }
         },
       );
-      it.each(activitiesArray)('should throw error for the other activities', (type) => {
+      it.each(activitiesArray)('should throw error for the other activities', (type: string) => {
         switch (Number(type)) {
           case ActivityType.ENIGME:
           case ActivityType.DEFI:

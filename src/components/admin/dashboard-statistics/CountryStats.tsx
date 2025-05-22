@@ -22,6 +22,7 @@ import styles from './styles/charts.module.css';
 import { sumContribution } from './utils/sumData';
 import { createFamiliesWithoutAccountRows, createFloatingAccountsRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from './utils/tableHeaders';
+import { useGetMediatheque } from 'src/api/mediatheque/mediatheque.get';
 import { useGetCountriesStats } from 'src/api/statistics/statistics.get';
 import { useCountries } from 'src/services/useCountries';
 import type { OneVillageTableRow } from 'types/statistics.type';
@@ -46,6 +47,7 @@ const CountryStats = () => {
   const noDataFoundMessage = 'Pas de données pour le Pays sélectionné';
   const { countries } = useCountries();
   const countriesStats = useGetCountriesStats(selectedCountry, selectedPhase);
+  const mediatheque = useGetMediatheque();
 
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
   const [floatingAccountsRows, setFloatingAccountsRows] = React.useState<Array<OneVillageTableRow>>([]);
@@ -70,7 +72,7 @@ const CountryStats = () => {
   const filteredVillage = mockClassroomsStats.filter((village) => village.classroomCountryCode === selectedCountry);
   const countryData = sumContribution[selectedCountry];
 
-  const { totalActivities = 0, totalComments = 0, totalVideos = 0 } = countryData || {};
+  const { totalComments = 0, totalVideos = 0 } = countryData || {};
 
   const classStats = mockConnectionsStats.map((classroom) => ({
     registered: classroom.registeredClassroomsCount,
@@ -92,6 +94,16 @@ const CountryStats = () => {
   const handlePhaseChange = (phase: string) => {
     setSelectedPhase(+phase);
   };
+
+  const countryPublications = React.useMemo(() => {
+    if (!mediatheque.data || !selectedCountry) return 0;
+    return mediatheque.data.filter(
+      (activity: any) =>
+        activity.village?.countries?.some((country: any) => country.isoCode === selectedCountry) &&
+        !!activity.displayAsUser &&
+        activity.user.type === 3,
+    ).length;
+  }, [mediatheque.data, selectedCountry]);
 
   return (
     <>
@@ -184,7 +196,7 @@ const CountryStats = () => {
               <BarCharts barChartData={barChartData} title={EngagementBarChartTitle} />
             </div>
             <div className={styles.exchangesConnectionsContainer}>
-              <ClassesExchangesCard totalPublications={totalActivities} totalComments={totalComments} totalVideos={totalVideos} />
+              <ClassesExchangesCard totalPublications={countryPublications} totalComments={totalComments} totalVideos={totalVideos} />
               <BarCharts className={styles.connectionsChart} barChartData={barChartData} title={ContributionBarChartTitle} />
             </div>
             <div>
