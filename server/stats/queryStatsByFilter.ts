@@ -9,6 +9,17 @@ const studentRepository = AppDataSource.getRepository(Student);
 const villageRepository = AppDataSource.getRepository(Village);
 const userRepository = AppDataSource.getRepository(User);
 
+const getVillagesFromCountryId = async (countryId: string | undefined): Promise<Village[]> => {
+  if (countryId === undefined) {
+    return await villageRepository.find();
+  }
+
+  return await villageRepository
+    .createQueryBuilder('village')
+    .where('village.countryCodes LIKE :countryId', { countryId: `%${countryId}%` })
+    .getMany();
+}
+
 export const getFamiliesWithoutAccount = async (condition?: string, conditionValue?: object) => {
   const query = studentRepository
     .createQueryBuilder('student')
@@ -46,22 +57,16 @@ export const getConnectedFamiliesCount = async (filterParams: StatsFilterParams)
     if (village) return await getCountForVillage(village, phase, classroomId);
   }
 
-  if (countryId) {
-    const villages = await villageRepository
-      .createQueryBuilder('village')
-      .where('village.countryCodes LIKE :countryId', { countryId: `%${countryId}%` })
-      .getMany();
-
-    const countPromises = villages.map((vil) => getCountForVillage(vil, phase));
-    const results = await Promise.all(countPromises);
-    return results.reduce((total, count) => total + count, 0);
-  }
-
   if (villageId) {
     const village = await villageRepository.findOne({ where: { id: villageId } });
     if (village) return await getCountForVillage(village, phase);
   }
-  return 0;
+
+  const villages = await getVillagesFromCountryId(countryId);
+
+  const countPromises = villages.map((vil) => getCountForVillage(vil, phase));
+  const results = await Promise.all(countPromises);
+  return results.reduce((total, count) => total + count, 0);
 };
 
 export const getFloatingAccounts = async (filterParams: StatsFilterParams) => {
@@ -83,18 +88,17 @@ export const getFamilyAccountsCount = async (filterParams: StatsFilterParams) =>
   if (villageId) {
     const village = await villageRepository.findOne({ where: { id: villageId } });
     if (village) familyAccountsCount = await countFamilyAccounts(village, phase);
-  } else if (countryId) {
-    const villages = await villageRepository
-      .createQueryBuilder('village')
-      .where('village.countryCodes LIKE :countryId', { countryId: `%${countryId}%` })
-      .getMany();
-    const countPromises = villages.map(async (vil) => {
-      return countFamilyAccounts(vil, phase);
-    });
-
-    const results = (await Promise.all(countPromises)) as number[];
-    familyAccountsCount = results.reduce((total, count) => total + count, 0);
+    return familyAccountsCount;
   }
+
+  const villages = await getVillagesFromCountryId(countryId);
+
+  const countPromises = villages.map(async (vil) => {
+    return countFamilyAccounts(vil, phase);
+  });
+
+  const results = (await Promise.all(countPromises)) as number[];
+  familyAccountsCount = results.reduce((total, count) => total + count, 0);
 
   return familyAccountsCount;
 };
@@ -105,18 +109,17 @@ export const getChildrenCodesCount = async (filterParams: StatsFilterParams, whe
   if (villageId) {
     const village = await villageRepository.findOne({ where: { id: villageId } });
     if (village) childrenCodesCount = await countChildrenCodes(village, phase, whereClause);
-  } else if (countryId) {
-    const villages = await villageRepository
-      .createQueryBuilder('village')
-      .where('village.countryCodes LIKE :countryId', { countryId: `%${countryId}%` })
-      .getMany();
-    const countPromises = villages.map(async (vil) => {
-      const whereClause = { clause: 'classroom.village = :villageId', value: { villageId: vil.id } };
-      return await countChildrenCodes(vil, phase, whereClause);
-    });
-    const results = await Promise.all(countPromises);
-    childrenCodesCount = results.reduce((total, count) => total + count, 0);
+    return childrenCodesCount;
   }
+
+  const villages = await getVillagesFromCountryId(countryId);
+
+  const countPromises = villages.map(async (vil) => {
+    const whereClause = { clause: 'classroom.village = :villageId', value: { villageId: vil.id } };
+    return await countChildrenCodes(vil, phase, whereClause);
+  });
+  const results = await Promise.all(countPromises);
+  childrenCodesCount = results.reduce((total, count) => total + count, 0);
 
   return childrenCodesCount;
 };
