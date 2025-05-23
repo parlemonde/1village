@@ -1,7 +1,10 @@
+import React from 'react';
+
 import { Box } from '@mui/material';
+
 import { OneVillageTable } from '../OneVillageTable';
 import { countryToFlag } from 'src/utils';
-import { Country } from 'types/country.type';
+import type { Country } from 'types/country.type';
 
 type CountryStatus = 'active' | 'observer' | 'ghost' | 'absent';
 
@@ -23,7 +26,6 @@ const getCountryColor = (status: CountryStatus) => {
       return '#FFF';
   }
 };
-
 
 // Même structure de données que dans la table villages-mondes (manage/villages)
 

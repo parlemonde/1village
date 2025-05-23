@@ -4,8 +4,8 @@ import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simp
 import CircleIcon from '@mui/icons-material/Circle';
 
 import TooltipMouseTracker from '../TooltipMouseTracker/TooltipMouseTracker';
-import { countryToFlag } from 'src/utils';
 import styles from './DashboardWorldMap.module.css';
+import { countryToFlag } from 'src/utils';
 
 type CountryStatus = 'active' | 'observer' | 'ghost' | 'absent';
 

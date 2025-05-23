@@ -101,8 +101,6 @@ export const OneVillageTable = ({
           let aValue = a[exactKey] || '';
           let bValue = b[exactKey] || '';
 
-         
-
           if (options.order?.toLowerCase() === 'country' || options.order?.toLowerCase() === 'countries') {
             aValue = removeCountryFlagFromText(aValue as string);
             bValue = removeCountryFlagFromText(bValue as string);

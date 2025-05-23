@@ -5,6 +5,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box, Grid, Tab, Tabs } from '@mui/material';
 
 import { OneVillageTable } from '../OneVillageTable';
+import ActivityTable from './ActivityTable';
 import TabPanel from './TabPanel';
 import TeamComments from './TeamComments';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
@@ -16,7 +17,6 @@ import { createFamiliesWithoutAccountRows, createFloatingAccountsRows } from './
 import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from './utils/tableHeaders';
 import { useGetOneVillageStats, useGetSessionsStats } from 'src/api/statistics/statistics.get';
 import type { OneVillageTableRow } from 'types/statistics.type';
-import ActivityTable from './ActivityTable';
 
 const GlobalStats = () => {
   const [value, setValue] = React.useState(0);
