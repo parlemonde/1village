@@ -16,6 +16,7 @@ import PhaseDetails from './menu/PhaseDetails';
 import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
+import { useGetCountriesStats } from 'src/api/statistics/statistics.get';
 import { useCountries } from 'src/services/useCountries';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
@@ -33,12 +34,13 @@ const ContributionBarChartTitle = 'Contribution des classes';
 
 const CountryStats = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
-  // const [selectedPhase, setSelectedPhase] = useState<number>(0);
+  const [selectedPhase, _setSelectedPhase] = useState<number>(0);
   const pelicoMessage = 'Merci de sélectionner un pays pour analyser ses statistiques ';
   const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
   const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(null, selectedCountry, null);
 
   const { countries } = useCountries();
+  const countriesStats = useGetCountriesStats(selectedCountry, selectedPhase);
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
   };
@@ -109,7 +111,11 @@ const CountryStats = () => {
             <BarCharts className={styles.midContainer} dataByMonth={mockDataByMonth} title={EngagementBarChartTitle} />
           </div>
           <div className="statistic__average--container">
-            <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
+            <ClassesExchangesCard
+              totalPublications={countriesStats.data?.exchanges.publicationsCount || 0}
+              totalComments={countriesStats.data?.exchanges.commentsCount || 0}
+              totalVideos={countriesStats.data?.exchanges.videosCount || 0}
+            />
             <BarCharts dataByMonth={mockDataByMonth} title={ContributionBarChartTitle} />
           </div>
           {statisticsClassrooms && statisticsClassrooms.phases && (
