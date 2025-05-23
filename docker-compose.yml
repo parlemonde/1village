@@ -2,7 +2,7 @@ services:
   backend:
     build:
       context: ./
-      dockerfile: Dockerfile.development
+      dockerfile: dev.Dockerfile
     ports:
       - '5000:5000'
     links:
@@ -22,10 +22,11 @@ services:
         condition: service_healthy
       dynamodb:
         condition: service_started
+
   migration:
     build:
       context: ./
-      dockerfile: Dockerfile.development
+      dockerfile: dev.Dockerfile
     links:
       - mysql
     env_file:
@@ -34,6 +35,7 @@ services:
       mysql:
         condition: service_healthy
     command: ['yarn', 'run', 'migration:run-dev']
+
   mysql:
     image: mysql:8
     environment:
@@ -47,6 +49,7 @@ services:
       - '33060:33060'
     volumes:
       - ./.mysql-data:/var/lib/mysql
+
   minio:
     image: minio/minio
     ports:
@@ -60,6 +63,7 @@ services:
     volumes:
       - ./.minio-data:/data
     command: server --console-address ":9090" /data
+
   dynamodb:
     command: '-jar DynamoDBLocal.jar -sharedDb -dbPath ./data'
     image: 'amazon/dynamodb-local:latest'
