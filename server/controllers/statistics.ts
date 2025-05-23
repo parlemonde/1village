@@ -15,8 +15,6 @@ import {
   getFamiliesWithoutAccountForCountry,
   getFamilyAccountsCountForCountry,
   getFloatingAccountsForCountry,
-  getAllCountriesStatus,
-  populateCountries,
 } from '../stats/countryStats';
 import {
   getChildrenCodesCountForGlobal,
@@ -90,16 +88,6 @@ statisticsController.get({ path: '/villages/:villageId' }, async (_req, res) => 
     familiesWithoutAccount: await getFamiliesWithoutAccountForVillage(villageId),
     floatingAccounts: await getFloatingAccountsForVillage(villageId),
   });
-});
-
-statisticsController.get({ path: '/countries/populate' }, async (_req, res) => {
-  await populateCountries();
-  res.sendJSON({ message: 'Pays ajoutés avec succès' });
-});
-
-statisticsController.get({ path: '/countries/status' }, async (_req, res) => {
-  const statuses = await getAllCountriesStatus();
-  res.sendJSON({ statuses });
 });
 
 statisticsController.get({ path: '/countries/:countryId' }, async (_req, res) => {
