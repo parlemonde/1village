@@ -5,7 +5,7 @@ import {
   getFamiliesWithoutAccount,
   getFamilyAccountsCount,
   getFloatingAccounts,
-} from './queryStatsByFilter';
+} from './queryStatsByFilters';
 
 export const getFamiliesWithoutAccountForGlobal = async () => {
   return getFamiliesWithoutAccount();

@@ -12,6 +12,7 @@ import 'src/styles/register.scss';
 import 'src/styles/mon-compte.scss';
 import 'src/styles/se-presenter.scss';
 import 'src/styles/slot-machine.scss';
+import 'src/styles/statistic.scss';
 
 import type { EmotionCache } from '@emotion/react';
 import { CacheProvider } from '@emotion/react';
