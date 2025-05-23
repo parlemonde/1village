@@ -4,51 +4,11 @@ import CircleIcon from '@mui/icons-material/Circle';
 import { useQuery } from 'react-query';
 import TooltipMouseTracker from '../TooltipMouseTracker/TooltipMouseTracker';
 import styles from './DashboardWorldMap.module.css';
-
-type CountryStatus = 'active' | 'observer' | 'ghost' | 'absent';
-
-interface CountryData {
-  iso2: string;
-  status: CountryStatus;
-}
-
-const getCountryColor = (status: CountryStatus) => {
-  switch (status) {
-    case 'active':
-      return '#4CC64A';
-    case 'observer':
-      return '#6082FC';
-    case 'ghost':
-      return '#FFD678';
-    case 'absent':
-      return '#D11818';
-    default:
-      return '#FFF';
-  }
-};
-
-const getStatusLabel = (status: CountryStatus) => {
-  switch (status) {
-    case 'active':
-      return 'Actif';
-    case 'observer':
-      return 'Observateur';
-    case 'ghost':
-      return 'Fantôme';
-    case 'absent':
-      return 'Absent';
-    default:
-      return '';
-  }
-};
-
-
+import { countryToFlag } from 'src/utils';
 
 const DashboardWorldMap = () => {
   const [isTooltipVisible, setIsTooltipVisible] = React.useState(false);
-  const [tooltipData, setTooltipData] = React.useState<React.ReactNode>('');
-
-
+  const [tooltipData, setTooltipData] = React.useState('');
 
   return (
     <div className={styles.mapContainer}>
@@ -59,7 +19,9 @@ const DashboardWorldMap = () => {
               geographies.map((geo) => (
                 <Geography
                   onMouseOver={() => {
-                    setTooltipData(geo.properties.name);
+                    const countryName = geo.properties.nameFR || geo.properties.name;
+                    const flag = countryToFlag(geo.properties.iso2);
+                    setTooltipData(`${flag} ${countryName}`);
                     setIsTooltipVisible(true);
                   }}
                   onMouseLeave={() => setIsTooltipVisible(false)}
