@@ -6,7 +6,7 @@ interface MouseTrackerProps {
   isVisible: boolean;
 }
 
-const MouseTracker = ({ children, offset = { x: 15, y: 15 }, isVisible }: MouseTrackerProps) => {
+const MouseTracker = ({ children, offset = { x: 0, y: 0 }, isVisible }: MouseTrackerProps) => {
   const [position, setPosition] = React.useState({ x: 0, y: 0 });
 
   React.useEffect(() => {
@@ -26,19 +26,15 @@ const MouseTracker = ({ children, offset = { x: 15, y: 15 }, isVisible }: MouseT
   return (
     <div
       style={{
-        position: 'fixed',
+        position: 'absolute',
         top: 0,
         left: 0,
-        padding: '0.5rem 1rem',
+        padding: '1rem 2rem',
         display: isVisible ? 'block' : 'none',
         background: 'white',
         boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
         transform: `translate(${position.x}px, ${position.y}px)`,
         pointerEvents: 'none',
-        zIndex: 1000,
-        borderRadius: '4px',
-        fontSize: '0.875rem',
-        whiteSpace: 'nowrap',
       }}
     >
       {children}

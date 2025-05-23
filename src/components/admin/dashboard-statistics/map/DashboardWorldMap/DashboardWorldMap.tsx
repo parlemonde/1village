@@ -3,8 +3,6 @@ import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simp
 import CircleIcon from '@mui/icons-material/Circle';
 import { useQuery } from 'react-query';
 import TooltipMouseTracker from '../TooltipMouseTracker/TooltipMouseTracker';
-import { countryToFlag } from 'src/utils';
-import { axiosRequest } from 'src/utils/axiosRequest';
 import styles from './DashboardWorldMap.module.css';
 
 type CountryStatus = 'active' | 'observer' | 'ghost' | 'absent';
@@ -44,24 +42,13 @@ const getStatusLabel = (status: CountryStatus) => {
   }
 };
 
-const fetchCountriesStatus = async (): Promise<{ statuses: CountryData[] }> => {
-  const response = await axiosRequest({
-    method: 'GET',
-    baseURL: '/api',
-    url: '/statistics/countries/status',
-  });
-  return response.data;
-};
+
 
 const DashboardWorldMap = () => {
   const [isTooltipVisible, setIsTooltipVisible] = React.useState(false);
   const [tooltipData, setTooltipData] = React.useState<React.ReactNode>('');
 
-  const { data: countriesData, isLoading } = useQuery(['countries-status'], fetchCountriesStatus);
 
-  if (isLoading) {
-    return <div>Chargement...</div>;
-  }
 
   return (
     <div className={styles.mapContainer}>
@@ -69,56 +56,39 @@ const DashboardWorldMap = () => {
         <ZoomableGroup center={[0, 0]} zoom={0.9}>
           <Geographies geography="/earth/countries.geo.json">
             {({ geographies }) =>
-              geographies.map((geo) => {
-                const countryData = countriesData?.statuses?.find((data) => data.iso2 === geo.properties.iso2);
-                return (
-                  <Geography
-                    onMouseOver={() => {
-                      const countryName = geo.properties.nameFR || geo.properties.name;
-                      const flag = countryToFlag(geo.properties.iso2);
-                      const status = countryData ? getStatusLabel(countryData.status) : '';
-                      setTooltipData(
-                        <div>
-                          {flag} {countryName}
-                          {status && (
-                            <>
-                              <br />
-                              <strong>{status}</strong>
-                            </>
-                          )}
-                        </div>,
-                      );
-                      setIsTooltipVisible(true);
-                    }}
-                    onMouseLeave={() => setIsTooltipVisible(false)}
-                    key={geo.rsmKey}
-                    geography={geo}
-                    style={{
-                      default: {
-                        fill: countryData ? getCountryColor(countryData.status) : '#FFF',
-                        stroke: '#000',
-                        strokeWidth: '.2',
-                        outline: 'none',
-                        transition: 'ease .2s',
-                      },
-                      hover: {
-                        fill: countryData ? getCountryColor(countryData.status) : '#edf2fb',
-                        stroke: '#000',
-                        strokeWidth: '.2',
-                        outline: 'none',
-                        cursor: 'pointer',
-                        opacity: 0.8,
-                      },
-                      pressed: {
-                        fill: countryData ? getCountryColor(countryData.status) : 'white',
-                        stroke: '#000',
-                        strokeWidth: '.2',
-                        outline: 'none',
-                      },
-                    }}
-                  />
-                );
-              })
+              geographies.map((geo) => (
+                <Geography
+                  onMouseOver={() => {
+                    setTooltipData(geo.properties.name);
+                    setIsTooltipVisible(true);
+                  }}
+                  onMouseLeave={() => setIsTooltipVisible(false)}
+                  key={geo.rsmKey}
+                  geography={geo}
+                  style={{
+                    default: {
+                      fill: '#FFF',
+                      stroke: '#000',
+                      strokeWidth: '.2',
+                      outline: 'none',
+                      transition: 'ease .2s',
+                    },
+                    hover: {
+                      fill: '#edf2fb',
+                      stroke: '#000',
+                      strokeWidth: '.2',
+                      outline: 'none',
+                      cursor: 'pointer',
+                    },
+                    pressed: {
+                      fill: 'white',
+                      stroke: '#000',
+                      strokeWidth: '.2',
+                      outline: 'none',
+                    },
+                  }}
+                />
+              ))
             }
           </Geographies>
         </ZoomableGroup>
