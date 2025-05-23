@@ -12,6 +12,7 @@ services:
       - '33060:33060'
     volumes:
       - ./.mysql-data:/var/lib/mysql
+
   minio:
     image: minio/minio
     ports:
@@ -25,6 +26,7 @@ services:
     volumes:
       - ./.minio-data:/data
     command: server --console-address ":9090" /data
+
   dynamodb:
     command: '-jar DynamoDBLocal.jar -sharedDb -dbPath ./data'
     image: 'amazon/dynamodb-local:latest'
