@@ -23,8 +23,8 @@ import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
+import { useGetCountriesWithVillages } from 'src/api/countries/countries.get';
 import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
-import { useCountries } from 'src/services/useCountries';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import { useVillages } from 'src/services/useVillages';
 import type { ClassroomsStats, OneVillageTableRow, SessionsStats } from 'types/statistics.type';
@@ -39,7 +39,7 @@ const VillageStats = () => {
   const [value, setValue] = React.useState(0);
   const [selectedPhase, setSelectedPhase] = React.useState<number>(0);
 
-  const { countries } = useCountries();
+  const { data: countries } = useGetCountriesWithVillages();
 
   const { villages } = useVillages(options);
   const villagesStats = useGetVillagesStats(+selectedVillage, selectedPhase);
