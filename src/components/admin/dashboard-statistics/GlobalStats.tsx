@@ -21,8 +21,6 @@ import { useGetOneVillageStats, useGetSessionsStats } from 'src/api/statistics/s
 import { useStatisticsClassrooms } from 'src/services/useStatistics';
 import type { ClassroomsStats, OneVillageTableRow } from 'types/statistics.type';
 
-//const BarChartTitle = 'Evolution des connexions';
-
 const GlobalStats = () => {
   const [value, setValue] = useState(0);
   const [selectedPhase, setSelectedPhase] = useState<number>(0);
@@ -105,13 +103,6 @@ const GlobalStats = () => {
             Nombre de connexions moyen par classe
           </AverageStatsCard>
         </div>
-        {/* TODO attribute not in statisticsSessions - not sure what to do with it
-
-          statisticsSessions.data?.barChartData && (
-          <div className="statistic--container">
-            <BarCharts dataByMonth={statisticsSessions.data?.barChartData} title={BarChartTitle} />
-          </div>
-        )*/}
         <div className="statistic__average--container">
           <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
           <ClassesContributionCard></ClassesContributionCard>
