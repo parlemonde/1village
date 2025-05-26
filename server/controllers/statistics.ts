@@ -1,5 +1,6 @@
 import type { Request } from 'express';
 
+import type { StatsFilterParams } from '../../types/statistics.type';
 import { Classroom } from '../entities/classroom';
 import {
   getConnectedClassroomsCount,
@@ -24,6 +25,7 @@ import {
   getFamilyAccountsCountForGlobal,
   getFloatingAccountsForGlobal,
 } from '../stats/globalStats';
+import { getChildrenCodesCount, getConnectedFamiliesCount, getFamilyAccountsCount } from '../stats/queryStatsByFilter';
 import {
   getAverageConnections,
   getAverageDuration,
@@ -50,10 +52,13 @@ const classroomRepository = AppDataSource.getRepository(Classroom);
 export const statisticsController = new Controller('/statistics');
 
 statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
-  const villageId = req.query.villageId ? parseInt(req.query.villageId as string) : null;
-  const countryCode = req.query.countryCode ? (req.query.countryCode as string) : null;
-  const classroomId = req.query.classroomId ? parseInt(req.query.classroomId as string) : null;
+  const villageId = req.query.villageId ? parseInt(req.query.villageId as string) : undefined;
+  const countryCode = req.query.countryCode ? (req.query.countryCode as string) : undefined;
+  const classroomId = req.query.classroomId ? parseInt(req.query.classroomId as string) : undefined;
   // const phase = req.params.phase ? parseInt(req.params.phase) : null;
+
+  const filters: StatsFilterParams = { villageId, countryId: countryCode, classroomId, phase: undefined };
+
   try {
     // Appelez les fonctions avec villageId
     const minDuration = await getMinDuration(villageId, countryCode, classroomId);
@@ -68,6 +73,9 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
     const registeredClassroomsCount = await getClassroomCount(villageId, countryCode, classroomId);
     const connectedClassroomsCount = await getConnectedClassroomsCount(villageId, countryCode, classroomId);
     const contributedClassroomsCount = await getContributedClassroomsCount(villageId, countryCode, classroomId);
+    const connectedFamiliesCount = await getConnectedFamiliesCount(filters);
+    const familyAccountCount = await getFamilyAccountsCount(filters);
+    const childrenCodesCount = await getChildrenCodesCount(filters);
     const barChartData = await getBarChartData();
 
     return res.sendJSON({
@@ -83,6 +91,9 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
       registeredClassroomsCount,
       connectedClassroomsCount,
       contributedClassroomsCount,
+      connectedFamiliesCount,
+      familyAccountCount,
+      childrenCodesCount,
       barChartData,
     });
   } catch (error) {

@@ -3,13 +3,18 @@ import { AppDataSource } from '../../utils/data-source';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
 
-export const createFamilyAccountQuery = (villageId: number) => {
-  const query = classroomRepository
+export const createFamilyAccountQuery = () => {
+  return classroomRepository
     .createQueryBuilder('classroom')
-    .innerJoin('classroom.village', 'village')
     .innerJoin('classroom.user', 'user')
     .innerJoin('classroom.students', 'student')
-    .where('user.type = :userType', { userType: 3 })
-    .andWhere('village.id = :villageId', { villageId });
-  return query;
+    .andWhere('user.type = :userType', { userType: 3 });
+};
+
+export const createFamilyAccountInVillageQuery = (villageId: number) => {
+  return createFamilyAccountQuery().innerJoin('classroom.village', 'village').andWhere('village.id = :villageId', { villageId });
+};
+
+export const createFamilyAccountInContryQuery = (countryId: string) => {
+  return createFamilyAccountQuery().andWhere('classroom.countryCode = :countryId', { countryId });
 };
