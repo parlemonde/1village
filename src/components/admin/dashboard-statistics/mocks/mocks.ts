@@ -178,6 +178,7 @@ export const mockConnectionsStats: SessionsStats[] = [
     registeredClassroomsCount: 100,
     connectedClassroomsCount: 80,
     contributedClassroomsCount: 50,
+    barChartData: [],
   },
 ];
 

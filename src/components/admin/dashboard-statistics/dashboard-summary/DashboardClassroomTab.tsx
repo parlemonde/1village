@@ -4,20 +4,32 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
-import ClassesContributionCard from '../cards/ClassesContributionCard/ClassesContributionCard';
 import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from '../cards/StatsCard/StatsCard';
 import BarCharts from '../charts/BarCharts';
+import PieCharts from '../charts/PieCharts';
 import PhaseDetails from '../menu/PhaseDetails';
+import styles from '../styles/charts.module.css';
 import { AverageStatsProcessingMethod } from 'types/dashboard.type';
 import type { DashboardSummaryData } from 'types/dashboard.type';
 
+// To delete when pie chart data is done
+const mockPieChartData = {
+  data: [
+    { id: 0, value: 10, label: 'series A' },
+    { id: 1, value: 15, label: 'series B' },
+    { id: 2, value: 20, label: 'series C' },
+  ],
+};
+
+const ENGAGEMENT_BAR_CHAR_TITLE = 'Évolution des connexions';
+const CONTRIBUTION_BAR_CHAR_TITLE = 'Contribution des classes';
+
 export interface DashboardClassroomTabProps {
   data: DashboardSummaryData;
-  barChartTitle?: string;
 }
 
-const DashboardClassroomTab = ({ data, barChartTitle }: DashboardClassroomTabProps) => {
+const DashboardClassroomTab = ({ data }: DashboardClassroomTabProps) => {
   return (
     <>
       <div className="statistic--container">
@@ -41,24 +53,23 @@ const DashboardClassroomTab = ({ data, barChartTitle }: DashboardClassroomTabPro
         </AverageStatsCard>
         <AverageStatsCard
           data={{
-            min: data.minConnections ? data.minConnections : 0,
-            max: data.maxConnections ? data.maxConnections : 0,
-            average: data.averageConnections ? data.averageConnections : 0,
-            median: data.medianConnections ? data.medianConnections : 0,
+            min: data.minConnections,
+            max: data.maxConnections,
+            average: data.averageConnections,
+            median: data.medianConnections,
           }}
           icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
         >
           Nombre de connexions moyen par classe
         </AverageStatsCard>
       </div>
-      {data.barChartData && (
-        <div className="statistic--container">
-          <BarCharts dataByMonth={data.barChartData} title={barChartTitle} />
-        </div>
-      )}
+      <div className="statistic__average--container">
+        <PieCharts className={styles.minContainer} pieChartData={mockPieChartData} />
+        <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+      </div>
       <div className="statistic__average--container">
         <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
-        <ClassesContributionCard />
+        <BarCharts dataByMonth={data.barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
       </div>
       {data && data.phases && (
         <div className="statistic__phase--container">

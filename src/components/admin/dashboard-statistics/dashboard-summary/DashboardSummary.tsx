@@ -10,10 +10,9 @@ import type { DashboardSummaryData } from 'types/dashboard.type';
 
 interface DashboardSummaryProps {
   data: DashboardSummaryData;
-  barChartTitle?: string;
 }
 
-const DashboardSummary = ({ data, barChartTitle }: DashboardSummaryProps) => {
+const DashboardSummary = ({ data }: DashboardSummaryProps) => {
   const [tabValue, setTabValue] = useState<DashboardSummaryTab>(DashboardSummaryTab.CLASSROOM);
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: DashboardSummaryTab) => {
@@ -31,7 +30,7 @@ const DashboardSummary = ({ data, barChartTitle }: DashboardSummaryProps) => {
         <Tab value={DashboardSummaryTab.FAMILY} label="En famille" />
       </Tabs>
       <TabPanel value={tabValue} index={DashboardSummaryTab.CLASSROOM}>
-        <DashboardClassroomTab data={data} barChartTitle={barChartTitle} />
+        <DashboardClassroomTab data={data} />
       </TabPanel>
       <TabPanel value={tabValue} index={DashboardSummaryTab.FAMILY}>
         <DashboardFamilyTab data={data} />
