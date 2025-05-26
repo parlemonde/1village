@@ -3,10 +3,13 @@ import { AppDataSource } from '../../utils/data-source';
 
 const studentRepository = AppDataSource.getRepository(Student);
 export const createConnectedFamilyQuery = () => {
-  const query = studentRepository
+  return studentRepository
     .createQueryBuilder('student')
     .innerJoin('classroom', 'classroom', 'classroom.id = student.classroomId')
     .innerJoin('classroom.village', 'village')
     .andWhere('student.numLinkedAccount >= 1');
-  return query;
+};
+
+export const createConnectedFamilyInCountryQuery = (countryId: string) => {
+  return createConnectedFamilyQuery().andWhere('classroom.countryCode = :countryId', { countryId });
 };
