@@ -25,7 +25,7 @@ const AverageStatsCard = ({
 
     switch (processingMethod) {
       case AverageStatsProcessingMethod.BY_MIN:
-        return Math.floor(valueNotUndefined) / 60;
+        return Math.floor(valueNotUndefined / 60);
       case AverageStatsProcessingMethod.NO_PROCESSING:
       default:
         return valueNotUndefined;
