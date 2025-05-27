@@ -25,7 +25,7 @@
     "migration:run-dev": "rm -rf dist && yarn build:server && yarn typeorm migration:run -d dist/server/utils/data-source.js || true",
     "migration:revert-dev": "rm -rf dist && yarn build:server && npx typeorm migration:revert -d dist/server/utils/data-source.js || true",
     "typeorm": "typeorm-ts-node-commonjs",
-    "prepare": "husky"
+    "postinstall": "husky"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": "eslint --fix"
