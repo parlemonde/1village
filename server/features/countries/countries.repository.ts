@@ -1,8 +1,8 @@
-import { Classroom } from '../../entities/classroom';
+import { Village } from '../../entities/village';
 import { AppDataSource } from '../../utils/data-source';
 
-const classroomRepository = AppDataSource.getRepository(Classroom);
+const villageRepository = AppDataSource.getRepository(Village);
 
-export const selectCountriesWithVillages = async (): Promise<{ countryCode: string }[]> => {
-  return await classroomRepository.createQueryBuilder('classroom').distinct().select(['classroom.countryCode AS countryCode']).getRawMany();
+export const selectCountriesOfVillages = async (): Promise<{ countryCodes: string }[]> => {
+  return await villageRepository.createQueryBuilder('village').select(['village.countryCodes AS countryCodes']).getRawMany();
 };
