@@ -1,3 +1,4 @@
+import type { BarChartDataByMonth } from './dashboard.type';
 import type { VillagePhase } from './village.type';
 
 export interface ClassroomsStats {
@@ -39,6 +40,7 @@ export interface SessionsStats {
   registeredClassroomsCount: number;
   connectedClassroomsCount: number;
   contributedClassroomsCount: number;
+  barChartData: BarChartDataByMonth[];
 }
 
 export interface VillageStats {

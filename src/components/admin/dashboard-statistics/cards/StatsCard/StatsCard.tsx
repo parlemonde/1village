@@ -20,7 +20,7 @@ const StatsCard = ({ children, data }: StatsCardProps) => {
       }}
     >
       <p>{children}</p>
-      <p>{data}</p>
+      <p>{data ?? 0}</p>
     </Box>
   );
 };
