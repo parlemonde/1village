@@ -1,7 +1,6 @@
 import React from 'react';
 
 import styles from './AverageStatsCard.module.css';
-import { valueOrDefault } from 'src/utils/valueOrDefaultAt';
 import type { AverageStatsData } from 'types/dashboard.type';
 import { AverageStatsProcessingMethod } from 'types/dashboard.type';
 
@@ -21,7 +20,7 @@ const AverageStatsCard = ({
   processingMethod = AverageStatsProcessingMethod.NO_PROCESSING,
 }: AverageStatsCardProps) => {
   const processValue = (value: number | undefined): number => {
-    const valueNotUndefined = valueOrDefault(value, 0);
+    const valueNotUndefined = value ?? 0;
 
     switch (processingMethod) {
       case AverageStatsProcessingMethod.BY_MIN:

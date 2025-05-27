@@ -3,7 +3,6 @@ import React from 'react';
 import Box from '@mui/material/Box';
 
 import styles from './StatsCard.module.css';
-import { valueOrDefault } from 'src/utils/valueOrDefaultAt';
 
 interface StatsCardProps {
   children: React.ReactNode;
@@ -21,7 +20,7 @@ const StatsCard = ({ children, data }: StatsCardProps) => {
       }}
     >
       <p>{children}</p>
-      <p>{valueOrDefault(data, 0)}</p>
+      <p>{data ?? 0}</p>
     </Box>
   );
 };
