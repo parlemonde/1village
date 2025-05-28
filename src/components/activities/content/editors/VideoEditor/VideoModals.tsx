@@ -241,7 +241,7 @@ export const VideoModals = ({ id, isModalOpen, setIsModalOpen, videoUrl, setVide
                   </div>
                   {preview.mode === 1 && (
                     <div style={{ width: '100%', height: '90%', backgroundColor: 'black' }}>
-                      <ReactPlayer width="100%" height="100%" light url={preview.url} controls />
+                      <ReactPlayer width="100%" height="100%" url={preview.url} controls />
                     </div>
                   )}
                   {preview.mode === 2 && <Alert severity="error">{'Erreur: impossible de lire cette vidéo.'}</Alert>}
