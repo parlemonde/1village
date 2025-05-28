@@ -29,7 +29,7 @@ __metadata:
     "@swc/core": "npm:1.2.205"
     "@swc/jest": "npm:0.2.21"
     "@types/cookie-parser": "npm:1.4.3"
-    "@types/cors": "npm:2.8.12"
+    "@types/cors": "npm:2.8.18"
     "@types/cpx": "npm:1.5.2"
     "@types/croppie": "npm:2.6.1"
     "@types/d3-geo": "npm:3.0.2"
@@ -3831,10 +3831,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cors@npm:2.8.12":
-  version: 2.8.12
-  resolution: "@types/cors@npm:2.8.12"
-  checksum: 10/8c45f112c7d1d2d831b4b266f2e6ed33a1887a35dcbfe2a18b28370751fababb7cd045e745ef84a523c33a25932678097bf79afaa367c6cb3fa0daa7a6438257
+"@types/cors@npm:2.8.18":
+  version: 2.8.18
+  resolution: "@types/cors@npm:2.8.18"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10/6e49b741345e67834cd19d766228509e4b37d6d5c272355bb059502b4787f5adf58776d9114ac5f0f407966e0347ae8d1f995d7ea41e6a24f716d36b3010401b
   languageName: node
   linkType: hard
 
