@@ -1,11 +1,11 @@
 # STAGE 1 - Typescript to Javascript
-FROM node:20.11.1-slim as build-dependencies
+FROM node:20.11.1-slim AS build-dependencies
 
 ARG BUILD_VERSION
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
-    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/lib/apt/lists/*
 
 # Create app directory
 WORKDIR /app
@@ -37,12 +37,12 @@ COPY tsconfig.json .
 RUN mkdir dist
 
 # Build sources
-ENV DOCKER 1
-ENV NODE_ENV production
+ENV DOCKER=1
+ENV NODE_ENV=production
 RUN yarn build
 
 # STAGE 2 - Docker server
-FROM node:20.11.1-slim as prod
+FROM node:20.11.1-slim AS prod
 
 # Add ffmpeg for audio mix
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -66,8 +66,8 @@ COPY next.config.js .
 COPY --from=build-dependencies app/dist dist
 COPY --from=build-dependencies app/public public
 
-ENV DOCKER 1
-ENV NODE_ENV production
+ENV DOCKER=1
+ENV NODE_ENV=production
 
 EXPOSE 5000
 
