@@ -75,7 +75,7 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
           <Grid item xs={12} md={4}>
             {isFieldValid(MimicData.video as string | null) && (
               <div style={{ width: '100%', height: '100%', marginTop: '0.2rem' }}>
-                <ReactPlayer width="100%" height="70%" light url={MimicData.video || ''} controls />
+                <ReactPlayer width="100%" height="70%" url={MimicData.video || ''} controls />
                 <Button
                   name="video"
                   style={{ width: '100%', maxWidth: '320px', marginTop: '0.4rem' }}
