@@ -55,10 +55,10 @@ const VillageStats = () => {
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
 
   useEffect(() => {
-    if (villagesStats.data?.familiesWithoutAccount) {
-      setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(villagesStats.data?.familiesWithoutAccount));
+    if (villagesStats.data?.family.familiesWithoutAccount) {
+      setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(villagesStats.data?.family.familiesWithoutAccount));
     }
-  }, [villagesStats.data?.familiesWithoutAccount]);
+  }, [villagesStats.data?.family.familiesWithoutAccount]);
 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
@@ -208,9 +208,9 @@ const VillageStats = () => {
                 gap: 2,
               }}
             >
-              <StatsCard data={villagesStats.data?.familyAccountsCount}>Nombre de profs ayant créé des comptes famille</StatsCard>
-              <StatsCard data={villagesStats.data?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
-              <StatsCard data={villagesStats.data?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
+              <StatsCard data={villagesStats.data?.family.familyAccountsCount}>Nombre de profs ayant créé des comptes famille</StatsCard>
+              <StatsCard data={villagesStats.data?.family.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
+              <StatsCard data={villagesStats.data?.family.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
             </Box>
           </>
         )}
