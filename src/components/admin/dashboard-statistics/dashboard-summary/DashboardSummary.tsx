@@ -5,14 +5,15 @@ import { Tab, Tabs } from '@mui/material';
 import TabPanel from '../TabPanel';
 import DashboardClassroomTab from './DashboardClassroomTab';
 import DashboardFamilyTab from './DashboardFamilyTab';
-import { DashboardSummaryTab } from 'types/dashboard.type';
+import { DashboardSummaryTab, DashboardType } from 'types/dashboard.type';
 import type { DashboardSummaryData } from 'types/dashboard.type';
 
 interface DashboardSummaryProps {
   data: DashboardSummaryData;
+  dashboardType?: DashboardType;
 }
 
-const DashboardSummary = ({ data }: DashboardSummaryProps) => {
+const DashboardSummary = ({ data, dashboardType = DashboardType.COMPLETE }: DashboardSummaryProps) => {
   const [tabValue, setTabValue] = useState<DashboardSummaryTab>(DashboardSummaryTab.CLASSROOM);
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: DashboardSummaryTab) => {
@@ -30,7 +31,7 @@ const DashboardSummary = ({ data }: DashboardSummaryProps) => {
         <Tab value={DashboardSummaryTab.FAMILY} label="En famille" />
       </Tabs>
       <TabPanel value={tabValue} index={DashboardSummaryTab.CLASSROOM}>
-        <DashboardClassroomTab data={data} />
+        <DashboardClassroomTab data={data} dashboardType={dashboardType} />
       </TabPanel>
       <TabPanel value={tabValue} index={DashboardSummaryTab.FAMILY}>
         <DashboardFamilyTab data={data} />

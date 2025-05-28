@@ -1,11 +1,45 @@
+import type { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder';
+
+import type { StatsFilterParams } from '../../types/statistics.type';
+import { GroupType } from '../../types/statistics.type';
 import { AnalyticSession } from '../entities/analytic';
 import { Classroom } from '../entities/classroom';
+import { UserType } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';
+import { generateDefaultStatsFilterParams } from '../utils/generateDefaultParams';
 
 const analyticSessionRepository = AppDataSource.getRepository(AnalyticSession);
 const classroomRepository = AppDataSource.getRepository(Classroom);
 
-export const getMinDuration = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+const addFiltersToQuery = (queryBuilder: SelectQueryBuilder<AnalyticSession>, params?: StatsFilterParams) => {
+  const { countryId, villageId, classroomId, groupType } = params ?? generateDefaultStatsFilterParams();
+
+  if (villageId) {
+    queryBuilder.andWhere('user.villageId = :villageId', { villageId });
+  }
+
+  if (countryId) {
+    queryBuilder.andWhere('user.countryCode = :countryId', { countryId });
+  }
+
+  if (classroomId) {
+    queryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
+  }
+
+  if (groupType !== undefined) {
+    switch (groupType) {
+      case GroupType.CLASSROOM:
+        queryBuilder.andWhere('user.type = :userType', { userType: UserType.TEACHER });
+        break;
+      case GroupType.FAMILY:
+        queryBuilder.andWhere('user.type = :userType', { userType: UserType.FAMILY });
+        break;
+      default:
+    }
+  }
+};
+
+export const getMinDuration = async (params?: StatsFilterParams) => {
   const queryBuilder = analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('user.villageId', 'villageId')
@@ -13,24 +47,14 @@ export const getMinDuration = async (villageId?: number | null, countryCode?: st
     .innerJoin('analytic_session.user', 'user')
     .leftJoin('user.classroom', 'classroom');
 
-  if (villageId) {
-    queryBuilder.andWhere('user.villageId = :villageId', { villageId });
-  }
-
-  if (countryCode) {
-    queryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
-  }
-
-  if (classroomId) {
-    queryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
-  }
+  addFiltersToQuery(queryBuilder, params);
 
   const result = await queryBuilder.getRawOne();
 
   return result.minDuration ? parseInt(result.minDuration, 10) : null;
 };
 
-export const getMaxDuration = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+export const getMaxDuration = async (params?: StatsFilterParams) => {
   const queryBuilder = analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('user.villageId', 'villageId')
@@ -38,24 +62,14 @@ export const getMaxDuration = async (villageId?: number | null, countryCode?: st
     .innerJoin('analytic_session.user', 'user')
     .leftJoin('user.classroom', 'classroom');
 
-  if (villageId) {
-    queryBuilder.andWhere('user.villageId = :villageId', { villageId });
-  }
-
-  if (countryCode) {
-    queryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
-  }
-
-  if (classroomId) {
-    queryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
-  }
+  addFiltersToQuery(queryBuilder, params);
 
   const result = await queryBuilder.getRawOne();
 
   return result.maxDuration ? parseInt(result.maxDuration, 10) : null;
 };
 
-export const getAverageDuration = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+export const getAverageDuration = async (params?: StatsFilterParams) => {
   const queryBuilder = analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('user.villageId', 'villageId')
@@ -63,17 +77,7 @@ export const getAverageDuration = async (villageId?: number | null, countryCode?
     .innerJoin('analytic_session.user', 'user')
     .leftJoin('user.classroom', 'classroom');
 
-  if (villageId) {
-    queryBuilder.andWhere('user.villageId = :villageId', { villageId });
-  }
-
-  if (countryCode) {
-    queryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
-  }
-
-  if (classroomId) {
-    queryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
-  }
+  addFiltersToQuery(queryBuilder, params);
 
   const result = await queryBuilder.getRawOne();
 
@@ -103,7 +107,7 @@ export const getClassroomCount = async (villageId?: number | null, countryCode?:
 };
 
 // TODO - add phase: number | null
-export const getMedianDuration = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+export const getMedianDuration = async (params?: StatsFilterParams) => {
   const queryBuilder = analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('analytic_session.duration', 'duration')
@@ -111,17 +115,8 @@ export const getMedianDuration = async (villageId?: number | null, countryCode?:
     .leftJoin('user.classroom', 'classroom')
     .where('analytic_session.duration IS NOT NULL')
     .orderBy('analytic_session.duration', 'ASC');
-  if (villageId) {
-    queryBuilder.andWhere('user.villageId = :villageId', { villageId });
-  }
 
-  if (countryCode) {
-    queryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
-  }
-
-  if (classroomId) {
-    queryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
-  }
+  addFiltersToQuery(queryBuilder, params);
 
   const durations = await queryBuilder.getRawMany();
 
@@ -141,7 +136,7 @@ export const getMedianDuration = async (villageId?: number | null, countryCode?:
 };
 
 // TODO - add phase: number | null
-export const getMinConnections = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+export const getMinConnections = async (params?: StatsFilterParams) => {
   const subQueryBuilder = analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('COUNT(analytic_session.id)', 'occurrences')
@@ -149,17 +144,7 @@ export const getMinConnections = async (villageId?: number | null, countryCode?:
     .leftJoin('user.classroom', 'classroom')
     .groupBy('analytic_session.userId');
 
-  if (villageId) {
-    subQueryBuilder.andWhere('user.villageId = :villageId', { villageId });
-  }
-
-  if (countryCode) {
-    subQueryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
-  }
-
-  if (classroomId) {
-    subQueryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
-  }
+  addFiltersToQuery(subQueryBuilder, params);
 
   const result = await analyticSessionRepository
     .createQueryBuilder()
@@ -175,7 +160,7 @@ export const getMinConnections = async (villageId?: number | null, countryCode?:
   return parseInt(result.minConnections, 10);
 };
 
-export const getMaxConnections = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+export const getMaxConnections = async (params?: StatsFilterParams) => {
   const subQueryBuilder = analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('COUNT(analytic_session.id)', 'occurrences')
@@ -183,17 +168,7 @@ export const getMaxConnections = async (villageId?: number | null, countryCode?:
     .leftJoin('user.classroom', 'classroom')
     .groupBy('analytic_session.userId');
 
-  if (villageId) {
-    subQueryBuilder.andWhere('user.villageId = :villageId', { villageId });
-  }
-
-  if (countryCode) {
-    subQueryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
-  }
-
-  if (classroomId) {
-    subQueryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
-  }
+  addFiltersToQuery(subQueryBuilder, params);
 
   const result = await analyticSessionRepository
     .createQueryBuilder()
@@ -209,7 +184,7 @@ export const getMaxConnections = async (villageId?: number | null, countryCode?:
   return parseInt(result.maxConnections, 10);
 };
 
-export const getAverageConnections = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+export const getAverageConnections = async (params?: StatsFilterParams) => {
   const subQueryBuilder = analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('COUNT(analytic_session.id)', 'occurrences')
@@ -217,17 +192,7 @@ export const getAverageConnections = async (villageId?: number | null, countryCo
     .leftJoin('user.classroom', 'classroom')
     .groupBy('analytic_session.userId');
 
-  if (villageId) {
-    subQueryBuilder.andWhere('user.villageId = :villageId', { villageId });
-  }
-
-  if (countryCode) {
-    subQueryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
-  }
-
-  if (classroomId) {
-    subQueryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
-  }
+  addFiltersToQuery(subQueryBuilder, params);
 
   const result = await analyticSessionRepository
     .createQueryBuilder()
@@ -244,7 +209,7 @@ export const getAverageConnections = async (villageId?: number | null, countryCo
 };
 
 // TODO - add phase: number | null
-export const getMedianConnections = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+export const getMedianConnections = async (params?: StatsFilterParams) => {
   const subQueryBuilder = analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('COUNT(analytic_session.id)', 'occurrences')
@@ -253,17 +218,7 @@ export const getMedianConnections = async (villageId?: number | null, countryCod
     .groupBy('analytic_session.userId')
     .orderBy('occurrences', 'ASC');
 
-  if (villageId) {
-    subQueryBuilder.andWhere('user.villageId = :villageId', { villageId });
-  }
-
-  if (countryCode) {
-    subQueryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
-  }
-
-  if (classroomId) {
-    subQueryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
-  }
+  addFiltersToQuery(subQueryBuilder, params);
 
   const result = await analyticSessionRepository
     .createQueryBuilder()

@@ -44,11 +44,23 @@ export interface SessionsStats {
 }
 
 export interface VillageStats {
-  childrenCodesCount: number;
-  familyAccountsCount: number;
-  connectedFamiliesCount: number;
-  familiesWithoutAccount: FamiliesWithoutAccount[];
-  floatingAccounts: FloatingAccount[];
+  family: {
+    minDuration: number;
+    maxDuration: number;
+    medianDuration: number;
+    averageDuration: number;
+
+    minConnections: number;
+    maxConnections: number;
+    averageConnections: number;
+    medianConnections: number;
+
+    childrenCodesCount: number;
+    familyAccountsCount: number;
+    connectedFamiliesCount: number;
+    familiesWithoutAccount: FamiliesWithoutAccount[];
+    floatingAccounts: FloatingAccount[];
+  };
 }
 
 export interface FamiliesWithoutAccount {
@@ -76,13 +88,20 @@ export interface OneVillageTableRow {
 }
 
 export type StatsFilterParams = {
-  villageId: number | undefined;
-  classroomId: number | undefined;
-  countryId: string | undefined;
-  phase: VillagePhase | undefined;
+  villageId?: number;
+  classroomId?: number;
+  countryId?: string;
+  phase?: VillagePhase;
+  groupType?: GroupType;
 };
 
 export type WhereClause = {
   clause: string;
   value: object;
 };
+
+export enum GroupType {
+  CLASSROOM,
+  FAMILY,
+  All,
+}
