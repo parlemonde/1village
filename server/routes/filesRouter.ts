@@ -7,4 +7,4 @@ import { handleErrors } from '../middlewares/handleErrors';
 import { fileUpladInMemory } from '../middlewares/multer';
 
 export const filesRouter = Router();
-filesRouter.post('/', fileUpladInMemory.array('files'), handleErrors(authenticate(UserType.ADMIN)), uploadFiles);
+filesRouter.post('/', fileUpladInMemory.array('files'), handleErrors(authenticate(UserType.OBSERVATOR)), uploadFiles);
