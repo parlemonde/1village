@@ -36,7 +36,7 @@ COPY next.config.js ./
 COPY tsconfig.json ./
 RUN mkdir dist
 
-ENV DOCKER 1
+ENV DOCKER=1
 
 EXPOSE 5000
 
