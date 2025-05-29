@@ -5,18 +5,19 @@ import { useQuery } from 'react-query';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Country } from 'types/country.type';
 
-export const useCountries = (): { countries: Country[] } => {
+export const useCountries = (params?: { hasVillage: boolean }): { countries: Country[] } => {
   const getCountries: QueryFunction<Country[]> = React.useCallback(async () => {
     const response = await axiosRequest({
       method: 'GET',
       url: '/countries',
+      params,
     });
     if (response.error) {
       return [];
     }
     return response.data;
-  }, []);
-  const { data, isLoading, error } = useQuery<Country[], unknown>(['countries'], getCountries);
+  }, [params]);
+  const { data, isLoading, error } = useQuery<Country[], unknown>(['countries', params], getCountries);
 
   return {
     countries: isLoading || error ? [] : data || [],

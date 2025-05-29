@@ -46,7 +46,7 @@ const ClassroomStats = () => {
 
   const pelicoMessage = 'Merci de sélectionner une classe pour analyser ses statistiques ';
 
-  const { countries } = useCountries();
+  const { countries } = useCountries({ hasVillage: true });
   const { villages } = useVillages(villageFilter);
   const classroomsStats = useGetClassroomsStats(+selectedClassroom, +selectedPhase);
   const { classrooms } = useClassrooms(classroomFilter);
