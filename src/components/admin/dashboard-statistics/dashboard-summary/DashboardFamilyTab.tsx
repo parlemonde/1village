@@ -8,7 +8,6 @@ import { OneVillageTable } from '../../OneVillageTable';
 import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
 import StatsCard from '../cards/StatsCard/StatsCard';
 import BarCharts from '../charts/BarCharts';
-import { mockDataByMonth } from '../mocks/mocks';
 import styles from '../styles/charts.module.css';
 import { createFamiliesWithoutAccountRows, createFloatingAccountsRows } from '../utils/tableCreator';
 import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from '../utils/tableHeader';
@@ -91,7 +90,7 @@ const DashboardFamilyTab = ({ data }: DashboardFamilyTabProps) => {
       </div>
 
       <div className="statistic--container">
-        <BarCharts className={styles.midContainer} dataByMonth={mockDataByMonth} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+        <BarCharts className={styles.midContainer} dataByMonth={familyData.countConnectionsByDayAndMonth} title={ENGAGEMENT_BAR_CHAR_TITLE} />
       </div>
     </>
   );
