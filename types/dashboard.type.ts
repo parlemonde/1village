@@ -28,3 +28,8 @@ export enum AverageStatsProcessingMethod {
 }
 
 export interface DashboardSummaryData extends SessionsStats, ClassroomsStats, VillageStats {}
+
+export enum DashboardType {
+  ONE_VILLAGE_PANEL,
+  COMPLETE,
+}

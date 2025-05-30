@@ -10,7 +10,7 @@ import BarCharts from '../charts/BarCharts';
 import PieCharts from '../charts/PieCharts';
 import PhaseDetails from '../menu/PhaseDetails';
 import styles from '../styles/charts.module.css';
-import { AverageStatsProcessingMethod } from 'types/dashboard.type';
+import { AverageStatsProcessingMethod, DashboardType } from 'types/dashboard.type';
 import type { DashboardSummaryData } from 'types/dashboard.type';
 
 // To delete when pie chart data is done
@@ -27,9 +27,10 @@ const CONTRIBUTION_BAR_CHAR_TITLE = 'Contribution des classes';
 
 export interface DashboardClassroomTabProps {
   data: DashboardSummaryData;
+  dashboardType: DashboardType;
 }
 
-const DashboardClassroomTab = ({ data }: DashboardClassroomTabProps) => {
+const DashboardClassroomTab = ({ data, dashboardType }: DashboardClassroomTabProps) => {
   return (
     <>
       <div className="statistic--container">
@@ -63,10 +64,16 @@ const DashboardClassroomTab = ({ data }: DashboardClassroomTabProps) => {
           Nombre de connexions moyen par classe
         </AverageStatsCard>
       </div>
-      <div className="statistic__average--container">
-        <PieCharts className={styles.minContainer} pieChartData={mockPieChartData} />
-        <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
-      </div>
+      {dashboardType === DashboardType.ONE_VILLAGE_PANEL ? (
+        <div className="statistic--container">
+          <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+        </div>
+      ) : (
+        <div className="statistic__average--container">
+          <PieCharts className={styles.minContainer} pieChartData={mockPieChartData} />
+          <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+        </div>
+      )}
       <div className="statistic__average--container">
         <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
         <BarCharts dataByMonth={data.barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
