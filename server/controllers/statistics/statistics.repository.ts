@@ -1,6 +1,17 @@
 import { ActivityStatus } from '../../../types/activity.type';
-import type { ClassroomCountDetails, CountryCountDetails, PhaseDetails, VillageCountDetails } from '../../../types/statistics.type';
+import type {
+  ClassroomCountDetails,
+  CountryCountDetails,
+  DailyCount,
+  DailyCountByMonth,
+  PhaseDetails,
+  StatsFilterParams,
+  VillageCountDetails,
+} from '../../../types/statistics.type';
+import { GroupType } from '../../../types/statistics.type';
+import { UserType } from '../../../types/user.type';
 import type { Activity } from '../../entities/activity';
+import { AnalyticSession } from '../../entities/analytic';
 import type { Classroom } from '../../entities/classroom';
 import type { Village } from '../../entities/village';
 import { getCountryCodes } from '../../repositories/country.repository';
@@ -11,6 +22,7 @@ import {
   getVideosCountByVillageId,
   getVideosTotalCount,
 } from '../../repositories/video.repository';
+import { AppDataSource } from '../../utils/data-source';
 import {
   getActivitiesByClassroomUserAndPhase,
   getActivitiesByCountryAndPhase,
@@ -260,3 +272,61 @@ async function formatClassroomsActivitiesByPhase(phase: number, classrooms: Clas
 
   return classroomDetails;
 }
+
+export const getDailyConnectionCountByMonth = async (filters?: StatsFilterParams) => {
+  const query = AppDataSource.getRepository(AnalyticSession)
+    .createQueryBuilder('as')
+    .select('COUNT(*) as count, YEAR(as.date) as year, MONTH(as.date) as month, DAY(as.date) as day, DATE(as.date) as date')
+    .groupBy('YEAR(as.date), MONTH(as.date), DAY(as.date), DATE(as.date)')
+    .orderBy('DATE(as.date)', 'ASC');
+
+  if (filters && filters.groupType === GroupType.FAMILY) {
+    query.innerJoin('user', 'user', 'as.userId = user.id').where('user.type = :userType', { userType: UserType.FAMILY });
+  }
+
+  const data = (await query.getRawMany()) as { count: number; year: number; month: number; day: number; date: string }[];
+
+  // Step 1: Group data by month and day
+  const groupedData = data.reduce((acc, item) => {
+    // To change to base Date
+    const date = new Date(item.year, item.month - 1);
+    const monthYear = date.toLocaleDateString('en-EN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+
+    if (!acc[monthYear]) {
+      acc[monthYear] = {};
+    }
+    acc[monthYear][item.day] = item.count;
+
+    return acc;
+  }, {} as Record<string, Record<number, number>>);
+
+  // Step 2: Fill in missing days for each month
+  const result: DailyCountByMonth[] = Object.keys(groupedData).map((monthYear) => {
+    const date = new Date(monthYear);
+    const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+
+    const counts: DailyCount[] = [];
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const value = groupedData[monthYear][day] || 0; // Utilise 0 si aucune donnée pour ce jour
+      counts.push({
+        value,
+        selected: value > 0, // Exemple : sélectionner si ce jour a au moins une occurrence
+      });
+    }
+
+    return {
+      month: date.toLocaleDateString('fr-FR', {
+        month: 'long',
+        year: 'numeric',
+      }),
+      counts,
+    };
+  });
+
+  return result;
+};
