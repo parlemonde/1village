@@ -1,5 +1,5 @@
 import type { PhaseDetail } from '../src/api/statistics/compare.api';
-import type { BarChartDataByMonth, ContributionBarChartData } from './dashboard.type';
+import type { ContributionBarChartData } from './dashboard.type';
 import type { User } from './user.type';
 import type { Village, VillagePhase } from './village.type';
 
@@ -42,7 +42,7 @@ export interface SessionsStats {
   registeredClassroomsCount: number;
   connectedClassroomsCount: number;
   contributedClassroomsCount: number;
-  barChartData: BarChartDataByMonth[];
+  dailyConnectionCountByMonth: DailyCountByMonth[];
   contributionsBarChartData: ContributionBarChartData;
 }
 
@@ -63,6 +63,8 @@ export interface VillageStats {
     connectedFamiliesCount: number;
     familiesWithoutAccount: FamiliesWithoutAccount[];
     floatingAccounts: FloatingAccount[];
+
+    dailyConnectionCountByMonth: DailyCountByMonth[];
   };
   activityCountDetails: ActivityCountDetails[];
 }
@@ -139,6 +141,17 @@ export enum GroupType {
   CLASSROOM,
   FAMILY,
   All,
+}
+
+export type MonthLabel = string;
+
+export interface DailyCount {
+  readonly value: number;
+  readonly selected: boolean;
+}
+export interface DailyCountByMonth {
+  readonly month: MonthLabel;
+  readonly counts: DailyCount[];
 }
 
 export type ClassroomActivity = {
