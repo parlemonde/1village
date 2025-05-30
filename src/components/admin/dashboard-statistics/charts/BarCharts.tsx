@@ -11,8 +11,12 @@ interface Props {
   className?: string;
 }
 
-const BarCharts: React.FC<Props> = ({ dataByMonth, title, className }) => {
+const BarCharts = ({ dataByMonth, title, className }: Props) => {
   const [selectedMonthIndex, setSelectedMonthIndex] = useState(0);
+  if (!dataByMonth || dataByMonth.length === 0) {
+    return null;
+  }
+
   const selectedData = dataByMonth[selectedMonthIndex];
 
   const handleMonthChange = (direction: 'prev' | 'next') => {

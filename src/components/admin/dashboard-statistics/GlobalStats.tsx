@@ -4,7 +4,6 @@ import TeamComments from './TeamComments';
 import DashboardSummary from './dashboard-summary/DashboardSummary';
 import PhaseDropdown from './filters/PhaseDropdown';
 import DashboardWorldMap from './map/DashboardWorldMap/DashboardWorldMap';
-import { mockDataByMonth } from './mocks/mocks';
 import styles from './styles/charts.module.css';
 import { useGetOneVillageStats, useGetSessionsStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms } from 'src/services/useStatistics';
@@ -37,7 +36,7 @@ const GlobalStats = () => {
       {statisticsSessions.data && statisticsFamily.data ? (
         <DashboardSummary
           dashboardType={DashboardType.ONE_VILLAGE_PANEL}
-          data={{ ...statisticsClassrooms, ...statisticsSessions.data, ...statisticsFamily.data, barChartData: mockDataByMonth }}
+          data={{ ...statisticsClassrooms, ...statisticsSessions.data, ...statisticsFamily.data }}
         />
       ) : null}
     </>
