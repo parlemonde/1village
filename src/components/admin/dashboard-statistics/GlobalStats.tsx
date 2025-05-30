@@ -10,7 +10,6 @@ import TeamCommentCard from './TeamCommentCard';
 import DashboardSummary from './dashboard-summary/DashboardSummary';
 import StatisticFilters from './filters/StatisticFilters';
 import DashboardWorldMap from './map/DashboardWorldMap/DashboardWorldMap';
-import { mockDataByMonth } from './mocks/mocks';
 import { useGetSessionsStats, useGetOneVillageStats, useGetCountriesEngagementStatuses } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms } from 'src/services/useStatistics';
 import type { VillageInteractionsActivity } from 'types/analytics/village-interactions-activity';
@@ -133,7 +132,7 @@ const GlobalStats = () => {
               {sessionStatistics && oneVillageStatistics && (
                 <DashboardSummary
                   dashboardType={DashboardType.ONE_VILLAGE_PANEL}
-                  dashboardSummaryData={{ ...classroomsStatistics, ...sessionStatistics, ...oneVillageStatistics, barChartData: mockDataByMonth }}
+                  dashboardSummaryData={{ ...classroomsStatistics, ...sessionStatistics, ...oneVillageStatistics }}
                 />
               )}
               <Box mt={4}>
@@ -155,7 +154,7 @@ const GlobalStats = () => {
               {sessionStatistics && oneVillageStatistics && (
                 <DashboardSummary
                   dashboardType={DashboardType.ONE_VILLAGE_PANEL}
-                  dashboardSummaryData={{ ...classroomsStatistics, ...sessionStatistics, ...oneVillageStatistics, barChartData: mockDataByMonth }}
+                  dashboardSummaryData={{ ...classroomsStatistics, ...sessionStatistics, ...oneVillageStatistics }}
                   activeTab={DashboardSummaryTab.FAMILY}
                 />
               )}

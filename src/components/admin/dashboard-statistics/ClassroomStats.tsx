@@ -11,9 +11,9 @@ import TeamCommentCard from './TeamCommentCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import ClassroomDetailsCard from './cards/ClassroomDetailsCard/ClassroomDetailsCard';
 import StatsCard from './cards/StatsCard/StatsCard';
-import BarCharts from './charts/BarCharts';
+import BarChartWithMonthSelector from './charts/BarChartWithMonthSelector';
 import StatisticFilters from './filters/StatisticFilters';
-import { mockDataByMonth } from './mocks/mocks';
+import { mockDailyCountByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
@@ -115,7 +115,7 @@ const ClassroomStats = () => {
                   </AverageStatsCard>
                 </div> */}
                 <div className="statistic--container">
-                  <BarCharts dataByMonth={mockDataByMonth} title={BarChartTitle} />
+                  <BarChartWithMonthSelector data={mockDailyCountByMonth} title={BarChartTitle} />
                 </div>
                 <div style={{ marginTop: '2.5rem' }}>
                   <ClassesExchangesCard

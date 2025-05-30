@@ -11,7 +11,6 @@ import TeamCommentCard from './TeamCommentCard';
 import ClassesContributionCard from './cards/ClassesContributionCard/ClassesContributionCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
-import BarCharts from './charts/BarCharts';
 import type { CountryChartData } from './charts/DualBarChart/DualBarChart';
 import DualBarChart from './charts/DualBarChart/DualBarChart';
 import PieCharts from './charts/PieCharts';
@@ -25,6 +24,8 @@ import { useGetVillagesStats, useGetVillageEngagementStatus, useGetClassroomsEng
 import { useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
+import { mockDailyCountByMonth } from './mocks/mocks';
+import BarChartWithMonthSelector from './charts/BarChartWithMonthSelector';
 
 const VillageStats = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -50,8 +51,6 @@ const VillageStats = () => {
   });
 
   const totalActivitiesCounts = villageStatistics?.totalActivityCounts;
-
-  const barChartData = sessionsStatistics?.barChartData || [];
 
   useEffect(() => {
     if (villageStatistics?.family?.familiesWithoutAccount) {
@@ -164,7 +163,7 @@ const VillageStats = () => {
                 </div> */}
                 <div className="statistic__average--container">
                   {engagementStatusStatistics && <PieCharts engagementStatusData={engagementStatusStatistics} />}
-                  <BarCharts dataByMonth={barChartData} title="Évolution des connexions" />
+                  <BarChartWithMonthSelector data={mockDailyCountByMonth} title="Évolution des connexions" />
                 </div>
                 <div className="statistic__average--container" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gridGap: '2rem' }}>
                   <ClassesExchangesCard
