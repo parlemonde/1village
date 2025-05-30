@@ -7,15 +7,13 @@ import { Box } from '@mui/material';
 import { OneVillageTable } from '../../OneVillageTable';
 import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
 import StatsCard from '../cards/StatsCard/StatsCard';
-import BarCharts from '../charts/BarCharts';
-import { mockDataByMonth } from '../mocks/mocks';
+import BarChartWithMonthSelector from '../charts/BarChartWithMonthSelector';
+import { mockDailyCountByMonth } from '../mocks/mocks';
 import styles from '../styles/charts.module.css';
 import { createFamiliesWithoutAccountRows, createFloatingAccountsRows } from '../utils/tableCreator';
 import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from '../utils/tableHeader';
 import type { DashboardSummaryData } from 'types/dashboard.type';
 import { AverageStatsProcessingMethod } from 'types/dashboard.type';
-
-const ENGAGEMENT_BAR_CHAR_TITLE = 'Évolution des connexions';
 
 export interface DashboardFamilyTabProps {
   data: DashboardSummaryData;
@@ -91,7 +89,7 @@ const DashboardFamilyTab = ({ data }: DashboardFamilyTabProps) => {
       </div>
 
       <div className="statistic--container">
-        <BarCharts className={styles.midContainer} dataByMonth={mockDataByMonth} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+        <BarChartWithMonthSelector className={styles.midContainer} data={mockDailyCountByMonth} title="Évolution des connexions" />
       </div>
     </>
   );
