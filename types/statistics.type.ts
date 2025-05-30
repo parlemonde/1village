@@ -60,6 +60,8 @@ export interface VillageStats {
     connectedFamiliesCount: number;
     familiesWithoutAccount: FamiliesWithoutAccount[];
     floatingAccounts: FloatingAccount[];
+
+    countConnectionsByDayAndMonth: BarChartDataByMonth[];
   };
   exchanges: Exchanges;
 }
@@ -112,3 +114,6 @@ export enum GroupType {
   FAMILY,
   All,
 }
+
+export type DayData = { value: number; isSelected: boolean };
+export type MonthData = { month: string; barChartData: DayData[] };
