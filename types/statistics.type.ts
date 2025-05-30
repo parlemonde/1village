@@ -61,7 +61,28 @@ export interface VillageStats {
     familiesWithoutAccount: FamiliesWithoutAccount[];
     floatingAccounts: FloatingAccount[];
   };
-  exchanges: Exchanges;
+  activityCountDetails: ActivityCountDetails[];
+}
+
+export interface ActivityCountDetails {
+  phaseDetails: {
+    phaseId: number;
+    publicationsCount?: number;
+    commentsCount?: number;
+    videoCount?: number;
+    draftCount?: number;
+    mascotCount?: number;
+    enigmaCount?: number;
+    gameCount?: number;
+    questionCount?: number;
+    reactionCount?: number;
+    reportingCount?: number;
+    storyCount?: number;
+    challengeCount?: number;
+    anthemCount?: number;
+    reinventStoryCount?: number;
+  }[];
+  villageName: string;
 }
 
 export interface Exchanges {
