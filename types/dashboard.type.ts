@@ -33,3 +33,7 @@ export enum DashboardType {
   ONE_VILLAGE_PANEL,
   COMPLETE,
 }
+
+export interface DashboardSummaryFilters {
+  phase?: number;
+}

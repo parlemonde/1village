@@ -8,10 +8,10 @@ import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchanges
 import StatsCard from '../cards/StatsCard/StatsCard';
 import BarCharts from '../charts/BarCharts';
 import PieCharts from '../charts/PieCharts';
-import PhaseDetails from '../menu/PhaseDetails';
 import styles from '../styles/charts.module.css';
+import DashboardPhaseDetails from './DashboardPhaseDetails';
 import { AverageStatsProcessingMethod, DashboardType } from 'types/dashboard.type';
-import type { DashboardSummaryData } from 'types/dashboard.type';
+import type { DashboardSummaryData, DashboardSummaryFilters } from 'types/dashboard.type';
 
 // To delete when pie chart data is done
 const mockPieChartData = {
@@ -28,9 +28,10 @@ const CONTRIBUTION_BAR_CHAR_TITLE = 'Contribution des classes';
 export interface DashboardClassroomTabProps {
   data: DashboardSummaryData;
   dashboardType: DashboardType;
+  filters: DashboardSummaryFilters;
 }
 
-const DashboardClassroomTab = ({ data, dashboardType }: DashboardClassroomTabProps) => {
+const DashboardClassroomTab = ({ data, dashboardType, filters }: DashboardClassroomTabProps) => {
   return (
     <>
       <div className="statistic--container">
@@ -78,19 +79,7 @@ const DashboardClassroomTab = ({ data, dashboardType }: DashboardClassroomTabPro
         <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
         <BarCharts dataByMonth={data.barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
       </div>
-      {data && data.phases && (
-        <div className="statistic__phase--container">
-          <div>
-            <PhaseDetails phase={1} data={data.phases[0].data} />
-          </div>
-          <div className="statistic__phase">
-            <PhaseDetails phase={2} data={data.phases[1].data} />
-          </div>
-          <div className="statistic__phase">
-            <PhaseDetails phase={3} data={data.phases[1].data} />
-          </div>
-        </div>
-      )}
+      <DashboardPhaseDetails data={data} filters={filters} />
     </>
   );
 };

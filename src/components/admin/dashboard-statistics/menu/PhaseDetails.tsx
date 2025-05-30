@@ -17,6 +17,23 @@ import {
 
 import ArrowRight from 'src/svg/arrow-right.svg';
 
+const NAMES = {
+  villageName: 'Nom du village',
+  commentCount: 'Commentaires',
+  draftCount: 'Brouillons',
+  mascotCount: 'Mascottes',
+  videoCount: 'Vidéos',
+  enigmaCount: 'Enigmes',
+  gameCount: 'Jeux',
+  questionCount: 'Questions',
+  reactionCount: 'Réactions',
+  anthemCount: 'Hymnes',
+  reinventStoryCount: 'Réécriture',
+  challengeCount: 'Défis',
+  reportingCount: 'Reportages',
+  storyCount: 'Histoires',
+};
+
 interface PhaseDetailsProps {
   phase: number;
   data: Record<string, string | number>[];
@@ -38,6 +55,14 @@ const PhaseDetails = ({ phase, data }: PhaseDetailsProps) => {
     }
     return a[orderBy] < b[orderBy] ? 1 : -1;
   });
+
+  const translateName = (key: keyof typeof NAMES) => {
+    if (key in NAMES) {
+      return NAMES[key];
+    }
+
+    return key;
+  };
 
   return (
     <Accordion sx={{ boxShadow: 'none' }}>
@@ -67,7 +92,7 @@ const PhaseDetails = ({ phase, data }: PhaseDetailsProps) => {
                       IconComponent={KeyboardArrowUpIcon}
                       onClick={() => handleRequestSort(key)}
                     >
-                      {key}
+                      {translateName(key as keyof typeof NAMES)}
                     </TableSortLabel>
                   </TableCell>
                 ))}

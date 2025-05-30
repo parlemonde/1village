@@ -38,6 +38,7 @@ const GlobalStats = () => {
         <DashboardSummary
           dashboardType={DashboardType.ONE_VILLAGE_PANEL}
           data={{ ...statisticsClassrooms, ...statisticsSessions.data, ...statisticsFamily.data, barChartData: mockDataByMonth }}
+          filters={{ phase: selectedPhase }}
         />
       ) : null}
     </>

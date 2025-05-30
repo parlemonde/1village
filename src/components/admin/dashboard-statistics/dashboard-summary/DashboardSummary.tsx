@@ -6,14 +6,15 @@ import TabPanel from '../TabPanel';
 import DashboardClassroomTab from './DashboardClassroomTab';
 import DashboardFamilyTab from './DashboardFamilyTab';
 import { DashboardSummaryTab, DashboardType } from 'types/dashboard.type';
-import type { DashboardSummaryData } from 'types/dashboard.type';
+import type { DashboardSummaryData, DashboardSummaryFilters } from 'types/dashboard.type';
 
 interface DashboardSummaryProps {
   data: DashboardSummaryData;
   dashboardType?: DashboardType;
+  filters?: DashboardSummaryFilters;
 }
 
-const DashboardSummary = ({ data, dashboardType = DashboardType.COMPLETE }: DashboardSummaryProps) => {
+const DashboardSummary = ({ data, dashboardType = DashboardType.COMPLETE, filters = {} }: DashboardSummaryProps) => {
   const [tabValue, setTabValue] = useState<DashboardSummaryTab>(DashboardSummaryTab.CLASSROOM);
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: DashboardSummaryTab) => {
@@ -31,7 +32,7 @@ const DashboardSummary = ({ data, dashboardType = DashboardType.COMPLETE }: Dash
         <Tab value={DashboardSummaryTab.FAMILY} label="En famille" />
       </Tabs>
       <TabPanel value={tabValue} index={DashboardSummaryTab.CLASSROOM}>
-        <DashboardClassroomTab data={data} dashboardType={dashboardType} />
+        <DashboardClassroomTab data={data} dashboardType={dashboardType} filters={filters} />
       </TabPanel>
       <TabPanel value={tabValue} index={DashboardSummaryTab.FAMILY}>
         <DashboardFamilyTab data={data} />
