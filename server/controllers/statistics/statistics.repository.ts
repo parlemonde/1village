@@ -1,7 +1,7 @@
 import type { Activity } from '../../../types/activity.type';
 import { ActivityStatus, ActivityType } from '../../../types/activity.type';
 import { getActivities } from '../activities/activities.repository';
-import { getCommentsByActivityIds } from '../comments/comments.repository';
+import { getCommentCountForActivities } from '../comments/comments.repository';
 import { getVillages } from '../villages/village.repository';
 
 // DEPRECATED: groupBy function only available for Node.js v21
@@ -38,28 +38,31 @@ export const getActivityTypeCountByVillages = async (params?: GetActivityTypeCou
   const activities = await getActivities({ phase, villageIds, classroomId });
   const activitiesByPhases = groupBy(activities, (activity: Activity) => activity.phase);
 
-  return villages.map((village) => {
-    const phaseDetails: any[] = [];
+  return Promise.all(
+    villages.map(async (village) => {
+      const phaseDetails: any[] = [];
 
-    activitiesByPhases.forEach((activities: Activity[], phaseId: number) => {
-      if (phaseId === phase) return;
+      for (const [phaseId, activitiesByPhase] of activitiesByPhases) {
+        if (phaseId === phase) return;
 
-      const filteredActivities = activities.filter((activity: Activity) => activity.villageId === village.id && activity.phase === phaseId);
+        const filteredActivities = activitiesByPhase.filter((activity: Activity) => activity.villageId === village.id && activity.phase === phaseId);
 
-      phaseDetails.push(getActivitiesCount(filteredActivities, phaseId));
-    });
+        const activityCounts = await getActivityCounts(filteredActivities, phaseId);
+        phaseDetails.push(activityCounts);
+      }
 
-    return {
-      villageName: village.name,
-      phaseDetails,
-    };
-  });
+      return {
+        villageName: village.name,
+        phaseDetails,
+      };
+    }),
+  );
 };
 
-const getActivitiesCount = (activities: Activity[], phaseId: number) => {
+const getActivityCounts = async (activities: Activity[], phaseId: number) => {
   const draftCount = activities.filter((activity: Activity) => activity.status === ActivityStatus.DRAFT).length;
   const videoCount = activities.reduce((count, activity) => count + activity.content.filter((content) => content.type === 'video').length, 0);
-  const commentCount = getCommentsByActivityIds(activities.map((activity) => activity.id));
+  const commentCount = await getCommentCountForActivities(activities.map((activity) => activity.id));
 
   const baseActivityCount = { phaseId, draftCount, videoCount, commentCount };
 
