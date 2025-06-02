@@ -84,7 +84,7 @@ export const OneVillageTable = ({
         return {
           ...prevOptions,
           page: 1,
-          order: name,
+          order: name.toLowerCase(),
           sort: 'asc',
         };
       }
@@ -101,19 +101,25 @@ export const OneVillageTable = ({
           let aValue = a[exactKey] || '';
           let bValue = b[exactKey] || '';
 
+          // Gestion des villages
           if (options.order?.toLowerCase() === 'country' || options.order?.toLowerCase() === 'countries') {
             aValue = removeCountryFlagFromText(aValue as string);
             bValue = removeCountryFlagFromText(bValue as string);
           }
 
-          // Gestion des nombres
-          // if (typeof aValue === 'number' && typeof bValue === 'number') {
-          //   return options.sort === 'asc' ? aValue - bValue : bValue - aValue;
-          // }
-
           // Gestion des chaînes de caractères
           if (typeof aValue === 'string') aValue = normalizeString(aValue.toLowerCase());
           if (typeof bValue === 'string') bValue = normalizeString(bValue.toLowerCase());
+
+          // Gestion des React nodes
+          if (React.isValidElement(aValue)) {
+            const key = aValue.key?.toString() || '';
+            aValue = key.toLowerCase();
+          }
+          if (React.isValidElement(bValue)) {
+            const key = bValue.key?.toString() || '';
+            bValue = key.toLowerCase();
+          }
 
           if (aValue > bValue) {
             return options.sort === 'asc' ? 1 : -1;
