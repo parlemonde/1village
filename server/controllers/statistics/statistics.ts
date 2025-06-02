@@ -29,7 +29,6 @@ import {
 } from '../../stats/sessionStats';
 import { getFamiliesWithoutAccountForVillage } from '../../stats/villageStats';
 import { AppDataSource } from '../../utils/data-source';
-import { generateDefaultStatsFilterParams } from '../../utils/generateDefaultParams';
 import { Controller } from '../controller';
 import type { StatisticsDto } from './statistics.dto';
 import { getActivityTypeCountByVillages } from './statistics.repository';
@@ -38,7 +37,7 @@ const classroomRepository = AppDataSource.getRepository(Classroom);
 export const statisticsController = new Controller('/statistics');
 
 const constructFamilyResponseFromFilters = async (filters: StatsFilterParams) => {
-  const filtersFamily = { ...(filters ?? generateDefaultStatsFilterParams()), groupType: GroupType.FAMILY };
+  const filtersFamily = { ...(filters || {}), groupType: GroupType.FAMILY };
 
   const minDuration = await getMinDuration(filtersFamily);
   const maxDuration = await getMaxDuration(filtersFamily);
