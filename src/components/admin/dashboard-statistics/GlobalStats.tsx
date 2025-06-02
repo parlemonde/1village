@@ -9,7 +9,7 @@ import TabPanel from './TabPanel';
 import TeamComments from './TeamComments';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesContributionCard from './cards/ClassesContributionCard/ClassesContributionCard';
-import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
+// import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
 import PhaseDropdown from './filters/PhaseDropdown';
 import DashboardWorldMap from './map/DashboardWorldMap/DashboardWorldMap';
@@ -36,6 +36,7 @@ const GlobalStats = () => {
       setFamiliesWithoutAccountRows([]);
       setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(oneVillageStats.data?.familiesWithoutAccount));
     }
+
     if (oneVillageStats.data?.floatingAccounts) {
       setFloatingAccountsRows([]);
       setFloatingAccountsRows(createFloatingAccountsRows(oneVillageStats.data?.floatingAccounts));
@@ -62,7 +63,7 @@ const GlobalStats = () => {
       </div>
       <TeamComments />
       <DashboardWorldMap />
-      <Tabs value={value} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
+      <Tabs value={value} onChange={handleTabChange} sx={{ py: 3 }}>
         <Tab label="En classe" />
         <Tab label="En famille" />
       </Tabs>
@@ -104,7 +105,11 @@ const GlobalStats = () => {
           </AverageStatsCard>
         </div>
         <div className="statistic__average--container">
-          <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
+          {/*<ClassesExchangesCard
+            totalPublications={oneVillageStats.data?.exchanges.publicationsCount || 0}
+            totalComments={oneVillageStats.data?.exchanges.commentsCount || 0}
+            totalVideos={oneVillageStats.data?.exchanges.videosCount || 0}
+          />*/}
           <ClassesContributionCard></ClassesContributionCard>
         </div>
         {statisticsClassrooms && statisticsClassrooms.phases && (
@@ -122,37 +127,35 @@ const GlobalStats = () => {
         )}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <>
-          <OneVillageTable
-            admin={false}
-            emptyPlaceholder={<p>{'Pas de données'}</p>}
-            data={familiesWithoutAccountRows}
-            columns={FamiliesWithoutAccountHeaders}
-            titleContent={`À surveiller : comptes non créés (${familiesWithoutAccountRows.length})`}
-          />
-          <OneVillageTable
-            admin={false}
-            emptyPlaceholder={<p>{'Pas de données'}</p>}
-            data={floatingAccountsRows}
-            columns={FloatingAccountsHeaders}
-            titleContent={`À surveiller : comptes flottants (${floatingAccountsRows.length})`}
-          />
-          <Box
-            className={styles.classroomStats}
-            sx={{
-              display: 'flex',
-              flexDirection: {
-                xs: 'column',
-                md: 'row',
-              },
-              gap: 2,
-            }}
-          >
-            <StatsCard data={oneVillageStats.data?.familyAccountsCount}>Nombre de profs ayant créé des comptes famille</StatsCard>
-            <StatsCard data={oneVillageStats.data?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
-            <StatsCard data={oneVillageStats.data?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
-          </Box>
-        </>
+        <OneVillageTable
+          admin={false}
+          emptyPlaceholder={<p>Pas de données</p>}
+          data={familiesWithoutAccountRows}
+          columns={FamiliesWithoutAccountHeaders}
+          titleContent={`À surveiller : comptes non créés (${familiesWithoutAccountRows.length})`}
+        />
+        <OneVillageTable
+          admin={false}
+          emptyPlaceholder={<p>Pas de données</p>}
+          data={floatingAccountsRows}
+          columns={FloatingAccountsHeaders}
+          titleContent={`À surveiller : comptes flottants (${floatingAccountsRows.length})`}
+        />
+        <Box
+          className={styles.classroomStats}
+          sx={{
+            display: 'flex',
+            flexDirection: {
+              xs: 'column',
+              md: 'row',
+            },
+            gap: 2,
+          }}
+        >
+          <StatsCard data={oneVillageStats.data?.familyAccountsCount}>Nombre de profs ayant créé des comptes famille</StatsCard>
+          <StatsCard data={oneVillageStats.data?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
+          <StatsCard data={oneVillageStats.data?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
+        </Box>
       </TabPanel>
     </>
   );

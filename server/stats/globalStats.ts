@@ -18,8 +18,10 @@ export const getConnectedFamiliesCountForGlobal = async () => {
 
 export const getChildrenCodesCountForGlobal = async () => {
   const filterParams = generateEmptyFilterParams();
+
   return await getChildrenCodesCount(filterParams);
 };
+
 export const getFloatingAccountsForGlobal = async () => {
   const filterParams = generateEmptyFilterParams();
   return await getFloatingAccounts(filterParams);

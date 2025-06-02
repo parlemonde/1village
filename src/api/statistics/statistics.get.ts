@@ -18,7 +18,7 @@ async function getOneVillageStats(): Promise<VillageStats> {
     await axiosRequest({
       method: 'GET',
       baseURL: '/api',
-      url: `/statistics/onevillage`,
+      url: `/statistics/one-village`,
     })
   ).data;
 }
