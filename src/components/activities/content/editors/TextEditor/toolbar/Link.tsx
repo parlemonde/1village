@@ -205,6 +205,20 @@ interface EditorLinkProps {
 }
 const EditorLink = ({ children, entityKey, contentState }: React.PropsWithChildren<EditorLinkProps>) => {
   const { url } = contentState.getEntity(entityKey).getData();
+
+  // Validation de l'URL avec une expression régulière
+  const urlPattern = /^(https?:\/\/)?[\w-]+(\.[\w-]+)+[/#?]?.*$/;
+  if (!urlPattern.test(url)) {
+    return null;
+  }
+
+  // Liste blanche des protocoles d'URL autorisés
+  const allowedProtocols = ['https:'];
+  const urlProtocol = new URL(url).protocol;
+  if (!allowedProtocols.includes(urlProtocol)) {
+    return null;
+  }
+
   return (
     <a href={url} target="_self" style={{ color: primaryColor, textDecoration: 'underline' }}>
       {children}
