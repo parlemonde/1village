@@ -5,6 +5,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box, Tab, Tabs } from '@mui/material';
 
 import { OneVillageTable } from '../OneVillageTable';
+import ActivityTable from './ActivityTable';
 import TabPanel from './TabPanel';
 import TeamComments from './TeamComments';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
@@ -62,6 +63,7 @@ const GlobalStats = () => {
       </div>
       <TeamComments />
       <DashboardWorldMap />
+      <ActivityTable />
       <Tabs value={value} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
         <Tab label="En classe" />
         <Tab label="En famille" />
