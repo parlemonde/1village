@@ -10,6 +10,7 @@ import { useGetOneVillageStats, useGetSessionsStats } from 'src/api/statistics/s
 import { useStatisticsClassrooms } from 'src/services/useStatistics';
 import { DashboardType } from 'types/dashboard.type';
 import type { ClassroomsStats } from 'types/statistics.type';
+import ActivityTable from './ActivityTable';
 
 const GlobalStats = () => {
   const [selectedPhase, setSelectedPhase] = useState<number>(0);
@@ -34,6 +35,7 @@ const GlobalStats = () => {
       </div>
       <TeamComments />
       <DashboardWorldMap />
+      <ActivityTable />
       {statisticsSessions.data && statisticsFamily.data ? (
         <DashboardSummary
           dashboardType={DashboardType.ONE_VILLAGE_PANEL}
