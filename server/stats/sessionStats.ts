@@ -6,13 +6,12 @@ import { AnalyticSession } from '../entities/analytic';
 import { Classroom } from '../entities/classroom';
 import { UserType } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';
-import { generateDefaultStatsFilterParams } from '../utils/generateDefaultParams';
 
 const analyticSessionRepository = AppDataSource.getRepository(AnalyticSession);
 const classroomRepository = AppDataSource.getRepository(Classroom);
 
 const addFiltersToQuery = (queryBuilder: SelectQueryBuilder<AnalyticSession>, params?: StatsFilterParams) => {
-  const { countryId, villageId, classroomId, groupType } = params ?? generateDefaultStatsFilterParams();
+  const { countryId, villageId, classroomId, groupType } = params || {};
 
   if (villageId) {
     queryBuilder.andWhere('user.villageId = :villageId', { villageId });
