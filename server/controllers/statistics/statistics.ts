@@ -1,6 +1,7 @@
 import type { Request } from 'express';
 
 import type { StatsFilterParams } from '../../../types/statistics.type';
+import { GroupType } from '../../../types/statistics.type';
 import { Classroom } from '../../entities/classroom';
 import {
   getConnectedClassroomsCount,
@@ -11,21 +12,9 @@ import {
   getContributedClassroomsCount,
 } from '../../stats/classroomStats';
 import { getBarChartData } from '../../stats/connectionStats';
-import {
-  getChildrenCodesCountForCountry,
-  getConnectedFamiliesCountForCountry,
-  getFamiliesWithoutAccountForCountry,
-  getFamilyAccountsCountForCountry,
-  getFloatingAccountsForCountry,
-} from '../../stats/countryStats';
-import {
-  getChildrenCodesCountForGlobal,
-  getConnectedFamiliesCountForGlobal,
-  getFamiliesWithoutAccountForGlobal,
-  getFamilyAccountsCountForGlobal,
-  getFloatingAccountsForGlobal,
-} from '../../stats/globalStats';
-import { getChildrenCodesCount, getConnectedFamiliesCount, getFamilyAccountsCount } from '../../stats/queryStatsByFilter';
+import { getFamiliesWithoutAccountForCountry } from '../../stats/countryStats';
+import { getFamiliesWithoutAccountForGlobal } from '../../stats/globalStats';
+import { getChildrenCodesCount, getConnectedFamiliesCount, getFamilyAccountsCount, getFloatingAccounts } from '../../stats/queryStatsByFilter';
 import {
   getAverageConnections,
   getAverageDuration,
@@ -38,20 +27,51 @@ import {
   getMinDuration,
   getUserConnectionsList,
 } from '../../stats/sessionStats';
-import {
-  getChildrenCodesCountForVillage,
-  getConnectedFamiliesCountForVillage,
-  getFamiliesWithoutAccountForVillage,
-  getFamilyAccountsCountForVillage,
-  getFloatingAccountsForVillage,
-} from '../../stats/villageStats';
+import { getFamiliesWithoutAccountForVillage } from '../../stats/villageStats';
 import { AppDataSource } from '../../utils/data-source';
+import { generateDefaultStatsFilterParams } from '../../utils/generateDefaultParams';
 import { Controller } from '../controller';
 import type { StatisticsDto } from './statistics.dto';
 import { getActivityTypeCountByVillages } from './statistics.repository';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
 export const statisticsController = new Controller('/statistics');
+
+const constructFamilyResponseFromFilters = async (filters: StatsFilterParams) => {
+  const filtersFamily = { ...(filters ?? generateDefaultStatsFilterParams()), groupType: GroupType.FAMILY };
+
+  const minDuration = await getMinDuration(filtersFamily);
+  const maxDuration = await getMaxDuration(filtersFamily);
+  const averageDuration = await getAverageDuration(filtersFamily);
+  const medianDuration = await getMedianDuration(filtersFamily);
+
+  const minConnections = await getMinConnections(filtersFamily);
+  const maxConnections = await getMaxConnections(filtersFamily);
+  const averageConnections = await getAverageDuration(filtersFamily);
+  const medianConnections = await getMedianConnections(filtersFamily);
+
+  const familyAccountsCount = await getFamilyAccountsCount(filtersFamily);
+  const childrenCodesCount = await getChildrenCodesCount(filtersFamily);
+  const connectedFamiliesCount = await getConnectedFamiliesCount(filtersFamily);
+  const floatingAccounts = await getFloatingAccounts(filtersFamily);
+
+  return {
+    minDuration,
+    maxDuration,
+    averageDuration,
+    medianDuration,
+
+    minConnections,
+    maxConnections,
+    averageConnections,
+    medianConnections,
+
+    familyAccountsCount,
+    childrenCodesCount,
+    connectedFamiliesCount,
+    floatingAccounts,
+  };
+};
 
 statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
   const villageId = req.query.villageId ? parseInt(req.query.villageId as string) : undefined;
@@ -63,14 +83,14 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
 
   try {
     // Appelez les fonctions avec villageId
-    const minDuration = await getMinDuration(villageId, countryCode, classroomId);
-    const maxDuration = await getMaxDuration(villageId, countryCode, classroomId);
-    const averageDuration = await getAverageDuration(villageId, countryCode, classroomId);
-    const medianDuration = await getMedianDuration(villageId, countryCode, classroomId);
-    const minConnections = await getMinConnections(villageId, countryCode, classroomId);
-    const maxConnections = await getMaxConnections(villageId, countryCode, classroomId);
-    const averageConnections = await getAverageConnections(villageId, countryCode, classroomId);
-    const medianConnections = await getMedianConnections(villageId, countryCode, classroomId);
+    const minDuration = await getMinDuration(filters);
+    const maxDuration = await getMaxDuration(filters);
+    const averageDuration = await getAverageDuration(filters);
+    const medianDuration = await getMedianDuration(filters);
+    const minConnections = await getMinConnections(filters);
+    const maxConnections = await getMaxConnections(filters);
+    const averageConnections = await getAverageConnections(filters);
+    const medianConnections = await getMedianConnections(filters);
     const testConnections = await getUserConnectionsList();
     const registeredClassroomsCount = await getClassroomCount(villageId, countryCode, classroomId);
     const connectedClassroomsCount = await getConnectedClassroomsCount(villageId, countryCode, classroomId);
@@ -226,19 +246,18 @@ statisticsController.get({ path: '/classrooms' }, async (req, res) => {
 statisticsController.get({ path: '/one-village' }, async (req, res) => {
   const phase = req.query.phase as unknown as number;
 
-  const familyAccountsCount = await getFamilyAccountsCountForGlobal();
-  const childrenCodesCount = await getChildrenCodesCountForGlobal();
-  const connectedFamiliesCount = await getConnectedFamiliesCountForGlobal();
-  const familiesWithoutAccount = await getFamiliesWithoutAccountForGlobal();
-  const floatingAccounts = await getFloatingAccountsForGlobal();
+  const filters: StatsFilterParams = {};
+
+  const family = {
+    ...(await constructFamilyResponseFromFilters(filters)),
+    //TODO refactor getFamiliesWithoutAccount
+    familiesWithoutAccount: await getFamiliesWithoutAccountForGlobal(),
+  };
+
   const activityCountDetails = await getActivityTypeCountByVillages({ phase });
 
   const response: StatisticsDto = {
-    familyAccountsCount,
-    childrenCodesCount,
-    connectedFamiliesCount,
-    familiesWithoutAccount,
-    floatingAccounts,
+    family,
     activityCountDetails,
   };
 
@@ -249,47 +268,40 @@ statisticsController.get({ path: '/villages/:villageId' }, async (req, res) => {
   const villageId = parseInt(req.params.villageId);
   const { countryCode } = req.params;
   const phase = req.query.phase as unknown as number;
+  const filters: StatsFilterParams = { villageId, phase };
 
-  const familyAccountsCount = await getFamilyAccountsCountForVillage(villageId, phase);
-  const childrenCodesCount = await getChildrenCodesCountForVillage(villageId, phase);
-  const connectedFamiliesCount = await getConnectedFamiliesCountForVillage(villageId, phase);
-  const familiesWithoutAccount = await getFamiliesWithoutAccountForVillage(villageId);
-  const floatingAccounts = await getFloatingAccountsForVillage(villageId);
-  const activityCountDetails = await getActivityTypeCountByVillages({ phase, countryCode, villageId });
-
-  const response: StatisticsDto = {
-    familyAccountsCount,
-    childrenCodesCount,
-    connectedFamiliesCount,
-    familiesWithoutAccount,
-    floatingAccounts,
-    activityCountDetails,
+  const family = {
+    ...(await constructFamilyResponseFromFilters(filters)),
+    //TODO refactor getFamiliesWithoutAccount
+    familiesWithoutAccount: await getFamiliesWithoutAccountForVillage(villageId),
   };
 
-  res.sendJSON(response);
+  const activityCountDetails = await getActivityTypeCountByVillages({ phase, countryCode, villageId });
+
+  res.sendJSON({
+    family,
+    activityCountDetails,
+  });
 });
 
 statisticsController.get({ path: '/countries/:countryCode' }, async (req, res) => {
   const { countryCode } = req.params;
   const phase = req.query.phase as unknown as number;
 
-  const familyAccountsCount = await getFamilyAccountsCountForCountry(countryCode, phase);
-  const childrenCodesCount = await getChildrenCodesCountForCountry(countryCode, phase);
-  const connectedFamiliesCount = await getConnectedFamiliesCountForCountry(countryCode, phase);
-  const familiesWithoutAccount = await getFamiliesWithoutAccountForCountry(countryCode);
-  const floatingAccounts = await getFloatingAccountsForCountry(countryCode);
-  const activityCountDetails = await getActivityTypeCountByVillages({ phase, countryCode });
+  const filters: StatsFilterParams = { countryId: countryCode, phase };
 
-  const response: StatisticsDto = {
-    familyAccountsCount,
-    childrenCodesCount,
-    connectedFamiliesCount,
-    familiesWithoutAccount,
-    floatingAccounts,
-    activityCountDetails,
+  const family = {
+    ...(await constructFamilyResponseFromFilters(filters)),
+    //TODO refactor getFamiliesWithoutAccount
+    familiesWithoutAccount: await getFamiliesWithoutAccountForCountry(countryCode),
   };
 
-  res.sendJSON(response);
+  const activityCountDetails = await getActivityTypeCountByVillages({ phase, countryCode });
+
+  res.sendJSON({
+    family,
+    activityCountDetails,
+  });
 });
 
 statisticsController.get({ path: '/classrooms/:classroomId' }, async (req, res) => {
@@ -297,15 +309,40 @@ statisticsController.get({ path: '/classrooms/:classroomId' }, async (req, res) 
   const { countryCode } = req.params;
   const phase = req.query.phase as unknown as number;
 
+  const filters: StatsFilterParams = { classroomId, phase };
+
+  const minDuration = await getMinDuration(filters);
+  const maxDuration = await getMaxDuration(filters);
+  const averageDuration = await getAverageDuration(filters);
+  const medianDuration = await getMedianDuration(filters);
+
+  const minConnections = await getMinConnections(filters);
+  const maxConnections = await getMaxConnections(filters);
+  const averageConnections = await getAverageDuration(filters);
+  const medianConnections = await getMedianConnections(filters);
+
   const childrenCodesCount = await getChildrenCodesCountForClassroom(classroomId, phase);
   const connectedFamiliesCount = await getConnectedFamiliesCountForClassroom(classroomId, phase);
   const familiesWithoutAccount = await getFamiliesWithoutAccountForClassroom(classroomId);
+
   const activityCountDetails = await getActivityTypeCountByVillages({ phase, countryCode, classroomId });
 
   const response: StatisticsDto = {
-    childrenCodesCount,
-    connectedFamiliesCount,
-    familiesWithoutAccount,
+    family: {
+      minDuration,
+      maxDuration,
+      averageDuration,
+      medianDuration,
+
+      minConnections,
+      maxConnections,
+      averageConnections,
+      medianConnections,
+
+      childrenCodesCount,
+      connectedFamiliesCount,
+      familiesWithoutAccount,
+    },
     activityCountDetails,
   };
 

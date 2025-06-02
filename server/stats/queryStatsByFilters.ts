@@ -73,7 +73,7 @@ export const getFloatingAccounts = async (filterParams: StatsFilterParams) => {
   return floatingAccounts;
 };
 
-export const getFamilyAccountsCount = async (filterParams: { villageId: number | undefined; phase: VillagePhase | undefined }) => {
+export const getFamilyAccountsCount = async (filterParams: { villageId?: number | undefined; phase?: VillagePhase | undefined }) => {
   const { villageId, phase } = filterParams;
   const village = await villageRepository.findOne({ where: { id: villageId } });
   const query = userRepository
