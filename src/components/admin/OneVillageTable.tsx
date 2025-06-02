@@ -74,14 +74,19 @@ export const OneVillageTable = ({
 
   const onSortBy = (name: string) => () => {
     setTableOptions((prevOptions) => {
-      if (prevOptions.order === name) {
+      if (prevOptions.order?.toLowerCase() === name.toLowerCase()) {
         return {
           ...prevOptions,
           page: 1,
           sort: prevOptions.sort === 'asc' ? 'desc' : 'asc',
         };
       } else {
-        return { ...prevOptions, page: 1, order: name.toLowerCase() };
+        return {
+          ...prevOptions,
+          page: 1,
+          order: name.toLowerCase(),
+          sort: 'asc',
+        };
       }
     });
   };
@@ -91,15 +96,30 @@ export const OneVillageTable = ({
     const useSort = options.sort !== undefined && options.order !== undefined;
     const sortedData = useSort
       ? [...data].sort((a, b) => {
-          let aValue = a[options.order || ''] || '';
-          let bValue = b[options.order || ''] || '';
+          // Trouver la clé exacte dans l'objet en ignorant la casse
+          const exactKey = Object.keys(a).find((key) => key.toLowerCase() === (options.order || '').toLowerCase()) || '';
+          let aValue = a[exactKey] || '';
+          let bValue = b[exactKey] || '';
 
-          if (options.order === 'country' || options.order === 'countries') {
+          // Gestion des villages
+          if (options.order?.toLowerCase() === 'country' || options.order?.toLowerCase() === 'countries') {
             aValue = removeCountryFlagFromText(aValue as string);
             bValue = removeCountryFlagFromText(bValue as string);
           }
+
+          // Gestion des chaînes de caractères
           if (typeof aValue === 'string') aValue = normalizeString(aValue.toLowerCase());
           if (typeof bValue === 'string') bValue = normalizeString(bValue.toLowerCase());
+
+          // Gestion des React nodes
+          if (React.isValidElement(aValue)) {
+            const key = aValue.key?.toString() || '';
+            aValue = key.toLowerCase();
+          }
+          if (React.isValidElement(bValue)) {
+            const key = bValue.key?.toString() || '';
+            bValue = key.toLowerCase();
+          }
 
           if (aValue > bValue) {
             return options.sort === 'asc' ? 1 : -1;
