@@ -61,7 +61,11 @@ export const getActivityTypeCountByVillages = async (params?: GetActivityTypeCou
 
 const getActivityCounts = async (activities: Activity[], phaseId: number) => {
   const draftCount = activities.filter((activity: Activity) => activity.status === ActivityStatus.DRAFT).length;
-  const videoCount = activities.reduce((count, activity) => count + activity.content.filter((content) => content.type === 'video').length, 0);
+
+  // Control if activity content is an array because of bad data in a staging database...
+  const videoCount = activities.reduce((count, activity) => {
+    return count + (Array.isArray(activity.content) ? activity.content.filter((content) => content.type === 'video').length : 0);
+  }, 0);
   const commentCount = await getCommentCountForActivities(activities.map((activity) => activity.id));
 
   const baseActivityCount = { phaseId, draftCount, videoCount, commentCount };

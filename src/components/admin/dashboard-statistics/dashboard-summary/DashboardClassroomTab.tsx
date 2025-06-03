@@ -31,6 +31,19 @@ export interface DashboardClassroomTabProps {
 }
 
 const DashboardClassroomTab = ({ data, dashboardType }: DashboardClassroomTabProps) => {
+  const videoCount =
+    data.activityCountDetails?.reduce((total, activity) => total + activity.phaseDetails.reduce((sum, phase) => sum + phase.videoCount, 0), 0) ?? 0;
+  const commentCount =
+    data.activityCountDetails?.reduce((total, activity) => total + activity.phaseDetails.reduce((sum, phase) => sum + phase.commentCount, 0), 0) ?? 0;
+  const publicationCount = data.activityCountDetails
+    .flatMap((activityCountDetails) =>
+      activityCountDetails.phaseDetails.flatMap((phaseDetails) => {
+        const { phaseId, ...rest } = phaseDetails;
+        return Object.values(rest);
+      }),
+    )
+    .reduce((accumulator: number, currentValue) => (typeof currentValue === 'number' ? accumulator + currentValue : accumulator), 0);
+
   return (
     <>
       <div className="statistic--container">
@@ -75,10 +88,10 @@ const DashboardClassroomTab = ({ data, dashboardType }: DashboardClassroomTabPro
         </div>
       )}
       <div className="statistic__average--container">
-        <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
+        <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
         <BarCharts dataByMonth={data.barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
       </div>
-      {data && data.phases && (
+      {data?.phases && (
         <div className="statistic__phase--container">
           <div>
             <PhaseDetails phase={1} data={data.phases[0].data} />

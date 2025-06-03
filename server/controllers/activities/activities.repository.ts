@@ -12,7 +12,7 @@ type GetActivitiesParams = {
 export const getActivities = async ({ phase, villageIds, classroomId }: GetActivitiesParams) => {
   const activityQB = activitiesRepository
     .createQueryBuilder('activity')
-    .select(['activity.phase', 'activity.type', 'activity.status', 'activity.content', 'activity.villageId']);
+    .select(['activity.id', 'activity.phase', 'activity.type', 'activity.status', 'activity.content', 'activity.villageId']);
 
   if (phase) {
     activityQB.where('activity.phase = :phase', { phase });
