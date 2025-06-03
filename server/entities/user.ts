@@ -133,7 +133,7 @@ export class User implements UserInterface {
   @OneToOne(() => Classroom, (classroom: Classroom) => classroom.user)
   public classroom: Classroom | null;
 
-  @OneToMany(() => Activity, (activity: Activity) => activity.user)
+  @OneToMany(() => Activity, (activity) => activity.user)
   public activities: Activity[];
 
   @OneToMany(() => Game, (game: Game) => game.user)

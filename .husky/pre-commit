@@ -1,2 +1,2 @@
-yarn lint-staged --no-stash
+yarn lint-staged
 yarn tsc

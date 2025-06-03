@@ -10,7 +10,7 @@ export interface Classroom {
   country?: Country;
   delayedDays?: number;
   hasVisibilitySetToClass?: boolean;
-  user?: User;
+  user: User | null;
   defaultPrintMessage?: string;
 }
 

@@ -51,6 +51,26 @@ const ClassroomStats = () => {
   const classroomsStats = useGetClassroomsStats(+selectedClassroom, +selectedPhase);
   const { classrooms } = useClassrooms(classroomFilter);
 
+  const videoCount = 0;
+  const commentCount = 0;
+  const publicationCount = 0;
+
+  /*if (classroomsStats?.data) {
+    videoCount =
+      classroomsStats.data.activityCountDetails?.reduce(
+        (total, activity) => total + activity.phaseDetails.reduce((sum, phase) => sum + phase.videoCount, 0),
+        0,
+      ) ?? 0;
+    commentCount =
+      classroomsStats.data.activityCountDetails?.reduce(
+        (total, activity) => total + activity.phaseDetails.reduce((sum, phase) => sum + phase.commentCount, 0),
+        0,
+      ) ?? 0;
+    publicationCount = classroomsStats.data.activityCountDetails
+      .flatMap((activityCountDetails) => activityCountDetails.phaseDetails.flatMap((phaseDetails) => Object.values(phaseDetails)))
+      .reduce((accumulator: number, currentValue) => (typeof currentValue === 'number' ? accumulator + currentValue : accumulator), 0);
+  }*/
+
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
     setSelectedVillage('');
@@ -145,7 +165,7 @@ const ClassroomStats = () => {
           <BarCharts dataByMonth={mockDataByMonth} title={BarChartTitle} />
         </div>
         <div className="statistic__average--container">
-          <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
+          <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
         </div>
         {statisticsClassrooms && statisticsClassrooms.phases && (
           <div className="statistic__phase--container">

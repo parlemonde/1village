@@ -18,6 +18,7 @@ export const userTypeNames = {
   [UserType.FAMILY]: 'Parent',
   [UserType.OBSERVATOR]: 'Observateur',
 };
+
 export interface User {
   id: number;
   email: string;
