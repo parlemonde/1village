@@ -46,6 +46,26 @@ const VillageStats = () => {
   const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
   const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(Number(selectedVillage), selectedCountry, null);
 
+  let videoCount = 0;
+  let commentCount = 0;
+  let publicationCount = 0;
+
+  if (villagesStats?.data) {
+    videoCount =
+      villagesStats.data.activityCountDetails?.reduce(
+        (total, activity) => total + activity.phaseDetails.reduce((sum, phase) => sum + phase.videoCount, 0),
+        0,
+      ) ?? 0;
+    commentCount =
+      villagesStats.data.activityCountDetails?.reduce(
+        (total, activity) => total + activity.phaseDetails.reduce((sum, phase) => sum + phase.commentCount, 0),
+        0,
+      ) ?? 0;
+    publicationCount = villagesStats.data.activityCountDetails
+      .flatMap((activityCountDetails) => activityCountDetails.phaseDetails.flatMap((phaseDetails) => Object.values(phaseDetails)))
+      .reduce((accumulator: number, currentValue) => (typeof currentValue === 'number' ? accumulator + currentValue : accumulator), 0);
+  }
+
   useEffect(() => {
     setOptions({
       countryIsoCode: selectedCountry,
@@ -168,7 +188,7 @@ const VillageStats = () => {
           <BarCharts dataByMonth={mockDataByMonth} title={EngagementBarChartTitle} />
         </div>
         <div className="statistic__average--container">
-          <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
+          <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
           <ClassesContributionCard></ClassesContributionCard>
         </div>
         {statisticsClassrooms && statisticsClassrooms.phases && (

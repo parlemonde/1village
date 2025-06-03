@@ -61,7 +61,20 @@ export interface VillageStats {
     familiesWithoutAccount: FamiliesWithoutAccount[];
     floatingAccounts: FloatingAccount[];
   };
+  activityCountDetails: ActivityCountDetails[];
 }
+
+type ActivityCountDetails = {
+  villageName: string;
+  phaseDetails: PhaseDetails[];
+};
+
+type PhaseDetails = {
+  phaseId: string;
+  videoCount: number;
+  commentCount: number;
+  draftCount: number;
+};
 
 export interface FamiliesWithoutAccount {
   student_id: number;

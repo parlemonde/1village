@@ -26,7 +26,7 @@ const DashboardSummary = ({ data, dashboardType = DashboardType.COMPLETE }: Dash
 
   return (
     <>
-      <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
+      <Tabs value={tabValue} onChange={handleTabChange} sx={{ py: 3 }}>
         <Tab value={DashboardSummaryTab.CLASSROOM} label="En classe" />
         <Tab value={DashboardSummaryTab.FAMILY} label="En famille" />
       </Tabs>
