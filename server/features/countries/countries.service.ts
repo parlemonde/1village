@@ -1,9 +1,16 @@
 import { countries } from '../../utils/iso-3166-countries-french';
-import { selectCountriesWithVillages } from './countries.repository';
+import { selectCountriesOfVillages } from './countries.repository';
 
-export const getCountriesWithVillages = async () => {
-  const countryCodesWithVillages = (await selectCountriesWithVillages()).map((obj) => obj.countryCode);
+export const getCountries = async (hasVillage: boolean) => {
+  if (!hasVillage) {
+    return countries;
+  }
+
+  const request = await selectCountriesOfVillages();
+
+  const setCountryCodes = new Set(request.flatMap((obj) => obj.countryCodes.split(',')));
+
   return countries.filter((country) => {
-    return countryCodesWithVillages.includes(country.isoCode);
+    return setCountryCodes.has(country.isoCode);
   });
 };

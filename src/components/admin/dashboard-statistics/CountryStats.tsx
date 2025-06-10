@@ -22,7 +22,7 @@ const CountryStats = () => {
 
   const statisticsFamily = useGetCountriesStats(selectedCountry, selectedPhase);
 
-  const { countries } = useCountries();
+  const { countries } = useCountries({ hasVillage: true });
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
   };

@@ -22,9 +22,9 @@ import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
-import { useGetCountriesWithVillages } from 'src/api/countries/countries.get';
 import { useGetClassroomsStats } from 'src/api/statistics/statistics.get';
 import { useClassrooms } from 'src/services/useClassrooms';
+import { useCountries } from 'src/services/useCountries';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import { useVillages } from 'src/services/useVillages';
 import type { ClassroomFilter } from 'types/classroom.type';
@@ -46,7 +46,7 @@ const ClassroomStats = () => {
 
   const pelicoMessage = 'Merci de sélectionner une classe pour analyser ses statistiques ';
 
-  const { data: countries } = useGetCountriesWithVillages();
+  const { countries } = useCountries({ hasVillage: true });
   const { villages } = useVillages(villageFilter);
   const classroomsStats = useGetClassroomsStats(+selectedClassroom, +selectedPhase);
   const { classrooms } = useClassrooms(classroomFilter);
