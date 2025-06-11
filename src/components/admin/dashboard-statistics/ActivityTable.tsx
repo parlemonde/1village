@@ -83,10 +83,8 @@ const fakeData = [
 // On prépare les données déjà formatées pour l'affichage
 const tableData = fakeData.map((row) => {
   return {
-    id: row.id,
+    ...row,
     countries: countriesToText(row.countries),
-    totalConnections: row.totalConnections,
-    totalActivities: row.totalActivities,
     status: (
       <span key={row.status} style={{ color: getCountryColor(row.status as CountryStatus), fontSize: 24 }}>
         ●
