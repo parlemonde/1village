@@ -55,10 +55,10 @@ const VillageStats = () => {
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
 
   useEffect(() => {
-    if (villagesStats.data?.family.familiesWithoutAccount) {
-      setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(villagesStats.data?.family.familiesWithoutAccount));
+    if (villagesStats.data?.family?.familiesWithoutAccount) {
+      setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(villagesStats.data.family.familiesWithoutAccount));
     }
-  }, [villagesStats.data?.family.familiesWithoutAccount]);
+  }, [villagesStats.data?.family?.familiesWithoutAccount]);
 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
@@ -134,7 +134,7 @@ const VillageStats = () => {
           <StatsCard data={statisticsSessions.connectedClassroomsCount ? statisticsSessions.connectedClassroomsCount : 0}>
             Nombre de classes connectées
           </StatsCard>
-          <StatsCard data={statisticsSessions.contribuedClassroomsCount ? statisticsSessions.contribuedClassroomsCount : 0}>
+          <StatsCard data={statisticsSessions.contributedClassroomsCount ? statisticsSessions.contributedClassroomsCount : 0}>
             Nombre de classes contributrices
           </StatsCard>
         </div>
@@ -208,9 +208,9 @@ const VillageStats = () => {
                 gap: 2,
               }}
             >
-              <StatsCard data={villagesStats.data?.family.familyAccountsCount}>Nombre de profs ayant créé des comptes famille</StatsCard>
-              <StatsCard data={villagesStats.data?.family.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
-              <StatsCard data={villagesStats.data?.family.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
+              <StatsCard data={villagesStats.data?.family?.familyAccountsCount}>Nombre de profs ayant créé des comptes famille</StatsCard>
+              <StatsCard data={villagesStats.data?.family?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
+              <StatsCard data={villagesStats.data?.family?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
             </Box>
           </>
         )}
