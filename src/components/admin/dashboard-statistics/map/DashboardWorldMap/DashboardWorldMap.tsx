@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import CircleIcon from '@mui/icons-material/Circle';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
-import styles from './DashboardWorldMap.module.css';
+
 import TooltipMouseTracker from '../TooltipMouseTracker/TooltipMouseTracker';
 import { countryToFlag } from 'src/utils';
+import styles from './DashboardWorldMap.module.css';
 
 type CountryStatus = 'active' | 'observer' | 'ghost' | 'absent';
 
