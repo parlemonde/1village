@@ -39,7 +39,7 @@ const VillageStats = () => {
   const [value, setValue] = React.useState(0);
   const [selectedPhase, setSelectedPhase] = React.useState<number>(0);
 
-  const { countries } = useCountries();
+  const { countries } = useCountries({ hasVillage: true });
 
   const { villages } = useVillages(options);
   const villagesStats = useGetVillagesStats(+selectedVillage, selectedPhase);

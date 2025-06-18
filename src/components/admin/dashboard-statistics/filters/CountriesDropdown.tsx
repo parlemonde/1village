@@ -10,7 +10,7 @@ import Select from '@mui/material/Select';
 import type { Country } from 'types/country.type';
 
 interface CountriesDropdownProps {
-  countries: Country[];
+  countries: Country[] | undefined;
   onCountryChange: (country: string) => void;
 }
 
@@ -22,6 +22,10 @@ export default function CountriesDropdown({ countries, onCountryChange }: Countr
     setCountry(selectedCountry);
     onCountryChange(selectedCountry);
   };
+
+  if (!countries) {
+    return null;
+  }
 
   return (
     <Box
