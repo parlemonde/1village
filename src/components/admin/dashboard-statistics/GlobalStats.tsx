@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -17,14 +17,13 @@ import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from './utils/
 import { useGetOneVillageStats, useGetSessionsStats } from 'src/api/statistics/statistics.get';
 import type { OneVillageTableRow } from 'types/statistics.type';
 
-
 const GlobalStats = () => {
   const [value, setValue] = React.useState(0);
   const sessionsStats = useGetSessionsStats(null);
   const oneVillageStats = useGetOneVillageStats();
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
   const [floatingAccountsRows, setFloatingAccountsRows] = React.useState<Array<OneVillageTableRow>>([]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (oneVillageStats.data?.familiesWithoutAccount) {
       setFamiliesWithoutAccountRows([]);
       setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(oneVillageStats.data?.familiesWithoutAccount));

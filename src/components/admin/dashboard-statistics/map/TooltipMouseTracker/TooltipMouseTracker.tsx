@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface MouseTrackerProps {
   children: React.ReactNode;
@@ -7,9 +7,9 @@ interface MouseTrackerProps {
 }
 
 const MouseTracker = ({ children, offset = { x: 15, y: 15 }, isVisible }: MouseTrackerProps) => {
-  const [position, setPosition] = React.useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setPosition({
         x: e.clientX + offset.x,

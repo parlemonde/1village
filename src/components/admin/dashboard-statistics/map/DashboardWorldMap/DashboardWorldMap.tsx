@@ -1,11 +1,9 @@
-import React from 'react';
-import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
-
+import React, { useState } from 'react';
 import CircleIcon from '@mui/icons-material/Circle';
-
+import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
+import styles from './DashboardWorldMap.module.css';
 import TooltipMouseTracker from '../TooltipMouseTracker/TooltipMouseTracker';
 import { countryToFlag } from 'src/utils';
-import styles from './DashboardWorldMap.module.css';
 
 type CountryStatus = 'active' | 'observer' | 'ghost' | 'absent';
 
@@ -14,18 +12,18 @@ interface CountryData {
   status: CountryStatus;
 }
 
+// Même structure de données que dans la table villages-mondes (manage/villages)
 const testData: CountryData[] = [
-  { iso2: 'FR', status: 'active' }, // France
-  { iso2: 'DE', status: 'observer' }, // Allemagne
-  { iso2: 'ES', status: 'ghost' }, // Espagne
-  { iso2: 'IT', status: 'absent' }, // Italie
-  { iso2: 'GB', status: 'active' }, // Royaume-Uni
-  { iso2: 'PT', status: 'observer' }, // Portugal
-  { iso2: 'GR', status: 'ghost' }, // Grèce
-  { iso2: 'BE', status: 'active' }, // Belgique
+  { iso2: 'FR', status: 'active' },
+  { iso2: 'DE', status: 'observer' },
+  { iso2: 'ES', status: 'ghost' },
+  { iso2: 'IT', status: 'absent' },
+  { iso2: 'GB', status: 'active' },
+  { iso2: 'PT', status: 'observer' },
+  { iso2: 'GR', status: 'ghost' },
+  { iso2: 'BE', status: 'active' },
 ];
 
-// Même structure de données que dans la table villages-mondes (manage/villages)
 const getCountryColor = (status: CountryStatus) => {
   switch (status) {
     case 'active':
@@ -41,7 +39,6 @@ const getCountryColor = (status: CountryStatus) => {
   }
 };
 
-// Même structure de données que dans la table villages-mondes (manage/villages)
 const getStatusLabel = (status: CountryStatus) => {
   switch (status) {
     case 'active':
@@ -58,8 +55,8 @@ const getStatusLabel = (status: CountryStatus) => {
 };
 
 const DashboardWorldMap = () => {
-  const [isTooltipVisible, setIsTooltipVisible] = React.useState(false);
-  const [tooltipData, setTooltipData] = React.useState<React.ReactNode>('');
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+  const [tooltipData, setTooltipData] = useState<React.ReactNode>('');
 
   return (
     <div className={styles.mapContainer}>
@@ -69,23 +66,25 @@ const DashboardWorldMap = () => {
             {({ geographies }) =>
               geographies.map((geo) => {
                 const countryData = testData.find((data) => data.iso2 === geo.properties.iso2);
+
+                const tooltipContent = () => {
+                  return (
+                    <div>
+                      {countryToFlag(geo.properties.iso2)} {geo.properties.nameFR || geo.properties.name}
+                      {countryData && (
+                        <>
+                          <br />
+                          <strong>{getStatusLabel(countryData.status)}</strong>
+                        </>
+                      )}
+                    </div>
+                  );
+                };
+
                 return (
                   <Geography
                     onMouseOver={() => {
-                      const countryName = geo.properties.nameFR || geo.properties.name;
-                      const flag = countryToFlag(geo.properties.iso2);
-                      const status = countryData ? getStatusLabel(countryData.status) : '';
-                      setTooltipData(
-                        <div>
-                          {flag} {countryName}
-                          {status && (
-                            <>
-                              <br />
-                              <strong>{status}</strong>
-                            </>
-                          )}
-                        </div>,
-                      );
+                      setTooltipData(tooltipContent);
                       setIsTooltipVisible(true);
                     }}
                     onMouseLeave={() => setIsTooltipVisible(false)}
