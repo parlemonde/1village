@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import CountryActivityPhaseAccordion from './CountryActivityPhaseAccordion';
 import VillageListCard from './cards/VillageListCard/VillageListCard';
 import HorizontalBarsChart from './charts/HorizontalChart';
 import DashboardSummary from './dashboard-summary/DashboardSummary';
@@ -16,6 +17,11 @@ import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
 const CountryStats = () => {
   const [selectedPhase, setSelectedPhase] = React.useState<number>(0);
   const [selectedCountry, setSelectedCountry] = useState<string>('');
+  const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
+    1: false,
+    2: false,
+    3: false,
+  });
   const pelicoMessage = 'Merci de sélectionner un pays pour analyser ses statistiques ';
   const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
   const statisticsSessions: SessionsStats = useStatisticsSessions(null, selectedCountry, null) as SessionsStats;
@@ -54,6 +60,36 @@ const CountryStats = () => {
           <DashboardSummary data={{ ...statisticsSessions, ...statisticsClassrooms, ...statisticsFamily.data, barChartData: mockDataByMonth }} />
         </>
       )}
+      {/* Accordéons par phase */}
+      {selectedCountry &&
+        (selectedPhase === 0 ? (
+          [1, 2, 3].map((phase) => (
+            <CountryActivityPhaseAccordion
+              key={phase}
+              phaseId={phase}
+              countryCode={selectedCountry}
+              open={openPhases[phase]}
+              onClick={() =>
+                setOpenPhases((prev) => ({
+                  ...prev,
+                  [phase]: !prev[phase],
+                }))
+              }
+            />
+          ))
+        ) : (
+          <CountryActivityPhaseAccordion
+            phaseId={selectedPhase}
+            countryCode={selectedCountry}
+            open={openPhases[selectedPhase]}
+            onClick={() =>
+              setOpenPhases((prev) => ({
+                ...prev,
+                [selectedPhase]: !prev[selectedPhase],
+              }))
+            }
+          />
+        ))}
     </>
   );
 };
