@@ -40,7 +40,7 @@ export class Village implements VillageInterface {
   })
   public activePhase: number;
 
-  @OneToMany(() => PhaseHistory, (phaseHistory) => phaseHistory.village, { eager: true })
+  @OneToMany(() => PhaseHistory, (phaseHistory) => phaseHistory.village)
   public phaseHistories: PhaseHistory[];
 
   @OneToOne(() => Activity, { onDelete: 'SET NULL' })
