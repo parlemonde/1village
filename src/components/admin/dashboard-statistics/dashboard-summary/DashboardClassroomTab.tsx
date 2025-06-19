@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Grid from '@mui/material/Grid';
 
+import CountryActivityPhaseAccordion from '../CountryActivityPhaseAccordion';
 import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from '../cards/StatsCard/StatsCard';
@@ -29,9 +30,16 @@ const CONTRIBUTION_BAR_CHAR_TITLE = 'Contribution des classes';
 export interface DashboardClassroomTabProps {
   data: DashboardSummaryData;
   dashboardType: DashboardType;
+  selectedCountry?: string;
+  selectedPhase?: number;
 }
 
-const DashboardClassroomTab = ({ data, dashboardType }: DashboardClassroomTabProps) => {
+const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedPhase = 0 }: DashboardClassroomTabProps) => {
+  const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
+    1: false,
+    2: false,
+    3: false,
+  });
   return (
     <>
       <Grid container spacing={4} direction={{ xs: 'column', md: 'row' }}>
@@ -109,6 +117,39 @@ const DashboardClassroomTab = ({ data, dashboardType }: DashboardClassroomTabPro
             </div>
           </Grid>
         )}
+        {/* Accordéons par phase */}
+        {selectedCountry &&
+          (selectedPhase === 0 ? (
+            [1, 2, 3].map((phase) => (
+              <Grid item xs={12} lg={12} key={phase}>
+                <CountryActivityPhaseAccordion
+                  phaseId={phase}
+                  countryCode={selectedCountry}
+                  open={openPhases[phase]}
+                  onClick={() =>
+                    setOpenPhases((prev) => ({
+                      ...prev,
+                      [phase]: !prev[phase],
+                    }))
+                  }
+                />
+              </Grid>
+            ))
+          ) : (
+            <Grid item xs={12} lg={12}>
+              <CountryActivityPhaseAccordion
+                phaseId={selectedPhase}
+                countryCode={selectedCountry}
+                open={openPhases[selectedPhase]}
+                onClick={() =>
+                  setOpenPhases((prev) => ({
+                    ...prev,
+                    [selectedPhase]: !prev[selectedPhase],
+                  }))
+                }
+              />
+            </Grid>
+          ))}
       </Grid>
     </>
   );

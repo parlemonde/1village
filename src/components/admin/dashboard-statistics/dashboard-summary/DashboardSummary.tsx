@@ -11,9 +11,11 @@ import type { DashboardSummaryData } from 'types/dashboard.type';
 interface DashboardSummaryProps {
   data: DashboardSummaryData;
   dashboardType?: DashboardType;
+  selectedCountry?: string;
+  selectedPhase?: number;
 }
 
-const DashboardSummary = ({ data, dashboardType = DashboardType.COMPLETE }: DashboardSummaryProps) => {
+const DashboardSummary = ({ data, dashboardType = DashboardType.COMPLETE, selectedCountry, selectedPhase }: DashboardSummaryProps) => {
   const [tabValue, setTabValue] = useState<DashboardSummaryTab>(DashboardSummaryTab.CLASSROOM);
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: DashboardSummaryTab) => {
@@ -31,7 +33,7 @@ const DashboardSummary = ({ data, dashboardType = DashboardType.COMPLETE }: Dash
         <Tab value={DashboardSummaryTab.FAMILY} label="En famille" />
       </Tabs>
       <TabPanel value={tabValue} index={DashboardSummaryTab.CLASSROOM}>
-        <DashboardClassroomTab data={data} dashboardType={dashboardType} />
+        <DashboardClassroomTab data={data} dashboardType={dashboardType} selectedCountry={selectedCountry} selectedPhase={selectedPhase} />
       </TabPanel>
       <TabPanel value={tabValue} index={DashboardSummaryTab.FAMILY}>
         <DashboardFamilyTab data={data} />
