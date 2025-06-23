@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import ActivityTable from './ActivityTable';
 import TeamComments from './TeamComments';
 import DashboardSummary from './dashboard-summary/DashboardSummary';
 import PhaseDropdown from './filters/PhaseDropdown';
@@ -10,7 +11,6 @@ import { useGetOneVillageStats, useGetSessionsStats } from 'src/api/statistics/s
 import { useStatisticsClassrooms } from 'src/services/useStatistics';
 import { DashboardType } from 'types/dashboard.type';
 import type { ClassroomsStats } from 'types/statistics.type';
-import ActivityTable from './ActivityTable';
 
 const GlobalStats = () => {
   const [selectedPhase, setSelectedPhase] = useState<number>(0);
