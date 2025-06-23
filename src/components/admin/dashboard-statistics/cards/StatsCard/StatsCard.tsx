@@ -20,6 +20,7 @@ const StatsCard = ({ children, data }: StatsCardProps) => {
       }}
       style={{
         width: '100%',
+        height: '100%',
       }}
     >
       <p>{children}</p>

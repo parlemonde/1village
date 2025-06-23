@@ -73,33 +73,41 @@ const DashboardClassroomTab = ({ data, dashboardType }: DashboardClassroomTabPro
             Nombre de connexions moyen par classe
           </AverageStatsCard>
         </Grid>
-
         {dashboardType === DashboardType.ONE_VILLAGE_PANEL ? (
-          <div className="statistic--container">
+          <Grid item xs={12} lg={12}>
             <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
-          </div>
+          </Grid>
         ) : (
-          <div className="statistic__average--container">
-            <PieCharts className={styles.minContainer} pieChartData={mockPieChartData} />
-            <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
-          </div>
+          <>
+            <Grid item xs={12} lg={6}>
+              <PieCharts className={styles.minContainer} pieChartData={mockPieChartData} />
+            </Grid>
+            <Grid item xs={12} lg={6}>
+              <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+            </Grid>
+          </>
         )}
-        <Grid item xs={12} lg={6}>
+        <Grid item xs={12} lg={12}>
           <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
+        </Grid>
+        <Grid item xs={12} lg={12}>
           <BarCharts dataByMonth={data.barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
         </Grid>
+
         {data && data.phases && (
-          <div className="statistic__phase--container">
-            <div>
-              <PhaseDetails phase={1} data={data.phases[0].data} />
+          <Grid item xs={12} lg={12}>
+            <div className="statistic__phase--container">
+              <div>
+                <PhaseDetails phase={1} data={data.phases[0].data} />
+              </div>
+              <div className="statistic__phase">
+                <PhaseDetails phase={2} data={data.phases[1].data} />
+              </div>
+              <div className="statistic__phase">
+                <PhaseDetails phase={3} data={data.phases[1].data} />
+              </div>
             </div>
-            <div className="statistic__phase">
-              <PhaseDetails phase={2} data={data.phases[1].data} />
-            </div>
-            <div className="statistic__phase">
-              <PhaseDetails phase={3} data={data.phases[1].data} />
-            </div>
-          </div>
+          </Grid>
         )}
       </Grid>
     </>
