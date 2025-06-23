@@ -2,6 +2,7 @@ import React from 'react';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import Grid from '@mui/material/Grid';
 
 import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchangesCard';
@@ -33,64 +34,82 @@ export interface DashboardClassroomTabProps {
 const DashboardClassroomTab = ({ data, dashboardType }: DashboardClassroomTabProps) => {
   return (
     <>
-      <div className="statistic--container">
-        <StatsCard data={data.registeredClassroomsCount}>Nombre de classes inscrites</StatsCard>
-        <StatsCard data={data.connectedClassroomsCount}>Nombre de classes connectées</StatsCard>
-        <StatsCard data={data.contributedClassroomsCount}>Nombre de classes contributrices</StatsCard>
-      </div>
-      <div className="statistic__average--container">
-        <AverageStatsCard
-          data={{
-            min: data.minDuration,
-            max: data.maxDuration,
-            average: data.averageDuration,
-            median: data.medianDuration,
-          }}
-          unit="min"
-          processingMethod={AverageStatsProcessingMethod.BY_MIN}
-          icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}
-        >
-          Temps de connexion moyen par classe
-        </AverageStatsCard>
-        <AverageStatsCard
-          data={{
-            min: data.minConnections,
-            max: data.maxConnections,
-            average: data.averageConnections,
-            median: data.medianConnections,
-          }}
-          icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
-        >
-          Nombre de connexions moyen par classe
-        </AverageStatsCard>
-      </div>
-      {dashboardType === DashboardType.ONE_VILLAGE_PANEL ? (
-        <div className="statistic--container">
-          <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
-        </div>
-      ) : (
-        <div className="statistic__average--container">
-          <PieCharts className={styles.minContainer} pieChartData={mockPieChartData} />
-          <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
-        </div>
-      )}
-      <div className="statistic__average--container">
-        <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
-        <BarCharts dataByMonth={data.barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
-      </div>
-      {data && data.phases && (
-        <div className="statistic__phase--container">
-          <div>
-            <PhaseDetails phase={1} data={data.phases[0].data} />
-          </div>
-          <div className="statistic__phase">
-            <PhaseDetails phase={2} data={data.phases[1].data} />
-          </div>
-          <div className="statistic__phase">
-            <PhaseDetails phase={3} data={data.phases[1].data} />
-          </div>
-        </div>
-      )}
+      <Grid container spacing={4} direction={{ xs: 'column', md: 'row' }}>
+        <Grid item xs={12} lg={4}>
+          <StatsCard data={data.registeredClassroomsCount}>Nombre de classes inscrites</StatsCard>
+        </Grid>
+        <Grid item xs={12} lg={4}>
+          <StatsCard data={data.connectedClassroomsCount}>Nombre de classes connectées</StatsCard>
+        </Grid>
+        <Grid item xs={12} lg={4}>
+          <StatsCard data={data.contributedClassroomsCount}>Nombre de classes contributrices</StatsCard>
+        </Grid>
+
+        <Grid item xs={12} lg={6}>
+          <AverageStatsCard
+            data={{
+              min: data.minDuration,
+              max: data.maxDuration,
+              average: data.averageDuration,
+              median: data.medianDuration,
+            }}
+            unit="min"
+            processingMethod={AverageStatsProcessingMethod.BY_MIN}
+            icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}
+          >
+            Temps de connexion moyen par classe
+          </AverageStatsCard>
+        </Grid>
+        <Grid item xs={12} lg={6}>
+          <AverageStatsCard
+            data={{
+              min: data.minConnections,
+              max: data.maxConnections,
+              average: data.averageConnections,
+              median: data.medianConnections,
+            }}
+            icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
+          >
+            Nombre de connexions moyen par classe
+          </AverageStatsCard>
+        </Grid>
+        {dashboardType === DashboardType.ONE_VILLAGE_PANEL ? (
+          <Grid item xs={12} lg={12}>
+            <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+          </Grid>
+        ) : (
+          <>
+            <Grid item xs={12} lg={6}>
+              <PieCharts className={styles.minContainer} pieChartData={mockPieChartData} />
+            </Grid>
+            <Grid item xs={12} lg={6}>
+              <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+            </Grid>
+          </>
+        )}
+        <Grid item xs={12} lg={12}>
+          <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
+        </Grid>
+        <Grid item xs={12} lg={12}>
+          <BarCharts dataByMonth={data.barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
+        </Grid>
+
+        {data && data.phases && (
+          <Grid item xs={12} lg={12}>
+            <div className="statistic__phase--container">
+              <div>
+                <PhaseDetails phase={1} data={data.phases[0].data} />
+              </div>
+              <div className="statistic__phase">
+                <PhaseDetails phase={2} data={data.phases[1].data} />
+              </div>
+              <div className="statistic__phase">
+                <PhaseDetails phase={3} data={data.phases[1].data} />
+              </div>
+            </div>
+          </Grid>
+        )}
+      </Grid>
     </>
   );
 };

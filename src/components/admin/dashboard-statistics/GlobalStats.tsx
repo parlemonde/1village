@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import ActivityTable from './ActivityTable';
 import TeamComments from './TeamComments';
 import DashboardSummary from './dashboard-summary/DashboardSummary';
 import PhaseDropdown from './filters/PhaseDropdown';
@@ -34,6 +35,7 @@ const GlobalStats = () => {
       </div>
       <TeamComments />
       <DashboardWorldMap />
+      <ActivityTable />
       {statisticsSessions.data && statisticsFamily.data ? (
         <DashboardSummary
           dashboardType={DashboardType.ONE_VILLAGE_PANEL}

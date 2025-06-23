@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { isValidElement, useMemo, useState } from 'react';
 
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Box, Paper, TableContainer, TableSortLabel, useTheme } from '@mui/material';
@@ -52,9 +52,8 @@ export const OneVillageTable = ({
   minTableHeightInPx = 240,
 }: OneVillageTableProps) => {
   const theme = useTheme();
-  // const color = admin ? 'white' : 'black';
   const backgroundColor = admin ? theme.palette.secondary.main : primaryColorLight;
-  const [options, setTableOptions] = React.useState<TableOptions>({
+  const [options, setTableOptions] = useState<TableOptions>({
     page: 1,
     limit: 10,
     sort: 'asc',
@@ -74,32 +73,48 @@ export const OneVillageTable = ({
 
   const onSortBy = (name: string) => () => {
     setTableOptions((prevOptions) => {
-      if (prevOptions.order === name) {
+      if (prevOptions.order?.toLowerCase() === name.toLowerCase()) {
         return {
           ...prevOptions,
           page: 1,
           sort: prevOptions.sort === 'asc' ? 'desc' : 'asc',
         };
       } else {
-        return { ...prevOptions, page: 1, order: name.toLowerCase() };
+        return {
+          ...prevOptions,
+          page: 1,
+          order: name.toLowerCase(),
+          sort: 'asc',
+        };
       }
     });
   };
 
   const usePagination = usePaginationProp !== undefined ? usePaginationProp : options.page !== undefined && options.limit !== undefined;
-  const displayedData = React.useMemo(() => {
+  const displayedData = useMemo(() => {
     const useSort = options.sort !== undefined && options.order !== undefined;
     const sortedData = useSort
       ? [...data].sort((a, b) => {
-          let aValue = a[options.order || ''] || '';
-          let bValue = b[options.order || ''] || '';
+          const exactKey = Object.keys(a).find((key) => key.toLowerCase() === (options.order || '').toLowerCase()) || '';
+          let aValue = a[exactKey] || '';
+          let bValue = b[exactKey] || '';
 
-          if (options.order === 'country' || options.order === 'countries') {
+          if (options.order?.toLowerCase() === 'country' || options.order?.toLowerCase() === 'countries') {
             aValue = removeCountryFlagFromText(aValue as string);
             bValue = removeCountryFlagFromText(bValue as string);
           }
+
           if (typeof aValue === 'string') aValue = normalizeString(aValue.toLowerCase());
           if (typeof bValue === 'string') bValue = normalizeString(bValue.toLowerCase());
+
+          if (isValidElement(aValue)) {
+            const key = aValue.key?.toString() || '';
+            aValue = key.toLowerCase();
+          }
+          if (isValidElement(bValue)) {
+            const key = bValue.key?.toString() || '';
+            bValue = key.toLowerCase();
+          }
 
           if (aValue > bValue) {
             return options.sort === 'asc' ? 1 : -1;

@@ -18,6 +18,10 @@ const StatsCard = ({ children, data }: StatsCardProps) => {
           md: '0 1rem',
         },
       }}
+      style={{
+        width: '100%',
+        height: '100%',
+      }}
     >
       <p>{children}</p>
       <p>{data ?? 0}</p>
