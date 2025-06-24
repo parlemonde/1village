@@ -38,6 +38,7 @@ interface OneVillageTableProps {
   usePagination?: boolean;
   minTableHeightInPx?: number;
   rowStyle?: (row: any) => React.CSSProperties;
+  tableLayout?: 'auto' | 'fixed';
 }
 
 export const OneVillageTable = ({
@@ -52,6 +53,7 @@ export const OneVillageTable = ({
   usePagination: usePaginationProp,
   minTableHeightInPx = 240,
   rowStyle,
+  tableLayout = 'fixed',
 }: OneVillageTableProps) => {
   const theme = useTheme();
   const backgroundColor = admin ? theme.palette.secondary.main : primaryColorLight;
@@ -139,7 +141,7 @@ export const OneVillageTable = ({
               <RemoveRedEyeIcon sx={{ mr: '6px' }} /> {titleContent}
             </Box>
           )}
-          <Table size="small" aria-label={ariaLabel} sx={{ tableLayout: 'fixed' }}>
+          <Table size="small" aria-label={ariaLabel} sx={{ tableLayout }}>
             {data.length === 0 ? (
               <TableBody>
                 <TableRow sx={{ height: '242px' }}>

@@ -44,17 +44,17 @@ const CountryActivityTable: React.FC<CountryActivityTableProps> = (props: Countr
   const tableData: TableRow[] =
     mode === 'country'
       ? data.map((row: any, idx: number) => ({
-        ...row,
-        id: row.id || idx,
-        _highlight: row.isSelected,
-      }))
+          ...row,
+          id: row.id || idx,
+          _highlight: row.isSelected,
+        }))
       : (data as (ClassroomActivity & { phaseDetail?: PhaseDetail })[]).map((row, idx: number) => ({
-        id: row.classroomId || idx,
-        name: row.name,
-        totalPublications: row.totalPublications,
-        ...row.phaseDetail,
-        _highlight: true,
-      }));
+          id: row.classroomId || idx,
+          name: row.name,
+          totalPublications: row.totalPublications,
+          ...row.phaseDetail,
+          _highlight: true,
+        }));
 
   const columns = mode === 'country' ? getCountryActivityTableHeaders(phaseId) : CountryActivityTableHeaders;
 
@@ -62,8 +62,15 @@ const CountryActivityTable: React.FC<CountryActivityTableProps> = (props: Countr
   const rowStyle = (row: TableRow) => (row._highlight ? { color: '#1976d2', fontWeight: 600 } : {});
 
   return (
-    <div style={{ margin: '0rem 0', overflowX: 'auto' }}>
-      <OneVillageTable admin={false} emptyPlaceholder={<p>Aucune donnée pour ce pays</p>} data={tableData} columns={columns} rowStyle={rowStyle} />
+    <div style={{ margin: '0rem 0', overflowX: 'auto', width: '100%' }}>
+      <OneVillageTable
+        admin={false}
+        emptyPlaceholder={<p>Aucune donnée pour ce pays</p>}
+        data={tableData}
+        columns={columns}
+        rowStyle={rowStyle}
+        tableLayout="auto"
+      />
     </div>
   );
 };
