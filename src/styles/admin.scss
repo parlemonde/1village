@@ -26,3 +26,7 @@ input[type='search']::-webkit-search-results-decoration {
   font-size: 1.5rem;
   font-weight: bold;
 }
+
+.css-1xjev9d-MuiGrid-root>.MuiGrid-item {
+  max-width: 100% !important;
+}
