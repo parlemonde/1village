@@ -37,6 +37,8 @@ interface OneVillageTableProps {
   footerElementsLabel?: string;
   usePagination?: boolean;
   minTableHeightInPx?: number;
+  rowStyle?: (row: any) => React.CSSProperties;
+  tableLayout?: 'auto' | 'fixed';
 }
 
 export const OneVillageTable = ({
@@ -50,6 +52,8 @@ export const OneVillageTable = ({
   footerElementsLabel = 'élément',
   usePagination: usePaginationProp,
   minTableHeightInPx = 240,
+  rowStyle,
+  tableLayout = 'fixed',
 }: OneVillageTableProps) => {
   const theme = useTheme();
   const backgroundColor = admin ? theme.palette.secondary.main : primaryColorLight;
@@ -130,14 +134,14 @@ export const OneVillageTable = ({
 
   return (
     <NoSsr>
-      <Paper sx={{ width: '100%', overflow: 'hidden', border: '1px solid blue', borderRadius: '24px', boxShadow: 'none' }}>
+      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer sx={{ minHeight: `${minTableHeightInPx + 2}px` }}>
           {titleContent && (
             <Box sx={{ fontWeight: 'bold', display: 'flex', border: 'none', backgroundColor, p: '8px' }}>
               <RemoveRedEyeIcon sx={{ mr: '6px' }} /> {titleContent}
             </Box>
           )}
-          <Table size="small" aria-label={ariaLabel} sx={{ tableLayout: 'fixed' }}>
+          <Table size="small" aria-label={ariaLabel} sx={{ tableLayout }}>
             {data.length === 0 ? (
               <TableBody>
                 <TableRow sx={{ height: '242px' }}>
@@ -214,10 +218,16 @@ export const OneVillageTable = ({
                   }}
                 >
                   {displayedData.map((d, index) => (
-                    <TableRow key={d.id}>
+                    <TableRow key={d.id} style={rowStyle ? rowStyle(d) : {}}>
                       {columns.map((c) => {
+                        const isSelected = d.isSelected;
                         return (
-                          <TableCell key={`${d.id}_${c.key}`} size="small" title={typeof d[c.key] === 'string' ? (d[c.key] as string) : ''}>
+                          <TableCell
+                            key={`${d.id}_${c.key}`}
+                            size="small"
+                            title={typeof d[c.key] === 'string' ? (d[c.key] as string) : ''}
+                            style={isSelected ? { color: 'blue', fontWeight: 'bold', borderBottom: '2px solid #1976d2' } : {}}
+                          >
                             {d[c.key] !== undefined ? d[c.key] : ''}
                           </TableCell>
                         );

@@ -51,7 +51,11 @@ const CountryStats = () => {
             <HorizontalBarsChart highlightCountry="FR"></HorizontalBarsChart>
           </div>
           <VillageListCard></VillageListCard>
-          <DashboardSummary data={{ ...statisticsSessions, ...statisticsClassrooms, ...statisticsFamily.data, barChartData: mockDataByMonth }} />
+          <DashboardSummary
+            data={{ ...statisticsSessions, ...statisticsClassrooms, ...statisticsFamily.data, barChartData: mockDataByMonth }}
+            selectedCountry={selectedCountry}
+            selectedPhase={selectedPhase}
+          />
         </>
       )}
     </>
