@@ -38,7 +38,7 @@ const CountryActivityPhaseAccordion: React.FC<Props> = ({ phaseId, countryCode, 
         {open ? <KeyboardDoubleArrowUpIcon fontSize="large" /> : <KeyboardDoubleArrowDownIcon fontSize="large" />}
       </div>
       {open && (
-        <div style={{ padding: '1rem' }}>
+        <div style={{ width: '100vh', padding: '1rem' }}>
           <CountryActivityTable countryCode={countryCode} phaseId={phaseId} mode="country" />
         </div>
       )}
