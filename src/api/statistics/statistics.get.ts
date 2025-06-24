@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { SessionsStats, VillageStats } from 'types/statistics.type';
 
-async function getSessionsStats(phase: number | null): Promise<SessionsStats> {
+async function getSessionsStats(phase?: number): Promise<SessionsStats> {
   return (
     await axiosRequest({
       method: 'GET',
@@ -23,7 +23,7 @@ async function getOneVillageStats(): Promise<VillageStats> {
   ).data;
 }
 
-async function getVillagesStats(villageId: number | null, phase: number): Promise<VillageStats> {
+async function getVillagesStats(villageId?: number, phase?: number): Promise<VillageStats> {
   return (
     await axiosRequest({
       method: 'GET',
@@ -33,7 +33,7 @@ async function getVillagesStats(villageId: number | null, phase: number): Promis
   ).data;
 }
 
-async function getCountriesStats(countryId: string | null, phase: number): Promise<VillageStats> {
+async function getCountriesStats(countryId?: string, phase?: number): Promise<VillageStats> {
   return (
     await axiosRequest({
       method: 'GET',
@@ -43,25 +43,25 @@ async function getCountriesStats(countryId: string | null, phase: number): Promi
   ).data;
 }
 
-export const useGetSessionsStats = (phase: number | null) => {
+export const useGetSessionsStats = (phase?: number) => {
   return useQuery(['sessions-stats', phase], () => getSessionsStats(phase));
 };
 export const useGetOneVillageStats = () => {
   return useQuery(['1v-stats'], () => getOneVillageStats());
 };
 
-export const useGetVillagesStats = (villageId: number | null, phase: number) => {
+export const useGetVillagesStats = (villageId?: number, phase?: number) => {
   return useQuery(['villages-stats', villageId, phase], () => getVillagesStats(villageId, phase), {
     enabled: villageId !== null,
   });
 };
-export const useGetCountriesStats = (countryId: string | null, phase: number) => {
+export const useGetCountriesStats = (countryId?: string, phase?: number) => {
   return useQuery(['countries-stats', countryId, phase], () => getCountriesStats(countryId, phase), {
     enabled: countryId !== null,
   });
 };
 
-async function getClassroomsStats(classroomId: number | null, phase: number): Promise<VillageStats> {
+async function getClassroomsStats(classroomId?: number, phase?: number): Promise<VillageStats> {
   return (
     await axiosRequest({
       method: 'GET',
@@ -71,7 +71,7 @@ async function getClassroomsStats(classroomId: number | null, phase: number): Pr
   ).data;
 }
 
-export const useGetClassroomsStats = (classroomId: number | null, phase: number) => {
+export const useGetClassroomsStats = (classroomId?: number, phase?: number) => {
   return useQuery(['classrooms-stats', classroomId, phase], () => getClassroomsStats(classroomId, phase), {
     enabled: classroomId !== null,
   });
