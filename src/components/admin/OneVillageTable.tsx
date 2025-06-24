@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { isValidElement, useMemo, useState } from 'react';
 
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Box, Paper, TableContainer, TableSortLabel, useTheme } from '@mui/material';
@@ -37,6 +37,8 @@ interface OneVillageTableProps {
   footerElementsLabel?: string;
   usePagination?: boolean;
   minTableHeightInPx?: number;
+  rowStyle?: (row: any) => React.CSSProperties;
+  tableLayout?: 'auto' | 'fixed';
 }
 
 export const OneVillageTable = ({
@@ -50,11 +52,12 @@ export const OneVillageTable = ({
   footerElementsLabel = 'élément',
   usePagination: usePaginationProp,
   minTableHeightInPx = 240,
+  rowStyle,
+  tableLayout = 'fixed',
 }: OneVillageTableProps) => {
   const theme = useTheme();
-  // const color = admin ? 'white' : 'black';
   const backgroundColor = admin ? theme.palette.secondary.main : primaryColorLight;
-  const [options, setTableOptions] = React.useState<TableOptions>({
+  const [options, setTableOptions] = useState<TableOptions>({
     page: 1,
     limit: 10,
     sort: 'asc',
@@ -74,32 +77,48 @@ export const OneVillageTable = ({
 
   const onSortBy = (name: string) => () => {
     setTableOptions((prevOptions) => {
-      if (prevOptions.order === name) {
+      if (prevOptions.order?.toLowerCase() === name.toLowerCase()) {
         return {
           ...prevOptions,
           page: 1,
           sort: prevOptions.sort === 'asc' ? 'desc' : 'asc',
         };
       } else {
-        return { ...prevOptions, page: 1, order: name.toLowerCase() };
+        return {
+          ...prevOptions,
+          page: 1,
+          order: name.toLowerCase(),
+          sort: 'asc',
+        };
       }
     });
   };
 
   const usePagination = usePaginationProp !== undefined ? usePaginationProp : options.page !== undefined && options.limit !== undefined;
-  const displayedData = React.useMemo(() => {
+  const displayedData = useMemo(() => {
     const useSort = options.sort !== undefined && options.order !== undefined;
     const sortedData = useSort
       ? [...data].sort((a, b) => {
-          let aValue = a[options.order || ''] || '';
-          let bValue = b[options.order || ''] || '';
+          const exactKey = Object.keys(a).find((key) => key.toLowerCase() === (options.order || '').toLowerCase()) || '';
+          let aValue = a[exactKey] || '';
+          let bValue = b[exactKey] || '';
 
-          if (options.order === 'country' || options.order === 'countries') {
+          if (options.order?.toLowerCase() === 'country' || options.order?.toLowerCase() === 'countries') {
             aValue = removeCountryFlagFromText(aValue as string);
             bValue = removeCountryFlagFromText(bValue as string);
           }
+
           if (typeof aValue === 'string') aValue = normalizeString(aValue.toLowerCase());
           if (typeof bValue === 'string') bValue = normalizeString(bValue.toLowerCase());
+
+          if (isValidElement(aValue)) {
+            const key = aValue.key?.toString() || '';
+            aValue = key.toLowerCase();
+          }
+          if (isValidElement(bValue)) {
+            const key = bValue.key?.toString() || '';
+            bValue = key.toLowerCase();
+          }
 
           if (aValue > bValue) {
             return options.sort === 'asc' ? 1 : -1;
@@ -115,14 +134,14 @@ export const OneVillageTable = ({
 
   return (
     <NoSsr>
-      <Paper sx={{ width: '100%', overflow: 'hidden', border: '1px solid blue', borderRadius: '24px', boxShadow: 'none' }}>
+      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer sx={{ minHeight: `${minTableHeightInPx + 2}px` }}>
           {titleContent && (
             <Box sx={{ fontWeight: 'bold', display: 'flex', border: 'none', backgroundColor, p: '8px' }}>
               <RemoveRedEyeIcon sx={{ mr: '6px' }} /> {titleContent}
             </Box>
           )}
-          <Table size="small" aria-label={ariaLabel} sx={{ tableLayout: 'fixed' }}>
+          <Table size="small" aria-label={ariaLabel} sx={{ tableLayout }}>
             {data.length === 0 ? (
               <TableBody>
                 <TableRow sx={{ height: '242px' }}>
@@ -199,10 +218,16 @@ export const OneVillageTable = ({
                   }}
                 >
                   {displayedData.map((d, index) => (
-                    <TableRow key={d.id}>
+                    <TableRow key={d.id} style={rowStyle ? rowStyle(d) : {}}>
                       {columns.map((c) => {
+                        const isSelected = d.isSelected;
                         return (
-                          <TableCell key={`${d.id}_${c.key}`} size="small" title={typeof d[c.key] === 'string' ? (d[c.key] as string) : ''}>
+                          <TableCell
+                            key={`${d.id}_${c.key}`}
+                            size="small"
+                            title={typeof d[c.key] === 'string' ? (d[c.key] as string) : ''}
+                            style={isSelected ? { color: 'blue', fontWeight: 'bold', borderBottom: '2px solid #1976d2' } : {}}
+                          >
                             {d[c.key] !== undefined ? d[c.key] : ''}
                           </TableCell>
                         );

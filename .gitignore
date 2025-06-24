@@ -61,11 +61,7 @@ clap-stag.parlemonde.org
 dump
 test.js
 test.html
-docker-compose.build.yml
-docker-compose.bdd.yml
 medias
 server/ffmpeg-audio-mixer
 
 *.http
-
-.husky/

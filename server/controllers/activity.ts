@@ -1,13 +1,11 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
-import { IsNull } from 'typeorm';
 
 import type { ActivityContent, AnyData } from '../../types/activity.type';
 import { EPhase1Steps, ActivityStatus, ActivityType, EPhase2Steps, EPhase3Steps } from '../../types/activity.type';
 import type { GameData, GamesData } from '../../types/game.type';
 import type { StoriesData, StoryElement } from '../../types/story.type';
 import { ImageType } from '../../types/story.type';
-// import { hasSubscribed } from '../emails/checkSubscribe';
 import { Activity } from '../entities/activity';
 import { Game } from '../entities/game';
 import { Image } from '../entities/image';
@@ -50,6 +48,7 @@ activityController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: 
     teacherId: req.query.teacherId ? Number(getQueryString(req.query.teacherId)) : undefined,
     visibleToParent: req.user.type === UserType.FAMILY ? true : false,
   });
+
   res.sendJSON(activities);
 });
 
@@ -59,20 +58,24 @@ activityController.get({ path: '/:id', userType: UserType.OBSERVATOR }, async (r
   const activity = await AppDataSource.getRepository(Activity).findOne({
     where: { id },
   });
+
   if (activity === null) {
     next();
     return;
   }
+
   if (req.user && req.user.type === UserType.TEACHER && req.user.villageId !== activity.villageId) {
     next();
     return;
   }
+
   const commentCount = await getActivitiesCommentCount([activity.id]);
   activity.commentCount = commentCount[activity.id] || 0;
+
   res.sendJSON(activity);
 });
 
-// --- Get draft activity for type and subtype  ---
+// --- Get draft activity for type and subtype ---
 activityController.get({ path: '/draft', userType: UserType.OBSERVATOR }, async (req: Request, res: Response, next: NextFunction) => {
   if (req.query.villageId === undefined || req.query.type === undefined) {
     next();
@@ -85,12 +88,15 @@ activityController.get({ path: '/draft', userType: UserType.OBSERVATOR }, async 
     type: req.query.type ? Number(getQueryString(req.query.type)) || 0 : 0,
     status: ActivityStatus.DRAFT,
   };
+
   if (req.query.subType !== undefined) {
     search.subType = req.query.subType ? Number(getQueryString(req.query.subType)) || 0 : 0;
   }
+
   const activity = await AppDataSource.getRepository(Activity).findOne({
     where: search,
   });
+
   res.sendJSON({ draft: activity || null });
 });
 
@@ -107,9 +113,11 @@ activityController.get({ path: '/mascotte', userType: UserType.OBSERVATOR }, asy
       status: ActivityStatus.PUBLISHED,
     },
   });
+
   if (activity) {
     const commentCount = await getActivitiesCommentCount([activity.id]);
     activity.commentCount = commentCount[activity.id] || 0;
+
     res.sendJSON(activity);
   } else {
     next();
@@ -217,6 +225,7 @@ const createActivityValidator = ajv.compile(CREATE_SCHEMA);
 
 activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const data = req.body;
+
   if (!createActivityValidator(data)) {
     sendInvalidDataError(createActivityValidator);
     return;
@@ -229,6 +238,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   const villageId = req.user.type <= UserType.MEDIATOR ? data.villageId || req.user.villageId || null : req.user.villageId || null;
 
   const activity = new Activity();
+
   activity.type = data.type;
   activity.subType = data.subType ?? null;
   activity.status = data.status ?? ActivityStatus.PUBLISHED;
@@ -264,6 +274,7 @@ activityController.post(
       if (activityParent.type === 11) {
         for (const villageId of villageIds) {
           const activity = new Activity();
+
           activity.type = activityParent.type;
           activity.subType = activityParent.subType;
           activity.status = ActivityStatus.PUBLISHED;
@@ -282,6 +293,7 @@ activityController.post(
           await AppDataSource.getRepository(Activity).save(activity);
           await AppDataSource.getRepository(Village).update({ id: villageId }, { anthemId: activity.id });
         }
+
         await AppDataSource.getRepository(Activity).update(
           { id: data.activityParentId },
           { status: ActivityStatus.PUBLISHED, isDisplayed: false, publishDate: new Date() },
@@ -291,6 +303,7 @@ activityController.post(
       } else {
         for (const villageId of villageIds) {
           const activity = new Activity();
+
           activity.type = activityParent.type;
           activity.subType = activityParent.subType;
           activity.status = ActivityStatus.PUBLISHED;
@@ -396,10 +409,12 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
 
   const id = parseInt(req.params.id, 10) || 0;
   const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id } });
+
   if (activity === null) {
     next();
     return;
   }
+
   if (activity.userId !== req.user.id && req.user.type > UserType.ADMIN) {
     next();
     return;
@@ -407,6 +422,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
 
   if (activity.status !== ActivityStatus.PUBLISHED) {
     if (data.phase) activity.phase = data.phase;
+
     if (data.phaseStep) {
       switch (activity.phase) {
         case 1: {
@@ -429,10 +445,12 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
       }
     }
   }
+
   if (data.status === 0 && activity.status !== 0) {
     activity.status = data.status;
     activity.publishDate = new Date();
   }
+
   activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
   activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
   activity.isPinned = data.isPinned !== undefined ? data.isPinned : activity.isPinned;
@@ -448,6 +466,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   // logic to create a activity game
   if (activity.type === ActivityType.GAME && activity.status === ActivityStatus.PUBLISHED && activity.data) {
     const gamesData = activity.data as GamesData;
+
     gamesData.game1.gameId = (await createGame(gamesData.game1, activity)).id;
     gamesData.game2.gameId = (await createGame(gamesData.game2, activity)).id;
     gamesData.game3.gameId = (await createGame(gamesData.game3, activity)).id;
@@ -460,24 +479,23 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     activity.data
   ) {
     const imagesData = activity.data as Omit<StoriesData, 'tale'>;
+
     //Save to image table only if ActivityType.STORY or ActivityType.RE_INVENT_STORY has new images
     if (!imagesData.object.imageId && imagesData.object.inspiredStoryId) {
       imagesData.object.imageId = (await createStory(imagesData.object, activity, ImageType.OBJECT, imagesData.object.inspiredStoryId)).id;
     }
+
     if (!imagesData.place.imageId && imagesData.place.inspiredStoryId) {
       imagesData.place.imageId = (await createStory(imagesData.place, activity, ImageType.PLACE, imagesData.place.inspiredStoryId)).id;
     }
+
     if (!imagesData.odd.imageId && imagesData.odd.inspiredStoryId) {
       imagesData.odd.imageId = (await createStory(imagesData.odd, activity, ImageType.ODD, imagesData.odd.inspiredStoryId)).id;
     }
   }
 
-  // check and send an email notification to the user who created the activity
-  // const { userId } = activity;
-  // const activityId = activity.id;
-  // hasSubscribed(activityId, userId, 'reaction');
-
   await AppDataSource.getRepository(Activity).save(activity);
+
   res.sendJSON(activity);
 });
 
@@ -500,6 +518,7 @@ async function updateActivityChildren(activity: Activity, data: UpdateActivity):
 const createGame = async (data: GameData, activity: Activity): Promise<Game> => {
   const id = data.gameId;
   const game = id ? await AppDataSource.getRepository(Game).findOneOrFail({ where: { id: data.gameId || 0 } }) : new Game();
+
   delete data['gameId'];
   game.activityId = activity.id;
   game.villageId = activity.villageId;
@@ -510,26 +529,31 @@ const createGame = async (data: GameData, activity: Activity): Promise<Game> => 
   game.fakeSignification2 = data.fakeSignification2;
   game.origine = data.origine;
   game.video = data.video;
+
   await AppDataSource.getRepository(Game).save(game);
+
   return game;
 };
 
 activityController.put({ path: '/:id/askSame', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user;
+
   if (!user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
 
   const id = parseInt(req.params.id, 10) || 0;
   const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id } });
+
   if (activity === null || activity.type !== ActivityType.QUESTION || activity.userId === user.id) {
     next();
     return;
   }
+
   // TODO: When we change the type of askSame from stringt to array of number, we have to change the type here as well
   const askSame = !activity.data.askSame ? [] : ((activity.data.askSame as string) || '').split(',').map((n) => parseInt(n, 10) || 0);
-  // activity.data = data.data ?? activity.data;
   const index = askSame.findIndex((i) => i === user.id);
+
   if (index !== -1) {
     askSame.splice(index, 1);
   } else {
@@ -537,7 +561,9 @@ activityController.put({ path: '/:id/askSame', userType: UserType.TEACHER }, asy
   }
 
   activity.data.askSame = askSame.join(',');
+
   await AppDataSource.getRepository(Activity).save(activity);
+
   res.sendJSON(activity);
 });
 
@@ -545,14 +571,16 @@ activityController.put({ path: '/:id/askSame', userType: UserType.TEACHER }, asy
 const createStory = async (data: StoryElement, activity: Activity, type: ImageType, inspiredStoryId: number = 0): Promise<Image> => {
   const id = data.imageId;
   const storyImage = id ? await AppDataSource.getRepository(Image).findOneOrFail({ where: { id: data.imageId || 0 } }) : new Image();
-  // delete data['imageId'];
+
   storyImage.activityId = activity.id;
   storyImage.villageId = activity.villageId;
   storyImage.userId = activity.userId;
   storyImage.imageType = type;
   storyImage.imageUrl = data.imageUrl;
   storyImage.inspiredStoryId = inspiredStoryId;
+
   await AppDataSource.getRepository(Image).save(storyImage);
+
   return storyImage;
 };
 
@@ -560,10 +588,12 @@ const createStory = async (data: StoryElement, activity: Activity, type: ImageTy
 activityController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
   const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id } });
+
   if (activity === null || req.user === undefined) {
     res.status(204).send();
     return;
   }
+
   if (activity.userId !== req.user.id && req.user.type > UserType.ADMIN) {
     res.status(204).send();
     return;
@@ -575,6 +605,7 @@ activityController.delete({ path: '/:id', userType: UserType.TEACHER }, async (r
   } else {
     await AppDataSource.getRepository(Activity).softDelete({ id });
   }
+
   res.status(204).send();
 });
 
@@ -588,6 +619,7 @@ activityController.delete(
       res.status(204).send();
       return;
     }
+
     if (activity.userId !== req.user.id && req.user.type > UserType.ADMIN) {
       res.status(204).send();
       return;
@@ -627,10 +659,12 @@ activityController.get(
   { path: '/children', userType: UserType.SUPER_ADMIN | UserType.ADMIN | UserType.MEDIATOR },
   async (req: Request, res: Response) => {
     const id = req.query.id;
+
     const activities = await AppDataSource.getRepository(Activity)
       .createQueryBuilder('Activity')
       .where('Activity.parentActivityId = :id', { id })
       .getMany();
+
     res.sendJSON(activities);
   },
 );

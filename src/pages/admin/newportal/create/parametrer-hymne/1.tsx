@@ -94,15 +94,13 @@ const AnthemStep1 = () => {
     }
     const fullMixUrl = fullTracks.length > 0 ? await postMixAudio(fullTracks) : '';
 
-    updateActivity({ data: { ...data, mixUrl, fullMixUrl } });
+    updateActivity({ data: { ...data, mixUrl, fullMixUrl }, villageId: undefined, phase: 3 });
   };
 
   const onNext = async () => {
     setIsLoading(true);
     // [1] Build the verse url
     await buildVerseUrl();
-    const updatedActivity = { ...activity, villageId: undefined, phase: 3 };
-    updateActivity(updatedActivity);
     // [2] Save the activity
     save().catch(console.error);
     setIsLoading(false);

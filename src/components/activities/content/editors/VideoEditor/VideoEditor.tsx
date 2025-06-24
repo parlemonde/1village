@@ -31,7 +31,7 @@ export const VideoEditor = ({ id, value = '', onChange = () => {}, onDelete = ()
                 backgroundColor: 'black',
               }}
             >
-              <ReactPlayer width="100%" height="100%" light url={value} controls />
+              <ReactPlayer width="100%" height="100%" url={value} controls />
             </div>
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

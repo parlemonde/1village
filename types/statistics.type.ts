@@ -1,3 +1,4 @@
+import type { BarChartDataByMonth } from './dashboard.type';
 import type { VillagePhase } from './village.type';
 
 export interface ClassroomsStats {
@@ -10,6 +11,19 @@ export interface ClassroomsStats {
   commentsCount: number;
   videosCount: number;
   activities: { count: number; type: number; phase: number }[];
+  phases?: Phases[];
+}
+
+export type ClassroomStats = Omit<VillageStats, 'floatingAccounts' | 'familyAccountsCount'>;
+
+export interface Phases {
+  data: Record<string, string | number>[];
+  phase: string;
+}
+
+export interface ClassroomStat {
+  data: ClassroomsStats[];
+  phases: Phases[];
 }
 
 export interface SessionsStats {
@@ -26,17 +40,28 @@ export interface SessionsStats {
   registeredClassroomsCount: number;
   connectedClassroomsCount: number;
   contributedClassroomsCount: number;
+  barChartData: BarChartDataByMonth[];
 }
 
 export interface VillageStats {
-  childrenCodesCount: number;
-  familyAccountsCount: number;
-  connectedFamiliesCount: number;
-  familiesWithoutAccount: FamiliesWithoutAccount[];
-  floatingAccounts: FloatingAccount[];
-}
+  family: {
+    minDuration: number;
+    maxDuration: number;
+    medianDuration: number;
+    averageDuration: number;
 
-export type ClassroomStats = Omit<VillageStats, 'floatingAccounts' | 'familyAccountsCount'>;
+    minConnections: number;
+    maxConnections: number;
+    averageConnections: number;
+    medianConnections: number;
+
+    childrenCodesCount: number;
+    familyAccountsCount: number;
+    connectedFamiliesCount: number;
+    familiesWithoutAccount: FamiliesWithoutAccount[];
+    floatingAccounts: FloatingAccount[];
+  };
+}
 
 export interface FamiliesWithoutAccount {
   student_id: number;
@@ -63,13 +88,20 @@ export interface OneVillageTableRow {
 }
 
 export type StatsFilterParams = {
-  villageId: number | undefined;
-  classroomId: number | undefined;
-  countryId: string | undefined;
-  phase: VillagePhase | undefined;
+  villageId?: number;
+  classroomId?: number;
+  countryId?: string;
+  phase?: VillagePhase;
+  groupType?: GroupType;
 };
 
 export type WhereClause = {
   clause: string;
   value: object;
 };
+
+export enum GroupType {
+  CLASSROOM,
+  FAMILY,
+  All,
+}
