@@ -14,9 +14,7 @@ import StatsCard from './cards/StatsCard/StatsCard';
 import BarCharts from './charts/BarCharts';
 import DualBarChart from './charts/DualBarChart/DualBarChart';
 import PieCharts from './charts/PieCharts';
-import CountriesDropdown from './filters/CountriesDropdown';
-import PhaseDropdown from './filters/PhaseDropdown';
-import VillageDropdown from './filters/VillageDropdown';
+import StatisticFilters from './filters/StatisticFilters';
 import PhaseDetails from './menu/PhaseDetails';
 import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
@@ -24,35 +22,21 @@ import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
 import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
-import { useCountries } from 'src/services/useCountries';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
-import { useVillages } from 'src/services/useVillages';
 import type { ClassroomsStats, OneVillageTableRow, SessionsStats } from 'types/statistics.type';
-import type { VillageFilter } from 'types/village.type';
 
 const VillageStats = () => {
   const data = { data: [{ label: 'test1', id: 1, value: 1 }] };
-  const EngagementBarChartTitle = 'Évolution des connexions';
-  const [selectedCountry, setSelectedCountry] = useState<string>('FR');
-  const [selectedVillage, setSelectedVillage] = useState<string>('');
-  const [options, setOptions] = useState<VillageFilter>({ countryIsoCode: '' });
-  const [value, setValue] = React.useState(0);
-  const [selectedPhase, setSelectedPhase] = React.useState<number>(0);
 
-  const { countries } = useCountries({ hasVillage: true });
+  const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedPhase, setSelectedPhase] = useState<number>();
+  const [selectedCountry, setSelectedCountry] = useState<string>();
+  const [selectedVillage, setSelectedVillage] = useState<number>();
+  const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = useState<Array<OneVillageTableRow>>([]);
 
-  const { villages } = useVillages(options);
-  const villagesStats = useGetVillagesStats(+selectedVillage, selectedPhase);
+  const villagesStats = useGetVillagesStats(selectedVillage, selectedPhase);
   const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
   const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(Number(selectedVillage), selectedCountry, null);
-
-  useEffect(() => {
-    setOptions({
-      countryIsoCode: selectedCountry,
-    });
-  }, [selectedCountry]);
-
-  const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
 
   useEffect(() => {
     if (villagesStats.data?.family?.familiesWithoutAccount) {
@@ -60,24 +44,11 @@ const VillageStats = () => {
     }
   }, [villagesStats.data?.family?.familiesWithoutAccount]);
 
-  const handleCountryChange = (country: string) => {
-    setSelectedCountry(country);
-    setSelectedVillage('');
+  const handleTabChange = (_event: React.SyntheticEvent, selectedTab: number) => {
+    setSelectedTab(selectedTab);
   };
 
-  const handleVillageChange = (village: string) => {
-    setSelectedVillage(village);
-  };
-
-  const handlePhaseChange = (phase: string) => {
-    setSelectedPhase(+phase);
-  };
-
-  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
-
-  const pelicoMessage = 'Merci de sélectionner un village-monde pour analyser ses statistiques ';
+  const pelicoMessage = 'Merci de sélectionner un village-monde pour analyser ses statistiques';
   const noDataFoundMessage = 'Pas de données pour le Village-Monde sélectionné';
 
   const firstTable = {
@@ -108,88 +79,75 @@ const VillageStats = () => {
 
   return (
     <>
-      <div className={styles.filtersContainer}>
-        <div className={styles.smallFilter}>
-          <PhaseDropdown onPhaseChange={handlePhaseChange} />
-        </div>
-        <div className={styles.medFilter}>
-          <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} />
-        </div>
-        <div className={styles.medFilter}>
-          <VillageDropdown villages={villages} onVillageChange={handleVillageChange} />
-        </div>
-        <div className={styles.medFilter} />
-      </div>
-      <TeamComments />
-      <DualBarChart firstTable={firstTable} secondTable={secondTable} />
-      <Tabs value={value} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
-        <Tab label="En classe" />
-        <Tab label="En famille" />
-      </Tabs>
-      <TabPanel value={value} index={0}>
-        <div className="statistic--container">
-          <StatsCard data={statisticsSessions.registeredClassroomsCount ? statisticsSessions.registeredClassroomsCount : 0}>
-            Nombre de classes inscrites
-          </StatsCard>
-          <StatsCard data={statisticsSessions.connectedClassroomsCount ? statisticsSessions.connectedClassroomsCount : 0}>
-            Nombre de classes connectées
-          </StatsCard>
-          <StatsCard data={statisticsSessions.contributedClassroomsCount ? statisticsSessions.contributedClassroomsCount : 0}>
-            Nombre de classes contributrices
-          </StatsCard>
-        </div>
-        <div className="statistic__average--container">
-          <AverageStatsCard
-            data={{
-              min: statisticsSessions.minDuration ? Math.floor(statisticsSessions.minDuration / 60) : 0,
-              max: statisticsSessions.maxDuration ? Math.floor(statisticsSessions.maxDuration / 60) : 0,
-              average: statisticsSessions.averageDuration ? Math.floor(statisticsSessions.averageDuration / 60) : 0,
-              median: statisticsSessions.medianDuration ? Math.floor(statisticsSessions.medianDuration / 60) : 0,
-            }}
-            unit="min"
-            icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}
-          >
-            Temps de connexion moyen par classe
-          </AverageStatsCard>
-          <AverageStatsCard
-            data={{
-              min: statisticsSessions.minConnections ? statisticsSessions.minConnections : 0,
-              max: statisticsSessions.maxConnections ? statisticsSessions.maxConnections : 0,
-              average: statisticsSessions.averageConnections ? statisticsSessions.averageConnections : 0,
-              median: statisticsSessions.medianConnections ? statisticsSessions.medianConnections : 0,
-            }}
-            icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
-          >
-            Nombre de connexions moyen par classe
-          </AverageStatsCard>
-        </div>
-        <div className="statistic__average--container">
-          <PieCharts pieChartData={data}></PieCharts>
-          <BarCharts dataByMonth={mockDataByMonth} title={EngagementBarChartTitle} />
-        </div>
-        <div className="statistic__average--container">
-          <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
-          <ClassesContributionCard></ClassesContributionCard>
-        </div>
-        {statisticsClassrooms && statisticsClassrooms.phases && (
-          <div className="statistic__phase--container">
-            <div>
-              <PhaseDetails phase={1} data={statisticsClassrooms.phases[0].data} />
+      <StatisticFilters onPhaseChange={setSelectedPhase} onCountryChange={setSelectedCountry} onVillageChange={setSelectedVillage} />
+      {selectedCountry || selectedVillage ? (
+        <>
+          <TeamComments />
+          <DualBarChart firstTable={firstTable} secondTable={secondTable} />
+          <Tabs value={selectedTab} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
+            <Tab label="En classe" />
+            <Tab label="En famille" />
+          </Tabs>
+          <TabPanel value={selectedTab} index={0}>
+            <div className="statistic--container">
+              <StatsCard data={statisticsSessions.registeredClassroomsCount ? statisticsSessions.registeredClassroomsCount : 0}>
+                Nombre de classes inscrites
+              </StatsCard>
+              <StatsCard data={statisticsSessions.connectedClassroomsCount ? statisticsSessions.connectedClassroomsCount : 0}>
+                Nombre de classes connectées
+              </StatsCard>
+              <StatsCard data={statisticsSessions.contributedClassroomsCount ? statisticsSessions.contributedClassroomsCount : 0}>
+                Nombre de classes contributrices
+              </StatsCard>
             </div>
-            <div className="statistic__phase">
-              <PhaseDetails phase={2} data={statisticsClassrooms.phases[1].data} />
+            <div className="statistic__average--container">
+              <AverageStatsCard
+                data={{
+                  min: statisticsSessions.minDuration ? Math.floor(statisticsSessions.minDuration / 60) : 0,
+                  max: statisticsSessions.maxDuration ? Math.floor(statisticsSessions.maxDuration / 60) : 0,
+                  average: statisticsSessions.averageDuration ? Math.floor(statisticsSessions.averageDuration / 60) : 0,
+                  median: statisticsSessions.medianDuration ? Math.floor(statisticsSessions.medianDuration / 60) : 0,
+                }}
+                unit="min"
+                icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}
+              >
+                Temps de connexion moyen par classe
+              </AverageStatsCard>
+              <AverageStatsCard
+                data={{
+                  min: statisticsSessions.minConnections ? statisticsSessions.minConnections : 0,
+                  max: statisticsSessions.maxConnections ? statisticsSessions.maxConnections : 0,
+                  average: statisticsSessions.averageConnections ? statisticsSessions.averageConnections : 0,
+                  median: statisticsSessions.medianConnections ? statisticsSessions.medianConnections : 0,
+                }}
+                icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
+              >
+                Nombre de connexions moyen par classe
+              </AverageStatsCard>
             </div>
-            <div className="statistic__phase">
-              <PhaseDetails phase={3} data={statisticsClassrooms.phases[1].data} />
+            <div className="statistic__average--container">
+              <PieCharts pieChartData={data} />
+              <BarCharts dataByMonth={mockDataByMonth} title="Évolution des connexions" />
             </div>
-          </div>
-        )}
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        {!selectedVillage ? (
-          <PelicoCard message={pelicoMessage} />
-        ) : (
-          <>
+            <div className="statistic__average--container">
+              <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
+              <ClassesContributionCard />
+            </div>
+            {statisticsClassrooms && statisticsClassrooms.phases && (
+              <div className="statistic__phase--container">
+                <div>
+                  <PhaseDetails phase={1} data={statisticsClassrooms.phases[0].data} />
+                </div>
+                <div className="statistic__phase">
+                  <PhaseDetails phase={2} data={statisticsClassrooms.phases[1].data} />
+                </div>
+                <div className="statistic__phase">
+                  <PhaseDetails phase={3} data={statisticsClassrooms.phases[1].data} />
+                </div>
+              </div>
+            )}
+          </TabPanel>
+          <TabPanel value={selectedTab} index={1}>
             <OneVillageTable
               admin={false}
               emptyPlaceholder={<p>{noDataFoundMessage}</p>}
@@ -212,9 +170,11 @@ const VillageStats = () => {
               <StatsCard data={villagesStats.data?.family?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
               <StatsCard data={villagesStats.data?.family?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
             </Box>
-          </>
-        )}
-      </TabPanel>
+          </TabPanel>
+        </>
+      ) : (
+        <PelicoCard message={pelicoMessage} />
+      )}
     </>
   );
 };
