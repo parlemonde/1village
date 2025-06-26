@@ -1,21 +1,21 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 
-import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import Select from '@mui/material/Select';
 
+export type DropdownOption = { key: string; value: string };
+
 interface DropdownProps {
-  data: string[];
+  data: DropdownOption[];
   onItemChange: (item: string) => void;
   label: string;
-  title: string;
 }
 
-export default function Dropdown({ data, onItemChange, label, title }: DropdownProps) {
-  const [item, setItem] = React.useState('');
+export default function Dropdown({ data, onItemChange, label }: DropdownProps) {
+  const [item, setItem] = useState('');
 
   const handleChange = (event: SelectChangeEvent) => {
     const selectedItem = event.target.value as string;
@@ -24,18 +24,16 @@ export default function Dropdown({ data, onItemChange, label, title }: DropdownP
   };
 
   return (
-    <Box>
-      <FormControl fullWidth size="small">
-        <InputLabel id="country-menu-select">{title}</InputLabel>
-        <Select labelId="country-menu-select" id="country-select" value={item} label={title} onChange={handleChange}>
-          <MenuItem value="">{label}</MenuItem>
-          {data.map((item) => (
-            <MenuItem key={item} value={item}>
-              {item}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Box>
+    <FormControl fullWidth size="small">
+      <InputLabel id="menu-select">{label}</InputLabel>
+      <Select labelId="menu-select" id="select" value={item} onChange={handleChange} label={label}>
+        <MenuItem value="">Aucun(e)</MenuItem>
+        {data.map((item) => (
+          <MenuItem key={item.key} value={item.key}>
+            {item.value}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 }
