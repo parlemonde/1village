@@ -38,8 +38,8 @@ export function getCountryActivityTableHeaders(phaseId: number) {
         { key: 'enigmaCount', label: 'Indices', sortable: true },
         { key: 'mascotCount', label: 'Mascottes', sortable: true },
         { key: 'videoCount', label: 'Vidéos', sortable: true },
-        { key: 'draftCount', label: 'Brouillons', sortable: true },
         { key: 'commentCount', label: 'Commentaires', sortable: true },
+        { key: 'draftCount', label: 'Brouillons', sortable: true },
       ];
     case 2:
       return [
