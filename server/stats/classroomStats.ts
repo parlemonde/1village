@@ -96,8 +96,8 @@ export const getContributedClassroomsCount = async (
     queryBuilder.having('COUNT(DISTINCT activity.phase) = :nbPhases', { nbPhases });
   }
 
-  const result = await queryBuilder.getRawOne();
-  return parseInt(result?.classroomsCount, 10);
+  const result = await queryBuilder.getCount();
+  return result;
 };
 
 export const normalizeForCountry = (inputData: any) => {
