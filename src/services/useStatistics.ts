@@ -15,7 +15,17 @@ const generateUrl = (baseUrl: string, params: any): string => {
 
 export const useStatisticsClassrooms = (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
   const getStatisticsClassrooms = useCallback(async () => {
-    const url = generateUrl('/statistics/sessions', { villageId, countryCode, classroomId });
+    const params = new URLSearchParams();
+    if (villageId) {
+      params.append('villageId', String(villageId));
+    }
+    if (countryCode) {
+      params.append('countryCode', countryCode);
+    }
+    if (classroomId) {
+      params.append('classroomId', String(classroomId));
+    }
+    const url = generateUrl('/statistics/sessions', params);
     const response = await axiosRequest({
       method: 'GET',
       url: url,
