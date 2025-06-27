@@ -4,14 +4,21 @@ import { AppDataSource } from '../../utils/data-source';
 const villageRepository = AppDataSource.getRepository(Village);
 
 type GetVillagesParams = {
-  villageIds?: number[];
+  countryCode?: string;
+  villageId?: number;
 };
 
-export const getVillages = async ({ villageIds = [] }: GetVillagesParams) => {
+export const getVillages = async ({ countryCode, villageId }: GetVillagesParams) => {
   const villageQB = villageRepository.createQueryBuilder('village');
 
-  if (villageIds?.length > 0) {
-    villageQB.where('village.id IN (:...villageIds)', { villageIds });
+  if (countryCode) {
+    villageQB.where('village.countryCodes LIKE :likeCountryCode', {
+      likeCountryCode: `%${countryCode}%`,
+    });
+  }
+
+  if (villageId) {
+    villageQB.where('village.id = :villageId', { villageId });
   }
 
   return await villageQB.getMany();

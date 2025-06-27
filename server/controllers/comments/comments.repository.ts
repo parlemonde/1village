@@ -5,7 +5,7 @@ const commentsRepository = AppDataSource.getRepository(Comment);
 
 export const getCommentCountForActivities = async (activityIds: number[]) => {
   if (!activityIds || activityIds.length === 0) {
-    return 0;
+    return [];
   }
 
   const commentQB = commentsRepository.createQueryBuilder('comment').where('comment.activityId IN (:...activityIds)', { activityIds });

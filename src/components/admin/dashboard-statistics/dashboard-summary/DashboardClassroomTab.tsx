@@ -4,7 +4,6 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Grid from '@mui/material/Grid';
 
-import { getCommentCount, getPublicationCount, getVideoCount } from '../../StatisticsUtils';
 import CountryActivityPhaseAccordion from '../CountryActivityPhaseAccordion';
 import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchangesCard';
@@ -41,11 +40,6 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
     2: false,
     3: false,
   });
-
-  const videoCount = getVideoCount(data);
-  const commentCount = getCommentCount(data);
-  const publicationCount = getPublicationCount(data);
-
   return (
     <>
       <Grid container spacing={4} direction={{ xs: 'column', md: 'row' }}>
@@ -102,7 +96,7 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
           </>
         )}
         <Grid item xs={12} lg={12}>
-          <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
+          <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
         </Grid>
         <Grid item xs={12} lg={12}>
           <BarCharts dataByMonth={data.barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
