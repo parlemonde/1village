@@ -5,6 +5,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box, Tab, Tabs } from '@mui/material';
 
 import { OneVillageTable } from '../OneVillageTable';
+import { getCommentCount, getPublicationCount, getVideoCount } from '../StatisticsUtils';
 import TabPanel from './TabPanel';
 import TeamComments from './TeamComments';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
@@ -42,9 +43,13 @@ const VillageStats = () => {
   const { countries } = useCountries({ hasVillage: true });
 
   const { villages } = useVillages(options);
-  const villagesStats = useGetVillagesStats(+selectedVillage, selectedPhase);
+  const { data: villageStatistics } = useGetVillagesStats(+selectedVillage, selectedPhase);
   const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
   const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(Number(selectedVillage), selectedCountry, null);
+
+  const videoCount = getVideoCount(villageStatistics);
+  const commentCount = getCommentCount(villageStatistics);
+  const publicationCount = getPublicationCount(villageStatistics);
 
   useEffect(() => {
     setOptions({
@@ -55,10 +60,10 @@ const VillageStats = () => {
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
 
   useEffect(() => {
-    if (villagesStats.data?.family?.familiesWithoutAccount) {
-      setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(villagesStats.data.family.familiesWithoutAccount));
+    if (villageStatistics?.family?.familiesWithoutAccount) {
+      setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(villageStatistics.family.familiesWithoutAccount));
     }
-  }, [villagesStats.data?.family?.familiesWithoutAccount]);
+  }, [villageStatistics?.family?.familiesWithoutAccount]);
 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
@@ -168,7 +173,7 @@ const VillageStats = () => {
           <BarCharts dataByMonth={mockDataByMonth} title={EngagementBarChartTitle} />
         </div>
         <div className="statistic__average--container">
-          <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
+          <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
           <ClassesContributionCard></ClassesContributionCard>
         </div>
         {statisticsClassrooms && statisticsClassrooms.phases && (
@@ -208,9 +213,9 @@ const VillageStats = () => {
                 gap: 2,
               }}
             >
-              <StatsCard data={villagesStats.data?.family?.familyAccountsCount}>Nombre de profs ayant créé des comptes famille</StatsCard>
-              <StatsCard data={villagesStats.data?.family?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
-              <StatsCard data={villagesStats.data?.family?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
+              <StatsCard data={villageStatistics?.family?.familyAccountsCount}>Nombre de profs ayant créé des comptes famille</StatsCard>
+              <StatsCard data={villageStatistics?.family?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
+              <StatsCard data={villageStatistics?.family?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
             </Box>
           </>
         )}

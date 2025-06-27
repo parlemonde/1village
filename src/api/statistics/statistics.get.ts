@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { ClassroomStats, SessionsStats, VillageStats } from 'types/statistics.type';
+import type { SessionsStats, VillageStats } from 'types/statistics.type';
 
 async function getSessionsStats(phase: number | null): Promise<SessionsStats> {
   return (
@@ -61,7 +61,7 @@ export const useGetCountriesStats = (countryId: string | null, phase: number) =>
   });
 };
 
-async function getClassroomsStats(classroomId: number | null, phase: number): Promise<ClassroomStats> {
+async function getClassroomsStats(classroomId: number | null, phase: number): Promise<VillageStats> {
   return (
     await axiosRequest({
       method: 'GET',

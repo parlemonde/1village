@@ -14,10 +14,10 @@ import type { ClassroomsStats } from 'types/statistics.type';
 
 const GlobalStats = () => {
   const [selectedPhase, setSelectedPhase] = useState<number>(0);
-  const statisticsClassrooms = useStatisticsClassrooms(null, null, null) as ClassroomsStats;
+  const classroomStatistics = useStatisticsClassrooms(null, null, null) as ClassroomsStats;
 
-  const statisticsSessions = useGetSessionsStats(selectedPhase);
-  const statisticsFamily = useGetOneVillageStats();
+  const { data: sessionStatistics } = useGetSessionsStats(selectedPhase);
+  const { data: oneVillageStatistics } = useGetOneVillageStats();
 
   const handlePhaseChange = (phase: string) => {
     setSelectedPhase(+phase);
@@ -36,12 +36,12 @@ const GlobalStats = () => {
       <TeamComments />
       <DashboardWorldMap />
       <ActivityTable />
-      {statisticsSessions.data && statisticsFamily.data ? (
+      {sessionStatistics && oneVillageStatistics && (
         <DashboardSummary
           dashboardType={DashboardType.ONE_VILLAGE_PANEL}
-          data={{ ...statisticsClassrooms, ...statisticsSessions.data, ...statisticsFamily.data, barChartData: mockDataByMonth }}
+          data={{ ...classroomStatistics, ...sessionStatistics, ...oneVillageStatistics, barChartData: mockDataByMonth }}
         />
-      ) : null}
+      )}
     </>
   );
 };
