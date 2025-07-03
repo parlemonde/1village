@@ -20,28 +20,31 @@ import type { CountryChartData } from './charts/DualBarChart/DualBarChart';
 import DualBarChart from './charts/DualBarChart/DualBarChart';
 import PieCharts from './charts/PieCharts';
 import StatisticFilters from './filters/StatisticFilters';
-import PhaseDetails from './menu/PhaseDetails';
-import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import ClassroomsToMonitorTable from './tables/ClassroomsToMonitorTable';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
-import { useGetClassroomsEngagementStatus, useGetVillageEngagementStatus, useGetVillagesStats } from 'src/api/statistics/statistics.get';
-import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
+import {
+  useGetClassroomsEngagementStatus,
+  useGetCompareStats,
+  useGetVillageEngagementStatus,
+  useGetVillagesStats,
+} from 'src/api/statistics/statistics.get';
+import { useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
 const VillageStats = () => {
   const [selectedTab, setSelectedTab] = useState(0);
-  const [selectedPhase, setSelectedPhase] = useState<number>();
+  const [selectedPhase, setSelectedPhase] = useState<number>(0);
   const [selectedCountry, setSelectedCountry] = useState<string>();
   const [selectedVillage, setSelectedVillage] = useState<number>();
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = useState<Array<OneVillageTableRow>>([]);
   const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
-    1: false,
-    2: false,
-    3: false,
+    1: true,
+    2: true,
+    3: true,
   });
 
   const [classroomContributionsByCountry, setClassroomContributionsByCountry] = useState<CountryChartData[]>([]);
@@ -50,15 +53,18 @@ const VillageStats = () => {
   const { data: villageStatistics, isLoading: isLoadingVillageStatistics } = useGetVillagesStats(selectedVillage, selectedPhase);
   const { data: villageEngagementStatus, isLoading: isLoadingVillageEngagementStatus } = useGetVillageEngagementStatus(selectedVillage);
 
-  const { data: classroomsStatistics, isLoading: isLoadingClassroomsStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
   const { data: sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(selectedVillage, null, null, selectedPhase);
   const { data: engagementStatusStatistics, isLoading: isLoadingEngagementStatusStatistics } = useGetClassroomsEngagementStatus({
     villageId: selectedVillage,
   });
+  const { data: compareData, isLoading: isLoadingCompareData } = useGetCompareStats();
 
   const videoCount = getVideoCount(villageStatistics);
   const commentCount = getCommentCount(villageStatistics);
   const publicationCount = getPublicationCount(villageStatistics);
+
+  // Extract barChartData for better readability
+  const barChartData = sessionsStatistics?.barChartData || [];
 
   useEffect(() => {
     if (villageStatistics?.family?.familiesWithoutAccount) {
@@ -111,7 +117,12 @@ const VillageStats = () => {
   return (
     <>
       <TeamCommentCard type={TeamCommentType.VILLAGE} />
-      <StatisticFilters onPhaseChange={setSelectedPhase} onCountryChange={setSelectedCountry} onVillageChange={setSelectedVillage} />
+      <StatisticFilters
+        onPhaseChange={setSelectedPhase}
+        onCountryChange={setSelectedCountry}
+        onVillageChange={setSelectedVillage}
+        selectedPhase={selectedPhase}
+      />
       {selectedCountry && selectedVillage ? (
         <>
           {isLoadingGraphsData ? (
@@ -122,7 +133,7 @@ const VillageStats = () => {
               {classroomContributionsByCountry && <DualBarChart data={classroomContributionsByCountry} />}
             </>
           )}
-          {isLoadingClassroomsStatistics || isLoadingSessionsStatistics || isLoadingVillageStatistics || isLoadingEngagementStatusStatistics ? (
+          {isLoadingSessionsStatistics || isLoadingVillageStatistics || isLoadingEngagementStatusStatistics || isLoadingCompareData ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
           ) : (
             <>
@@ -165,27 +176,16 @@ const VillageStats = () => {
                 </div>
                 <div className="statistic__average--container">
                   {engagementStatusStatistics && <PieCharts engagementStatusData={engagementStatusStatistics} />}
-                  <BarCharts dataByMonth={mockDataByMonth} title="Évolution des connexions" />
+                  <BarCharts dataByMonth={barChartData} title="Évolution des connexions" />
                 </div>
-                <div className="statistic__average--container">
+                <div className="statistic__average--container" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gridGap: '2rem' }}>
                   <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
                   <ClassesContributionCard data={sessionsStatistics.contributionsBarChartData} />
                 </div>
-                {classroomsStatistics?.phases && (
-                  <div className="statistic__phase--container">
-                    <div>
-                      <PhaseDetails phase={1} data={classroomsStatistics.phases[0].data} />
-                    </div>
-                    <div className="statistic__phase">
-                      <PhaseDetails phase={2} data={classroomsStatistics.phases[1].data} />
-                    </div>
-                    <div className="statistic__phase">
-                      <PhaseDetails phase={3} data={classroomsStatistics.phases[1].data} />
-                    </div>
-                  </div>
-                )}
-                {selectedVillage &&
-                  selectedPhase &&
+
+                {!!selectedVillage &&
+                  selectedPhase !== undefined &&
+                  compareData &&
                   (selectedPhase === 0 ? (
                     [1, 2, 3].map((phase) => (
                       <CountryActivityPhaseAccordion
@@ -238,6 +238,38 @@ const VillageStats = () => {
                   <StatsCard data={villageStatistics?.family?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
                   <StatsCard data={villageStatistics?.family?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
                 </Box>
+                {/* Phase tables for Familles tab */}
+                {!!selectedVillage &&
+                  selectedPhase !== undefined &&
+                  compareData &&
+                  (selectedPhase === 0 ? (
+                    [1, 2, 3].map((phase) => (
+                      <CountryActivityPhaseAccordion
+                        key={phase}
+                        phaseId={phase}
+                        villageId={+selectedVillage}
+                        open={openPhases[phase]}
+                        onClick={() =>
+                          setOpenPhases((prev) => ({
+                            ...prev,
+                            [phase]: !prev[phase],
+                          }))
+                        }
+                      />
+                    ))
+                  ) : (
+                    <CountryActivityPhaseAccordion
+                      phaseId={+selectedPhase}
+                      villageId={+selectedVillage}
+                      open={openPhases[selectedPhase]}
+                      onClick={() =>
+                        setOpenPhases((prev) => ({
+                          ...prev,
+                          [selectedPhase]: !prev[selectedPhase],
+                        }))
+                      }
+                    />
+                  ))}
               </TabPanel>
             </>
           )}

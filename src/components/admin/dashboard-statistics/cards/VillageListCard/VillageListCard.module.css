@@ -1,30 +1,28 @@
 .villageListContainer {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #cfd8dc;
-    padding: 15px;
-    border: 1px solid #4C3ED9;
-    border-radius: 8px;
-    align-items: center;
-  }
-  
-  .villageList {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    column-gap: 50px;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-  
-  .villageItem {
-    display: flex;
-    align-items: center;
-  }
-  
-  .villageBullet {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin-right: 8px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  border: 1px solid #4c3ed9;
+  border-radius: 8px;
+  align-items: center;
+}
+
+.villageList {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 50px;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.villageItem {
+  display: flex;
+  align-items: center;
+}
+
+.villageBullet {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}

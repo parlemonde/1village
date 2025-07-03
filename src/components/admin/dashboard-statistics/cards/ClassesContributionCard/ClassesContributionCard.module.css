@@ -1,7 +1,7 @@
 .cardContainer {
-    background-color: #F5F5F5;
-    border-radius: 1rem;
-    flex: 2;
-    min-width: 'fit-content';
-    font-weight: 600;
+  background-color: #f5f5f5;
+  border-radius: 1rem;
+  flex: 2;
+  min-width: 'fit-content';
+  font-weight: 600;
 }

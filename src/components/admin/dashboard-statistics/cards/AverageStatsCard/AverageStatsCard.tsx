@@ -32,7 +32,7 @@ const AverageStatsCard = ({
   };
 
   return (
-    <div className={styles.cardContainer}>
+    <div className={`${styles.root} ${styles.cardContainer}`}>
       <p>{children}</p>
       <div className={styles.cardContainerAverage}>
         {icon && <p>{icon}</p>}
