@@ -65,7 +65,7 @@ export interface VillageStats {
   activityCountDetails: ActivityCountDetails[];
 }
 
-type ActivityCountDetails = {
+export type ActivityCountDetails = {
   villageName: string;
   classrooms: ClassroomCountDetails[];
 };

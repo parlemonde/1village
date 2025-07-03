@@ -42,9 +42,9 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
     3: false,
   });
 
-  const videoCount = getVideoCount(data);
-  const commentCount = getCommentCount(data);
-  const publicationCount = getPublicationCount(data);
+  const videoCount = getVideoCount(data, selectedCountry);
+  const commentCount = getCommentCount(data, selectedCountry);
+  const publicationCount = getPublicationCount(data, selectedCountry);
 
   return (
     <>

@@ -93,8 +93,8 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
 
     return {
       ...baseActivityCount,
-      ...(indiceCount && { indiceCount }),
-      ...(mascotCount && { mascotCount }),
+      indiceCount,
+      mascotCount,
     };
   } else if (phaseId === 2) {
     const reportingCount = activityByType.get(ActivityType.REPORTAGE)?.length;
@@ -107,13 +107,13 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
 
     return {
       ...baseActivityCount,
-      ...(reportingCount && { reportingCount }),
-      ...(challengeCount && { challengeCount }),
-      ...(enigmaCount && { enigmaCount }),
-      ...(gameCount && { gameCount }),
-      ...(questionCount && { questionCount }),
-      ...(reactionCount && { reactionCount }),
-      ...(storyCount && { storyCount }),
+      reportingCount,
+      challengeCount,
+      enigmaCount,
+      gameCount,
+      questionCount,
+      reactionCount,
+      storyCount,
     };
   } else if (phaseId === 3) {
     const reinventStoryCount = activityByType.get(ActivityType.RE_INVENT_STORY)?.length;
@@ -121,8 +121,8 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
 
     return {
       ...baseActivityCount,
-      ...(reinventStoryCount && { reinventStoryCount }),
-      ...(anthemCount && { anthemCount }),
+      reinventStoryCount,
+      anthemCount,
     };
   } else {
     return { ...baseActivityCount };
