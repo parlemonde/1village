@@ -34,9 +34,10 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
     3: false,
   });
 
-  const videoCount = getVideoCount(dashboardSummaryData);
-  const commentCount = getCommentCount(dashboardSummaryData);
-  const publicationCount = getPublicationCount(dashboardSummaryData);
+  const videoCount = getVideoCount(dashboardSummaryData, selectedCountry);
+  const commentCount = getCommentCount(dashboardSummaryData, selectedCountry);
+  const publicationCount = getPublicationCount(dashboardSummaryData, selectedCountry);
+
   return (
     <>
       <ClassroomsToMonitorTable countryId={selectedCountry} />
