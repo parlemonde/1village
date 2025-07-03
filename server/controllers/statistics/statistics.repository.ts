@@ -3,6 +3,7 @@ import type { Activity } from '../../entities/activity';
 import { getActivities } from '../activities/activities.repository';
 import { getClassrooms } from '../classrooms/classroom.repository';
 import { getCommentCountForActivities } from '../comments/comments.repository';
+import getClassroomName from '../users/getClassroomName';
 import { getVillages } from '../villages/village.repository';
 
 // DEPRECATED: groupBy function only available for Node.js v21
@@ -61,7 +62,14 @@ export const getActivityTypeCountByVillages = async (params?: GetActivityTypeCou
         }
       }
 
-      classroomDetails.push({ phaseDetails, name: filteredClassroom.name, countryCode: filteredClassroom.countryCode });
+      const classroomName = await getClassroomName(filteredClassroom.id);
+
+      classroomDetails.push({
+        phaseDetails,
+        classroomName,
+        classroomId: filteredClassroom.id,
+        countryCode: filteredClassroom.countryCode,
+      });
     }
 
     result.push({
@@ -93,8 +101,8 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
 
     return {
       ...baseActivityCount,
-      ...(indiceCount && { indiceCount }),
-      ...(mascotCount && { mascotCount }),
+      indiceCount,
+      mascotCount,
     };
   } else if (phaseId === 2) {
     const reportingCount = activityByType.get(ActivityType.REPORTAGE)?.length;
@@ -107,13 +115,13 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
 
     return {
       ...baseActivityCount,
-      ...(reportingCount && { reportingCount }),
-      ...(challengeCount && { challengeCount }),
-      ...(enigmaCount && { enigmaCount }),
-      ...(gameCount && { gameCount }),
-      ...(questionCount && { questionCount }),
-      ...(reactionCount && { reactionCount }),
-      ...(storyCount && { storyCount }),
+      reportingCount,
+      challengeCount,
+      enigmaCount,
+      gameCount,
+      questionCount,
+      reactionCount,
+      storyCount,
     };
   } else if (phaseId === 3) {
     const reinventStoryCount = activityByType.get(ActivityType.RE_INVENT_STORY)?.length;
@@ -121,8 +129,8 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
 
     return {
       ...baseActivityCount,
-      ...(reinventStoryCount && { reinventStoryCount }),
-      ...(anthemCount && { anthemCount }),
+      reinventStoryCount,
+      anthemCount,
     };
   } else {
     return { ...baseActivityCount };
