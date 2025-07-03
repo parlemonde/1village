@@ -43,9 +43,10 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
     3: false,
   });
 
-  const videoCount = getVideoCount(data);
-  const commentCount = getCommentCount(data);
-  const publicationCount = getPublicationCount(data);
+  const videoCount = getVideoCount(data, selectedCountry);
+  const commentCount = getCommentCount(data, selectedCountry);
+  const publicationCount = getPublicationCount(data, selectedCountry);
+
   return (
     <>
       <ClassroomsToMonitorTable countryId={selectedCountry} />
@@ -110,7 +111,7 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
           <BarCharts dataByMonth={data.barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
         </Grid>
 
-        {data && data.phases && (
+        {data?.phases && (
           <Grid item xs={12} lg={12}>
             <div className="statistic__phase--container">
               <div>

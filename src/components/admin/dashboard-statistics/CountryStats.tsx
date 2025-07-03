@@ -11,7 +11,7 @@ import StatisticFilters from './filters/StatisticFilters';
 import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
-import { useGetCountriesStats } from 'src/api/statistics/statistics.get';
+import { useGetCompareGlobalStats, useGetCountriesStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import type { CountryStat } from 'types/analytics/country-stat';
 import type { VillageListItem } from 'types/analytics/village-list-item';
@@ -31,6 +31,7 @@ const CountryStats = () => {
   const { data: classroomsStatistics, isLoading: isLoadingClassroomStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
   const { data: sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, selectedCountry, null, selectedPhase);
   const { data: familyStatistics, isLoading: isLoadingFamilyStatistics } = useGetCountriesStats(selectedCountry, selectedPhase);
+  const { data: activityCountDetails, isLoading: isLoadingActivityCountDetails } = useGetCompareGlobalStats(selectedPhase);
 
   // On mocke l'asynchronisme en attendant d'avoir l'appel serveur censé retourner les interactions des villages-mondes
   // A refacto lors de l'implémentation des tickets VIL-407 et VIL-63
@@ -90,14 +91,14 @@ const CountryStats = () => {
               </>
             )
           )}
-          {isLoadingClassroomStatistics || isLoadingSessionsStatistics || isLoadingFamilyStatistics ? (
+          {isLoadingClassroomStatistics || isLoadingSessionsStatistics || isLoadingFamilyStatistics || isLoadingActivityCountDetails ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
           ) : (
             classroomsStatistics &&
             sessionsStatistics &&
             familyStatistics && (
               <DashboardSummary
-                data={{ ...classroomsStatistics, ...sessionsStatistics, ...familyStatistics, barChartData: mockDataByMonth }}
+                data={{ ...classroomsStatistics, ...sessionsStatistics, ...familyStatistics, barChartData: mockDataByMonth, ...activityCountDetails }}
                 selectedCountry={selectedCountry}
                 selectedPhase={selectedPhase}
               />
