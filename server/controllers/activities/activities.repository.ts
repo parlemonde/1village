@@ -9,9 +9,7 @@ type GetActivitiesParams = {
 };
 
 export const getActivities = async ({ phase, villageIds = [] }: GetActivitiesParams) => {
-  const activityQB = activitiesRepository
-    .createQueryBuilder('activity')
-    .select(['activity.id', 'activity.phase', 'activity.type', 'activity.status', 'activity.content', 'activity.villageId']);
+  const activityQB = activitiesRepository.createQueryBuilder('activity').leftJoinAndSelect('activity.user', 'user');
 
   if (phase) {
     activityQB.where('activity.phase = :phase', { phase });
@@ -21,11 +19,5 @@ export const getActivities = async ({ phase, villageIds = [] }: GetActivitiesPar
     activityQB.where('activity.villageId IN (:...villageIds)', { villageIds });
   }
 
-  return await activityQB
-    .setFindOptions({
-      relations: {
-        user: true,
-      },
-    })
-    .getMany();
+  return await activityQB.getMany();
 };

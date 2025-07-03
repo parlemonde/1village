@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
+import type { ClassroomStat, SessionsStats } from 'types/statistics.type';
 
 interface RequestParams {
   [key: string]: string;
@@ -24,7 +24,7 @@ async function getClassroomStatistics(
   countryCode?: string | null,
   classroomId?: number | null,
   phase?: number | null,
-): Promise<ClassroomsStats> {
+): Promise<ClassroomStat> {
   const baseUrl: string = '/statistics/sessions';
   const params: RequestParams = {};
 
@@ -68,7 +68,7 @@ async function getSessionsStatistics(
 }
 
 export function useStatisticsClassrooms(villageId?: number | null, countryCode?: string | null, classroomId?: number | null, phase?: number | null) {
-  const queryResult = useQuery<ClassroomsStats>(
+  const queryResult = useQuery<ClassroomStat>(
     ['classrooms', villageId, countryCode, classroomId],
     () => getClassroomStatistics(villageId, countryCode, classroomId, phase),
     {
@@ -76,9 +76,10 @@ export function useStatisticsClassrooms(villageId?: number | null, countryCode?:
     },
   );
 
-  const emptyStats: ClassroomsStats = {
-    classroomId: 0,
-    classroomCountryCode: '',
+  const emptyStats: ClassroomStat = {
+    id: 0,
+    classroomName: '',
+    countryCode: '',
     villageId: 0,
     villageName: '',
     userFirstName: 0,

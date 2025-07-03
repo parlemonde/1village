@@ -1,9 +1,9 @@
-import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
+import type { ClassroomStat, SessionsStats } from 'types/statistics.type';
 
-export const mockClassroomsStats: ClassroomsStats[] = [
+export const mockClassroomsStats: ClassroomStat[] = [
   {
-    classroomId: 1,
-    classroomCountryCode: 'FR',
+    id: 1,
+    countryCode: 'FR',
     villageId: 1,
     villageName: 'Village A',
     commentsCount: 1,
@@ -18,8 +18,8 @@ export const mockClassroomsStats: ClassroomsStats[] = [
     ],
   },
   {
-    classroomId: 2,
-    classroomCountryCode: 'CA',
+    id: 2,
+    countryCode: 'CA',
     villageId: 2,
     villageName: 'Village B',
     commentsCount: 1,
@@ -34,8 +34,8 @@ export const mockClassroomsStats: ClassroomsStats[] = [
     ],
   },
   {
-    classroomId: 3,
-    classroomCountryCode: 'FR',
+    id: 3,
+    countryCode: 'FR',
     villageId: 456,
     villageName: 'Village C',
     commentsCount: 1,
@@ -50,8 +50,8 @@ export const mockClassroomsStats: ClassroomsStats[] = [
     ],
   },
   {
-    classroomId: 5,
-    classroomCountryCode: 'PT',
+    id: 5,
+    countryCode: 'PT',
     villageId: 1,
     villageName: 'Village D',
     commentsCount: 1,
@@ -66,8 +66,8 @@ export const mockClassroomsStats: ClassroomsStats[] = [
     ],
   },
   {
-    classroomId: 5,
-    classroomCountryCode: 'PT',
+    id: 5,
+    countryCode: 'PT',
     villageId: 1,
     villageName: 'Village D',
     commentsCount: 1,
@@ -82,8 +82,8 @@ export const mockClassroomsStats: ClassroomsStats[] = [
     ],
   },
   {
-    classroomId: 6,
-    classroomCountryCode: 'Grece',
+    id: 6,
+    countryCode: 'Grece',
     villageId: 1,
     villageName: 'Village E',
     commentsCount: 1,
@@ -98,8 +98,8 @@ export const mockClassroomsStats: ClassroomsStats[] = [
     ],
   },
   {
-    classroomId: 7,
-    classroomCountryCode: 'Maroc',
+    id: 7,
+    countryCode: 'Maroc',
     villageId: 1,
     villageName: 'Village F',
     commentsCount: 1,
@@ -114,8 +114,8 @@ export const mockClassroomsStats: ClassroomsStats[] = [
     ],
   },
   {
-    classroomId: 8,
-    classroomCountryCode: 'Tunisie',
+    id: 8,
+    countryCode: 'Tunisie',
     villageId: 1,
     villageName: 'Village G',
     commentsCount: 0,
@@ -130,8 +130,8 @@ export const mockClassroomsStats: ClassroomsStats[] = [
     ],
   },
   {
-    classroomId: 9,
-    classroomCountryCode: 'Belgique',
+    id: 9,
+    countryCode: 'Belgique',
     villageId: 1,
     villageName: 'Village H',
     commentsCount: 22,
@@ -146,8 +146,8 @@ export const mockClassroomsStats: ClassroomsStats[] = [
     ],
   },
   {
-    classroomId: 10,
-    classroomCountryCode: 'Roumanie',
+    id: 10,
+    countryCode: 'Roumanie',
     villageId: 1,
     villageName: 'Village I',
     commentsCount: 0,

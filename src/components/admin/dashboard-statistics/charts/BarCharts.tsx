@@ -23,6 +23,17 @@ const BarCharts: React.FC<Props> = ({ dataByMonth, title, className }) => {
     }
   };
 
+  if (dataByMonth.length === 0 || !selectedData) {
+    return (
+      <div className={classNames(styles.barContainer, className)}>
+        {title && <div className={styles.title}>{title}</div>}
+        <div className={styles.chart}>
+          <p>Aucune donnée disponible</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={classNames(styles.barContainer, className)}>
       {title && <div className={styles.title}>{title}</div>}

@@ -1,17 +1,21 @@
-import type { PhaseDetail } from '../src/api/statistics/compare.api';
+import type { ComparePhaseDetail } from '../src/api/statistics/compare.api';
 import type { BarChartDataByMonth, ContributionBarChartData } from './dashboard.type';
 import type { User } from './user.type';
 import type { Village, VillagePhase } from './village.type';
 
-export interface ClassroomsStats {
-  classroomId: number;
-  classroomCountryCode: string;
-  villageId: number;
+export interface ClassroomDetails {
+  id: number;
+  classroomName?: string;
+  countryCode: string;
   villageName: string;
-  userFirstName: number;
-  userLastName: number;
   commentsCount: number;
   videosCount: number;
+}
+
+export interface ClassroomStat extends ClassroomDetails {
+  villageId: number;
+  userFirstName: number;
+  userLastName: number;
   activities: { count: number; type: number; phase: number }[];
   phases?: Phases[];
 }
@@ -21,11 +25,6 @@ export type ClassroomStats = Omit<VillageStats, 'floatingAccounts' | 'familyAcco
 export interface Phases {
   data: Record<string, string | number>[];
   phase: string;
-}
-
-export interface ClassroomStat {
-  data: ClassroomsStats[];
-  phases: Phases[];
 }
 
 export interface SessionsStats {
@@ -46,27 +45,6 @@ export interface SessionsStats {
   contributionsBarChartData: ContributionBarChartData;
 }
 
-export interface VillageStats {
-  family: {
-    minDuration: number;
-    maxDuration: number;
-    medianDuration: number;
-    averageDuration: number;
-
-    minConnections: number;
-    maxConnections: number;
-    averageConnections: number;
-    medianConnections: number;
-
-    childrenCodesCount: number;
-    familyAccountsCount: number;
-    connectedFamiliesCount: number;
-    familiesWithoutAccount: FamiliesWithoutAccount[];
-    floatingAccounts: FloatingAccount[];
-  };
-  activityCountDetails: ActivityCountDetails[];
-}
-
 type ActivityCountDetails = {
   villageName: string;
   classrooms: ClassroomCountDetails[];
@@ -74,19 +52,20 @@ type ActivityCountDetails = {
 
 type ClassroomCountDetails = {
   name: string;
-  classroomId: string;
+  classroomId: string | null;
   totalPublications: number;
   classroomName: string;
   countryCode: string;
   phaseDetails: PhaseDetails[];
 };
 
-type PhaseDetails = {
+export type PhaseDetails = {
   phaseId: number;
-  videoCount: number;
   commentCount: number;
   draftCount: number;
+  indiceCount?: number;
   mascotCount?: number;
+  videoCount?: number;
   challengeCount?: number;
   enigmaCount?: number;
   gameCount?: number;
@@ -95,8 +74,23 @@ type PhaseDetails = {
   reportingCount?: number;
   storyCount?: number;
   anthemCount?: number;
+  contentLibreCount?: number;
   reinventStoryCount?: number;
 };
+
+interface FamillyStats
+  extends Omit<SessionsStats, 'registeredClassroomsCount' | 'connectedClassroomsCount' | 'contributedClassroomsCount' | 'barChartData'> {
+  childrenCodesCount: number;
+  familyAccountsCount: number;
+  connectedFamiliesCount: number;
+  familiesWithoutAccount: FamiliesWithoutAccount[];
+  floatingAccounts: FloatingAccount[];
+}
+
+export interface VillageStats {
+  family: FamillyStats;
+  activityCountDetails: ActivityCountDetails[];
+}
 
 export interface FamiliesWithoutAccount {
   student_id: number;
@@ -146,7 +140,7 @@ export type ClassroomActivity = {
   countryCode: string;
   classroomId: string;
   totalPublications: number;
-  phaseDetails: PhaseDetail[];
+  phaseDetails: ComparePhaseDetail[];
 };
 
 export type VillageActivity = {
@@ -155,8 +149,8 @@ export type VillageActivity = {
 };
 
 export interface StatisticsDto {
-  family: any;
-  activityCountDetails: VillageActivity[];
+  family: Omit<FamillyStats, 'familiesWithoutAccount'>;
+  activityCountDetails: ActivityCountDetails[];
 }
 
 export enum ClassroomMonitoringStatus {
