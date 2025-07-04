@@ -13,6 +13,7 @@ import { serializeToQueryUrl, debounce, getQueryString } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { ActivityContentType, ActivityContent, Activity, AnyData } from 'types/activity.type';
 import { ActivityType, ActivityStatus } from 'types/activity.type';
+import { UserType } from 'types/user.type';
 
 type ActivitySaveResponse = { success: false } | { success: true; activity: Activity };
 
@@ -74,14 +75,20 @@ const debouncedSaveActivityInSession = debounce(saveActivityInSession, 400, fals
 export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { user } = React.useContext(UserContext);
+  const { user, classroom } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const [activity, setActivity] = React.useState<Activity | null>(null);
   const [draft, setDraft] = React.useState<Activity | null>(null);
   const [draftStep, setDraftStep] = React.useState(0);
   const draftStepTimeout = React.useRef<number | undefined>(undefined);
+  const [classroomInActivityContext, setClassroomInActivityContext] = React.useState(classroom);
 
   const currentActivityId = activity === null ? null : activity.id;
+
+  // Sync classroomInActivityContext with UserContext.classroom
+  React.useEffect(() => {
+    setClassroomInActivityContext(classroom);
+  }, [classroom]);
 
   // Save & get activity to session storage.
   React.useEffect(() => {
@@ -169,6 +176,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
         responseType: responseType ?? null,
         data: initialData || {},
         isPinned: false,
+        classroomId: classroomInActivityContext ? classroomInActivityContext.id : null,
       };
       setActivity(newActivity);
       if (type !== ActivityType.QUESTION && type !== ActivityType.ANTHEM) {
@@ -176,7 +184,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
       }
       return true;
     },
-    [user, village, getDraft],
+    [user, village, classroomInActivityContext, getDraft],
   );
 
   const createActivityIfNotExist = React.useCallback(
@@ -272,6 +280,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
         content: activityRef.current.content,
         data: activityRef.current.data,
         isPinned: activityRef.current.isPinned,
+        classroomId: activityRef.current.classroomId,
       };
       if (!publish) {
         if (data.data) {
@@ -315,6 +324,11 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
         isPinned: activityRef.current.isPinned,
         displayAsUser: activityRef.current.displayAsUser,
       };
+      // if no classroomId is set
+      if (user?.type === UserType.TEACHER && activityRef.current.classroomId === null) {
+        data.classroomId = classroomInActivityContext ? classroomInActivityContext.id : null;
+        activityRef.current.classroomId = data.classroomId;
+      }
       // if not yet published, the response type and isPinned can be changed.
       if (activityRef.current.status === ActivityStatus.DRAFT) {
         data.responseActivityId = activityRef.current.responseActivityId;
@@ -348,7 +362,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
         activity: response.data as Activity,
       };
     },
-    [village],
+    [village, classroomInActivityContext, user],
   );
 
   const save = React.useCallback(

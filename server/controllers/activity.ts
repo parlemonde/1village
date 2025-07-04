@@ -168,6 +168,7 @@ type CreateActivityData = {
   responseType?: number;
   isPinned?: boolean;
   displayAsUser?: boolean;
+  classroomId?: number | null;
 };
 
 // --- create activity's schema ---
@@ -215,6 +216,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
     },
     isPinned: { type: 'boolean', nullable: true },
     displayAsUser: { type: 'boolean', nullable: true },
+    classroomId: { type: 'number', nullable: true },
   },
   required: ['type', 'data', 'content'],
   additionalProperties: false,
@@ -251,6 +253,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   activity.responseType = data.responseType ?? null;
   activity.isPinned = data.isPinned || false;
   activity.displayAsUser = data.displayAsUser || false;
+  activity.classroomId = data.classroomId ?? null;
 
   await AppDataSource.getRepository(Activity).save(activity);
 
@@ -289,6 +292,7 @@ activityController.post(
           activity.displayAsUser = activityParent.displayAsUser;
           activity.parentActivityId = activityParent.id;
           activity.publishDate = new Date();
+          activity.classroomId = activityParent.classroomId;
 
           await AppDataSource.getRepository(Activity).save(activity);
           await AppDataSource.getRepository(Village).update({ id: villageId }, { anthemId: activity.id });
@@ -318,6 +322,7 @@ activityController.post(
           activity.displayAsUser = activityParent.displayAsUser;
           activity.parentActivityId = activityParent.id;
           activity.publishDate = new Date();
+          activity.classroomId = activityParent.classroomId;
 
           await AppDataSource.getRepository(Activity).save(activity);
         }
@@ -346,6 +351,7 @@ type UpdateActivity = {
   data?: AnyData;
   content?: ActivityContent[];
   phaseStep?: string;
+  classroomId?: number;
 };
 
 const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
@@ -388,6 +394,7 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
       },
       nullable: true,
     },
+    classroomId: { type: 'number', nullable: true },
   },
   required: [],
   additionalProperties: false,
@@ -457,6 +464,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   activity.displayAsUser = data.displayAsUser !== undefined ? data.displayAsUser : activity.displayAsUser;
   activity.data = data.data ?? activity.data;
   activity.content = data.content ?? activity.content;
+  activity.classroomId = data.classroomId ?? null;
 
   // update activity children
   if (!activity.parentActivityId && activity.status === ActivityStatus.PUBLISHED) {

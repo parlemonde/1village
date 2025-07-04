@@ -140,5 +140,5 @@ export class Activity implements ActivityInterface<AnyData> {
   public classroom: Classroom;
 
   @Column({ nullable: true })
-  public classroomId: number;
+  public classroomId: number | null;
 }
