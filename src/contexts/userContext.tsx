@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import React from 'react';
+import type { Classroom } from 'server/entities/classroom';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Student } from 'types/student.type';
@@ -11,6 +12,7 @@ type UserContextFunc = Promise<{ success: boolean; errorCode: number }>;
 interface UserContextValue {
   user: User | null;
   isLoggedIn: boolean;
+  classroom: Classroom | null;
   login(username: string, password: string, remember: boolean): UserContextFunc;
   loginWithSso(code: string): UserContextFunc;
   signup(user: UserForm, inviteCode?: string): UserContextFunc;
@@ -19,6 +21,7 @@ interface UserContextValue {
   logout(): Promise<void>;
   deleteAccount(): Promise<boolean>;
   setUser: (value: React.SetStateAction<User | null>) => void;
+  setClassroom: (value: React.SetStateAction<Classroom | null>) => void;
   linkStudent(hashedCode: string): UserContextFunc;
   getLinkedStudentsToUser(userId: number): Promise<Student[]>;
   deleteLinkedStudent(userId: number, studentId: number): UserContextFunc;
@@ -28,6 +31,7 @@ interface UserContextValue {
 export const UserContext = React.createContext<UserContextValue>({
   user: null,
   isLoggedIn: false,
+  classroom: null,
   login: async () => ({ success: false, errorCode: 0 }),
   loginWithSso: async () => ({ success: false, errorCode: 0 }),
   signup: async () => ({ success: false, errorCode: 0 }),
@@ -36,6 +40,7 @@ export const UserContext = React.createContext<UserContextValue>({
   logout: async () => {},
   deleteAccount: async () => false,
   setUser: () => {},
+  setClassroom: async () => {},
   linkStudent: async () => ({ success: false, errorCode: 0 }),
   getLinkedStudentsToUser: async () => [] as Student[],
   deleteLinkedStudent: async () => ({ success: false, errorCode: 0 }),
@@ -49,6 +54,7 @@ interface UserContextProviderProps {
 
 export const UserContextProvider = ({ user, setUser, children }: React.PropsWithChildren<UserContextProviderProps>) => {
   const router = useRouter();
+  const [classroom, setClassroom] = React.useState<Classroom | null>(null);
 
   React.useEffect(() => {
     if (
@@ -63,6 +69,23 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
     )
       router.push('/');
   }, [user, router]);
+
+  const getClassroom = React.useCallback(
+    async (userId: number) => {
+      try {
+        const response = await axiosRequest({
+          method: 'GET',
+          url: `/classrooms/${userId}`,
+        });
+        setClassroom(response.data as Classroom);
+        return response.data as Classroom;
+      } catch (err) {
+        setClassroom(null);
+        return null;
+      }
+    },
+    [setClassroom],
+  );
 
   /**
    * Login the user with username and password.
@@ -93,12 +116,15 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
       }
 
       setUser(response.data.user || null);
+      if (response.data.user) {
+        getClassroom(response.data.user.id);
+      }
       return {
         success: true,
         errorCode: 0,
       };
     },
-    [setUser],
+    [setUser, getClassroom],
   );
 
   const loginWithSso = React.useCallback(
@@ -118,12 +144,15 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
         };
       }
       setUser(response.data.user || null);
+      if (response.data.user) {
+        getClassroom(response.data.user.id);
+      }
       return {
         success: true,
         errorCode: 0,
       };
     },
-    [setUser],
+    [setUser, getClassroom],
   );
 
   const logout = React.useCallback(async (): Promise<void> => {
@@ -344,6 +373,8 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
     () => ({
       user,
       isLoggedIn,
+      classroom,
+      setClassroom,
       login,
       loginWithSso,
       signup,
@@ -356,10 +387,12 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
       getLinkedStudentsToUser,
       deleteLinkedStudent,
       getClassroomAsFamily,
+      getClassroom,
     }),
     [
       user,
       isLoggedIn,
+      classroom,
       login,
       loginWithSso,
       signup,
@@ -368,10 +401,12 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
       logout,
       deleteAccount,
       setUser,
+      setClassroom,
       linkStudent,
       getLinkedStudentsToUser,
       deleteLinkedStudent,
       getClassroomAsFamily,
+      getClassroom,
     ],
   );
 

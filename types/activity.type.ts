@@ -61,6 +61,8 @@ export interface Activity<T extends AnyData = AnyData> {
   responseActivityId?: number | null;
   responseType?: number | null;
   isVisibleToParent?: boolean;
+
+  classroomId?: number | null;
 }
 
 // For activity Reaction, click is not allowed in the images in the Card
