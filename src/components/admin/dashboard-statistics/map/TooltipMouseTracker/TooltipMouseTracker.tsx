@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface MouseTrackerProps {
   children: React.ReactNode;
@@ -6,10 +6,10 @@ interface MouseTrackerProps {
   isVisible: boolean;
 }
 
-const MouseTracker = ({ children, offset = { x: 0, y: 0 }, isVisible }: MouseTrackerProps) => {
-  const [position, setPosition] = React.useState({ x: 0, y: 0 });
+const MouseTracker = ({ children, offset = { x: 15, y: 15 }, isVisible }: MouseTrackerProps) => {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setPosition({
         x: e.clientX + offset.x,
@@ -26,15 +26,19 @@ const MouseTracker = ({ children, offset = { x: 0, y: 0 }, isVisible }: MouseTra
   return (
     <div
       style={{
-        position: 'absolute',
+        position: 'fixed',
         top: 0,
         left: 0,
-        padding: '1rem 2rem',
+        padding: '0.5rem 1rem',
         display: isVisible ? 'block' : 'none',
         background: 'white',
         boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
         transform: `translate(${position.x}px, ${position.y}px)`,
         pointerEvents: 'none',
+        zIndex: 1000,
+        borderRadius: '4px',
+        fontSize: '0.875rem',
+        whiteSpace: 'nowrap',
       }}
     >
       {children}
