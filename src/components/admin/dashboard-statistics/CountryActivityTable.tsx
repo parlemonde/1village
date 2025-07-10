@@ -59,7 +59,15 @@ const CountryActivityTable: React.FC<CountryActivityTableProps> = (props: Countr
   const columns = mode === 'country' ? getCountryActivityTableHeaders(phaseId) : CountryActivityTableHeaders;
 
   // Custom row style: bleu si _highlight
-  const rowStyle = (row: TableRow) => (row._highlight ? { color: '#1976d2', fontWeight: 600 } : {});
+  const rowStyle = (row: TableRow) => {
+    if (row.id === 'total') {
+      return { color: 'black', fontWeight: 'bold', borderBottom: '2px solid black' };
+    }
+    if (row.isSelected) {
+      return { color: 'blue', fontWeight: 'bold' };
+    }
+    return {};
+  };
 
   return (
     <div style={{ margin: '0rem 0', overflowX: 'auto', width: '100%' }}>

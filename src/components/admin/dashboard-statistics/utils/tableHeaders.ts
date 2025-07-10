@@ -68,3 +68,41 @@ export function getCountryActivityTableHeaders(phaseId: number) {
       return [];
   }
 }
+
+export function getClassroomActivityTableHeaders(phaseId: number) {
+  const baseHeaders = [
+    { key: 'name', label: 'Classe', sortable: true },
+    { key: 'country', label: 'Pays', sortable: true },
+  ];
+
+  const phaseHeaders: { [key: number]: { key: string; label: string; sortable: boolean }[] } = {
+    1: [
+      { key: 'enigmaCount', label: 'Indices', sortable: true },
+      { key: 'mascotCount', label: 'Mascottes', sortable: true },
+      { key: 'videoCount', label: 'Vidéos', sortable: true },
+      { key: 'commentCount', label: 'Commentaires', sortable: true },
+      { key: 'draftCount', label: 'Brouillons', sortable: true },
+    ],
+    2: [
+      { key: 'reportingCount', label: 'Reportages', sortable: true },
+      { key: 'challengeCount', label: 'Défis', sortable: true },
+      { key: 'enigmaCount', label: 'Énigmes', sortable: true },
+      { key: 'gameCount', label: 'Jeux', sortable: true },
+      { key: 'questionCount', label: 'Questions', sortable: true },
+      { key: 'reactionCount', label: 'Réactions', sortable: true },
+      { key: 'videoCount', label: 'Vidéos', sortable: true },
+      { key: 'commentCount', label: 'Commentaires', sortable: true },
+      { key: 'draftCount', label: 'Brouillons', sortable: true },
+    ],
+    3: [
+      { key: 'anthemCount', label: 'Hymne', sortable: true },
+      { key: 'storyCount', label: 'Histoire', sortable: true },
+      { key: 'reinventStoryCount', label: 'Réécriture', sortable: true },
+      { key: 'videoCount', label: 'Vidéos', sortable: true },
+      { key: 'commentCount', label: 'Commentaires', sortable: true },
+      { key: 'draftCount', label: 'Brouillons', sortable: true },
+    ],
+  };
+
+  return baseHeaders.concat(phaseHeaders[phaseId] || []);
+}

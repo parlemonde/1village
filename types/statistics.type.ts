@@ -1,3 +1,4 @@
+import type { PhaseDetail } from '../src/api/statistics/compare.api';
 import type { BarChartDataByMonth } from './dashboard.type';
 import type { VillagePhase } from './village.type';
 
@@ -70,16 +71,29 @@ type ActivityCountDetails = {
 };
 
 type ClassroomCountDetails = {
+  name: string;
+  classroomId: string;
+  totalPublications: number;
   classroomName: string;
   countryCode: string;
   phaseDetails: PhaseDetails[];
 };
 
 type PhaseDetails = {
-  phaseId: string;
+  phaseId: number;
   videoCount: number;
   commentCount: number;
   draftCount: number;
+  mascotCount?: number;
+  challengeCount?: number;
+  enigmaCount?: number;
+  gameCount?: number;
+  questionCount?: number;
+  reactionCount?: number;
+  reportingCount?: number;
+  storyCount?: number;
+  anthemCount?: number;
+  reinventStoryCount?: number;
 };
 
 export interface FamiliesWithoutAccount {
@@ -123,4 +137,22 @@ export enum GroupType {
   CLASSROOM,
   FAMILY,
   All,
+}
+
+export type ClassroomActivity = {
+  name: string;
+  countryCode: string;
+  classroomId: string;
+  totalPublications: number;
+  phaseDetails: PhaseDetail[];
+};
+
+export type VillageActivity = {
+  villageName: string;
+  classrooms: ClassroomActivity[];
+};
+
+export interface StatisticsDto {
+  family: any;
+  activityCountDetails: VillageActivity[];
 }
