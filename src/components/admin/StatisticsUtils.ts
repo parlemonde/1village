@@ -1,39 +1,44 @@
 import type { VillageStats } from '../../../types/statistics.type';
 
-export const getVideoCount = (data?: VillageStats) => {
+export const getVideoCount = (data?: VillageStats, countryCode?: string) => {
   if (!data?.activityCountDetails?.length) return 0;
 
   return data.activityCountDetails.reduce((total, detail) => {
-    const classroomVideos = detail.classrooms.reduce((sumClass, classroom) => {
-      const phaseVideos = classroom.phaseDetails.reduce((sumPhase, phase) => {
-        return sumPhase + phase.videoCount;
+    const classroomVideos = detail.classrooms
+      .filter((classroom) => classroom.countryCode === countryCode)
+      .reduce((sumClass, classroom) => {
+        const phaseVideos = classroom.phaseDetails.reduce((sumPhase, phase) => {
+          return sumPhase + phase.videoCount;
+        }, 0);
+        return sumClass + phaseVideos;
       }, 0);
-      return sumClass + phaseVideos;
-    }, 0);
     return total + classroomVideos;
   }, 0);
 };
 
-export const getCommentCount = (data?: VillageStats) => {
+export const getCommentCount = (data?: VillageStats, countryCode?: string) => {
   if (!data?.activityCountDetails?.length) return 0;
 
   return data.activityCountDetails.reduce((total, detail) => {
-    const classroomComments = detail.classrooms.reduce((sumClass, classroom) => {
-      const phaseComments = classroom.phaseDetails.reduce((sumPhase, phase) => {
-        return sumPhase + phase.commentCount;
+    const classroomComments = detail.classrooms
+      .filter((classroom) => classroom.countryCode === countryCode)
+      .reduce((sumClass, classroom) => {
+        const phaseComments = classroom.phaseDetails.reduce((sumPhase, phase) => {
+          return sumPhase + phase.commentCount;
+        }, 0);
+        return sumClass + phaseComments;
       }, 0);
-      return sumClass + phaseComments;
-    }, 0);
     return total + classroomComments;
   }, 0);
 };
 
-export const getPublicationCount = (data?: VillageStats) => {
+export const getPublicationCount = (data?: VillageStats, countryCode?: string) => {
   if (!data?.activityCountDetails?.length) return 0;
 
   return data.activityCountDetails
     .flatMap((detail) => detail.classrooms ?? [])
-    .flatMap((c) => c.phaseDetails ?? [])
+    .filter((classroom) => classroom.countryCode === countryCode)
+    .flatMap((classroom) => classroom.phaseDetails ?? [])
     .reduce((total, phase) => {
       Object.entries(phase).forEach(([key, value]) => {
         if (key !== 'phaseId' && key !== 'draftCount' && typeof value === 'number') {
