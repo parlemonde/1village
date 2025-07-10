@@ -6,6 +6,7 @@ import { Box, Tab, Tabs } from '@mui/material';
 
 import { OneVillageTable } from '../OneVillageTable';
 import { getCommentCount, getPublicationCount, getVideoCount } from '../StatisticsUtils';
+import CountryActivityPhaseAccordion from './CountryActivityPhaseAccordion';
 import TabPanel from './TabPanel';
 import TeamComments from './TeamComments';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
@@ -34,6 +35,11 @@ const VillageStats = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>();
   const [selectedVillage, setSelectedVillage] = useState<number>();
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = useState<Array<OneVillageTableRow>>([]);
+  const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
+    1: false,
+    2: false,
+    3: false,
+  });
 
   const { data: villageStatistics } = useGetVillagesStats(selectedVillage, selectedPhase);
   const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
@@ -151,6 +157,36 @@ const VillageStats = () => {
                 </div>
               </div>
             )}
+            {selectedVillage &&
+              selectedPhase &&
+              (selectedPhase === 0 ? (
+                [1, 2, 3].map((phase) => (
+                  <CountryActivityPhaseAccordion
+                    key={phase}
+                    phaseId={phase}
+                    villageId={+selectedVillage}
+                    open={openPhases[phase]}
+                    onClick={() =>
+                      setOpenPhases((prev) => ({
+                        ...prev,
+                        [phase]: !prev[phase],
+                      }))
+                    }
+                  />
+                ))
+              ) : (
+                <CountryActivityPhaseAccordion
+                  phaseId={+selectedPhase}
+                  villageId={+selectedVillage}
+                  open={openPhases[selectedPhase]}
+                  onClick={() =>
+                    setOpenPhases((prev) => ({
+                      ...prev,
+                      [selectedPhase]: !prev[selectedPhase],
+                    }))
+                  }
+                />
+              ))}
           </TabPanel>
           <TabPanel value={selectedTab} index={1}>
             <OneVillageTable

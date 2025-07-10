@@ -217,28 +217,28 @@ export const OneVillageTable = ({
                     },
                   }}
                 >
-                  {displayedData.map((d, index) => (
-                    <TableRow key={d.id} style={rowStyle ? rowStyle(d) : {}}>
-                      {columns.map((c) => {
-                        const isSelected = d.isSelected;
-                        return (
+                  {displayedData.map((d, index) => {
+                    const customStyle = rowStyle ? rowStyle(d) : {};
+                    return (
+                      <TableRow key={d.id} style={customStyle}>
+                        {columns.map((c) => (
                           <TableCell
                             key={`${d.id}_${c.key}`}
                             size="small"
                             title={typeof d[c.key] === 'string' ? (d[c.key] as string) : ''}
-                            style={isSelected ? { color: 'blue', fontWeight: 'bold', borderBottom: '2px solid #1976d2' } : {}}
+                            style={customStyle}
                           >
                             {d[c.key] !== undefined ? d[c.key] : ''}
                           </TableCell>
-                        );
-                      })}
-                      {actions && (
-                        <TableCell align="right" padding="none" sx={{ width: '20px', color: 'blue' }}>
-                          {actions(d.id, index)}
-                        </TableCell>
-                      )}
-                    </TableRow>
-                  ))}
+                        ))}
+                        {actions && (
+                          <TableCell align="right" padding="none" sx={{ width: '20px', color: 'blue' }}>
+                            {actions(d.id, index)}
+                          </TableCell>
+                        )}
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </>
             )}

@@ -3,11 +3,15 @@ import React from 'react';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 
+import ClassroomActivityTable from './ClassroomActivityTable';
 import CountryActivityTable from './CountryActivityTable';
+import VillageActivityTable from './VillageActivityTable';
 
 interface Props {
   phaseId: number;
-  countryCode: string;
+  countryCode?: string;
+  villageId?: number;
+  classroomId?: string;
   open: boolean;
   onClick: () => void;
 }
@@ -18,7 +22,7 @@ const phaseLabels: Record<number, string> = {
   3: 'Phase 3',
 };
 
-const CountryActivityPhaseAccordion: React.FC<Props> = ({ phaseId, countryCode, open, onClick }) => {
+const CountryActivityPhaseAccordion: React.FC<Props> = ({ phaseId, countryCode, villageId, classroomId, open, onClick }) => {
   return (
     <div style={{ marginTop: '1.5rem', borderRadius: 8, border: '1px solid #eee', background: '#fafbfc' }}>
       <div
@@ -38,8 +42,10 @@ const CountryActivityPhaseAccordion: React.FC<Props> = ({ phaseId, countryCode, 
         {open ? <KeyboardDoubleArrowUpIcon fontSize="large" /> : <KeyboardDoubleArrowDownIcon fontSize="large" />}
       </div>
       {open && (
-        <div style={{ width: '100vh', padding: '1rem' }}>
-          <CountryActivityTable countryCode={countryCode} phaseId={phaseId} mode="country" />
+        <div style={{ padding: '1rem' }}>
+          {countryCode && <CountryActivityTable countryCode={countryCode} phaseId={phaseId} mode="country" />}
+          {villageId && !classroomId && <VillageActivityTable villageId={villageId} phaseId={phaseId} />}
+          {villageId && classroomId && <ClassroomActivityTable villageId={villageId} classroomId={classroomId} phaseId={phaseId} />}
         </div>
       )}
     </div>

@@ -178,6 +178,7 @@ const RAW_RUNTIME_STATE =
           ["typeorm", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.3.16"],\
           ["typescript", "patch:typescript@npm%3A4.7.4#optional!builtin<compat/typescript>::version=4.7.4&hash=65a307"],\
           ["uuid", "npm:8.3.2"],\
+          ["v8-compile-cache", "npm:2.4.0"],\
           ["vimeo", "npm:2.3.1"],\
           ["web-vitals", "npm:2.1.4"],\
           ["webpack", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:5.73.0"],\
@@ -343,6 +344,7 @@ const RAW_RUNTIME_STATE =
           ["typeorm", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.3.16"],\
           ["typescript", "patch:typescript@npm%3A4.7.4#optional!builtin<compat/typescript>::version=4.7.4&hash=65a307"],\
           ["uuid", "npm:8.3.2"],\
+          ["v8-compile-cache", "npm:2.4.0"],\
           ["vimeo", "npm:2.3.1"],\
           ["web-vitals", "npm:2.1.4"],\
           ["webpack", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:5.73.0"],\
@@ -21765,6 +21767,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/v8-compile-cache-npm-2.3.0-961375f150-7de7423db6.zip/node_modules/v8-compile-cache/",\
         "packageDependencies": [\
           ["v8-compile-cache", "npm:2.3.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:2.4.0", {\
+        "packageLocation": "./.yarn/cache/v8-compile-cache-npm-2.4.0-5979f8e405-49e726d7b2.zip/node_modules/v8-compile-cache/",\
+        "packageDependencies": [\
+          ["v8-compile-cache", "npm:2.4.0"]\
         ],\
         "linkType": "HARD"\
       }]\

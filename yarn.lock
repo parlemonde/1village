@@ -160,6 +160,7 @@ __metadata:
     typeorm: "npm:^0.3.11"
     typescript: "npm:4.7.4"
     uuid: "npm:^8.3.2"
+    v8-compile-cache: "npm:^2.4.0"
     vimeo: "npm:^2.1.1"
     web-vitals: "npm:^2.1.4"
     webpack: "npm:5.73.0"
@@ -17569,6 +17570,13 @@ __metadata:
   version: 2.3.0
   resolution: "v8-compile-cache@npm:2.3.0"
   checksum: 10/7de7423db6f48d76cffae93d70d503e160c97fc85e55945036d719111e20b33c4be5c21aa8b123a3da203bbb3bc4c8180f9667d5ccafcff11d749fae204ec7be
+  languageName: node
+  linkType: hard
+
+"v8-compile-cache@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "v8-compile-cache@npm:2.4.0"
+  checksum: 10/49e726d7b2825ef7bc92187ecd57c59525957badbddb18fa529b0458b9280c59a1607ad3da4abe7808e9f9a00ec99b0fc07e485ffb7358cd5c11b2ef68d2145f
   languageName: node
   linkType: hard
 

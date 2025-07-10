@@ -1,23 +1,9 @@
 import { useMemo } from 'react';
 
-// TypeScript types pour coller au format backend fourni
-export type PhaseDetail = {
-  phaseId: number;
-  commentCount?: number;
-  draftCount?: number;
-  mascotCount?: number;
-  videoCount?: number;
-  challengeCount?: number;
-  enigmaCount?: number;
-  gameCount?: number;
-  questionCount?: number;
-  reactionCount?: number;
-  reportingCount?: number;
-  storyCount?: number;
-  anthemCount?: number;
-  reinventStoryCount?: number;
-};
+import { type PhaseDetail } from 'src/api/statistics/compare.api';
+import { COUNTRY_NAMES, MOCK_DATA_DTO } from 'src/services/mocks/statistics.mocks';
 
+// TypeScript types pour coller au format backend fourni
 export type ClassroomActivity = {
   name: string;
   countryCode: string;
@@ -26,6 +12,8 @@ export type ClassroomActivity = {
   phaseDetails: PhaseDetail[];
 };
 
+export type { PhaseDetail };
+
 export type VillageActivity = {
   villageName: string;
   villageId: string;
@@ -33,113 +21,29 @@ export type VillageActivity = {
   classrooms: ClassroomActivity[];
 };
 
-// TODO: Fake data (à remplacer par un appel API plus tard)
-const MOCK_DATA: VillageActivity[] = [
-  {
-    villageName: 'France - Vietnam',
-    villageId: '123',
-    countryCodes: ['FR', 'VN'],
-    classrooms: [
-      {
-        name: 'École Marie-Renard',
-        countryCode: 'FR',
-        classroomId: '123',
-        totalPublications: 5,
-        phaseDetails: [
-          {
-            commentCount: 8,
-            draftCount: 3,
-            mascotCount: 1,
-            phaseId: 1,
-            videoCount: 0,
-          },
-          {
-            challengeCount: 0,
-            commentCount: 0,
-            draftCount: 0,
-            enigmaCount: 4,
-            gameCount: 0,
-            phaseId: 2,
-            questionCount: 0,
-            reactionCount: 0,
-            reportingCount: 0,
-            storyCount: 0,
-            videoCount: 0,
-          },
-          {
-            anthemCount: 0,
-            commentCount: 4,
-            draftCount: 0,
-            phaseId: 3,
-            reinventStoryCount: 0,
-            videoCount: 0,
-          },
-        ],
-      },
-      {
-        name: 'École Marie-Renard',
-        countryCode: 'FR',
-        classroomId: '123',
-        totalPublications: 5,
-        phaseDetails: [
-          {
-            commentCount: 6,
-            draftCount: 0,
-            mascotCount: 0,
-            phaseId: 1,
-            videoCount: 0,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    villageName: 'France - Espagne',
-    villageId: '123',
-    countryCodes: ['FR', 'ES'],
-    classrooms: [
-      {
-        name: 'École Marie-Renard',
-        countryCode: 'FR',
-        classroomId: '123',
-        totalPublications: 5,
-        phaseDetails: [
-          {
-            commentCount: 9,
-            draftCount: 0,
-            mascotCount: 0,
-            phaseId: 1,
-            videoCount: 0,
-          },
-        ],
-      },
-    ],
-  },
-];
-
-const COUNTRY_NAMES: Record<string, string> = {
-  FR: 'France',
-  VN: 'Vietnam',
-  ES: 'Espagne',
-  CA: 'Canada',
-  AR: 'Argentine',
-  BR: 'Brésil',
-  EC: 'Équateur',
-  IT: 'Italie',
-  JP: 'Japon',
-  LB: 'Liban',
-  MA: 'Maroc',
-  RO: 'Roumanie',
-  GB: 'Royaume-Uni',
-  RS: 'Serbie',
-  TN: 'Tunisie',
-  TR: 'Turquie',
-  // Ajoute d'autres pays si besoin
-};
-
 export type CountryActivityMode = 'country' | 'class';
 
+const calculateTotalPublications = (phaseDetails: PhaseDetail[], phaseId: number) => {
+  const phase = phaseDetails.find((p) => p.phaseId === phaseId);
+  if (!phase) return 0;
+  return (
+    (phase.mascotCount || 0) +
+    (phase.videoCount || 0) +
+    (phase.challengeCount || 0) +
+    (phase.enigmaCount || 0) +
+    (phase.gameCount || 0) +
+    (phase.questionCount || 0) +
+    (phase.reportingCount || 0) +
+    (phase.storyCount || 0) +
+    (phase.anthemCount || 0) +
+    (phase.reinventStoryCount || 0)
+  );
+};
+
 export function useCountryActivityTable(countryCode: string, phaseId: number, mode: CountryActivityMode = 'class') {
+  // const { data } = useGetCompareCountriesStats(countryCode, phaseId);
+  const data = MOCK_DATA_DTO;
+
   return useMemo(() => {
     if (!phaseId) return [];
     if (mode === 'country') {
@@ -165,43 +69,14 @@ export function useCountryActivityTable(countryCode: string, phaseId: number, mo
           isSelected: boolean;
         }
       > = {};
-      for (const village of MOCK_DATA) {
-        for (const cc of village.countryCodes) {
-          const classes = village.classrooms.filter((c) => c.countryCode === cc);
-          // Pour chaque classe, on cherche la phase demandée
-          let totalPublications = 0;
-          let commentCount = 0;
-          let draftCount = 0;
-          let mascotCount = 0;
-          let videoCount = 0;
-          let challengeCount = 0;
-          let enigmaCount = 0;
-          let gameCount = 0;
-          let questionCount = 0;
-          let reactionCount = 0;
-          let reportingCount = 0;
-          let storyCount = 0;
-          let anthemCount = 0;
-          let reinventStoryCount = 0;
-          for (const c of classes) {
-            const phase = c.phaseDetails.find((p) => p.phaseId === phaseId);
-            totalPublications += c.totalPublications || 0;
-            if (phase) {
-              commentCount += phase.commentCount || 0;
-              draftCount += phase.draftCount || 0;
-              mascotCount += phase.mascotCount || 0;
-              videoCount += phase.videoCount || 0;
-              challengeCount += phase.challengeCount || 0;
-              enigmaCount += phase.enigmaCount || 0;
-              gameCount += phase.gameCount || 0;
-              questionCount += phase.questionCount || 0;
-              reactionCount += phase.reactionCount || 0;
-              reportingCount += phase.reportingCount || 0;
-              storyCount += phase.storyCount || 0;
-              anthemCount += phase.anthemCount || 0;
-              reinventStoryCount += phase.reinventStoryCount || 0;
-            }
-          }
+
+      for (const village of data) {
+        for (const classroom of village.classrooms) {
+          const cc = classroom.countryCode;
+
+          const totalPublications = calculateTotalPublications(classroom.phaseDetails, phaseId);
+          const phase = classroom.phaseDetails.find((p) => p.phaseId === phaseId);
+
           if (!countryStats[cc]) {
             countryStats[cc] = {
               id: cc,
@@ -223,20 +98,23 @@ export function useCountryActivityTable(countryCode: string, phaseId: number, mo
               isSelected: false,
             };
           }
+
           countryStats[cc].totalPublications += totalPublications;
-          countryStats[cc].commentCount += commentCount;
-          countryStats[cc].draftCount += draftCount;
-          countryStats[cc].mascotCount += mascotCount;
-          countryStats[cc].videoCount += videoCount;
-          countryStats[cc].challengeCount += challengeCount;
-          countryStats[cc].enigmaCount += enigmaCount;
-          countryStats[cc].gameCount += gameCount;
-          countryStats[cc].questionCount += questionCount;
-          countryStats[cc].reactionCount += reactionCount;
-          countryStats[cc].reportingCount += reportingCount;
-          countryStats[cc].storyCount += storyCount;
-          countryStats[cc].anthemCount += anthemCount;
-          countryStats[cc].reinventStoryCount += reinventStoryCount;
+          if (phase) {
+            countryStats[cc].commentCount += phase.commentCount || 0;
+            countryStats[cc].draftCount += phase.draftCount || 0;
+            countryStats[cc].mascotCount += phase.mascotCount || 0;
+            countryStats[cc].videoCount += phase.videoCount || 0;
+            countryStats[cc].challengeCount += phase.challengeCount || 0;
+            countryStats[cc].enigmaCount += phase.enigmaCount || 0;
+            countryStats[cc].gameCount += phase.gameCount || 0;
+            countryStats[cc].questionCount += phase.questionCount || 0;
+            countryStats[cc].reactionCount += phase.reactionCount || 0;
+            countryStats[cc].reportingCount += phase.reportingCount || 0;
+            countryStats[cc].storyCount += phase.storyCount || 0;
+            countryStats[cc].anthemCount += phase.anthemCount || 0;
+            countryStats[cc].reinventStoryCount += phase.reinventStoryCount || 0;
+          }
         }
       }
       let rows = Object.values(countryStats);
@@ -269,19 +147,42 @@ export function useCountryActivityTable(countryCode: string, phaseId: number, mo
         // Trie pour mettre le pays sélectionné en premier
         rows = rows.sort((a, b) => (a.id === countryCode ? -1 : b.id === countryCode ? 1 : 0));
       }
-      return rows;
+
+      const totalRow = {
+        id: 'total',
+        name: 'Total',
+        totalPublications: rows.reduce((acc, row) => acc + (row.totalPublications || 0), 0),
+        commentCount: rows.reduce((acc, row) => acc + (row.commentCount || 0), 0),
+        draftCount: rows.reduce((acc, row) => acc + (row.draftCount || 0), 0),
+        mascotCount: rows.reduce((acc, row) => acc + (row.mascotCount || 0), 0),
+        videoCount: rows.reduce((acc, row) => acc + (row.videoCount || 0), 0),
+        challengeCount: rows.reduce((acc, row) => acc + (row.challengeCount || 0), 0),
+        enigmaCount: rows.reduce((acc, row) => acc + (row.enigmaCount || 0), 0),
+        gameCount: rows.reduce((acc, row) => acc + (row.gameCount || 0), 0),
+        questionCount: rows.reduce((acc, row) => acc + (row.questionCount || 0), 0),
+        reactionCount: rows.reduce((acc, row) => acc + (row.reactionCount || 0), 0),
+        reportingCount: rows.reduce((acc, row) => acc + (row.reportingCount || 0), 0),
+        storyCount: rows.reduce((acc, row) => acc + (row.storyCount || 0), 0),
+        anthemCount: rows.reduce((acc, row) => acc + (row.anthemCount || 0), 0),
+        reinventStoryCount: rows.reduce((acc, row) => acc + (row.reinventStoryCount || 0), 0),
+        isSelected: false,
+        _highlight: true,
+      };
+
+      return [totalRow, ...rows];
     } else {
       // mode 'class' (comportement actuel)
       if (!countryCode) return [];
-      const villages = MOCK_DATA.filter((v) => v.countryCodes.includes(countryCode));
+      const villages = data.filter((v) => v.classrooms.some((c) => c.countryCode === countryCode));
       const classrooms = villages.flatMap((v) => v.classrooms.filter((c) => c.countryCode === countryCode));
       return classrooms.map((c) => {
         const phase = c.phaseDetails.find((p) => p.phaseId === phaseId);
         return {
           ...c,
+          totalPublications: calculateTotalPublications(c.phaseDetails, phaseId),
           phaseDetail: phase,
         };
       });
     }
-  }, [countryCode, phaseId, mode]);
+  }, [countryCode, phaseId, mode, data]);
 }

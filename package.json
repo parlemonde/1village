@@ -128,6 +128,7 @@
     "supertest": "^6.3.3",
     "ts-node": "^10.9.1",
     "typescript": "4.7.4",
+    "v8-compile-cache": "^2.4.0",
     "webpack": "5.73.0",
     "webpack-bundle-analyzer": "4.5.0"
   },

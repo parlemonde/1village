@@ -6,6 +6,7 @@ import { Box, Tab, Tabs } from '@mui/material';
 
 import { OneVillageTable } from '../OneVillageTable';
 import { getCommentCount, getPublicationCount, getVideoCount } from '../StatisticsUtils';
+import CountryActivityPhaseAccordion from './CountryActivityPhaseAccordion';
 import TabPanel from './TabPanel';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
@@ -33,6 +34,11 @@ const ClassroomStats = () => {
   const [selectedVillage, setSelectedVillage] = useState<number>();
   const [selectedClassroom, setSelectedClassroom] = useState<number>();
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = useState<Array<OneVillageTableRow>>([]);
+  const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
+    1: false,
+    2: false,
+    3: false,
+  });
 
   const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(null, null, 1);
   const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
@@ -116,6 +122,38 @@ const ClassroomStats = () => {
                 </div>
               </div>
             )}
+            {selectedClassroom &&
+              selectedVillage &&
+              (selectedPhase === 0 ? (
+                [1, 2, 3].map((phase) => (
+                  <CountryActivityPhaseAccordion
+                    key={phase}
+                    phaseId={phase}
+                    classroomId={selectedClassroom.toString()}
+                    villageId={+selectedVillage}
+                    open={openPhases[phase]}
+                    onClick={() =>
+                      setOpenPhases((prev) => ({
+                        ...prev,
+                        [phase]: !prev[phase],
+                      }))
+                    }
+                  />
+                ))
+              ) : (
+                <CountryActivityPhaseAccordion
+                  phaseId={selectedPhase}
+                  classroomId={selectedClassroom.toString()}
+                  villageId={+selectedVillage}
+                  open={openPhases[selectedPhase]}
+                  onClick={() =>
+                    setOpenPhases((prev) => ({
+                      ...prev,
+                      [selectedPhase]: !prev[selectedPhase],
+                    }))
+                  }
+                />
+              ))}
           </TabPanel>
           <TabPanel value={selectedTab} index={1}>
             <OneVillageTable
