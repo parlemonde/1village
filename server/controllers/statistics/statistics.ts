@@ -295,12 +295,15 @@ statisticsController.get({ path: '/countries/:countryCode' }, async (req, res) =
     familiesWithoutAccount: await getFamiliesWithoutAccountForCountry(countryCode),
   };
 
-  const activityCountDetails = await getActivityTypeCountByVillages({ phase, countryCode });
+  res.sendJSON({ family });
+});
 
-  res.sendJSON({
-    family,
-    activityCountDetails,
-  });
+statisticsController.get({ path: '/compare/one-village' }, async (req, res) => {
+  const phase = req.query.phase as unknown as number;
+
+  const activityCountDetails = await getActivityTypeCountByVillages({ phase });
+
+  res.sendJSON(activityCountDetails);
 });
 
 statisticsController.get({ path: '/classrooms/:classroomId' }, async (req, res) => {
