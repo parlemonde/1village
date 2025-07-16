@@ -5,10 +5,10 @@ const activitiesRepository = AppDataSource.getRepository(Activity);
 
 type GetActivitiesParams = {
   phase?: number;
-  villageIds?: number[];
+  classroomIds?: number[];
 };
 
-export const getActivities = async ({ phase, villageIds = [] }: GetActivitiesParams) => {
+export const getActivities = async ({ phase, classroomIds = [] }: GetActivitiesParams) => {
   const activityQB = activitiesRepository
     .createQueryBuilder('activity')
     .select(['activity.id', 'activity.phase', 'activity.type', 'activity.status', 'activity.content', 'activity.villageId']);
@@ -17,8 +17,8 @@ export const getActivities = async ({ phase, villageIds = [] }: GetActivitiesPar
     activityQB.where('activity.phase = :phase', { phase });
   }
 
-  if (villageIds.length > 0) {
-    activityQB.where('activity.villageId IN (:...villageIds)', { villageIds });
+  if (classroomIds.length > 0) {
+    activityQB.where('activity.classroomId IN (:...classroomIds)', { classroomIds });
   }
 
   return await activityQB
