@@ -1,7 +1,7 @@
 // Ces const sont utilisées pour l'affichage des filtres dans la médiathèque pour les activités
 
 export const activitiesLabel = [
-  'Indice culturel',
+  'Indice',
   'Indice symbolique',
   'Mascotte',
   'Reportage',
@@ -14,7 +14,7 @@ export const activitiesLabel = [
   'Réinventer une histoire',
 ];
 
-export const themeOfIndiceCulturel = [
+export const themeOfIndice = [
   'Paysages',
   'Arts',
   'Lieux de vies',
@@ -23,6 +23,14 @@ export const themeOfIndiceCulturel = [
   'Loisirs et jeux',
   'Cuisines',
   'Traditions',
+  'Drapeau',
+  'Emblème',
+  'Fleur nationale',
+  'Devise',
+  'Hymne',
+  'Animal national',
+  'Figure symbolique',
+  'Monnaie',
   'Autre',
 ];
 
@@ -47,7 +55,7 @@ export const themeOfEnigme = ['Evenement mystère', 'Lieu mystère', 'Objet myst
 export const themeOfReportage = ['Paysages', 'Arts', 'Ecoles', 'Langues', 'Flore et faune', 'Loisirs et jeux', 'Cuisines', 'Traditions', 'Autre'];
 
 export const subThemesMap: { [key: string]: string[] } = {
-  'Indice culturel': themeOfIndiceCulturel,
+  Indice: themeOfIndice,
   'Indice symbolique': themeOfIndiceSymbolique,
   Défis: themeOfDefi,
   Jeux: themeOfJeux,
@@ -58,7 +66,7 @@ export const subThemesMap: { [key: string]: string[] } = {
 // Ces const sont utilisées pour la logique des filtres dans la médiathèque pour les activités
 
 export const activityNumberMapper: { [key: string]: number } = {
-  'Indice culturel': 6,
+  Indice: 6,
   'Indice symbolique': 7,
   Mascotte: 8,
   Reportage: 9,
@@ -72,7 +80,7 @@ export const activityNumberMapper: { [key: string]: number } = {
 };
 
 export const activityNameMapper: { [key: number]: string } = {
-  6: 'Indice culturel',
+  6: 'Indice',
   7: 'Indice symbolique',
   8: 'Mascotte',
   9: 'Reportage',

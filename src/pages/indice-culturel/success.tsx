@@ -20,7 +20,7 @@ const IndiceSuccess = () => {
         }}
       >
         <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
-          <p className="text">Votre indice culturel a bien été publié !</p>
+          <p className="text">Votre indice a bien été publié !</p>
           <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
         </div>
         <div className="text-center">
