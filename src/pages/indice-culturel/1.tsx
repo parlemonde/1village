@@ -78,8 +78,8 @@ const IndiceStep1 = () => {
         <div className="width-900">
           {activity.subType === -1 ? (
             <>
-              <h1>Présenter un autre type d&apos;indice culturel</h1>
-              <p className="text">Indiquez quel autre type d&apos;indice culturel vous souhaitez présenter :</p>
+              <h1>Présenter un autre type d&apos;indice</h1>
+              <p className="text">Indiquez quel autre type d&apos;indice vous souhaitez présenter :</p>
               <TextField
                 value={data.indice}
                 onChange={(event) => {
@@ -99,7 +99,7 @@ const IndiceStep1 = () => {
             </>
           ) : (
             <p className="text">
-              Vous trouvez ici les indices culturels qui ont déjà été présentés par les pélicopains sur l&apos;aspect &quot;
+              Vous trouvez ici les indices qui ont déjà été présentés par les pélicopains sur l&apos;aspect &quot;
               {getIndice(activity.subType, data).step1}&quot;. N&apos;hésitez pas à y puiser de l&apos;inspiration, avant de proposer votre indice !
               Vous pouvez également choisir de présenter un autre aspect culturel, en revenant à l&apos;étape précédente.
             </p>
@@ -110,9 +110,7 @@ const IndiceStep1 = () => {
               {sameActivities.length > 0 ? (
                 <Activities activities={sameActivities} withLinks />
               ) : (
-                <p className="center">
-                  Il n&apos;existe encore aucun indice culturel sur le thème &quot;{getIndice(activity.subType, data).title}&quot;
-                </p>
+                <p className="center">Il n&apos;existe encore aucun indice sur le thème &quot;{getIndice(activity.subType, data).title}&quot;</p>
               )}
             </div>
           )}

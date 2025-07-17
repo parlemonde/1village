@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import * as React from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import { Box, Button } from '@mui/material';
 
@@ -12,12 +12,12 @@ import AnthemIcon from 'src/svg/navigation/anthem-icon.svg';
 import FreeContentIcon from 'src/svg/navigation/free-content-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
+import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import MusicIcon from 'src/svg/navigation/music-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import ReportageIcon from 'src/svg/navigation/reportage-icon.svg';
-import RouletteIcon from 'src/svg/navigation/roulette-icon.svg';
 import StoryIcon from 'src/svg/navigation/story-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
@@ -40,11 +40,13 @@ const ACCUEIL: Tab = {
   path: '/',
   icon: <HomeIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
 };
+
 const FREE_CONTENT: Tab = {
   label: 'Publier un contenu libre',
   path: '/contenu-libre',
   icon: <FreeContentIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
 };
+
 const ANTHEM_PARAM: Tab = {
   label: "Paramétrer l'hymne",
   path: '/parametrer-hymne',
@@ -53,8 +55,8 @@ const ANTHEM_PARAM: Tab = {
 
 export const Navigation = (): JSX.Element => {
   const router = useRouter();
-  const { village, selectedPhase } = React.useContext(VillageContext);
-  const { user } = React.useContext(UserContext);
+  const { village, selectedPhase } = useContext(VillageContext);
+  const { user } = useContext(UserContext);
   //* NOTE: might be interesting to make a hook for this below
   const isPelico =
     (user !== null && user.type === UserType.MEDIATOR) ||
@@ -62,10 +64,10 @@ export const Navigation = (): JSX.Element => {
     (user !== null && user.type === UserType.SUPER_ADMIN);
   const isTeacher = user !== null && user.type === UserType.TEACHER;
   const isParent = user !== null && user.type === UserType.FAMILY;
-  const [firstStoryCreated, setFirstStoryCreated] = React.useState(false);
-  const [mascotteActivity, setMascotteActivity] = React.useState<Activity | null>(null);
+  const [_firstStoryCreated, setFirstStoryCreated] = useState(false);
+  const [mascotteActivity, setMascotteActivity] = useState<Activity | null>(null);
 
-  const getStories = React.useCallback(async () => {
+  const getStories = useCallback(async () => {
     if (!village) {
       setFirstStoryCreated(false);
       return;
@@ -80,15 +82,16 @@ export const Navigation = (): JSX.Element => {
     setFirstStoryCreated(response.data.length > 0);
   }, [village]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     getStories().catch(console.error);
   }, [getStories]);
 
-  const getMascotte = React.useCallback(
+  const getMascotte = useCallback(
     async (type: number) => {
       if (!village) {
         return;
       }
+
       const response = await axiosRequest({
         method: 'GET',
         url: `/activities/draft${serializeToQueryUrl({
@@ -96,6 +99,7 @@ export const Navigation = (): JSX.Element => {
           type,
         })}`,
       });
+
       if (response.error) {
         setMascotteActivity(null);
       } else {
@@ -106,12 +110,12 @@ export const Navigation = (): JSX.Element => {
   );
 
   // Get mascotte
-  React.useEffect(() => {
+  useEffect(() => {
     getMascotte(ActivityType.MASCOTTE).catch(console.error);
   }, [getMascotte]);
 
   // check color of icons
-  const TABS_PER_PHASE = React.useMemo<Tab[]>(
+  const TABS_PER_PHASE = useMemo<Tab[]>(
     () => [
       // ---- PHASE 1 ----
       {
@@ -126,22 +130,29 @@ export const Navigation = (): JSX.Element => {
         phase: 1,
         disabled: !isTeacher,
       },
-      // ---- Commenté pour l'année 2024 - 2025 d'1Village ----
-
-      // {
-      //   label: 'Présenter un indice culturel',
-      //   path: '/indice-culturel',
-      //   icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      //   phase: 1,
-      //   disabled: isParent,
-      // },
-      // {
-      //   label: 'Présenter un symbole',
-      //   path: '/symbole',
-      //   icon: <SymbolIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      //   phase: 1,
-      //   disabled: isParent,
-      // },
+      {
+        label: 'Présenter un indice',
+        path: '/indice-culturel',
+        icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 1,
+        disabled: isParent,
+      },
+      /* TODO:
+          Elise attend que l'équipe péda soit présente à partir de septembre 2025
+          pour confirmer la suppression de ce bouton. Une fois valider :
+            - supprimer ce bouton commenté
+            - supprimer les fichiers dans le dossier src/pages/symbole
+            - supprimer ActivityType.SYMBOL et les lignes de code associé à ce type dans les différents fichiers
+            - supprimer themeOfIndiceSymbolique dans dataFilters.ts
+            - chercher le mot "symbole" dans le code et supprimer si plus utilisé
+      {
+        label: 'Présenter un symbole',
+        path: '/symbole',
+        icon: <SymbolIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 1,
+        disabled: isParent,
+      },
+      */
       // ---- PHASE 2 ----
       {
         label: 'Réaliser un reportage',
@@ -185,14 +196,14 @@ export const Navigation = (): JSX.Element => {
         phase: 2,
         disabled: isParent,
       },
+      // ---- PHASE 3 ----
       {
         label: 'Inventer une histoire',
         path: '/creer-une-histoire',
         icon: <StoryIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-        phase: 2,
+        phase: 3,
         disabled: isParent,
       },
-      // ---- PHASE 3 ----
       {
         label: 'Chanter un couplet',
         path: '/chanter-un-couplet',
@@ -200,6 +211,7 @@ export const Navigation = (): JSX.Element => {
         phase: 3,
         disabled: !village?.anthemId || isParent,
       },
+      /*
       {
         label: 'Ré-inventer une histoire',
         path: '/re-inventer-une-histoire',
@@ -207,6 +219,7 @@ export const Navigation = (): JSX.Element => {
         phase: 3,
         disabled: firstStoryCreated === false || isParent,
       },
+      */
       ...(isTeacher
         ? [
             {
@@ -217,10 +230,10 @@ export const Navigation = (): JSX.Element => {
           ]
         : []),
     ],
-    [firstStoryCreated, mascotteActivity, village, isTeacher, isParent],
+    [mascotteActivity, village, isTeacher, isParent],
   );
 
-  const fixedTabs = React.useMemo<Tab[]>(
+  const fixedTabs = useMemo<Tab[]>(
     () => [
       ACCUEIL,
       {
@@ -233,7 +246,7 @@ export const Navigation = (): JSX.Element => {
     ],
     [user, isPelico, selectedPhase, isParent],
   );
-  const phaseTabs = React.useMemo<Tab[]>(() => TABS_PER_PHASE.filter((t) => t.phase && t.phase === selectedPhase), [selectedPhase, TABS_PER_PHASE]);
+  const phaseTabs = useMemo<Tab[]>(() => TABS_PER_PHASE.filter((t) => t.phase && t.phase === selectedPhase), [selectedPhase, TABS_PER_PHASE]);
 
   const currentPathName = router.pathname.split('/')[1] || '';
 
