@@ -31,7 +31,7 @@ const VillageStats = () => {
   const data = { data: [{ label: 'test1', id: 1, value: 1 }] };
 
   const [selectedTab, setSelectedTab] = useState(0);
-  const [selectedPhase, setSelectedPhase] = useState<number>();
+  const [selectedPhase, setSelectedPhase] = useState(0);
   const [selectedCountry, setSelectedCountry] = useState<string>();
   const [selectedVillage, setSelectedVillage] = useState<number>();
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = useState<Array<OneVillageTableRow>>([]);
@@ -158,7 +158,6 @@ const VillageStats = () => {
               </div>
             )}
             {selectedVillage &&
-              selectedPhase &&
               (selectedPhase === 0 ? (
                 [1, 2, 3].map((phase) => (
                   <CountryActivityPhaseAccordion
