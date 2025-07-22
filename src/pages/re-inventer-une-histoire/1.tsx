@@ -1,22 +1,23 @@
+import AddIcon from '@mui/icons-material/Add';
+import { Grid, ButtonBase, FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
+
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import AddIcon from '@mui/icons-material/Add';
-import { Grid, ButtonBase, FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
-
 import { isStory } from 'src/activity-types/anyActivity';
 import { ODD_CHOICE } from 'src/activity-types/story.constants';
+import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
 import { Base } from 'src/components/Base';
+import { BackButton } from 'src/components/buttons/BackButton';
+import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
-import { BackButton } from 'src/components/buttons/BackButton';
-import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { bgPage, primaryColor, errorColor } from 'src/styles/variables.const';
+
 import { ActivityStatus } from 'types/activity.type';
 import type { StoriesData } from 'types/story.type';
 

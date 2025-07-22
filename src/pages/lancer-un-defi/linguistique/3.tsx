@@ -4,14 +4,15 @@ import React from 'react';
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isLanguage, LANGUAGE_THEMES } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
+import { ContentEditor } from 'src/components/activities/content';
+import { getErrorSteps } from 'src/components/activities/defiLanguageChecks';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ContentEditor } from 'src/components/activities/content';
-import { getErrorSteps } from 'src/components/activities/defiLanguageChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { capitalize } from 'src/utils';
+
 import type { ActivityContent, ActivityContentType } from 'types/activity.type';
 
 const DefiStep3 = () => {

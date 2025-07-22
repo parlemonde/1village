@@ -2,14 +2,15 @@ import React from 'react';
 import { useQueryClient } from 'react-query';
 
 import { isMascotte } from 'src/activity-types/anyActivity';
+import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
-import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { useActivityRequests } from 'src/services/useActivity';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import { ActivityStatus } from 'types/activity.type';
 
 const MesActivites = () => {

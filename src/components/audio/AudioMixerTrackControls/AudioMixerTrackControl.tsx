@@ -1,12 +1,14 @@
-import React from 'react';
-
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { Slider, Tooltip } from '@mui/material';
 
-import type { AudioMixerTrack } from '../AudioMixer/AudioMixer';
-import styles from './AudioMixerTrackControl.module.css';
+import React from 'react';
+
 import { InstrumentSvg } from 'src/components/activities/anthem/InstrumentSvg/InstrumentSvg';
 import { primaryColor } from 'src/styles/variables.const';
+
+import type { AudioMixerTrack } from '../AudioMixer/AudioMixer';
+
+import styles from './AudioMixerTrackControl.module.css';
 
 interface AudioMixerTrackControlProps {
   idx: number;

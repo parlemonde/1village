@@ -1,9 +1,11 @@
+import path from 'path';
+
 import cookieParser from 'cookie-parser';
-import type { Response } from 'express';
 import express from 'express';
 import morgan from 'morgan';
 import next from 'next';
-import path from 'path';
+
+import type { Response } from 'express';
 
 import { UserType } from './entities/user';
 import { handleErrors } from './middlewares/handleErrors';

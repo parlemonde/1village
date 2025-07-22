@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-
 import { TextField, IconButton, Autocomplete, Popper, Fade, Paper, Box, Icon } from '@mui/material';
 
+import React, { useState } from 'react';
+
+import type { Track } from 'types/anthem.type';
+
 import type { DisplayableInstrumentsType } from '../../../../utils/instruments';
+
 import { InstrumentSvg } from '../InstrumentSvg/InstrumentSvg';
 import styles from './AnthemTrackIcon.module.css';
-import type { Track } from 'types/anthem.type';
 
 export interface AnthemTrackProps {
   track: Track;

@@ -1,20 +1,22 @@
+import { ButtonBase, Card } from '@mui/material';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { ButtonBase, Card } from '@mui/material';
-
-import styles from '../../styles/parametrer-hymne.module.css';
 import { isAnthem } from 'src/activity-types/anyActivity';
+import { getErrorSteps } from 'src/components/activities/anthemChecks';
+import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { getErrorSteps } from 'src/components/activities/anthemChecks';
-import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
 import SyllableBackline from 'src/svg/anthem/syllable-backline.svg';
 import SyllableIcon from 'src/svg/anthem/syllable.svg';
+
 import type { AnthemData, Syllable } from 'types/anthem.type';
+
+import styles from '../../styles/parametrer-hymne.module.css';
 
 const AnthemStep4 = () => {
   const router = useRouter();

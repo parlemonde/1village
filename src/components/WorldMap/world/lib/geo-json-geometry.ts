@@ -1,7 +1,8 @@
 import { geoDistance, geoInterpolate } from 'd3-geo';
 import earcut from 'earcut';
-import type { Geometry, Position } from 'geojson';
 import { BufferGeometry, Float32BufferAttribute } from 'three';
+
+import type { Geometry, Position } from 'geojson';
 
 import { polar2Cartesian } from './coords-utils';
 

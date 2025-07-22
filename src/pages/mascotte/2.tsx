@@ -1,16 +1,16 @@
+import { TextField, Grid, Box } from '@mui/material';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { TextField, Grid, Box } from '@mui/material';
-
 import { isMascotte } from 'src/activity-types/anyActivity';
 import type { MascotteData } from 'src/activity-types/mascotte.types';
-import { Base } from 'src/components/Base';
-import { Steps } from 'src/components/Steps';
-import { StepsButton } from 'src/components/StepsButtons';
 import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
 import { getErrorSteps } from 'src/components/activities/mascotteChecks';
+import { Base } from 'src/components/Base';
 import { MultipleCountrySelector } from 'src/components/selectors/MultipleCountrySelector';
+import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { errorColor } from 'src/styles/variables.const';
 

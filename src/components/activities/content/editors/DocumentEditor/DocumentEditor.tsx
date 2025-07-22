@@ -1,11 +1,12 @@
+import { Button } from '@mui/material';
+
 import React, { useState } from 'react';
 
-import { Button } from '@mui/material';
+import { primaryColor } from 'src/styles/variables.const';
 
 import { EditorContainer } from '../EditorContainer';
 import DocumentModal from './DocumentModal';
 import PdfDisplay from './PdfDisplay';
-import { primaryColor } from 'src/styles/variables.const';
 
 interface DocumentEditorProps {
   id: number;

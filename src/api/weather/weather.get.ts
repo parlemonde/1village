@@ -2,6 +2,7 @@ import { useQuery } from 'react-query';
 
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { Weather } from 'types/weather.type';
 
 type GET_WEATHER_PARAMS = {

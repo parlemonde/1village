@@ -1,10 +1,10 @@
+import type { ActivityContent, AnyData } from '../../types/activity.type';
+import type { GameData, GamesData } from '../../types/game.type';
+import type { StoriesData, StoryElement } from '../../types/story.type';
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
-import type { ActivityContent, AnyData } from '../../types/activity.type';
-import { EPhase1Steps, ActivityStatus, ActivityType, EPhase2Steps, EPhase3Steps } from '../../types/activity.type';
-import type { GameData, GamesData } from '../../types/game.type';
-import type { StoriesData, StoryElement } from '../../types/story.type';
+import { ActivityStatus, ActivityType, EPhase1Steps, EPhase2Steps, EPhase3Steps } from '../../types/activity.type';
 import { ImageType } from '../../types/story.type';
 import { Activity } from '../entities/activity';
 import { Game } from '../entities/game';

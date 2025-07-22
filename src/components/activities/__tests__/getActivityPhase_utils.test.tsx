@@ -1,5 +1,6 @@
-import { specificActivityPhase, getActivityPhase } from '../utils';
 import { ActivityType } from 'types/activity.type';
+
+import { specificActivityPhase, getActivityPhase } from '../utils';
 
 describe('Test function getActivityPhase', () => {
   describe('for active phase 1', () => {

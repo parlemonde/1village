@@ -1,8 +1,8 @@
 import React from 'react';
 
+import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
-import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import CulinaireIcon from 'src/svg/defi/culinaire.svg';
 import EcologiqueIcon from 'src/svg/defi/ecologique.svg';
 import LinguistiqueIcon from 'src/svg/defi/linguistique.svg';

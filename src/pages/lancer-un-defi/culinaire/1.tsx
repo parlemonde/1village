@@ -1,24 +1,25 @@
+import AddIcon from '@mui/icons-material/Add';
+import { ButtonBase, Grid, TextField } from '@mui/material';
+
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import AddIcon from '@mui/icons-material/Add';
-import { ButtonBase, Grid, TextField } from '@mui/material';
-
 import { isDefi } from 'src/activity-types/anyActivity';
 import { DEFI, isCooking } from 'src/activity-types/defi.constants';
 import type { CookingDefiData } from 'src/activity-types/defi.types';
+import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
 import { Base } from 'src/components/Base';
+import { BackButton } from 'src/components/buttons/BackButton';
+import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
-import { BackButton } from 'src/components/buttons/BackButton';
-import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { bgPage } from 'src/styles/variables.const';
+
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const DefiStep1 = () => {

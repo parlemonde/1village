@@ -2,11 +2,12 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Base } from 'src/components/Base';
-import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
+import { Steps } from 'src/components/Steps';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
+
 import { ActivityType } from 'types/activity.type';
 
 const PresentationStep1 = () => {

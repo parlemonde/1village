@@ -1,23 +1,24 @@
+import { Button, Switch, TextField } from '@mui/material';
+
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { TextField, Switch, Button } from '@mui/material';
-
 import { isFreeContent } from 'src/activity-types/anyActivity';
 import { getImage } from 'src/activity-types/freeContent.constants';
 import type { FreeContentData } from 'src/activity-types/freeContent.types';
+import { ActivityCard } from 'src/components/activities/ActivityCard';
+import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
 import { Base } from 'src/components/Base';
+import { LightBox } from 'src/components/lightbox/Lightbox';
 import { Modal } from 'src/components/Modal';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ActivityCard } from 'src/components/activities/ActivityCard';
-import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
-import { LightBox } from 'src/components/lightbox/Lightbox';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { primaryColor } from 'src/styles/variables.const';
+
 import { UserType } from 'types/user.type';
 
 const ContenuLibre = () => {

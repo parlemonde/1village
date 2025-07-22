@@ -1,18 +1,19 @@
+import { TextField } from '@mui/material';
+
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { TextField } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { DEFI, isFree } from 'src/activity-types/defi.constants';
 import type { FreeDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
+import { BackButton } from 'src/components/buttons/BackButton';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
+
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const FreeDefiStep1 = () => {

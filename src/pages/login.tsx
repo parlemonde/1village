@@ -1,14 +1,15 @@
+import { Backdrop, Box, Button, CircularProgress, Grid, Link, Tooltip, Typography } from '@mui/material';
+
 import { useRouter } from 'next/router';
 import qs from 'query-string';
 import React from 'react';
 
-import { Backdrop, Box, Button, CircularProgress, Grid, Link, Tooltip, Typography } from '@mui/material';
-
-import { isRedirectValid } from '../components/accueil/NewHome';
 import { UserContext } from 'src/contexts/userContext';
 import ArrowBack from 'src/svg/arrow_back.svg';
 import Logo from 'src/svg/logo_1village_classe.svg';
 import { onLoginSSO, SSO_HOST, CLIENT_ID } from 'src/utils/sso';
+
+import { isRedirectValid } from '../components/accueil/NewHome';
 
 const errorMessages = {
   0: 'Une erreur inconnue est survenue. Veuillez réessayer plus tard...',

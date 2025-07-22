@@ -6,6 +6,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
 import type { StoriesData } from 'types/story.type';

@@ -2,6 +2,7 @@ import { Vector3, Group, Mesh, MeshBasicMaterial, SphereGeometry } from 'three';
 
 import type { User } from '../../../../../types/user.type';
 import type { HoverableObject } from '../lib/hoverable-object';
+
 import { ImageTexture } from '../lib/image-texture';
 import { GLOBE_RADIUS, PELICO_IMAGE_URL, PELICO_USER } from '../world.constants';
 import { AtmosphereGlow } from './atmosphere-glow';

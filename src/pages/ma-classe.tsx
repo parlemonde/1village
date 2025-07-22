@@ -3,20 +3,21 @@ import React from 'react';
 import { useQueryClient } from 'react-query';
 
 import { isMascotte } from 'src/activity-types/anyActivity';
-import { Base } from 'src/components/Base';
-import { Modal } from 'src/components/Modal';
-import { PageLayout } from 'src/components/PageLayout';
-import { VideoTable } from 'src/components/VideoTable';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { GameCardMaClasse } from 'src/components/activities/ActivityCard/GameCardMaClasse';
 import { MascotteTemplate } from 'src/components/activities/content/MascotteTemplate';
 import { VideoView } from 'src/components/activities/content/views/VideoView';
+import { Base } from 'src/components/Base';
+import { Modal } from 'src/components/Modal';
+import { PageLayout } from 'src/components/PageLayout';
+import { VideoTable } from 'src/components/VideoTable';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { useActivityRequests } from 'src/services/useActivity';
 import { useVideos } from 'src/services/useVideos';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { Activity } from 'types/activity.type';
 import { ActivityStatus } from 'types/activity.type';
 import type { Video } from 'types/video.type';

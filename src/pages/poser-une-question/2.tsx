@@ -1,15 +1,15 @@
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import AddIcon from '@mui/icons-material/Add';
 import { ButtonBase, TextField, Card } from '@mui/material';
 
+import { useRouter } from 'next/router';
+import React from 'react';
+
 import { isQuestion } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
+import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 
 const Question2 = () => {

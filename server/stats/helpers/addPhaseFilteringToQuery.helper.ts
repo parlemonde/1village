@@ -1,10 +1,10 @@
-import type { SelectQueryBuilder } from 'typeorm';
-
-import { getPhasePeriod, phaseWasSelected } from '.';
 import type { Classroom } from '../../entities/classroom';
 import type { Student } from '../../entities/student';
 import type { User } from '../../entities/user';
 import type { Village, VillagePhase } from '../../entities/village';
+import type { SelectQueryBuilder } from 'typeorm';
+
+import { getPhasePeriod, phaseWasSelected } from '.';
 
 export const addPhaseFilteringToQuery = async <T extends User | Student | Classroom>(
   query: SelectQueryBuilder<T>,

@@ -4,13 +4,14 @@ import React from 'react';
 import { isEnigme } from 'src/activity-types/anyActivity';
 import { getSubcategoryName } from 'src/activity-types/enigme.constants';
 import type { EnigmeData } from 'src/activity-types/enigme.types';
+import { ContentEditor } from 'src/components/activities/content';
+import { getErrorSteps } from 'src/components/activities/enigmeChecks';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ContentEditor } from 'src/components/activities/content';
-import { getErrorSteps } from 'src/components/activities/enigmeChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
+
 import type { ActivityContent, ActivityContentType } from 'types/activity.type';
 
 const EnigmeStep3 = () => {

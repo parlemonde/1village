@@ -1,20 +1,21 @@
+import { TextField } from '@mui/material';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { TextField } from '@mui/material';
-
 import { getReportage } from 'src/activity-types/reportage.constants';
 import type { ReportageData } from 'src/activity-types/reportage.types';
+import { Activities } from 'src/components/activities/List';
 import { Base } from 'src/components/Base';
+import { BackButton } from 'src/components/buttons/BackButton';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { Activities } from 'src/components/activities/List';
-import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { getQueryString, serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { Activity } from 'types/activity.type';
 

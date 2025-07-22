@@ -8,34 +8,31 @@ import 'src/styles/editor.scss';
 import 'src/styles/fonts.scss';
 import 'src/styles/globals.scss';
 import 'src/styles/login.scss';
-import 'src/styles/register.scss';
 import 'src/styles/mon-compte.scss';
+import 'src/styles/register.scss';
 import 'src/styles/se-presenter.scss';
 import 'src/styles/slot-machine.scss';
 import 'src/styles/statistic.scss';
 
-import type { EmotionCache } from '@emotion/react';
+import { Container } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+
 import { CacheProvider } from '@emotion/react';
 import axios from 'axios';
-import type { Request } from 'express';
 import App from 'next/app';
-import type { AppProps, AppContext, AppInitialProps } from 'next/app';
 import Head from 'next/head';
 import { SnackbarProvider } from 'notistack';
 import NProgress from 'nprogress';
 import React, { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-import { Container } from '@mui/material';
-import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider } from '@mui/material/styles';
-
-import { Header } from 'src/components/Header';
-import { WelcomeModal } from 'src/components/WelcomeModal';
 import { AdminHeader } from 'src/components/admin/AdminHeader';
 import { AdminNavigation } from 'src/components/admin/AdminNavigation';
 import { NewAdminHeader } from 'src/components/admin/NewAdminHeader';
 import { NewAdminNavigation } from 'src/components/admin/NewAdminNavigation';
+import { Header } from 'src/components/Header';
+import { WelcomeModal } from 'src/components/WelcomeModal';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
 import { ClassroomContextProvider } from 'src/contexts/classroomContext';
 import { GameProvider } from 'src/contexts/gameContext';
@@ -46,8 +43,13 @@ import { useAnalytics } from 'src/hooks/useAnalytics';
 import createEmotionCache from 'src/styles/createEmotionCache';
 import theme from 'src/styles/theme';
 import { initH5p } from 'src/utils/initH5p';
+
 import type { User } from 'types/user.type';
 import type { Village } from 'types/village.type';
+
+import type { EmotionCache } from '@emotion/react';
+import type { Request } from 'express';
+import type { AppContext, AppInitialProps, AppProps } from 'next/app';
 
 interface MyAppOwnProps {
   csrfToken: string | null;

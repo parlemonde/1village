@@ -1,25 +1,26 @@
-import classNames from 'classnames';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import { Tooltip } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import classNames from 'classnames';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
+
 import { isEnigme } from 'src/activity-types/anyActivity';
 import { ENIGME_TYPES, getCategoryName, getSubcategoryName } from 'src/activity-types/enigme.constants';
 import type { EnigmeData } from 'src/activity-types/enigme.types';
+import { ContentView } from 'src/components/activities/content/ContentView';
+import { getErrorSteps } from 'src/components/activities/enigmeChecks';
 import { Base } from 'src/components/Base';
+import { EditButton } from 'src/components/buttons/EditButton';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ContentView } from 'src/components/activities/content/ContentView';
-import { getErrorSteps } from 'src/components/activities/enigmeChecks';
-import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+
 import { ActivityStatus } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 

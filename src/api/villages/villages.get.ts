@@ -1,7 +1,8 @@
 import { useQuery } from 'react-query';
-import type { Village } from 'server/entities/village';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
+
+import type { Village } from 'server/entities/village';
 
 async function getVillages(countryIsoCode?: string): Promise<Village[]> {
   const url = countryIsoCode ? `/villages?countryIsoCode=${countryIsoCode}` : '/villages';

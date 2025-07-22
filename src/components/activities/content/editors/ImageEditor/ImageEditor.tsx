@@ -1,12 +1,14 @@
+import { Button } from '@mui/material';
+
 import Image from 'next/image';
 import React from 'react';
 
-import { Button } from '@mui/material';
+import { primaryColor } from 'src/styles/variables.const';
 
 import type { EditorProps } from '../../content.types';
+
 import { EditorContainer } from '../EditorContainer';
 import { ImageModal } from './ImageModal';
-import { primaryColor } from 'src/styles/variables.const';
 
 export const ImageEditor = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const [isModalOpen, setIsModalOpen] = React.useState(value === '');

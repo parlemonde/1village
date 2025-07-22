@@ -1,5 +1,6 @@
-import base64url from 'base64url';
 import crypto from 'crypto';
+
+import base64url from 'base64url';
 
 /**
  * Function to generate the invite code for the teacher to

@@ -1,12 +1,13 @@
+import { Typography, Box, List, ListItem } from '@mui/material';
+
 import Link from 'next/link';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 
-import { Typography, Box, List, ListItem } from '@mui/material';
-
 import { useListArchives } from 'src/api/archive/archive.get';
 import { UserContext } from 'src/contexts/userContext';
 import BackArrow from 'src/svg/back-arrow.svg';
+
 import { UserType } from 'types/user.type';
 
 const Archive = () => {

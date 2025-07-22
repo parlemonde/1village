@@ -1,10 +1,12 @@
 import { useSnackbar } from 'notistack';
 import React from 'react';
-import type { QueryFunction } from 'react-query';
 import { useQueryClient, useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { Comment } from 'types/comment.type';
+
+import type { QueryFunction } from 'react-query';
 
 export const useComments = (activityId: number | null): { comments: Comment[]; setComments(newComments: Comment[]): void } => {
   const queryClient = useQueryClient();

@@ -1,8 +1,8 @@
 import React from 'react';
 
+import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
-import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import EvenementIcon from 'src/svg/enigme/evenement-mystere.svg';
 import LocationIcon from 'src/svg/enigme/location.svg';
 import ObjetIcon from 'src/svg/enigme/objet-mystere.svg';

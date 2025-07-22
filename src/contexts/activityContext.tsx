@@ -1,19 +1,21 @@
+import { Card, CircularProgress } from '@mui/material';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useQueryClient } from 'react-query';
 
-import { Card, CircularProgress } from '@mui/material';
-
-import { UserContext } from './userContext';
-import { VillageContext } from './villageContext';
-import { Modal } from 'src/components/Modal';
 import { getActivityPhase } from 'src/components/activities/utils';
+import { Modal } from 'src/components/Modal';
 import { primaryColor } from 'src/styles/variables.const';
 import { serializeToQueryUrl, debounce, getQueryString } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { ActivityContentType, ActivityContent, Activity, AnyData } from 'types/activity.type';
 import { ActivityType, ActivityStatus } from 'types/activity.type';
 import { UserType } from 'types/user.type';
+
+import { UserContext } from './userContext';
+import { VillageContext } from './villageContext';
 
 type ActivitySaveResponse = { success: false } | { success: true; activity: Activity };
 

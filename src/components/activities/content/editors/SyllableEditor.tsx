@@ -1,10 +1,11 @@
-import React from 'react';
-
 import { Box, InputBase } from '@mui/material';
+
+import React from 'react';
 
 import { primaryColor } from 'src/styles/variables.const';
 import BacklineIcon from 'src/svg/anthem/backline.svg';
 import TrashIcon from 'src/svg/anthem/trash.svg';
+
 import type { Syllable } from 'types/anthem.type';
 
 type SyllableEditorProps = {

@@ -1,6 +1,6 @@
+import type { StatsFilterParams } from '../../types/statistics.type';
 import type { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder';
 
-import type { StatsFilterParams } from '../../types/statistics.type';
 import { GroupType } from '../../types/statistics.type';
 import { AnalyticSession } from '../entities/analytic';
 import { Classroom } from '../entities/classroom';

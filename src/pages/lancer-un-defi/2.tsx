@@ -4,13 +4,14 @@ import React from 'react';
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isFree } from 'src/activity-types/defi.constants';
 import type { FreeDefiData } from 'src/activity-types/defi.types';
+import { ContentEditor } from 'src/components/activities/content';
+import { getErrorSteps } from 'src/components/activities/defiChecksFree';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ContentEditor } from 'src/components/activities/content';
-import { getErrorSteps } from 'src/components/activities/defiChecksFree';
 import { ActivityContext } from 'src/contexts/activityContext';
+
 import type { ActivityContent } from 'types/activity.type';
 
 const FreeDefiStep2 = () => {

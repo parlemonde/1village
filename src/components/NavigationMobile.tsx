@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
 import Box from '@mui/material/Box';
@@ -8,11 +6,14 @@ import Drawer from '@mui/material/Drawer';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 
+import React, { useState } from 'react';
+
+import { UserType } from 'types/user.type';
+
 import { Navigation } from './Navigation';
 import ShowFor from './ShowFor';
 import { VillageMonde } from './VillageMonde';
 import { VillageSelect } from './VillageSelect';
-import { UserType } from 'types/user.type';
 
 export const NavigationMobile = (): JSX.Element => {
   const [open, setState] = useState(false);

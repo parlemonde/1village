@@ -1,6 +1,6 @@
-import React from 'react';
-
 import { Tab, Tabs, Paper } from '@mui/material';
+
+import React from 'react';
 
 import { primaryColorLight } from 'src/styles/variables.const';
 

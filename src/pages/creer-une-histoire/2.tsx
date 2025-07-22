@@ -1,22 +1,23 @@
+import AddIcon from '@mui/icons-material/Add';
+import { TextField, Grid, ButtonBase } from '@mui/material';
+
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import AddIcon from '@mui/icons-material/Add';
-import { TextField, Grid, ButtonBase } from '@mui/material';
-
 import { isStory } from 'src/activity-types/anyActivity';
+import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
+import { getErrorSteps } from 'src/components/activities/storyChecks';
 import { Base } from 'src/components/Base';
+import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
-import { getErrorSteps } from 'src/components/activities/storyChecks';
-import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { useImageStoryRequests } from 'src/services/useImagesStory';
 import { bgPage, primaryColor } from 'src/styles/variables.const';
+
 import type { StoriesData, StoryElement } from 'types/story.type';
 
 const StoryStep2 = () => {

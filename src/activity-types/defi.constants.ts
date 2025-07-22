@@ -1,3 +1,5 @@
+import { capitalize, replaceTokens } from 'src/utils';
+
 import type {
   LanguageDefiData,
   DefiActivity,
@@ -9,7 +11,6 @@ import type {
   FreeDefiActivity,
   FreeDefiData,
 } from './defi.types';
-import { capitalize, replaceTokens } from 'src/utils';
 
 export const COOKING_DEFIS = [
   {

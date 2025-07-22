@@ -1,10 +1,11 @@
+import { Button } from '@mui/material';
+
 import React from 'react';
 
-import { Button } from '@mui/material';
+import { toTime } from 'src/utils/toTime';
 
 import AudioMixerTrackControl from '../AudioMixerTrackControls/AudioMixerTrackControl';
 import styles from './AudioMixer.module.css';
-import { toTime } from 'src/utils/toTime';
 
 export interface AudioMixerTrack {
   sampleVolume: number;

@@ -1,8 +1,9 @@
-import type { Position } from 'geojson';
 import { Line, Group, LineBasicMaterial } from 'three';
 
-import { GeoJsonGeometry } from '../lib/geo-json-geometry';
 import type { GeoJSONCountryData } from './country';
+import type { Position } from 'geojson';
+
+import { GeoJsonGeometry } from '../lib/geo-json-geometry';
 import { Country } from './country';
 
 const COLORS: { [key: string]: string[] } = {

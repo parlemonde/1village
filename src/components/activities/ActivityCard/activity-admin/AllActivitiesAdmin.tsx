@@ -1,12 +1,13 @@
-import React, { useCallback, useState } from 'react';
-import type { Activity } from 'server/entities/activity';
-
 import type { SelectChangeEvent } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 
+import React, { useCallback, useState } from 'react';
+
+import ActivityCardAdmin from 'src/components/activities/ActivityCard/activity-admin/ActivityCardAdmin';
 import PelicoNoContent from 'src/components/NoContentPelico';
 import PaginationNav from 'src/components/PaginationNav/PaginationNav';
-import ActivityCardAdmin from 'src/components/activities/ActivityCard/activity-admin/ActivityCardAdmin';
+
+import type { Activity } from 'server/entities/activity';
 
 type Props = {
   activities: Activity[];

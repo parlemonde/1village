@@ -1,34 +1,36 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Box, Button, Grid } from '@mui/material';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState, useCallback, useMemo, useContext } from 'react';
 
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box, Button, Grid } from '@mui/material';
-
-import { KeepRatio } from '../KeepRatio';
-import { ActivityComments } from '../activities/ActivityComments';
 import { useOneGameById } from 'src/api/game/game.getOneGameById';
+import { RightNavigation } from 'src/components/accueil/RightNavigation';
+import { VideoView } from 'src/components/activities/content/views/VideoView';
+import GameStats from 'src/components/activities/GameStats';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
+import ResponseButton from 'src/components/buttons/GameResponseButton';
 import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
 import { UserDisplayName } from 'src/components/UserDisplayName';
-import { RightNavigation } from 'src/components/accueil/RightNavigation';
-import GameStats from 'src/components/activities/GameStats';
-import { VideoView } from 'src/components/activities/content/views/VideoView';
-import ResponseButton from 'src/components/buttons/GameResponseButton';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useGameRequests } from 'src/services/useGames';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { primaryColor } from 'src/styles/variables.const';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
+
 import { GameType } from 'types/game.type';
 import type { Game } from 'types/game.type';
 import type { GameResponse } from 'types/gameResponse.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
+
+import { ActivityComments } from '../activities/ActivityComments';
+import { KeepRatio } from '../KeepRatio';
 
 function shuffleArray(size: number) {
   const array = Array.from(Array(size)).map((_, i) => i);

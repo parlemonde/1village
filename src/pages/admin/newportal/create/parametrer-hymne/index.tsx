@@ -1,11 +1,12 @@
+import { Button } from '@mui/material';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button } from '@mui/material';
-
 import { UserContext } from 'src/contexts/userContext';
 import BackArrow from 'src/svg/back-arrow.svg';
+
 import { UserType } from 'types/user.type';
 
 const Anthem = () => {

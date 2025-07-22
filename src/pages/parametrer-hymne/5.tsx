@@ -1,23 +1,24 @@
+import Backdrop from '@mui/material/Backdrop';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import Backdrop from '@mui/material/Backdrop';
-import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
-
 import { isAnthem } from 'src/activity-types/anyActivity';
+import { getErrorSteps } from 'src/components/activities/anthemChecks';
+import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { Base } from 'src/components/Base';
+import { EditButton } from 'src/components/buttons/EditButton';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { getErrorSteps } from 'src/components/activities/anthemChecks';
-import { AudioPlayer } from 'src/components/audio/AudioPlayer';
-import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageRequests } from 'src/services/useVillages';
+
 import { ActivityStatus } from 'types/activity.type';
 import type { AnthemData } from 'types/anthem.type';
 

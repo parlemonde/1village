@@ -1,19 +1,22 @@
-import Link from 'next/link';
-import React from 'react';
-
 import { Button, Divider, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import TextField from '@mui/material/TextField';
 
-import type { EditorProps } from '../content.types';
-import { EditorContainer } from './EditorContainer';
+import Link from 'next/link';
+import React from 'react';
+
 import { useH5pContentList } from 'src/api/h5p/h5p-content.list';
 import { useIsH5pEnabled } from 'src/api/h5p/h5p-enabled';
+import H5pPlayer from 'src/components/h5p/H5pPlayer';
 import { H5p } from 'src/components/H5pOLD';
 import { Modal } from 'src/components/Modal';
-import H5pPlayer from 'src/components/h5p/H5pPlayer';
 import { UserContext } from 'src/contexts/userContext';
 import { fontDetailColor } from 'src/styles/variables.const';
+
 import { UserType } from 'types/user.type';
+
+import type { EditorProps } from '../content.types';
+
+import { EditorContainer } from './EditorContainer';
 
 const IFRAME_REGEX = /<\s*iframe([^>]*)>.*?<\s*\/\s*iframe>/im;
 const SRC_REGEX = /src\s*=\s*"(.+?)"/im;

@@ -1,5 +1,6 @@
-import type { Material, Texture, Object3D } from 'three';
 import { Mesh } from 'three';
+
+import type { Material, Texture, Object3D } from 'three';
 
 type AnyMaterial = Material & { [key: string]: Texture };
 

@@ -3,6 +3,7 @@ import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
 import { getUserDisplayName } from 'src/utils';
+
 import type { Activity } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';

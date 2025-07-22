@@ -1,16 +1,16 @@
+import { Grid } from '@mui/material';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Grid } from '@mui/material';
-
 import { isMascotte } from 'src/activity-types/anyActivity';
 import type { MascotteData } from 'src/activity-types/mascotte.types';
-import { Base } from 'src/components/Base';
-import { Steps } from 'src/components/Steps';
-import { StepsButton } from 'src/components/StepsButtons';
 import { getErrorSteps } from 'src/components/activities/mascotteChecks';
+import { Base } from 'src/components/Base';
 import { MultipleCurrencySelector } from 'src/components/selectors/MultipleCurrencySelector';
 import { MultipleLanguageSelector } from 'src/components/selectors/MultipleLanguageSelector';
+import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 
 const MascotteStep3 = () => {

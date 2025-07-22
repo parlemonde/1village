@@ -1,16 +1,17 @@
-import { saveAs } from 'file-saver';
-import JSZip from 'jszip';
-import { useSnackbar } from 'notistack';
-import React, { useState } from 'react';
-
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { saveAs } from 'file-saver';
+import JSZip from 'jszip';
+import { useSnackbar } from 'notistack';
+import React, { useState } from 'react';
+
 import { subThemesMap, activityNumberMapper, subThemeNumberMapper } from 'src/config/mediatheque/dataFilters';
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { Activity } from 'types/activity.type';
 
 interface DownloadButtonProps {

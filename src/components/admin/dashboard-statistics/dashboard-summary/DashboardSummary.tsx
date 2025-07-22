@@ -1,12 +1,13 @@
+import { Tab, Tabs } from '@mui/material';
+
 import React, { useState } from 'react';
 
-import { Tab, Tabs } from '@mui/material';
+import { DashboardSummaryTab, DashboardType } from 'types/dashboard.type';
+import type { DashboardSummaryData } from 'types/dashboard.type';
 
 import TabPanel from '../TabPanel';
 import DashboardClassroomTab from './DashboardClassroomTab';
 import DashboardFamilyTab from './DashboardFamilyTab';
-import { DashboardSummaryTab, DashboardType } from 'types/dashboard.type';
-import type { DashboardSummaryData } from 'types/dashboard.type';
 
 interface DashboardSummaryProps {
   data: DashboardSummaryData;

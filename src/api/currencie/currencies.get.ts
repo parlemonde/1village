@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { Currency } from 'types/currency.type';
 
 export const getCurrencies = async (): Promise<Currency[]> => {

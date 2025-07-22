@@ -1,23 +1,24 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
-import { useRouter } from 'next/router';
-import React, { useState, useEffect } from 'react';
-
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 
+import { useRouter } from 'next/router';
+import React, { useState, useEffect } from 'react';
+
 import { editStudent } from 'src/api/classroom/student.put';
 import AccessControl from 'src/components/AccessControl';
 import { Base } from 'src/components/Base';
+import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { Modal } from 'src/components/Modal';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ClassroomContext } from 'src/contexts/classroomContext';
 import { bgPage } from 'src/styles/variables.const';
 import { isNormalizedStringEqual } from 'src/utils/string';
+
 import type { Student } from 'types/student.type';
 
 const ClassroomParamStep2 = () => {

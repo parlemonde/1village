@@ -1,16 +1,17 @@
+import { Box } from '@mui/material';
+
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { Box } from '@mui/material';
 
 import { isIndice } from 'src/activity-types/anyActivity';
 import { getIndice } from 'src/activity-types/indice.constants';
 import type { IndiceData } from 'src/activity-types/indice.types';
+import { ContentEditor } from 'src/components/activities/content';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
+
 import type { ActivityContent } from 'types/activity.type';
 import { ActivityStatus } from 'types/activity.type';
 

@@ -1,4 +1,5 @@
 import { Table, TableForeignKey, TableIndex } from 'typeorm';
+
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class AddPhaseHistory1731486908522 implements MigrationInterface {

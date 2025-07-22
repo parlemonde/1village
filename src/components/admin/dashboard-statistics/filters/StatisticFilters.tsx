@@ -1,12 +1,13 @@
+import Grid from '@mui/material/Grid';
+
 import React, { useMemo, useState } from 'react';
 
-import Grid from '@mui/material/Grid';
+import type { DropdownOption } from './Dropdown';
 
 import { useClassrooms } from '../../../../services/useClassrooms';
 import { useCountries } from '../../../../services/useCountries';
 import { useVillages } from '../../../../services/useVillages';
 import { getUserDisplayName } from '../../../../utils';
-import type { DropdownOption } from './Dropdown';
 import Dropdown from './Dropdown';
 
 type StatisticFiltersProps = {

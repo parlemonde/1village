@@ -1,12 +1,13 @@
 import React from 'react';
 
+import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import { Base } from 'src/components/Base';
 import { SuggestionCarousel } from 'src/components/SuggestionCarousel';
-import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import { UserContext } from 'src/contexts/userContext';
 import MascotteIcon from 'src/svg/presentation/mascotte.svg';
 import ThematiqueIcon from 'src/svg/presentation/thematique.svg';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import { UserType } from 'types/user.type';
 
 const suggestions = [

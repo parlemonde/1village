@@ -3,6 +3,7 @@ import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
 import BackArrow from 'src/svg/back-arrow.svg';
+
 import { UserType } from 'types/user.type';
 
 const Activities = () => {

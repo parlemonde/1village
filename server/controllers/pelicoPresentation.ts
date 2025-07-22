@@ -1,7 +1,7 @@
+import type { ActivityContent } from '../../types/activity.type';
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
-import type { ActivityContent } from '../../types/activity.type';
 import { PelicoPresentation } from '../entities/pelicoPresentation';
 import { UserType } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';

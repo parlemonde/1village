@@ -1,12 +1,14 @@
-import React from 'react';
-
 import { Grid, Box } from '@mui/material';
 
-import { ImageView } from '../content/views/ImageView';
-import type { ActivityViewProps } from './activity-view.types';
+import React from 'react';
+
 import type { MascotteActivity } from 'src/activity-types/mascotte.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { LightBox } from 'src/components/lightbox/Lightbox';
+
+import type { ActivityViewProps } from './activity-view.types';
+
+import { ImageView } from '../content/views/ImageView';
 
 export const MascotteActivityView = ({ activity }: ActivityViewProps<MascotteActivity>) => {
   return (

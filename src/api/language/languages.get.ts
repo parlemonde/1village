@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { Language } from 'types/language.type';
 
 export const getLanguages = async (): Promise<Language[]> => {

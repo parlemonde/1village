@@ -25,7 +25,7 @@ module.exports = {
     'plugin:@next/next/recommended',
   ],
   rules: {
-    // Windoqws eol
+    // Windows eol
     'prettier/prettier': [
       'error',
       {
@@ -58,26 +58,26 @@ module.exports = {
             position: 'after',
           },
           {
-            pattern: 'src/**',
-            group: 'sibling',
+            pattern: 'types/**',
+            group: 'type',
+            position: 'before',
           },
           {
-            pattern: 'types/**',
-            group: 'sibling',
+            pattern: 'src/**',
+            group: 'internal',
+            position: 'after',
           },
         ],
-        groups: [
-          ['builtin', 'external', 'internal'],
-          ['parent', 'sibling', 'index'],
-        ],
+        groups: [['builtin', 'external'], ['internal'], ['type'], ['parent', 'sibling', 'index']],
         'newlines-between': 'always',
-        alphabetize: { order: 'asc', caseInsensitive: false },
+        alphabetize: { order: 'asc', caseInsensitive: true },
       },
     ],
 
     // react
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
+    'react/react-in-jsx-scope': 'off',
 
     // typescript
     '@typescript-eslint/no-empty-function': 'off',

@@ -1,17 +1,17 @@
+import { TextField, Button } from '@mui/material';
+
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { TextField, Button } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isCooking, COOKING_DEFIS } from 'src/activity-types/defi.constants';
 import type { CookingDefiData } from 'src/activity-types/defi.types';
+import { getErrorSteps } from 'src/components/activities/defiChecksCooking';
 import { Base } from 'src/components/Base';
+import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { getErrorSteps } from 'src/components/activities/defiChecksCooking';
-import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 
 const DefiStep3 = () => {

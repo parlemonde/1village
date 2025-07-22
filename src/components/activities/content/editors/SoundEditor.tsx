@@ -1,16 +1,18 @@
-import { useSnackbar } from 'notistack';
-import React from 'react';
-
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { Button, Divider, TextField } from '@mui/material';
 import Alert from '@mui/material/Alert';
 
-import type { EditorProps } from '../content.types';
-import { EditorContainer } from './EditorContainer';
+import { useSnackbar } from 'notistack';
+import React from 'react';
+
 import { Modal } from 'src/components/Modal';
 import { fontDetailColor, bgPage, primaryColor } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
+import type { EditorProps } from '../content.types';
+
+import { EditorContainer } from './EditorContainer';
 
 export const SoundEditor = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const { enqueueSnackbar } = useSnackbar();

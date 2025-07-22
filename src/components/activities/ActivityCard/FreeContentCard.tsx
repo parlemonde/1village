@@ -1,17 +1,20 @@
+import { Button } from '@mui/material';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import router from 'next/router';
 import React from 'react';
 
-import { Button } from '@mui/material';
-
-import { CommentIcon } from './CommentIcon';
-import type { ActivityCardProps } from './activity-card.types';
 import { getImage } from 'src/activity-types/freeContent.constants';
 import type { FreeContentActivity } from 'src/activity-types/freeContent.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
+
 import { LinkNotAllowedInPath } from 'types/activity.type';
+
+import type { ActivityCardProps } from './activity-card.types';
+
+import { CommentIcon } from './CommentIcon';
 
 export const FreeContentCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<FreeContentActivity>) => {
   const firstImage = React.useMemo(() => getImage(activity.content, activity.data), [activity]);

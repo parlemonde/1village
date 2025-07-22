@@ -1,6 +1,11 @@
+import Box from '@mui/material/Box';
+
 import React, { useState } from 'react';
 
-import Box from '@mui/material/Box';
+import { useGetCountriesStats } from 'src/api/statistics/statistics.get';
+import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
+
+import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
 
 import VillageListCard from './cards/VillageListCard/VillageListCard';
 import HorizontalBarsChart from './charts/HorizontalChart';
@@ -9,9 +14,6 @@ import StatisticFilters from './filters/StatisticFilters';
 import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
-import { useGetCountriesStats } from 'src/api/statistics/statistics.get';
-import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
-import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
 
 const CountryStats = () => {
   const [selectedPhase, setSelectedPhase] = useState<number>();

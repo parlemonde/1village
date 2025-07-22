@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 
 import type { Country } from '../../types/country.type';
+
 import { countriesMap } from '../utils/countries-map';
 import { Activity } from './activity';
 import { Student } from './student';

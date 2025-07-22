@@ -1,8 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, ManyToMany, JoinTable, OneToOne, CreateDateColumn } from 'typeorm';
 
 import type { Country } from '../../types/country.type';
-import { UserType } from '../../types/user.type';
 import type { User as UserInterface } from '../../types/user.type';
+
+import { UserType } from '../../types/user.type';
 import { countriesMap } from '../utils/countries-map';
 import { Activity } from './activity';
 import { Classroom } from './classroom';

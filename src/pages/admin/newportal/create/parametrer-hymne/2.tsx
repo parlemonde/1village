@@ -1,26 +1,28 @@
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import styles from '../../../../../styles/parametrer-hymne.module.css';
+import { useRouter } from 'next/router';
+import React from 'react';
+
 import { postMixAudio } from 'src/api/audio/audio-mix.post';
 import { deleteAudio } from 'src/api/audio/audio.delete';
-import { PageLayout } from 'src/components/PageLayout';
-import { Steps } from 'src/components/Steps';
-import { StepsButton } from 'src/components/StepsButtons';
 import AnthemTrack from 'src/components/activities/anthem/AnthemTrack/AnthemTrack';
 import { InstrumentSvg } from 'src/components/activities/anthem/InstrumentSvg/InstrumentSvg';
 import { getErrorSteps } from 'src/components/activities/anthemChecks';
+import { PageLayout } from 'src/components/PageLayout';
+import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import Vocal from 'src/svg/anthem/vocal.svg';
 import { getLongestVerseSampleDuration } from 'src/utils/audios';
 import instruments from 'src/utils/instruments';
 import { toTime } from 'src/utils/toTime';
+
 import { ActivityStatus } from 'types/activity.type';
 import { TrackType } from 'types/anthem.type';
 import type { AnthemData, Track } from 'types/anthem.type';
+
+import styles from '../../../../../styles/parametrer-hymne.module.css';
 
 const AnthemStep2 = () => {
   const router = useRouter();

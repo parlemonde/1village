@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
-
 import { Box } from '@mui/material';
 
+import React, { useEffect, useState } from 'react';
+
 import { usePelicoPresentation } from 'src/api/pelicoPresentation/pelicoPresentation.get';
-import { Base } from 'src/components/Base';
 import { PelicoProfilNavigation } from 'src/components/accueil/PelicoProfilNavigation';
 import { ContentView } from 'src/components/activities/content/ContentView';
+import { Base } from 'src/components/Base';
 import { UserContext } from 'src/contexts/userContext';
 import { primaryColor } from 'src/styles/variables.const';
+
 import type { PelicoPresentation } from 'types/pelicoPresentation.type';
 
 const PelicoProfil = () => {

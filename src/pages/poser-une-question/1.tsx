@@ -1,16 +1,16 @@
+import { Button } from '@mui/material';
+
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { Button } from '@mui/material';
 
 import { isQuestion } from 'src/activity-types/anyActivity';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
+import { BackButton } from 'src/components/buttons/BackButton';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { UserDisplayName } from 'src/components/UserDisplayName';
-import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -18,6 +18,7 @@ import { useActivities } from 'src/services/useActivities';
 import { useActivityRequests } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { bgPage } from 'src/styles/variables.const';
+
 import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 

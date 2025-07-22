@@ -1,25 +1,26 @@
-import classNames from 'classnames';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import { Tooltip } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import classNames from 'classnames';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
+
 import { isReportage } from 'src/activity-types/anyActivity';
 import { getReportage } from 'src/activity-types/reportage.constants';
 import type { ReportageData } from 'src/activity-types/reportage.types';
+import { ContentView } from 'src/components/activities/content/ContentView';
+import { getErrorSteps } from 'src/components/activities/reportageChecks';
 import { Base } from 'src/components/Base';
+import { EditButton } from 'src/components/buttons/EditButton';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ContentView } from 'src/components/activities/content/ContentView';
-import { getErrorSteps } from 'src/components/activities/reportageChecks';
-import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+
 import { ActivityStatus } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 

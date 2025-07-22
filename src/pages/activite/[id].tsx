@@ -1,20 +1,21 @@
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-
 import { isEnigme } from 'src/activity-types/anyActivity';
-import { Base } from 'src/components/Base';
 import { RightNavigation } from 'src/components/accueil/RightNavigation';
 import { ActivityComments } from 'src/components/activities/ActivityComments';
 import { ActivityView } from 'src/components/activities/ActivityView';
+import { Base } from 'src/components/Base';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivity } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
 import { getQueryString } from 'src/utils';
+
 import type { AnyData, Activity as ActivityInterface } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';

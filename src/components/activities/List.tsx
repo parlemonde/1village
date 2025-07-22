@@ -1,11 +1,9 @@
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import type { SelectChangeEvent } from '@mui/material';
 import { Button } from '@mui/material';
 
-import PaginationNav from '../PaginationNav/PaginationNav';
-import { ActivityCard } from './ActivityCard';
+import { useRouter } from 'next/router';
+import React from 'react';
+
 import { isAnthem } from 'src/activity-types/anyActivity';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/services/useActivity';
@@ -13,8 +11,12 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import { defaultTextButtonStyle, primaryColor } from 'src/styles/variables.const';
 import ArrowRight from 'src/svg/arrow-right.svg';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
+
 import type { Activity, AnyData } from 'types/activity.type';
 import type { User } from 'types/user.type';
+
+import PaginationNav from '../PaginationNav/PaginationNav';
+import { ActivityCard } from './ActivityCard';
 
 interface ActivitiesProps {
   activities: Activity[];

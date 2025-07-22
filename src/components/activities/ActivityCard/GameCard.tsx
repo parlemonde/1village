@@ -1,20 +1,23 @@
+import { Button } from '@mui/material';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import router from 'next/router';
 import React, { useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 
-import { Button } from '@mui/material';
-
-import { CommentIcon } from './CommentIcon';
-import type { ActivityCardProps } from './activity-card.types';
 import { useCountAllStandardGame } from 'src/api/game/game.getAllGames';
 import { useCountAbleToPlayStandardGame } from 'src/api/game/game.getCountAvailable';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
+
 import { LinkNotAllowedInPath } from 'types/activity.type';
 import { GameType } from 'types/game.type';
 import type { GameActivity } from 'types/game.type';
+
+import type { ActivityCardProps } from './activity-card.types';
+
+import { CommentIcon } from './CommentIcon';
 
 // TODO : Remove all ts-ignore when mimic is standardized
 

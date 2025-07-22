@@ -1,20 +1,21 @@
+import { Box, TextField } from '@mui/material';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Box, TextField } from '@mui/material';
-
 import { getIndice } from 'src/activity-types/indice.constants';
 import type { IndiceData } from 'src/activity-types/indice.types';
+import { Activities } from 'src/components/activities/List';
 import { Base } from 'src/components/Base';
+import { BackButton } from 'src/components/buttons/BackButton';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { Activities } from 'src/components/activities/List';
-import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import { getQueryString } from 'src/utils';
+
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const IndiceStep1 = () => {

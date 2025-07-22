@@ -1,16 +1,18 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import styles from '../../styles/chanter-un-couplet.module.css';
+import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
+import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
-import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { ActivityContext } from 'src/contexts/activityContext';
+
 import type { Syllable } from 'types/anthem.type';
 import type { ClassAnthemData } from 'types/classAnthem.types';
+
+import styles from '../../styles/chanter-un-couplet.module.css';
 
 const SongStep2 = () => {
   const router = useRouter();

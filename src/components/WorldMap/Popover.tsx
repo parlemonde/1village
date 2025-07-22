@@ -1,9 +1,10 @@
-import * as React from 'react';
-
 import Card from '@mui/material/Card';
 
-import { UserPopover } from './UserPopover';
+import * as React from 'react';
+
 import type { User } from 'types/user.type';
+
+import { UserPopover } from './UserPopover';
 
 export type PopoverData<T extends 'country' | 'user' = 'country' | 'user'> = {
   type: T;
