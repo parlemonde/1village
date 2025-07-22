@@ -1,5 +1,6 @@
-import { ActivityStatus, ActivityType } from '../../../types/activity.type';
 import type { Activity } from '../../entities/activity';
+
+import { ActivityStatus, ActivityType } from '../../../types/activity.type';
 import { getActivities } from '../activities/activities.repository';
 import { getClassrooms } from '../classrooms/classroom.repository';
 import { getCommentCountForActivities } from '../comments/comments.repository';

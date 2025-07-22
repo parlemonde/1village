@@ -1,8 +1,9 @@
 import React from 'react';
 
+import { useVillageActivityTable } from 'src/services/useVillageActivityTable';
+
 import { OneVillageTable } from '../OneVillageTable';
 import { getCountryActivityTableHeaders } from './utils/tableHeaders';
-import { useVillageActivityTable } from 'src/services/useVillageActivityTable';
 
 interface VillageActivityTableProps {
   villageId: number;

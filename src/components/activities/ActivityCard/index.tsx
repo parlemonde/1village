@@ -1,10 +1,26 @@
-import Link from 'next/link';
-import React from 'react';
-
 import { Box } from '@mui/material';
 import Paper from '@mui/material/Paper';
 
-import { titles, icons, REACTIONS } from '../utils';
+import Link from 'next/link';
+
+import { isEnigme, isReaction } from 'src/activity-types/anyActivity';
+import { getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
+import { AvatarImg } from 'src/components/Avatar';
+import { Flag } from 'src/components/Flag';
+import { UserDisplayName } from 'src/components/UserDisplayName';
+import { useActivity } from 'src/services/useActivity';
+import { primaryColor } from 'src/styles/variables.const';
+import Timer from 'src/svg/enigme/timer.svg';
+import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
+import PinIcon from 'src/svg/pin.svg';
+import { toDate } from 'src/utils';
+
+import { ActivityType } from 'types/activity.type';
+import { UserType } from 'types/user.type';
+
+import type { ActivityCardProps } from './activity-card.types';
+
+import { icons, REACTIONS, titles } from '../utils';
 import { AnthemCard } from './AnthemCard';
 import { DefiCard } from './DefiCard';
 import { EnigmeCard } from './EnigmeCard';
@@ -19,20 +35,6 @@ import { ReportageCard } from './ReportageCard';
 import { StoryCard } from './StoryCard';
 import { SymbolCard } from './SymbolCard';
 import { VerseRecordCard } from './VerseRecordCard';
-import type { ActivityCardProps } from './activity-card.types';
-import { isEnigme, isReaction } from 'src/activity-types/anyActivity';
-import { getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
-import { AvatarImg } from 'src/components/Avatar';
-import { Flag } from 'src/components/Flag';
-import { UserDisplayName } from 'src/components/UserDisplayName';
-import { useActivity } from 'src/services/useActivity';
-import { primaryColor } from 'src/styles/variables.const';
-import Timer from 'src/svg/enigme/timer.svg';
-import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
-import PinIcon from 'src/svg/pin.svg';
-import { toDate } from 'src/utils';
-import { ActivityType } from 'types/activity.type';
-import { UserType } from 'types/user.type';
 
 const CardTypeMapper = {
   [ActivityType.MASCOTTE]: MascotteCard,

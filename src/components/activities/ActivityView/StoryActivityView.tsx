@@ -1,6 +1,3 @@
-import Image from 'next/image';
-import React from 'react';
-
 import { Container } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
@@ -8,12 +5,18 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/system';
 
-import StoriesDataCardView from './StoriesDataCardView';
-import type { ActivityViewProps } from './activity-view.types';
+import Image from 'next/image';
+import React from 'react';
+
 import { isStory } from 'src/activity-types/anyActivity';
 import { LightBox } from 'src/components/lightbox/Lightbox';
 import { bgPage } from 'src/styles/variables.const';
+
 import type { StoryActivity } from 'types/story.type';
+
+import type { ActivityViewProps } from './activity-view.types';
+
+import StoriesDataCardView from './StoriesDataCardView';
 
 export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>) => {
   const { odd, object, place } = activity.data;

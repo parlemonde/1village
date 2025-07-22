@@ -1,10 +1,12 @@
-import React, { useCallback, useContext } from 'react';
-
 import { Tooltip } from '@mui/material';
 
-import { ActivityChoiceButton } from './ActivityChoiceButton';
+import React, { useCallback, useContext } from 'react';
+
 import { GameContext } from 'src/contexts/gameContext';
+
 import type { GameType } from 'types/game.type';
+
+import { ActivityChoiceButton } from './ActivityChoiceButton';
 
 interface ActivityChoiceProps {
   activities: Array<{

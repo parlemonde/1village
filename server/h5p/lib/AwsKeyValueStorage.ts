@@ -1,5 +1,6 @@
-import type { IKeyValueStorage } from '@lumieducation/h5p-server';
 import { H5pError } from '@lumieducation/h5p-server';
+
+import type { IKeyValueStorage } from '@lumieducation/h5p-server';
 
 import { dynamoDb } from './dynamoDB';
 

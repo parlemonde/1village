@@ -1,23 +1,25 @@
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import styles from '../../styles/chanter-un-couplet.module.css';
+import { useRouter } from 'next/router';
+import React from 'react';
+
 import { postMixAudio } from 'src/api/audio/audio-mix.post';
 import { deleteAudio } from 'src/api/audio/audio.delete';
+import type { AudioMixerTrack } from 'src/components/audio/AudioMixer/AudioMixer';
+import AudioMixer from 'src/components/audio/AudioMixer/AudioMixer';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import type { AudioMixerTrack } from 'src/components/audio/AudioMixer/AudioMixer';
-import AudioMixer from 'src/components/audio/AudioMixer/AudioMixer';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { getLongestVerseSampleDuration, getVerseTracks } from 'src/utils/audios';
+
 import { ActivityStatus } from 'types/activity.type';
 import { TrackType } from 'types/anthem.type';
 import type { ClassAnthemData } from 'types/classAnthem.types';
+
+import styles from '../../styles/chanter-un-couplet.module.css';
 
 const SongStep1 = () => {
   const router = useRouter();

@@ -1,12 +1,13 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
 
+import type { PLM_User } from './user';
+import type { PLM_Village } from './village';
+
 import { User } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';
 import { logger } from '../utils/logger';
-import type { PLM_User } from './user';
 import { createPLMUserToDB } from './user';
-import type { PLM_Village } from './village';
 import { createVillages } from './village';
 
 const plmSsoUrl = process.env.PLM_HOST || '';

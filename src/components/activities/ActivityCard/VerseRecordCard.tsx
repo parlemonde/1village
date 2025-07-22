@@ -1,12 +1,15 @@
+import { Box, Button } from '@mui/material';
+
 import Link from 'next/link';
 import React from 'react';
 
-import { Box, Button } from '@mui/material';
+import { RedButton } from 'src/components/buttons/RedButton';
+
+import type { ClassAnthemActivity } from 'types/classAnthem.types';
+
+import type { ActivityCardProps } from './activity-card.types';
 
 import { CommentIcon } from './CommentIcon';
-import type { ActivityCardProps } from './activity-card.types';
-import { RedButton } from 'src/components/buttons/RedButton';
-import type { ClassAnthemActivity } from 'types/classAnthem.types';
 
 export const VerseRecordCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<ClassAnthemActivity>) => (
   <Box

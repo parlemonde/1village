@@ -1,5 +1,6 @@
-import type { MigrationInterface, QueryRunner } from 'typeorm';
 import { TableColumn } from 'typeorm';
+
+import type { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class AlterActivityTable1727776142738 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {

@@ -1,6 +1,10 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { Sortable } from 'src/components/Sortable';
+
+import type { ActivityContent, ActivityContentType } from 'types/activity.type';
+
 import { AddContentCard } from './AddContentCard';
 import { DocumentEditor } from './editors/DocumentEditor/DocumentEditor';
 import { H5pEditor } from './editors/H5pEditor';
@@ -8,8 +12,6 @@ import { ImageEditor } from './editors/ImageEditor/ImageEditor';
 import { SoundEditor } from './editors/SoundEditor';
 import { TextEditor } from './editors/TextEditor/TextEditor';
 import { VideoEditor } from './editors/VideoEditor/VideoEditor';
-import { Sortable } from 'src/components/Sortable';
-import type { ActivityContent, ActivityContentType } from 'types/activity.type';
 
 interface ContentEditorProps {
   content: ActivityContent[];

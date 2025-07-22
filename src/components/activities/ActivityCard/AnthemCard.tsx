@@ -1,12 +1,15 @@
+import { Button } from '@mui/material';
+
 import Link from 'next/link';
 import React from 'react';
 
-import { Button } from '@mui/material';
+import { RedButton } from 'src/components/buttons/RedButton';
+
+import type { AnthemActivity } from 'types/anthem.type';
+
+import type { ActivityCardProps } from './activity-card.types';
 
 import { CommentIcon } from './CommentIcon';
-import type { ActivityCardProps } from './activity-card.types';
-import { RedButton } from 'src/components/buttons/RedButton';
-import type { AnthemActivity } from 'types/anthem.type';
 
 export const AnthemCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<AnthemActivity>) => (
   <div

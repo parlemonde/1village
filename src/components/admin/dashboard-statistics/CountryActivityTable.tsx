@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { OneVillageTable } from '../OneVillageTable';
-import { CountryActivityTableHeaders, getCountryActivityTableHeaders } from './utils/tableHeaders';
 import { useCountryActivityTable } from 'src/services/useCountryActivityTable';
 import type { ClassroomActivity, PhaseDetail, CountryActivityMode } from 'src/services/useCountryActivityTable';
+
+import { OneVillageTable } from '../OneVillageTable';
+import { CountryActivityTableHeaders, getCountryActivityTableHeaders } from './utils/tableHeaders';
 
 interface CountryActivityTableProps {
   countryCode: string;

@@ -9,3 +9,4 @@ __mocks__
 dist
 public
 node_modules
+next.config.js

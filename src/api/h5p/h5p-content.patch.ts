@@ -1,6 +1,6 @@
-import type { IContentMetadata } from '@lumieducation/h5p-server';
-
 import { axiosRequest } from 'src/utils/axiosRequest';
+
+import type { IContentMetadata } from '@lumieducation/h5p-server';
 
 export type PatchH5pContentParams = {
   library: string | undefined;

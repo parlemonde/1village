@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
 
 import type { FeatureFlagsNames } from '../../types/featureFlag.constant';
+
 import { User } from './user';
 
 @Entity()

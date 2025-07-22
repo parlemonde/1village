@@ -1,21 +1,22 @@
-import classNames from 'classnames';
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import Layout from '../../../layout';
+import classNames from 'classnames';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
+
 import { useGetOneActivityById } from 'src/api/activities/activities.getOneById';
-import { Base } from 'src/components/Base';
-import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
-import StepsNavigation from 'src/components/activities/StepsNavigation';
 import { ContentView } from 'src/components/activities/content/ContentView';
+import StepsNavigation from 'src/components/activities/StepsNavigation';
+import { Base } from 'src/components/Base';
 import { EditButton } from 'src/components/buttons/EditButton';
+import { StepsButton } from 'src/components/StepsButtons';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/hooks/useActivity';
+
+import Layout from '../../../layout';
 
 const ContenuLibre = () => {
   const router = useRouter();

@@ -1,27 +1,28 @@
+import { Button, Grid, Backdrop, Box, Tooltip } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useQueryClient } from 'react-query';
 
-import { Button, Grid, Backdrop, Box, Tooltip } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
-
 import { isMascotte } from 'src/activity-types/anyActivity';
 import { getMascotteContent } from 'src/activity-types/mascotte.constants';
 import type { MascotteData } from 'src/activity-types/mascotte.types';
-import { AvatarImg } from 'src/components/Avatar';
-import { Base } from 'src/components/Base';
-import { Steps } from 'src/components/Steps';
-import { StepsButton } from 'src/components/StepsButtons';
 import { ImageView } from 'src/components/activities/content/views/ImageView';
 import { getErrorSteps } from 'src/components/activities/mascotteChecks';
+import { AvatarImg } from 'src/components/Avatar';
+import { Base } from 'src/components/Base';
 import { EditButton } from 'src/components/buttons/EditButton';
+import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { useCountries } from 'src/services/useCountries';
 import { useCurrencies } from 'src/services/useCurrencies';
 import { useLanguages } from 'src/services/useLanguages';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import { ActivityStatus } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';

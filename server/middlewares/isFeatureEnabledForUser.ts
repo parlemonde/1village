@@ -1,7 +1,7 @@
-import type { Request, Response, NextFunction } from 'express';
-
 import type { FeatureFlagsNames } from '../../types/featureFlag.constant';
 import type { User } from '../entities/user';
+import type { Request, Response, NextFunction } from 'express';
+
 import isFeatureEnabledForUser from '../utils/isFeatureEnabledForUser';
 
 export async function featureEnabledMiddleware(featureName: FeatureFlagsNames) {

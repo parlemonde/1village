@@ -1,19 +1,22 @@
+import { Button } from '@mui/material';
+
 import Link from 'next/link';
 import router from 'next/router';
 import React, { useState, useMemo, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 
-import { Button } from '@mui/material';
-
-import { CommentIcon } from './CommentIcon';
-import type { ActivityCardProps } from './activity-card.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useGameRequests } from 'src/services/useGames';
 import { bgPage } from 'src/styles/variables.const';
+
 import { LinkNotAllowedInPath } from 'types/activity.type';
 import type { GameActivity } from 'types/game.type';
 import { GameType } from 'types/game.type';
+
+import type { ActivityCardProps } from './activity-card.types';
+
+import { CommentIcon } from './CommentIcon';
 
 // todo : add game type in props
 

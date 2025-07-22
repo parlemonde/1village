@@ -1,5 +1,6 @@
-import type { FreeContentData } from './freeContent.types';
 import type { ActivityContent } from 'types/activity.type';
+
+import type { FreeContentData } from './freeContent.types';
 
 export const getImage = (activityContent: ActivityContent[], data: FreeContentData | null) => {
   if (data !== null && data.noImage) {

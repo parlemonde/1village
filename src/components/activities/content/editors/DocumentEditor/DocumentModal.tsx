@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { Button } from '@mui/material';
 
-import PdfDisplay from './PdfDisplay';
+import React, { useState } from 'react';
+
 import { useUploadFiles } from 'src/api/files/uploadFiles.post';
 import { Modal } from 'src/components/Modal';
 import { bgPage } from 'src/styles/variables.const';
+
+import PdfDisplay from './PdfDisplay';
 
 interface DocumentEditorProps {
   id: number;

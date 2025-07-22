@@ -1,8 +1,9 @@
 import * as H5P from '@lumieducation/h5p-server';
 import { v4 } from 'uuid';
 
-import { logger } from '../utils/logger';
 import type { H5pUser } from './h5p.types';
+
+import { logger } from '../utils/logger';
 import { AwsContentStorage } from './lib/AwsContentStorage';
 import { AwsContentUserDataStorage } from './lib/AwsContentUserDataStorage';
 import { AwsKeyValueStorage } from './lib/AwsKeyValueStorage';

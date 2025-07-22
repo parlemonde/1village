@@ -1,8 +1,10 @@
 import React from 'react';
 
-import type { ViewProps } from '../content.types';
-import PdfDisplay from '../editors/DocumentEditor/PdfDisplay';
 import { LightBox } from 'src/components/lightbox/Lightbox';
+
+import type { ViewProps } from '../content.types';
+
+import PdfDisplay from '../editors/DocumentEditor/PdfDisplay';
 
 export const DocumentView = ({ value = '' }: ViewProps) => {
   return (

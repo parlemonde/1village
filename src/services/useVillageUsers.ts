@@ -1,13 +1,15 @@
 import React from 'react';
-import type { QueryFunction } from 'react-query';
 import { useQuery } from 'react-query';
 
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
+
+import type { QueryFunction } from 'react-query';
 
 export const useVillageUsers = (): { users: User[] } => {
   const { village, selectedPhase } = React.useContext(VillageContext);

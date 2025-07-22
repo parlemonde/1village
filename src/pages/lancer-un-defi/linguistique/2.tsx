@@ -1,16 +1,16 @@
+import { TextField, Button } from '@mui/material';
+
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { TextField, Button } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isLanguage, LANGUAGE_THEMES } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
+import { getErrorSteps } from 'src/components/activities/defiLanguageChecks';
 import { Base } from 'src/components/Base';
+import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
-import { getErrorSteps } from 'src/components/activities/defiLanguageChecks';
-import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { capitalize, replaceTokens } from 'src/utils';
 

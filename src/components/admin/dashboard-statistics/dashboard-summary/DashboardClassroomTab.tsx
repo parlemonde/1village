@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
-
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Grid from '@mui/material/Grid';
 
+import React, { useState } from 'react';
+
+import { AverageStatsProcessingMethod, DashboardType } from 'types/dashboard.type';
+import type { DashboardSummaryData } from 'types/dashboard.type';
+
 import { getCommentCount, getPublicationCount, getVideoCount } from '../../StatisticsUtils';
-import CountryActivityPhaseAccordion from '../CountryActivityPhaseAccordion';
 import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from '../cards/StatsCard/StatsCard';
 import BarCharts from '../charts/BarCharts';
 import PieCharts from '../charts/PieCharts';
+import CountryActivityPhaseAccordion from '../CountryActivityPhaseAccordion';
 import PhaseDetails from '../menu/PhaseDetails';
 import styles from '../styles/charts.module.css';
-import { AverageStatsProcessingMethod, DashboardType } from 'types/dashboard.type';
-import type { DashboardSummaryData } from 'types/dashboard.type';
 
 // To delete when pie chart data is done
 const mockPieChartData = {

@@ -1,8 +1,9 @@
 import React from 'react';
 
-import styles from './AverageStatsCard.module.css';
 import type { AverageStatsData } from 'types/dashboard.type';
 import { AverageStatsProcessingMethod } from 'types/dashboard.type';
+
+import styles from './AverageStatsCard.module.css';
 
 interface AverageStatsCardProps {
   children: React.ReactNode;

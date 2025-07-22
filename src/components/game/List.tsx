@@ -1,6 +1,3 @@
-import React from 'react';
-import ReactPlayer from 'react-player';
-
 import { Grid, Link } from '@mui/material';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -8,9 +5,13 @@ import CardMedia from '@mui/material/CardMedia';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 
+import React from 'react';
+import ReactPlayer from 'react-player';
+
 import { useAllStandardGameByType } from 'src/api/game/game.getAllBySubtype';
 import { useAbleToPlayStandardGame } from 'src/api/game/game.getAvailable';
 import { primaryColor } from 'src/styles/variables.const';
+
 import { GameType } from 'types/game.type';
 
 // This mapping is used to create routes dynamically

@@ -1,24 +1,26 @@
+import { Button } from '@mui/material';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button } from '@mui/material';
-
-import { filterActivitiesByTerm, filterActivitiesWithLastGame } from './Filters/FilterActivities';
-import { LinkChild } from './LinkChild';
 import { getUserVisibilityFamilyParams } from 'src/api/user/user.get';
-import { Base } from 'src/components/Base';
-import { KeepRatio } from 'src/components/KeepRatio';
-import { WorldMap } from 'src/components/WorldMap';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
 import { Activities } from 'src/components/activities/List';
+import { Base } from 'src/components/Base';
+import { KeepRatio } from 'src/components/KeepRatio';
+import { WorldMap } from 'src/components/WorldMap';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
+
 import type { Activity, AnyData } from 'types/activity.type';
 import { GameType } from 'types/game.type';
 import { UserType } from 'types/user.type';
+
+import { filterActivitiesByTerm, filterActivitiesWithLastGame } from './Filters/FilterActivities';
+import { LinkChild } from './LinkChild';
 
 export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);

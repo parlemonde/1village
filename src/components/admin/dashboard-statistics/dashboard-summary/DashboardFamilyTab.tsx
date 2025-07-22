@@ -1,8 +1,11 @@
-import React from 'react';
-
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box } from '@mui/material';
+
+import React from 'react';
+
+import type { DashboardSummaryData } from 'types/dashboard.type';
+import { AverageStatsProcessingMethod } from 'types/dashboard.type';
 
 import { OneVillageTable } from '../../OneVillageTable';
 import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
@@ -12,8 +15,6 @@ import { mockDataByMonth } from '../mocks/mocks';
 import styles from '../styles/charts.module.css';
 import { createFamiliesWithoutAccountRows, createFloatingAccountsRows } from '../utils/tableCreator';
 import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from '../utils/tableHeader';
-import type { DashboardSummaryData } from 'types/dashboard.type';
-import { AverageStatsProcessingMethod } from 'types/dashboard.type';
 
 const ENGAGEMENT_BAR_CHAR_TITLE = 'Évolution des connexions';
 

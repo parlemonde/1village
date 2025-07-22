@@ -7,6 +7,7 @@ import type {
   NavigationPerf,
   BrowserPerf,
 } from '../../types/analytics.type';
+
 import { User } from './user';
 
 @Entity()

@@ -2,9 +2,9 @@ import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 
 import { Base } from 'src/components/Base';
+import CreateGame from 'src/components/game/CreateGame';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import CreateGame from 'src/components/game/CreateGame';
 import { GameContext } from 'src/contexts/gameContext';
 
 const ExpressionStep4 = () => {

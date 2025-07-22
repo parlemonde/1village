@@ -11,6 +11,7 @@ import { Tooltip } from '@mui/material';
 
 import { useActivity } from 'src/services/useActivity';
 import { primaryColor } from 'src/styles/variables.const';
+
 import type { User } from 'types/user.type';
 
 type Position = {

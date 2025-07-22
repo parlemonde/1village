@@ -4,12 +4,13 @@ import React from 'react';
 import { isSymbol } from 'src/activity-types/anyActivity';
 import { getSymbol } from 'src/activity-types/symbol.constants';
 import type { SymbolData } from 'src/activity-types/symbol.types';
+import { ContentEditor } from 'src/components/activities/content';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
+
 import { ActivityStatus } from 'types/activity.type';
 import type { ActivityContent } from 'types/activity.type';
 

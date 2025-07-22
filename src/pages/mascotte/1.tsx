@@ -1,22 +1,23 @@
+import { TextField, Box } from '@mui/material';
+
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { TextField, Box } from '@mui/material';
 
 import { isMascotte } from 'src/activity-types/anyActivity';
 import { DEFAULT_MASCOTTE_DATA } from 'src/activity-types/mascotte.constants';
 import type { MascotteData } from 'src/activity-types/mascotte.types';
-import { Base } from 'src/components/Base';
-import { Steps } from 'src/components/Steps';
-import { StepsButton } from 'src/components/StepsButtons';
 import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
 import { isValidSum } from 'src/components/activities/mascotteChecks';
+import { Base } from 'src/components/Base';
 import { BackButton } from 'src/components/buttons/BackButton';
+import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { errorColor } from 'src/styles/variables.const';
 import { getUserDisplayName, pluralS } from 'src/utils';
+
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const MascotteStep1 = () => {

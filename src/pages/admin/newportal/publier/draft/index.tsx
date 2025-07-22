@@ -1,11 +1,11 @@
+import { useMediaQuery } from '@mui/material';
+
 import Link from 'next/link';
 import React, { useState } from 'react';
 
-import { useMediaQuery } from '@mui/material';
-
 import { useGetActivitiesAdminDraft } from 'src/api/activities/activities.admin.get';
-import SearchField from 'src/components/SearchField';
 import AllActivitiesAdmin from 'src/components/activities/ActivityCard/activity-admin/AllActivitiesAdmin';
+import SearchField from 'src/components/SearchField';
 import BackArrow from 'src/svg/back-arrow.svg';
 
 const AllDraft = () => {

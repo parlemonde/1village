@@ -1,12 +1,13 @@
-import React from 'react';
-
 import { Box } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 
-import { FilterSelect } from './FilterSelect';
+import React from 'react';
+
 import { Flag } from 'src/components/Flag';
 import { primaryColor } from 'src/styles/variables.const';
 import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
+
+import { FilterSelect } from './FilterSelect';
 
 export const ACTIVITIES_PER_PHASE: { key: number; label: string; value: 'all' | number[] }[][] = [
   [

@@ -1,10 +1,11 @@
-import type { NextPageContext } from 'next';
+import { Button } from '@mui/material';
+
 import Link from 'next/link';
 import React from 'react';
 
-import { Button } from '@mui/material';
-
 import { Base } from 'src/components/Base';
+
+import type { NextPageContext } from 'next';
 
 const ErrorPage = () => {
   return (

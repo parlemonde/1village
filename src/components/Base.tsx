@@ -1,10 +1,11 @@
+import { Box, Grid } from '@mui/material';
+
 import React from 'react';
 
-import { Box, Grid } from '@mui/material';
+import { SubHeaders } from 'src/components/accueil/SubHeader';
 
 import { Navigation } from './Navigation';
 import { NavigationMobile } from './NavigationMobile';
-import { SubHeaders } from 'src/components/accueil/SubHeader';
 
 interface BaseProps {
   rightNav?: React.ReactNode | React.ReactNodeArray;

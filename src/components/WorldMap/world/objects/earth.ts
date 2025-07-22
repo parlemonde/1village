@@ -1,17 +1,19 @@
-import type { Vector3 } from 'three';
 import { DirectionalLight, Group, Mesh, MeshBasicMaterial, SphereGeometry } from 'three';
 
+import type { User } from 'types/user.type';
+
 import type { HoverableObject } from '../lib/hoverable-object';
+import type { GeoLabel } from './capital';
+import type { GeoJSONCountryData } from './country';
+import type { Vector3 } from 'three';
+
 import { ImageTexture } from '../lib/image-texture';
 import { GLOBE_IMAGE_URL, GLOBE_RADIUS } from '../world.constants';
 import { AtmosphereGlow } from './atmosphere-glow';
-import type { GeoLabel } from './capital';
 import { Capital } from './capital';
-import type { GeoJSONCountryData } from './country';
 import { CountryGroup } from './countryGroup';
 import { GlobeOutline } from './globe-outline';
 import { Pin } from './pin';
-import type { User } from 'types/user.type';
 
 export class Earth extends Group implements HoverableObject {
   public countryVisibility: boolean;

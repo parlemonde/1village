@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react';
-
 import { Button, Stack, Typography } from '@mui/material';
+
+import React, { useState, useCallback } from 'react';
 
 import ArrowRight from 'src/svg/arrow-right.svg';
 

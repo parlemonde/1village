@@ -1,5 +1,6 @@
-import type { LoadingManager } from 'three';
 import { Texture, Loader, Cache } from 'three';
+
+import type { LoadingManager } from 'three';
 
 class ImageLoader extends Loader {
   constructor(manager?: LoadingManager) {

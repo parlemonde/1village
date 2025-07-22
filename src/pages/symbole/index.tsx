@@ -1,8 +1,8 @@
 import React from 'react';
 
+import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
-import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import AnimalNationalIcon from 'src/svg/symbole/animal-national.svg';
 import DeviseIcon from 'src/svg/symbole/devise.svg';
 import DrapeauIcon from 'src/svg/symbole/drapeau.svg';

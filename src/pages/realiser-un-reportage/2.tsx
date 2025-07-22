@@ -4,13 +4,14 @@ import React from 'react';
 import { isReportage } from 'src/activity-types/anyActivity';
 import { getReportage } from 'src/activity-types/reportage.constants';
 import type { ReportageData } from 'src/activity-types/reportage.types';
+import { ContentEditor } from 'src/components/activities/content';
+import { getErrorSteps } from 'src/components/activities/reportageChecks';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ContentEditor } from 'src/components/activities/content';
-import { getErrorSteps } from 'src/components/activities/reportageChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
+
 import type { ActivityContent } from 'types/activity.type';
 
 const ReportageStep2 = () => {

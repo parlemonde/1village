@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import type { VillagePhase } from './village';
+
 import { Village } from './village';
 
 @Entity()

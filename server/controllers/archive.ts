@@ -1,4 +1,5 @@
 import AWS from 'aws-sdk';
+
 import type { Request, Response, NextFunction } from 'express';
 
 import { UserType } from '../entities/user';

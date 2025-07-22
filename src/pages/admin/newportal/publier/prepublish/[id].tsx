@@ -1,9 +1,3 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useSnackbar } from 'notistack';
-import React, { useEffect } from 'react';
-import { useQueryClient } from 'react-query';
-
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { Skeleton } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -16,10 +10,17 @@ import MenuItem from '@mui/material/MenuItem';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import Select from '@mui/material/Select';
 
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
+import React, { useEffect } from 'react';
+import { useQueryClient } from 'react-query';
+
 import { postAdminActivity } from 'src/api/activities/activities.admin.post';
 import { useGetOneActivityById } from 'src/api/activities/activities.getOneById';
 import { useGetVillages } from 'src/api/villages/villages.get';
 import { UserContext } from 'src/contexts/userContext';
+
 import { UserType } from 'types/user.type';
 
 const Prepublier = () => {

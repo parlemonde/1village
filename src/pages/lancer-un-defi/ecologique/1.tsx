@@ -5,12 +5,13 @@ import { isDefi } from 'src/activity-types/anyActivity';
 import { isEco, DEFI, ECO_ACTIONS } from 'src/activity-types/defi.constants';
 import type { EcoDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
-import { PageLayout } from 'src/components/PageLayout';
-import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
+import { PageLayout } from 'src/components/PageLayout';
+import { Steps } from 'src/components/Steps';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
+
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const DefiEcoStep1 = () => {

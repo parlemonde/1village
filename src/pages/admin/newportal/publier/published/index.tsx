@@ -1,14 +1,15 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
-import type { Activity } from 'server/entities/activity';
 
 import { useGetActivitiesAdminDraft } from 'src/api/activities/activities.admin.get';
 import { useGetVillages } from 'src/api/villages/villages.get';
-import SearchField from 'src/components/SearchField';
 import type { Option } from 'src/components/accueil/Filters/FilterSelect';
 // import { FilterSelect } from 'src/components/accueil/Filters/FilterSelect';
 import AllActivitiesAdmin from 'src/components/activities/ActivityCard/activity-admin/AllActivitiesAdmin';
+import SearchField from 'src/components/SearchField';
 import BackArrow from 'src/svg/back-arrow.svg';
+
+import type { Activity } from 'server/entities/activity';
 
 const Published = () => {
   const [search, setSearch] = useState('');

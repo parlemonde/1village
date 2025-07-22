@@ -1,21 +1,21 @@
-import { useSnackbar } from 'notistack';
-import React from 'react';
-
 import { Alert, AlertTitle, Checkbox, Grid, TextField } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import NoSsr from '@mui/material/NoSsr';
 
+import { useSnackbar } from 'notistack';
+import React from 'react';
+
+import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
-import LanguageFilter from 'src/components/LanguageFilter';
-import { Modal } from 'src/components/Modal';
 // import { LinkChild } from 'src/components/accueil/LinkChild';
-import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { QuestionButton } from 'src/components/buttons/QuestionButton';
 import { RedButton } from 'src/components/buttons/RedButton';
+import LanguageFilter from 'src/components/LanguageFilter';
+import { Modal } from 'src/components/Modal';
 import { NotifCheckbox } from 'src/components/mon-compte/NotifCheckbox';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
@@ -25,6 +25,7 @@ import { getUserDisplayName } from 'src/utils';
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from 'src/utils/accountChecks';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import { SSO_HOSTNAME } from 'src/utils/sso';
+
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 

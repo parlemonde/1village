@@ -1,5 +1,6 @@
-import type { MigrationInterface, QueryRunner } from 'typeorm';
 import { TableColumn, TableForeignKey } from 'typeorm';
+
+import type { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class AlterAnalyticSessionTable1724946964959 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {

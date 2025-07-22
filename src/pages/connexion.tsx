@@ -1,6 +1,3 @@
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
@@ -19,11 +16,15 @@ import {
   Typography,
 } from '@mui/material';
 
-import { isRedirectValid } from '../components/accueil/NewHome';
+import { useRouter } from 'next/router';
+import React from 'react';
+
 import { UserContext } from 'src/contexts/userContext';
 import { useUserRequests } from 'src/services/useUsers';
 import ArrowBack from 'src/svg/arrow_back.svg';
 import Logo from 'src/svg/logo_1village_famille.svg';
+
+import { isRedirectValid } from '../components/accueil/NewHome';
 
 const SignInParent = () => {
   const router = useRouter();

@@ -1,4 +1,5 @@
 import Tokens from 'csrf';
+
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
 
 import { getHeader, getQueryString } from '../utils';

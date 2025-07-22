@@ -1,9 +1,3 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useSnackbar } from 'notistack';
-import React, { useEffect } from 'react';
-import { useQueryClient } from 'react-query';
-
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { Skeleton } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -16,6 +10,12 @@ import MenuItem from '@mui/material/MenuItem';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import Select from '@mui/material/Select';
 
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
+import React, { useEffect } from 'react';
+import { useQueryClient } from 'react-query';
+
 import { deleteActivity } from 'src/api/activities/activities.admin.delete';
 import { postAdminActivity } from 'src/api/activities/activities.admin.post';
 import { useUpdateActivityPhase } from 'src/api/activities/activities.admin.put';
@@ -23,6 +23,7 @@ import { useGetChildrenActivitiesById } from 'src/api/activities/activities.admi
 import { useGetOneActivityById } from 'src/api/activities/activities.getOneById';
 import { useGetVillages } from 'src/api/villages/villages.get';
 import { UserContext } from 'src/contexts/userContext';
+
 import type { Activity } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 

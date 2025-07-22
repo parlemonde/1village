@@ -11,6 +11,7 @@ import StoryIcon from 'src/svg/navigation/story-icon.svg';
 import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
+
 import { ActivityType } from 'types/activity.type';
 import { PhaseType } from 'types/phase.type';
 

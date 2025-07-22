@@ -2,10 +2,10 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Base } from 'src/components/Base';
+import CreateGame from 'src/components/game/CreateGame';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import CreateGame from 'src/components/game/CreateGame';
 
 const MimiqueStep3 = () => {
   const router = useRouter();
