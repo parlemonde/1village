@@ -10,11 +10,6 @@ services:
       - minio
     env_file:
       - .env
-    volumes:
-      - ./public:/app/public
-      - ./src:/app/src
-      - ./server:/app/server
-      - ./types:/app/types
     depends_on:
       migration:
         condition: service_completed_successfully
@@ -22,6 +17,20 @@ services:
         condition: service_healthy
       dynamodb:
         condition: service_started
+    develop:
+      watch:
+        - path: ./public
+          target: /app/public
+          action: sync
+        - path: ./src
+          target: /app/src
+          action: sync
+        - path: ./server
+          target: /app/server
+          action: sync
+        - path: ./types
+          target: /app/types
+          action: sync
 
   migration:
     build:

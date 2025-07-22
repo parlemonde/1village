@@ -1,6 +1,6 @@
 FROM node:20.11.1-slim
 
-# Needed for nodemon!
+# Install required packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
     lsof \
     procps \
