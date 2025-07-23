@@ -28,7 +28,17 @@ export const Header = () => {
   const NavButton = styled(Button)(() => ({
     borderRadius: '18px',
     '&:hover': {
-      backgroundColor: primaryColorLight, // couleur au survol
+      backgroundColor: primaryColorLight,
+    },
+    '@media (max-width: 900px)': {
+      '&.MuiButtonBase-root': {
+        '& > .MuiButton-icon': {
+          margin: '0px',
+        },
+      },
+      '.nav-btn-text': {
+        display: 'none',
+      },
     },
   }));
 
@@ -78,7 +88,7 @@ export const Header = () => {
         })}
         className="with-shadow"
       >
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '4px' }}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr 0.5fr 0.5fr', md: 'repeat(3, 1fr)' }, gap: '4px' }}>
           <Link href="/">
             <a style={{ display: 'flex', alignItems: 'center' }}>
               <Logo style={{ width: '40px', height: 'auto' }} />
@@ -89,15 +99,15 @@ export const Header = () => {
           </Link>
           {isUserTypeTeacher && (
             <NavButton startIcon={<PushPinOutlinedIcon />} href="https://prof.parlemonde.org/les-ressources/">
-              Mes ressources
+              <span className="nav-btn-text">Mes ressources</span>
             </NavButton>
           )}
           {isUserTypeTeacher && (
             <NavButton startIcon={<ChatBubbleOutlineOutlinedIcon />} href="https://prof.parlemonde.org/la-salle/">
-              Ma messagerie
+              <span className="nav-btn-text">Ma messagerie</span>
             </NavButton>
           )}
-        </div>
+        </Box>
         {user && (
           <div className="header__user">
             <Box
