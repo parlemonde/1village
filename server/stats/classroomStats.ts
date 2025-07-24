@@ -82,20 +82,29 @@ export const getContributedClassroomsCount = async (
     .select('COUNT(DISTINCT classroom.id)', 'classroomsCount')
     .innerJoin('activity', 'activity', 'activity.classroomId = classroom.id')
     .groupBy('classroom.id');
-
-  if (villageId) {
-    queryBuilder.andWhere('classroom.villageId = :villageId', { villageId });
-  }
-  if (countryCode) {
-    queryBuilder.andWhere('classroom.countryCode = :countryCode', { countryCode });
-  }
   if (classroomId) {
     queryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
+  } else if (villageId) {
+    queryBuilder.andWhere('classroom.villageId = :villageId', { villageId });
+  } else if (countryCode) {
+    queryBuilder.andWhere('classroom.countryCode = :countryCode', { countryCode });
   }
-  if (nbPhases) {
-    queryBuilder.having('COUNT(DISTINCT activity.phase) = :nbPhases', { nbPhases });
-  }
+  if (nbPhases || nbPhases === 0) {
+    if (nbPhases === 0) {
+      // Condition: classroom must have at least one activity with phase 1, one with phase 2, and one with phase 3
+      queryBuilder.andWhere((qb) => {
+        const subQuery1 = qb.subQuery().select('1').from('activity', 'a1').where('a1.classroomId = classroom.id').andWhere('a1.phase = 1').getQuery();
 
+        const subQuery2 = qb.subQuery().select('1').from('activity', 'a2').where('a2.classroomId = classroom.id').andWhere('a2.phase = 2').getQuery();
+
+        const subQuery3 = qb.subQuery().select('1').from('activity', 'a3').where('a3.classroomId = classroom.id').andWhere('a3.phase = 3').getQuery();
+
+        return `EXISTS ${subQuery1} AND EXISTS ${subQuery2} AND EXISTS ${subQuery3}`;
+      });
+    } else {
+      queryBuilder.andWhere('activity.phase = :nbPhases', { nbPhases });
+    }
+  }
   const result = await queryBuilder.getCount();
   return result;
 };
