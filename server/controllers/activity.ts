@@ -254,6 +254,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   activity.isPinned = data.isPinned || false;
   activity.displayAsUser = data.displayAsUser || false;
   activity.classroomId = data.classroomId ?? null;
+  activity.publishDate = new Date();
 
   await AppDataSource.getRepository(Activity).save(activity);
 

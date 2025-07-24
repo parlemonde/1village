@@ -53,14 +53,14 @@ module.exports = {
       {
         pathGroups: [
           {
+            pattern: '**/types/**',
+            group: 'type',
+            position: 'before',
+          },
+          {
             pattern: '@mui/**',
             group: 'external',
             position: 'after',
-          },
-          {
-            pattern: 'types/**',
-            group: 'type',
-            position: 'before',
           },
           {
             pattern: 'src/**',
@@ -68,7 +68,7 @@ module.exports = {
             position: 'after',
           },
         ],
-        groups: [['builtin', 'external'], ['internal'], ['type'], ['parent', 'sibling', 'index']],
+        groups: [['builtin', 'external'], ['type'], ['internal'], ['parent', 'sibling', 'index']],
         'newlines-between': 'always',
         alphabetize: { order: 'asc', caseInsensitive: true },
       },
