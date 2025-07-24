@@ -1,5 +1,7 @@
 import { Button } from '@mui/material';
 
+import type { ActivityCardProps } from './activity-card.types';
+
 import Link from 'next/link';
 import React from 'react';
 
@@ -7,8 +9,6 @@ import type { QuestionActivity } from 'src/activity-types/question.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivityRequests } from 'src/services/useActivity';
-
-import type { ActivityCardProps } from './activity-card.types';
 
 import { CommentIcon } from './CommentIcon';
 

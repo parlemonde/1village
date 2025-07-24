@@ -1,3 +1,7 @@
+import type { Activity } from 'types/activity.type';
+import { ActivityStatus } from 'types/activity.type';
+import type { Video } from 'types/video.type';
+
 import { useSnackbar } from 'notistack';
 import React from 'react';
 import { useQueryClient } from 'react-query';
@@ -17,10 +21,6 @@ import { useActivities } from 'src/services/useActivities';
 import { useActivityRequests } from 'src/services/useActivity';
 import { useVideos } from 'src/services/useVideos';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { Activity } from 'types/activity.type';
-import { ActivityStatus } from 'types/activity.type';
-import type { Video } from 'types/video.type';
 
 const MaClasse = () => {
   const queryClient = useQueryClient();

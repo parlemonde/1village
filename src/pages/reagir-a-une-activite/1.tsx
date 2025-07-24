@@ -1,3 +1,5 @@
+import { ActivityType } from 'types/activity.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -10,8 +12,6 @@ import { Steps } from 'src/components/Steps';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { getQueryString } from 'src/utils';
-
-import { ActivityType } from 'types/activity.type';
 
 interface SelectedActivityInfos {
   id: number | null;

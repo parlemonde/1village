@@ -1,8 +1,8 @@
+import type { ViewProps } from '../content.types';
+
 import React from 'react';
 
 import { LightBox } from 'src/components/lightbox/Lightbox';
-
-import type { ViewProps } from '../content.types';
 
 import PdfDisplay from '../editors/DocumentEditor/PdfDisplay';
 

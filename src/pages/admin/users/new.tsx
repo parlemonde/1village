@@ -8,6 +8,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 
+import type { User } from 'types/user.type';
+import { UserType, userTypeNames } from 'types/user.type';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
@@ -19,9 +22,6 @@ import { useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
 import { defaultOutlinedButtonStyle } from 'src/styles/variables.const';
 import { isPseudoValid, isEmailValid } from 'src/utils/accountChecks';
-
-import type { User } from 'types/user.type';
-import { UserType, userTypeNames } from 'types/user.type';
 
 const Required = (label: string) => (
   <>

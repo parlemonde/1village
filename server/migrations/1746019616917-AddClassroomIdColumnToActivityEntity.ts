@@ -1,6 +1,6 @@
-import { TableColumn, TableForeignKey } from 'typeorm';
-
 import type { MigrationInterface, QueryRunner } from 'typeorm';
+
+import { TableColumn, TableForeignKey } from 'typeorm';
 
 export class AddClassroomIdColumnToActivityEntity1746019616917 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {

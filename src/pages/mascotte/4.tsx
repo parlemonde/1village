@@ -1,5 +1,7 @@
 import { Checkbox } from '@mui/material';
 
+import { ActivityStatus } from 'types/activity.type';
+
 import React from 'react';
 
 import type { MascotteData } from 'src/activity-types/mascotte.types';
@@ -8,8 +10,6 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
-
-import { ActivityStatus } from 'types/activity.type';
 
 const MascotteStep4 = () => {
   const { activity } = React.useContext(ActivityContext);

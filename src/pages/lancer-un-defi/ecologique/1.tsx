@@ -1,3 +1,5 @@
+import { ActivityStatus, ActivityType } from 'types/activity.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -11,8 +13,6 @@ import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
-
-import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const DefiEcoStep1 = () => {
   const router = useRouter();

@@ -2,6 +2,10 @@
 // import debounce from 'lodash.debounce';
 import { Button, Card, CircularProgress, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 
+import type { Activity } from 'types/activity.type';
+import type { Classroom, InitialStateOptionsProps } from 'types/classroom.type';
+import { UserType } from 'types/user.type';
+
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useReducer } from 'react';
 
@@ -24,10 +28,6 @@ import { primaryColor } from 'src/styles/variables.const';
 import EyeClosed from 'src/svg/eye-closed.svg';
 import EyeVisibility from 'src/svg/eye-visibility.svg';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { Activity } from 'types/activity.type';
-import type { Classroom, InitialStateOptionsProps } from 'types/classroom.type';
-import { UserType } from 'types/user.type';
 
 // const content1 = {
 //   text1: 'les familles peuvent voir toutes les activités publiées sur 1Village, mais',

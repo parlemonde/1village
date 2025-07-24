@@ -1,9 +1,9 @@
-import { H5pError } from '@lumieducation/h5p-server';
-import { v4 } from 'uuid';
-
 import type { ContentId, IContentMetadata, IContentStorage, IFileStats, ILibraryName, IUser } from '@lumieducation/h5p-server';
 import type { ListObjectsV2Output } from 'aws-sdk/clients/s3';
 import type { Readable } from 'stream';
+
+import { H5pError } from '@lumieducation/h5p-server';
+import { v4 } from 'uuid';
 
 import { s3 } from '../../fileUpload';
 import { logger } from '../../utils/logger';

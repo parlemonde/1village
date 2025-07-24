@@ -1,6 +1,6 @@
-import axios from 'axios';
-
 import type { User } from '../entities/user';
+
+import axios from 'axios';
 
 import { serializeToQueryUrl } from '../utils';
 

@@ -1,6 +1,9 @@
 import AppsIcon from '@mui/icons-material/Apps';
 import { ButtonBase, Card } from '@mui/material';
 
+import type { ActivityContentType } from 'types/activity.type';
+import { UserType } from 'types/user.type';
+
 import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
@@ -9,9 +12,6 @@ import ImageIcon from 'src/svg/editor/image_icon.svg';
 import SoundIcon from 'src/svg/editor/sound_icon.svg';
 import TextIcon from 'src/svg/editor/text_icon.svg';
 import VideoIcon from 'src/svg/editor/video_icon.svg';
-
-import type { ActivityContentType } from 'types/activity.type';
-import { UserType } from 'types/user.type';
 
 interface AddContentCardProps {
   addContent?(type: ActivityContentType): void;

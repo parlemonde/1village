@@ -1,6 +1,6 @@
-import { axiosRequest } from 'src/utils/axiosRequest';
-
 import type { GameDataMonneyOrExpression } from 'types/game.type';
+
+import { axiosRequest } from 'src/utils/axiosRequest';
 
 // TODO: changer les noms du type et de la fonction une fois que Mimique sera standardisé aussi
 

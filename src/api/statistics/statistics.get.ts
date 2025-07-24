@@ -1,8 +1,8 @@
+import type { SessionsStats, VillageStats } from 'types/statistics.type';
+
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { SessionsStats, VillageStats } from 'types/statistics.type';
 
 async function getSessionsStats(phase?: number): Promise<SessionsStats> {
   return (

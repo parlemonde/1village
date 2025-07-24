@@ -2,11 +2,11 @@ import { Box } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
+import type { Language } from 'types/language.type';
+
 import React from 'react';
 
 import { useLanguages } from 'src/services/useLanguages';
-
-import type { Language } from 'types/language.type';
 
 type LanguageOption = Language & {
   firstLetter: string;

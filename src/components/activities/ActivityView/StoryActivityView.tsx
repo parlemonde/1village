@@ -5,16 +5,16 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/system';
 
+import type { StoryActivity } from 'types/story.type';
+
+import type { ActivityViewProps } from './activity-view.types';
+
 import Image from 'next/image';
 import React from 'react';
 
 import { isStory } from 'src/activity-types/anyActivity';
 import { LightBox } from 'src/components/lightbox/Lightbox';
 import { bgPage } from 'src/styles/variables.const';
-
-import type { StoryActivity } from 'types/story.type';
-
-import type { ActivityViewProps } from './activity-view.types';
 
 import StoriesDataCardView from './StoriesDataCardView';
 

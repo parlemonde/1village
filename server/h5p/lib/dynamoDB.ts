@@ -1,6 +1,6 @@
-import AWS from 'aws-sdk';
-
 import type { DynamoDB } from 'aws-sdk';
+
+import AWS from 'aws-sdk';
 
 type AnyAttributes = Record<string, unknown>;
 

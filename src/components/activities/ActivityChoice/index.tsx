@@ -1,10 +1,10 @@
 import { Tooltip } from '@mui/material';
 
+import type { GameType } from 'types/game.type';
+
 import React, { useCallback, useContext } from 'react';
 
 import { GameContext } from 'src/contexts/gameContext';
-
-import type { GameType } from 'types/game.type';
 
 import { ActivityChoiceButton } from './ActivityChoiceButton';
 

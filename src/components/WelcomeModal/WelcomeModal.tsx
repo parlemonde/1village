@@ -1,9 +1,9 @@
+import { UserType } from 'types/user.type';
+
 import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-
-import { UserType } from 'types/user.type';
 
 import { FirstPhase } from './FirstPhase';
 import { SecondPhase } from './SecondPhase';

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import axios from 'axios';
-
 import type { AxiosRequestConfig } from 'axios';
+
+import axios from 'axios';
 
 export type AxiosReturnType<ResponseType = any> =
   | {

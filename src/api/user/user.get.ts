@@ -1,8 +1,8 @@
-import { axiosRequest } from 'src/utils/axiosRequest';
-
 import type { Student } from 'types/student.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
+
+import { axiosRequest } from 'src/utils/axiosRequest';
 
 export const getUser = async (userId: number) => {
   const response = await axiosRequest({

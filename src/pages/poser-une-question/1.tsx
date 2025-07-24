@@ -1,5 +1,8 @@
 import { Button } from '@mui/material';
 
+import { ActivityType } from 'types/activity.type';
+import { UserType } from 'types/user.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -18,9 +21,6 @@ import { useActivities } from 'src/services/useActivities';
 import { useActivityRequests } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { bgPage } from 'src/styles/variables.const';
-
-import { ActivityType } from 'types/activity.type';
-import { UserType } from 'types/user.type';
 
 const Question1 = () => {
   const router = useRouter();

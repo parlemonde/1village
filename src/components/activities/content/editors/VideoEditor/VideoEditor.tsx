@@ -1,11 +1,11 @@
 import { Button } from '@mui/material';
 
+import type { EditorProps } from '../../content.types';
+
 import React from 'react';
 import ReactPlayer from 'react-player';
 
 import { primaryColor } from 'src/styles/variables.const';
-
-import type { EditorProps } from '../../content.types';
 
 import { EditorContainer } from '../EditorContainer';
 import { VideoModals } from './VideoModals';

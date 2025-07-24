@@ -1,12 +1,12 @@
+import { UserType } from 'types/user.type';
+
+import type { ReactNode } from 'react';
+
 import Link from 'next/link';
 import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
 import BackArrow from 'src/svg/back-arrow.svg';
-
-import { UserType } from 'types/user.type';
-
-import type { ReactNode } from 'react';
 
 type Props = {
   children: ReactNode;

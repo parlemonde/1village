@@ -3,6 +3,8 @@ import { Button, TextField } from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import MaterialLink from '@mui/material/Link';
 
+import type { Village } from 'types/village.type';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -13,8 +15,6 @@ import { useVillageRequests } from 'src/services/useVillages';
 import { defaultOutlinedButtonStyle } from 'src/styles/variables.const';
 import { getQueryString } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { Village } from 'types/village.type';
 
 const EditVillage = () => {
   const router = useRouter();

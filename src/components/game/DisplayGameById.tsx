@@ -1,6 +1,12 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Grid } from '@mui/material';
 
+import { GameType } from 'types/game.type';
+import type { Game } from 'types/game.type';
+import type { GameResponse } from 'types/gameResponse.type';
+import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -22,12 +28,6 @@ import { useGameRequests } from 'src/services/useGames';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { primaryColor } from 'src/styles/variables.const';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
-
-import { GameType } from 'types/game.type';
-import type { Game } from 'types/game.type';
-import type { GameResponse } from 'types/gameResponse.type';
-import type { User } from 'types/user.type';
-import { UserType } from 'types/user.type';
 
 import { ActivityComments } from '../activities/ActivityComments';
 import { KeepRatio } from '../KeepRatio';

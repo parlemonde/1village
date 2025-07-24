@@ -1,5 +1,8 @@
 import Button from '@mui/material/Button';
 
+import type { PelicoPresentation, PelicoPresentationContent, PelicoPresentationContentType } from 'types/pelicoPresentation.type';
+import { UserType } from 'types/user.type';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
@@ -12,9 +15,6 @@ import { useUpdatePelicoPresentation } from 'src/api/pelicoPresentation/pelicoPr
 import { ContentEditor } from 'src/components/activities/content';
 import { UserContext } from 'src/contexts/userContext';
 import BackArrow from 'src/svg/back-arrow.svg';
-
-import type { PelicoPresentation, PelicoPresentationContent, PelicoPresentationContentType } from 'types/pelicoPresentation.type';
-import { UserType } from 'types/user.type';
 
 const Pelico = () => {
   const queryClient = useQueryClient();

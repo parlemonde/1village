@@ -1,6 +1,6 @@
-import { axiosRequest } from 'src/utils/axiosRequest';
-
 import type { User } from 'server/entities/user';
+
+import { axiosRequest } from 'src/utils/axiosRequest';
 
 export const updateUser = async (id: number, userData: Partial<User>) => {
   const response = await axiosRequest({

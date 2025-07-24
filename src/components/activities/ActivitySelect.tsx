@@ -1,6 +1,8 @@
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Box, Button, CircularProgress } from '@mui/material';
 
+import type { Activity } from 'types/activity.type';
+
 import React from 'react';
 
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
@@ -8,8 +10,6 @@ import { VillageContext } from 'src/contexts/villageContext';
 import { useActivity } from 'src/services/useActivity';
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { Activity } from 'types/activity.type';
 
 import { Activities } from './List';
 

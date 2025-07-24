@@ -1,14 +1,14 @@
 import { Button } from '@mui/material';
 
+import { ActivityType } from 'types/activity.type';
+import type { User } from 'types/user.type';
+
 import React from 'react';
 
 import { icons, DESC } from 'src/components/activities/utils';
 import { useActivities } from 'src/services/useActivities';
 import { primaryColor } from 'src/styles/variables.const';
 import { toDate } from 'src/utils';
-
-import { ActivityType } from 'types/activity.type';
-import type { User } from 'types/user.type';
 
 import { CommentIcon } from '../activities/ActivityCard/CommentIcon';
 

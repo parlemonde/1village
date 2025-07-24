@@ -2,6 +2,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Button, IconButton, InputAdornment, Link, TextField } from '@mui/material';
 
+import type { UserUpdatePassword } from 'types/user.type';
+
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
@@ -11,8 +13,6 @@ import ArrowBack from 'src/svg/arrow_back.svg';
 import Logo from 'src/svg/logo_1village_famille.svg';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 import { invalidPasswordMessageBuilder } from 'src/utils/invalidPasswordMessageBuilder';
-
-import type { UserUpdatePassword } from 'types/user.type';
 
 import { KeepRatio } from '../components/KeepRatio';
 

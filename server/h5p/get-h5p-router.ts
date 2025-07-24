@@ -1,5 +1,9 @@
 import path from 'path';
 
+import type { H5pAnyParams, H5pExpressRequest, H5pUser } from './h5p.types';
+import type { IContentMetadata, IEditorModel } from '@lumieducation/h5p-server';
+import type { RequestHandler, NextFunction, Request, Response } from 'express';
+
 import { h5pAjaxExpressRouter } from '@lumieducation/h5p-express';
 import { H5pError } from '@lumieducation/h5p-server';
 import express, { Router } from 'express';
@@ -7,10 +11,6 @@ import fs from 'fs-extra';
 import morgan from 'morgan';
 import multer from 'multer';
 import { v4 } from 'uuid';
-
-import type { H5pAnyParams, H5pExpressRequest, H5pUser } from './h5p.types';
-import type { IContentMetadata, IEditorModel } from '@lumieducation/h5p-server';
-import type { RequestHandler, NextFunction, Request, Response } from 'express';
 
 import { authenticate } from '../middlewares/authenticate';
 import { AppError, handleErrors } from '../middlewares/handleErrors';

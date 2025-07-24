@@ -1,13 +1,13 @@
 import { Box, Button } from '@mui/material';
 
+import type { ClassAnthemActivity } from 'types/classAnthem.types';
+
+import type { ActivityCardProps } from './activity-card.types';
+
 import Link from 'next/link';
 import React from 'react';
 
 import { RedButton } from 'src/components/buttons/RedButton';
-
-import type { ClassAnthemActivity } from 'types/classAnthem.types';
-
-import type { ActivityCardProps } from './activity-card.types';
 
 import { CommentIcon } from './CommentIcon';
 

@@ -1,5 +1,3 @@
-import { Column, Entity, ManyToOne, JoinColumn, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
-
 import type {
   AnalyticSession as AnalyticSessionInterface,
   AnalyticPageView as AnalyticPageViewInteface,
@@ -7,6 +5,8 @@ import type {
   NavigationPerf,
   BrowserPerf,
 } from '../../types/analytics.type';
+
+import { Column, Entity, ManyToOne, JoinColumn, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 import { User } from './user';
 

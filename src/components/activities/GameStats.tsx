@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react';
-
 import type { GameResponse } from 'types/gameResponse.type';
 import { UserType } from 'types/user.type';
 import type { User } from 'types/user.type';
+
+import React, { useMemo } from 'react';
 
 import { AvatarImg } from '../Avatar';
 import { Flag } from '../Flag';

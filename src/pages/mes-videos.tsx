@@ -1,3 +1,5 @@
+import type { Video } from 'types/video.type';
+
 import { useSnackbar } from 'notistack';
 import React from 'react';
 import { useQueryClient } from 'react-query';
@@ -9,8 +11,6 @@ import { PageLayout } from 'src/components/PageLayout';
 import { VideoTable } from 'src/components/VideoTable';
 import { useVideos } from 'src/services/useVideos';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { Video } from 'types/video.type';
 
 const MesVideos = () => {
   const queryClient = useQueryClient();

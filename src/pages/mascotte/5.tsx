@@ -1,6 +1,10 @@
 import { Button, Grid, Backdrop, Box, Tooltip } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { ActivityStatus } from 'types/activity.type';
+import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
+
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -22,10 +26,6 @@ import { useCountries } from 'src/services/useCountries';
 import { useCurrencies } from 'src/services/useCurrencies';
 import { useLanguages } from 'src/services/useLanguages';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import { ActivityStatus } from 'types/activity.type';
-import type { User } from 'types/user.type';
-import { UserType } from 'types/user.type';
 
 const MascotteStep5 = () => {
   const router = useRouter();

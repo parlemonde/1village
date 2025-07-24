@@ -1,6 +1,6 @@
-import { axiosRequest } from 'src/utils/axiosRequest';
-
 import type { Track } from 'types/anthem.type';
+
+import { axiosRequest } from 'src/utils/axiosRequest';
 
 type POST_AUDIO_RESPONSE = {
   url: string;

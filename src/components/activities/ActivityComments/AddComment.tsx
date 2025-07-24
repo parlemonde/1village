@@ -1,5 +1,8 @@
 import { Box, Button, CircularProgress, Tooltip } from '@mui/material';
 
+import { ActivityType } from 'types/activity.type';
+import { UserType } from 'types/user.type';
+
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import React from 'react';
@@ -10,9 +13,6 @@ import { useCommentRequests } from 'src/services/useComments';
 import { primaryColor, bgPage } from 'src/styles/variables.const';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import RouletteIcon from 'src/svg/navigation/roulette-icon.svg';
-
-import { ActivityType } from 'types/activity.type';
-import { UserType } from 'types/user.type';
 
 const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
 

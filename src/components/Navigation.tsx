@@ -1,5 +1,9 @@
 import { Box, Button } from '@mui/material';
 
+import type { Activity } from 'types/activity.type';
+import { ActivityStatus, ActivityType } from 'types/activity.type';
+import { UserType } from 'types/user.type';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -21,10 +25,6 @@ import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { Activity } from 'types/activity.type';
-import { ActivityStatus, ActivityType } from 'types/activity.type';
-import { UserType } from 'types/user.type';
 
 import { AvatarImg } from './Avatar';
 import { VillageMonde } from './VillageMonde';

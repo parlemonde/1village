@@ -1,6 +1,6 @@
-import { axiosRequest } from 'src/utils/axiosRequest';
-
 import type { Student } from 'types/student.type';
+
+import { axiosRequest } from 'src/utils/axiosRequest';
 
 export const editStudent = async (updatedStudent: Promise<Partial<Student>>) => {
   const { id, ...rest } = await updatedStudent;

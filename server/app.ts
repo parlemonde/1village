@@ -1,5 +1,7 @@
 import path from 'path';
 
+import type { Response, RequestHandler } from 'express';
+
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Router } from 'express';
@@ -7,8 +9,6 @@ import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import next from 'next';
-
-import type { Response, RequestHandler } from 'express';
 
 import { authRouter } from './authentication';
 import { controllerRouter } from './controllers';

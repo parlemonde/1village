@@ -1,12 +1,12 @@
-import { Raycaster, Vector3, AmbientLight, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-
 import type { User } from '../../../../types/user.type';
 import type { PopoverData } from '../Popover';
 import type { HoverableObject } from './lib/hoverable-object';
 import type { GeoLabel } from './objects/capital';
 import type { Country, GeoJSONCountryData } from './objects/country';
 import type { Object3D } from 'three';
+
+import { Raycaster, Vector3, AmbientLight, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import { clamp } from '../../../utils';
 import { Animations } from './animations';

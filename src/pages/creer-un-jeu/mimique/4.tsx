@@ -1,5 +1,10 @@
 import { Button, Tooltip, Backdrop, CircularProgress } from '@mui/material';
 
+import { ActivityType } from 'types/activity.type';
+import type { StepsTypes, GameDataMonneyOrExpression } from 'types/game.type';
+import { GameType } from 'types/game.type';
+import { UserType } from 'types/user.type';
+
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 
@@ -13,11 +18,6 @@ import { GameContext } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { getUserDisplayName } from 'src/utils';
-
-import { ActivityType } from 'types/activity.type';
-import type { StepsTypes, GameDataMonneyOrExpression } from 'types/game.type';
-import { GameType } from 'types/game.type';
-import { UserType } from 'types/user.type';
 
 const MimiqueStep4 = () => {
   const router = useRouter();

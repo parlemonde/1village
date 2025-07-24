@@ -1,5 +1,7 @@
 import 'leaflet/dist/leaflet.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import type { User } from 'types/user.type';
+
 import L from 'leaflet';
 import {} from 'leaflet.fullscreen';
 import maplibregl from 'maplibre-gl';
@@ -11,8 +13,6 @@ import { Tooltip } from '@mui/material';
 
 import { useActivity } from 'src/services/useActivity';
 import { primaryColor } from 'src/styles/variables.const';
-
-import type { User } from 'types/user.type';
 
 type Position = {
   lat: number;

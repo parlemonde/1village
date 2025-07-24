@@ -4,14 +4,14 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
+import type { Activity, ActivityContent } from 'types/activity.type';
+
 import React, { useContext } from 'react';
 
 import DownloadButton from 'src/components/admin/mediatheque/DownloadButton';
 import { MediaCarousel } from 'src/components/admin/mediatheque/MediaCarousel';
 import { activityNameMapper } from 'src/config/mediatheque/dataFilters';
 import MediathequeContext from 'src/contexts/mediathequeContext';
-
-import type { Activity, ActivityContent } from 'types/activity.type';
 
 interface User {
   school: string;

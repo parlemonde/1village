@@ -1,6 +1,8 @@
 import { Paper, Grid } from '@mui/material';
 import MaterialLink from '@mui/material/Link';
 
+import type { AnalyticData } from 'types/analytics.type';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -10,8 +12,6 @@ import { TimePicker, getToday } from 'src/components/admin/analytics/TimePicker'
 import { TimeserieWidget } from 'src/components/admin/analytics/TimeserieWidget';
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { AnalyticData } from 'types/analytics.type';
 
 const GREEN_COLOR = '#92e892';
 const ORANGE_COLOR = '#f7b045';

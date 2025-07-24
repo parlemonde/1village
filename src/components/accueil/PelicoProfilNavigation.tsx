@@ -1,5 +1,7 @@
 import { Avatar, Button } from '@mui/material';
 
+import { ActivityType } from 'types/activity.type';
+
 import React from 'react';
 
 import { icons, DESC } from 'src/components/activities/utils';
@@ -7,8 +9,6 @@ import { useActivities } from 'src/services/useActivities';
 import { bgPage, primaryColor } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 import { toDate } from 'src/utils';
-
-import { ActivityType } from 'types/activity.type';
 
 import { CommentIcon } from '../activities/ActivityCard/CommentIcon';
 

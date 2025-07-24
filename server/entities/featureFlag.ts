@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
-
 import type { FeatureFlagsNames } from '../../types/featureFlag.constant';
+
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
 
 import { User } from './user';
 

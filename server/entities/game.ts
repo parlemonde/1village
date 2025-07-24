@@ -1,3 +1,5 @@
+import type { Game as GameInterface } from '../../types/game.type';
+
 import {
   Column,
   Entity,
@@ -9,8 +11,6 @@ import {
   OneToMany,
   JoinColumn,
 } from 'typeorm';
-
-import type { Game as GameInterface } from '../../types/game.type';
 
 import { Activity } from './activity';
 import { GameResponse } from './gameResponse';

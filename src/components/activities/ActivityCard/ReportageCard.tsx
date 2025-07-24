@@ -1,5 +1,9 @@
 import { Button } from '@mui/material';
 
+import { LinkNotAllowedInPath } from 'types/activity.type';
+
+import type { ActivityCardProps } from './activity-card.types';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import router from 'next/router';
@@ -11,10 +15,6 @@ import type { ReportageActivity } from 'src/activity-types/reportage.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
-
-import { LinkNotAllowedInPath } from 'types/activity.type';
-
-import type { ActivityCardProps } from './activity-card.types';
 
 import { CommentIcon } from './CommentIcon';
 

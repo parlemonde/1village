@@ -1,9 +1,9 @@
+import type { hiddenType, inputType } from 'types/game.type';
+import { InputTypeEnum } from 'types/game.type';
+
 import React, { useContext } from 'react';
 
 import { GameContext } from 'src/contexts/gameContext';
-
-import type { hiddenType, inputType } from 'types/game.type';
-import { InputTypeEnum } from 'types/game.type';
 
 import GameField from './componentGameMapping/GameField';
 import GameMedia from './componentGameMapping/GameMedia';

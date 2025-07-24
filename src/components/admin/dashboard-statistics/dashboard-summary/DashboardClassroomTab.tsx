@@ -2,10 +2,10 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Grid from '@mui/material/Grid';
 
-import React, { useState } from 'react';
-
 import { AverageStatsProcessingMethod, DashboardType } from 'types/dashboard.type';
 import type { DashboardSummaryData } from 'types/dashboard.type';
+
+import React, { useState } from 'react';
 
 import { getCommentCount, getPublicationCount, getVideoCount } from '../../StatisticsUtils';
 import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';

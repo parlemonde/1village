@@ -4,6 +4,10 @@ import { Checkbox, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import MobileStepper from '@mui/material/MobileStepper';
 
+import { ActivityStatus, ActivityType } from 'types/activity.type';
+import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
+
 import { useSnackbar } from 'notistack';
 import React from 'react';
 
@@ -19,10 +23,6 @@ import { bgPage, defaultOutlinedButtonStyle, defaultTextButtonStyle } from 'src/
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
 import { getUserDisplayName, serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import { ActivityStatus, ActivityType } from 'types/activity.type';
-import type { User } from 'types/user.type';
-import { UserType } from 'types/user.type';
 
 export const FirstPhase = () => {
   const { user, setUser } = React.useContext(UserContext);

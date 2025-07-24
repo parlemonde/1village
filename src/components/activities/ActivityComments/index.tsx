@@ -1,3 +1,7 @@
+import type { Activity, AnyData } from 'types/activity.type';
+import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
+
 import React from 'react';
 
 import type { DataUse } from 'src/api/game/game.getOneGameById';
@@ -7,10 +11,6 @@ import { useActivities } from 'src/services/useActivities';
 import { useComments } from 'src/services/useComments';
 import { useImageStories } from 'src/services/useImagesStory';
 import { useVillageUsers } from 'src/services/useVillageUsers';
-
-import type { Activity, AnyData } from 'types/activity.type';
-import type { User } from 'types/user.type';
-import { UserType } from 'types/user.type';
 
 import { ActivityCard } from '../ActivityCard';
 import StoriesDataCardView from '../ActivityView/StoriesDataCardView';

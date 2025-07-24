@@ -3,6 +3,8 @@ import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Box, Button, IconButton, Menu, MenuItem, styled } from '@mui/material';
 
+import { UserType } from 'types/user.type';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -10,8 +12,6 @@ import React from 'react';
 import { UserContext } from 'src/contexts/userContext';
 import { primaryColorLight } from 'src/styles/variables.const';
 import Logo from 'src/svg/logo.svg';
-
-import { UserType } from 'types/user.type';
 
 import AccessControl from './AccessControl';
 import { VillageSelect } from './VillageSelect';

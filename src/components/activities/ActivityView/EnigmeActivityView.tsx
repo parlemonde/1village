@@ -1,5 +1,7 @@
 import { Button, Card } from '@mui/material';
 
+import type { ActivityViewProps } from './activity-view.types';
+
 import Link from 'next/link';
 import React from 'react';
 
@@ -8,8 +10,6 @@ import type { EnigmeActivity, EnigmeData } from 'src/activity-types/enigme.types
 import { ContentView } from 'src/components/activities/content/ContentView';
 import ArrowRight from 'src/svg/arrow-right.svg';
 import Timer from 'src/svg/enigme/timer.svg';
-
-import type { ActivityViewProps } from './activity-view.types';
 
 type EnigmeActivityViewProps = ActivityViewProps<EnigmeActivity> & {
   isAnswer: boolean;

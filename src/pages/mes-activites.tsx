@@ -1,3 +1,5 @@
+import { ActivityStatus } from 'types/activity.type';
+
 import React from 'react';
 import { useQueryClient } from 'react-query';
 
@@ -10,8 +12,6 @@ import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { useActivityRequests } from 'src/services/useActivity';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import { ActivityStatus } from 'types/activity.type';
 
 const MesActivites = () => {
   const queryClient = useQueryClient();

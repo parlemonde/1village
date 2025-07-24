@@ -1,8 +1,8 @@
+import type { TeamCommentInterface } from 'types/teamComment.type';
+
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { TeamCommentInterface } from 'types/teamComment.type';
 
 async function getTeamComments(): Promise<TeamCommentInterface> {
   return (

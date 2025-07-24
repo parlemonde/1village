@@ -1,3 +1,6 @@
+import { ActivityType } from 'types/activity.type';
+import type { StoryElement, StoriesData } from 'types/story.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -10,9 +13,6 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { getQueryString } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import { ActivityType } from 'types/activity.type';
-import type { StoryElement, StoriesData } from 'types/story.type';
 
 const InspiredStory = () => {
   const router = useRouter();

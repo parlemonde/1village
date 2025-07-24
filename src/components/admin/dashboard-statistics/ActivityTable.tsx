@@ -1,10 +1,10 @@
 import { Box } from '@mui/material';
 
+import type { Country } from 'types/country.type';
+
 import React from 'react';
 
 import { countryToFlag } from 'src/utils';
-
-import type { Country } from 'types/country.type';
 
 import { OneVillageTable } from '../OneVillageTable';
 

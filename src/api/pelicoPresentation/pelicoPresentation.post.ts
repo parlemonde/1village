@@ -1,7 +1,7 @@
+import type { PelicoPresentationContent } from 'types/pelicoPresentation.type';
+
 import axios from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
-
-import type { PelicoPresentationContent } from 'types/pelicoPresentation.type';
 
 const BASE_URL = '/api/pelico-presentation';
 

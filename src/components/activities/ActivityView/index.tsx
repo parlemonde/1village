@@ -1,3 +1,7 @@
+import { UserType } from 'types/user.type';
+
+import type { ActivityViewProps } from './activity-view.types';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -23,10 +27,6 @@ import { UserDisplayName } from 'src/components/UserDisplayName';
 import { useActivity } from 'src/services/useActivity';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { toDate } from 'src/utils';
-
-import { UserType } from 'types/user.type';
-
-import type { ActivityViewProps } from './activity-view.types';
 
 import { REACTIONS } from '../utils';
 import { DefiActivityView } from './DefiActivityView';

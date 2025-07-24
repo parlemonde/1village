@@ -1,7 +1,7 @@
-import * as argon2 from 'argon2';
-
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
+
+import * as argon2 from 'argon2';
 
 import { User, UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';

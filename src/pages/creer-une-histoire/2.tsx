@@ -1,6 +1,8 @@
 import AddIcon from '@mui/icons-material/Add';
 import { TextField, Grid, ButtonBase } from '@mui/material';
 
+import type { StoriesData, StoryElement } from 'types/story.type';
+
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -17,8 +19,6 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { useImageStoryRequests } from 'src/services/useImagesStory';
 import { bgPage, primaryColor } from 'src/styles/variables.const';
-
-import type { StoriesData, StoryElement } from 'types/story.type';
 
 const StoryStep2 = () => {
   const router = useRouter();

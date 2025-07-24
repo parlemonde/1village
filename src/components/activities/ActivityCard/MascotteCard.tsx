@@ -1,5 +1,7 @@
 import { Button } from '@mui/material';
 
+import type { ActivityCardProps } from './activity-card.types';
+
 import Link from 'next/link';
 import React from 'react';
 
@@ -7,8 +9,6 @@ import type { MascotteActivity } from 'src/activity-types/mascotte.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
-
-import type { ActivityCardProps } from './activity-card.types';
 
 import { CommentIcon } from './CommentIcon';
 

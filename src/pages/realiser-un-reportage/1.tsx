@@ -1,5 +1,8 @@
 import { TextField } from '@mui/material';
 
+import { ActivityStatus, ActivityType } from 'types/activity.type';
+import type { Activity } from 'types/activity.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -15,9 +18,6 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { getQueryString, serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import { ActivityStatus, ActivityType } from 'types/activity.type';
-import type { Activity } from 'types/activity.type';
 
 const ReportageStep1 = () => {
   const router = useRouter();

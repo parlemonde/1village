@@ -1,8 +1,8 @@
+import type { Activity } from 'server/entities/activity';
+
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { Activity } from 'server/entities/activity';
 
 async function getActivities(params: { limit: number | null; isPelico: boolean; isDraft: boolean }): Promise<Activity[]> {
   const { limit, isPelico, isDraft } = params;

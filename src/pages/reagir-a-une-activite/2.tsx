@@ -1,3 +1,5 @@
+import type { ActivityContent } from 'types/activity.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -8,8 +10,6 @@ import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
-
-import type { ActivityContent } from 'types/activity.type';
 
 const ReactionStep2 = () => {
   const router = useRouter();

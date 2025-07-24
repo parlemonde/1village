@@ -1,7 +1,7 @@
+import type { RequestHandler } from 'express';
+
 import { Router } from 'express';
 import morgan from 'morgan';
-
-import type { RequestHandler } from 'express';
 
 import { handleErrors } from '../middlewares/handleErrors';
 import { jsonify } from '../middlewares/jsonify';

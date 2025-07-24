@@ -1,5 +1,9 @@
 import { Card, CircularProgress } from '@mui/material';
 
+import type { ActivityContentType, ActivityContent, Activity, AnyData } from 'types/activity.type';
+import { ActivityType, ActivityStatus } from 'types/activity.type';
+import { UserType } from 'types/user.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useQueryClient } from 'react-query';
@@ -9,10 +13,6 @@ import { Modal } from 'src/components/Modal';
 import { primaryColor } from 'src/styles/variables.const';
 import { serializeToQueryUrl, debounce, getQueryString } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { ActivityContentType, ActivityContent, Activity, AnyData } from 'types/activity.type';
-import { ActivityType, ActivityStatus } from 'types/activity.type';
-import { UserType } from 'types/user.type';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';

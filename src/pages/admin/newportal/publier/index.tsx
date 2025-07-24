@@ -1,6 +1,8 @@
 import type { GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
 
+import { UserType } from 'types/user.type';
+
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
@@ -9,8 +11,6 @@ import ActivityCardAdminList from 'src/components/activities/ActivityCard/activi
 import { UserContext } from 'src/contexts/userContext';
 import PelicoStar from 'src/svg/pelico/pelico_star.svg';
 import PelicoVacances from 'src/svg/pelico/pelico_vacances.svg';
-
-import { UserType } from 'types/user.type';
 
 const rows: GridRowsProp = [
   // A row example of how it should look

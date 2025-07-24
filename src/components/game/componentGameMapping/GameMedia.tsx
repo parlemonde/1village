@@ -1,6 +1,8 @@
 import AddIcon from '@mui/icons-material/Add';
 import { ButtonBase } from '@mui/material';
 
+import type { inputType } from 'types/game.type';
+
 import Image from 'next/image';
 import React, { useContext } from 'react';
 import ReactPlayer from 'react-player';
@@ -11,8 +13,6 @@ import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { GameContext } from 'src/contexts/gameContext';
 import { errorColor, primaryColor, bgPage } from 'src/styles/variables.const';
-
-import type { inputType } from 'types/game.type';
 
 const GameMedia = ({ input }: { input: inputType }) => {
   const { updateGameConfig } = useContext(GameContext);

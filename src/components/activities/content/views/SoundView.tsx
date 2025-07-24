@@ -1,8 +1,8 @@
 import Alert from '@mui/material/Alert';
 
-import React from 'react';
-
 import type { ViewProps } from '../content.types';
+
+import React from 'react';
 
 export const SoundView = ({ value }: ViewProps) => {
   return (

@@ -1,9 +1,9 @@
+import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
+
 import { useCallback } from 'react';
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
 
 const generateUrl = (baseUrl: string, params: any): string => {
   const queryString = Object.keys(params)

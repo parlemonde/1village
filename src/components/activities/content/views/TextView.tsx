@@ -1,10 +1,10 @@
+import type { ViewProps } from '../content.types';
+
 import React, { useContext } from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
-
-import type { ViewProps } from '../content.types';
 
 import { ActivityCard } from '../../ActivityCard';
 

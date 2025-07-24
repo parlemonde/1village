@@ -1,6 +1,8 @@
 import AddIcon from '@mui/icons-material/Add';
 import { ButtonBase, Grid, TextField } from '@mui/material';
 
+import { ActivityStatus, ActivityType } from 'types/activity.type';
+
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -19,8 +21,6 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { bgPage } from 'src/styles/variables.const';
-
-import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const DefiStep1 = () => {
   const router = useRouter();

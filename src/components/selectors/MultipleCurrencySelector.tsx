@@ -1,11 +1,11 @@
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
+import type { Currency } from 'types/currency.type';
+
 import React from 'react';
 
 import { useCurrencies } from 'src/services/useCurrencies';
-
-import type { Currency } from 'types/currency.type';
 
 type CurrencyOption = Currency & {
   firstLetter: string;

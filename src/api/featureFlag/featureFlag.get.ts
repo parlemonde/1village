@@ -1,12 +1,12 @@
+import type { FeatureFlagsNames } from 'types/featureFlag.constant';
+import type { FeatureFlag } from 'types/featureFlag.type';
+import type { User } from 'types/user.type';
+
 import * as React from 'react';
 import { useQuery } from 'react-query';
 
 import { UserContext } from 'src/contexts/userContext';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { FeatureFlagsNames } from 'types/featureFlag.constant';
-import type { FeatureFlag } from 'types/featureFlag.type';
-import type { User } from 'types/user.type';
 
 export const fetchFeatureFlags = async () => {
   const response = await axiosRequest<Array<FeatureFlag & { users: User[] }>>({

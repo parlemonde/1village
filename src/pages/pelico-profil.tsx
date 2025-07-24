@@ -1,5 +1,7 @@
 import { Box } from '@mui/material';
 
+import type { PelicoPresentation } from 'types/pelicoPresentation.type';
+
 import React, { useEffect, useState } from 'react';
 
 import { usePelicoPresentation } from 'src/api/pelicoPresentation/pelicoPresentation.get';
@@ -8,8 +10,6 @@ import { ContentView } from 'src/components/activities/content/ContentView';
 import { Base } from 'src/components/Base';
 import { UserContext } from 'src/contexts/userContext';
 import { primaryColor } from 'src/styles/variables.const';
-
-import type { PelicoPresentation } from 'types/pelicoPresentation.type';
 
 const PelicoProfil = () => {
   const { user } = React.useContext(UserContext);

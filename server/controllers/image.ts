@@ -1,10 +1,10 @@
 import path from 'path';
 
+import type { Request, Response, NextFunction } from 'express';
+
 import fs from 'fs-extra';
 import sharp from 'sharp';
 import { v4 as uuidv4 } from 'uuid';
-
-import type { Request, Response, NextFunction } from 'express';
 
 import { UserType } from '../entities/user';
 import { deleteFile, uploadFile } from '../fileUpload';

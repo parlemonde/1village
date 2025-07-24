@@ -1,5 +1,12 @@
 import { Button, Paper } from '@mui/material';
 
+import { LinkNotAllowedInPath } from 'types/activity.type';
+import { GameType } from 'types/game.type';
+import type { GameActivity } from 'types/game.type';
+import { UserType } from 'types/user.type';
+
+import type { ActivityCardProps } from './activity-card.types';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import router from 'next/router';
@@ -15,13 +22,6 @@ import { useActivity } from 'src/services/useActivity';
 import { bgPage, primaryColor } from 'src/styles/variables.const';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { toDate } from 'src/utils';
-
-import { LinkNotAllowedInPath } from 'types/activity.type';
-import { GameType } from 'types/game.type';
-import type { GameActivity } from 'types/game.type';
-import { UserType } from 'types/user.type';
-
-import type { ActivityCardProps } from './activity-card.types';
 
 import { titles, REACTIONS, icons } from '../utils';
 import { CommentIcon } from './CommentIcon';

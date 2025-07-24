@@ -11,6 +11,9 @@ import MaterialLink from '@mui/material/Link';
 import NoSsr from '@mui/material/NoSsr';
 import Tooltip from '@mui/material/Tooltip';
 
+import { userTypeNames } from 'types/user.type';
+import type { Village } from 'types/village.type';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -25,9 +28,6 @@ import { useVillages } from 'src/services/useVillages';
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import { countryToFlag } from 'src/utils';
 import { exportJsonToCsv } from 'src/utils/csv-export';
-
-import { userTypeNames } from 'types/user.type';
-import type { Village } from 'types/village.type';
 
 const Users = () => {
   const router = useRouter();

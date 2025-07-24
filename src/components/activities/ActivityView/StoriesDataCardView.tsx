@@ -1,12 +1,12 @@
 import { Grid } from '@mui/material';
 
+import type { Activity } from 'types/activity.type';
+import type { User } from 'types/user.type';
+
 import React from 'react';
 
 import { useImageStories } from 'src/services/useImagesStory';
 import { useVillageUsers } from 'src/services/useVillageUsers';
-
-import type { Activity } from 'types/activity.type';
-import type { User } from 'types/user.type';
 
 import { ActivityCard } from '../ActivityCard';
 

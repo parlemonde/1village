@@ -1,5 +1,11 @@
 import { Button } from '@mui/material';
 
+import { LinkNotAllowedInPath } from 'types/activity.type';
+import type { GameActivity } from 'types/game.type';
+import { GameType } from 'types/game.type';
+
+import type { ActivityCardProps } from './activity-card.types';
+
 import Link from 'next/link';
 import router from 'next/router';
 import React, { useState, useMemo, useEffect } from 'react';
@@ -9,12 +15,6 @@ import { RedButton } from 'src/components/buttons/RedButton';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useGameRequests } from 'src/services/useGames';
 import { bgPage } from 'src/styles/variables.const';
-
-import { LinkNotAllowedInPath } from 'types/activity.type';
-import type { GameActivity } from 'types/game.type';
-import { GameType } from 'types/game.type';
-
-import type { ActivityCardProps } from './activity-card.types';
 
 import { CommentIcon } from './CommentIcon';
 

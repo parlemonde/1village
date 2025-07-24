@@ -1,3 +1,5 @@
+import type { ActivityContent, ActivityContentType } from 'types/activity.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -12,8 +14,6 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { capitalize } from 'src/utils';
-
-import type { ActivityContent, ActivityContentType } from 'types/activity.type';
 
 const DefiStep3 = () => {
   const router = useRouter();

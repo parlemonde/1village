@@ -1,8 +1,8 @@
-import useragent from 'express-useragent';
-import { Between } from 'typeorm';
-
 import type { AnalyticData, NavigationPerf, BrowserPerf } from '../../types/analytics.type';
 import type { JSONSchemaType } from 'ajv';
+
+import useragent from 'express-useragent';
+import { Between } from 'typeorm';
 
 import { AnalyticSession, AnalyticPageView, AnalyticPerformance } from '../entities/analytic';
 import { User, UserType } from '../entities/user';

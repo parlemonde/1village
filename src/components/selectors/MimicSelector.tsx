@@ -1,5 +1,9 @@
 import { TextField, Grid, Button } from '@mui/material';
 
+import type { MimicData } from 'types/game.type';
+
+import type { ChangeEventHandler } from 'react';
+
 import React from 'react';
 import ReactPlayer from 'react-player';
 
@@ -9,10 +13,6 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import UploadIcon from 'src/svg/jeu/add-video.svg';
-
-import type { MimicData } from 'types/game.type';
-
-import type { ChangeEventHandler } from 'react';
 
 interface MimicSelectorProps {
   MimicData: MimicData;

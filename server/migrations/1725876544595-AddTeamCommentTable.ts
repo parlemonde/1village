@@ -1,6 +1,6 @@
-import { Table } from 'typeorm';
-
 import type { MigrationInterface, QueryRunner } from 'typeorm';
+
+import { Table } from 'typeorm';
 
 export class AddTeamCommentTable1725876544595 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {

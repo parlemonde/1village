@@ -1,9 +1,9 @@
-import md5 from 'md5';
-
 import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
+
+import md5 from 'md5';
 
 /**
  * Returns a query string with the given parameters.

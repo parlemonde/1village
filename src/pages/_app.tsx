@@ -18,6 +18,13 @@ import { Container } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 
+import type { User } from 'types/user.type';
+import type { Village } from 'types/village.type';
+
+import type { EmotionCache } from '@emotion/react';
+import type { Request } from 'express';
+import type { AppContext, AppInitialProps, AppProps } from 'next/app';
+
 import { CacheProvider } from '@emotion/react';
 import axios from 'axios';
 import App from 'next/app';
@@ -43,13 +50,6 @@ import { useAnalytics } from 'src/hooks/useAnalytics';
 import createEmotionCache from 'src/styles/createEmotionCache';
 import theme from 'src/styles/theme';
 import { initH5p } from 'src/utils/initH5p';
-
-import type { User } from 'types/user.type';
-import type { Village } from 'types/village.type';
-
-import type { EmotionCache } from '@emotion/react';
-import type { Request } from 'express';
-import type { AppContext, AppInitialProps, AppProps } from 'next/app';
 
 interface MyAppOwnProps {
   csrfToken: string | null;

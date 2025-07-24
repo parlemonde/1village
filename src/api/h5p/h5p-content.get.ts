@@ -1,6 +1,6 @@
-import { axiosRequest } from 'src/utils/axiosRequest';
-
 import type { IContentMetadata, IEditorModel } from '@lumieducation/h5p-server';
+
+import { axiosRequest } from 'src/utils/axiosRequest';
 
 export type GetH5pContentData = IEditorModel & {
   library?: string | undefined;

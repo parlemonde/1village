@@ -7,9 +7,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-import React from 'react';
-
 import type { FamiliesWithoutAccount } from 'types/statistics.type';
+
+import React from 'react';
 
 function createRows(data: FamiliesWithoutAccount[]): FamiliesWithoutAccountRow[] {
   return data.map((row) => {

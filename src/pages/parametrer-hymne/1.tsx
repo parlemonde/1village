@@ -2,6 +2,10 @@ import { Box } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { ActivityStatus, ActivityType } from 'types/activity.type';
+import { TrackType } from 'types/anthem.type';
+import type { AnthemData, Track } from 'types/anthem.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -19,10 +23,6 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivityRequests } from 'src/services/useActivity';
 import instruments from 'src/utils/instruments';
-
-import { ActivityStatus, ActivityType } from 'types/activity.type';
-import { TrackType } from 'types/anthem.type';
-import type { AnthemData, Track } from 'types/anthem.type';
 
 import styles from '../../styles/parametrer-hymne.module.css';
 

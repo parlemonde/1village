@@ -1,8 +1,8 @@
-import { H5pError } from '@lumieducation/h5p-server';
-
 import type { IFileStats, ITemporaryFile, ITemporaryFileStorage, IUser } from '@lumieducation/h5p-server';
 import type { ReadStream } from 'fs-extra';
 import type { Readable } from 'stream';
+
+import { H5pError } from '@lumieducation/h5p-server';
 
 import { s3 } from '../../fileUpload';
 import { logger } from '../../utils/logger';

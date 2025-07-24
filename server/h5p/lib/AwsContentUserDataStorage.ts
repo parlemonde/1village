@@ -1,6 +1,6 @@
-import { H5pError } from '@lumieducation/h5p-server';
-
 import type { IContentUserData, IContentUserDataStorage, IFinishedUserData, IUser } from '@lumieducation/h5p-server';
+
+import { H5pError } from '@lumieducation/h5p-server';
 
 import { dynamoDb } from './dynamoDB';
 

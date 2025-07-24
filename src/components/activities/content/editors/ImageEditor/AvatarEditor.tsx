@@ -1,11 +1,11 @@
 import AddIcon from '@mui/icons-material/Add';
 import { ButtonBase } from '@mui/material';
 
+import type { EditorProps } from '../../content.types';
+
 import React from 'react';
 
 import { AvatarImg } from 'src/components/Avatar';
-
-import type { EditorProps } from '../../content.types';
 
 import { ImageModal } from './ImageModal';
 

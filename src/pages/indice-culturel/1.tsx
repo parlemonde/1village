@@ -1,5 +1,7 @@
 import { Box, TextField } from '@mui/material';
 
+import { ActivityStatus, ActivityType } from 'types/activity.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -15,8 +17,6 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import { getQueryString } from 'src/utils';
-
-import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const IndiceStep1 = () => {
   const router = useRouter();

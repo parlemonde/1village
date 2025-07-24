@@ -1,3 +1,5 @@
+import type { ActivityContent } from 'types/activity.type';
+
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
@@ -7,8 +9,6 @@ import StepsNavigation from 'src/components/activities/StepsNavigation';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
-
-import type { ActivityContent } from 'types/activity.type';
 
 import Layout from '../layout';
 

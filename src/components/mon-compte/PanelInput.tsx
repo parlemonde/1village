@@ -1,8 +1,8 @@
 import TextField from '@mui/material/TextField';
 
-import React from 'react';
-
 import type { CSSProperties } from 'react';
+
+import React from 'react';
 
 interface PanelInputProps {
   value: string | undefined;

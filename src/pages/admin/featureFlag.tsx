@@ -21,6 +21,10 @@ import {
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material/Select';
 
+import { FEATURE_FLAGS_NAMES } from 'types/featureFlag.constant';
+import type { User, UserType } from 'types/user.type';
+import { userTypeNames } from 'types/user.type';
+
 import { useSnackbar } from 'notistack';
 import React, { useState, useMemo } from 'react';
 import { useQueryClient } from 'react-query';
@@ -28,10 +32,6 @@ import { useQueryClient } from 'react-query';
 import { useFeatureFlags } from 'src/api/featureFlag/featureFlag.get';
 import { useUsers } from 'src/api/user/user.list';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import { FEATURE_FLAGS_NAMES } from 'types/featureFlag.constant';
-import type { User, UserType } from 'types/user.type';
-import { userTypeNames } from 'types/user.type';
 
 const FeatureFlagsTest: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();

@@ -1,6 +1,9 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Grid, ButtonBase, FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
 
+import { ActivityStatus, ActivityType } from 'types/activity.type';
+import type { StoriesData } from 'types/story.type';
+
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -19,9 +22,6 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useImageStoryRequests } from 'src/services/useImagesStory';
 import { primaryColor, bgPage, errorColor } from 'src/styles/variables.const';
-
-import { ActivityStatus, ActivityType } from 'types/activity.type';
-import type { StoriesData } from 'types/story.type';
 
 const StoryStep1 = () => {
   const router = useRouter();

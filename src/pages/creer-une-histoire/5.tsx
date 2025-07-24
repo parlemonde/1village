@@ -1,5 +1,9 @@
 import { Tooltip, Button, Backdrop, CircularProgress } from '@mui/material';
 
+import { ActivityStatus, ActivityType } from 'types/activity.type';
+import type { StoriesData } from 'types/story.type';
+import { UserType } from 'types/user.type';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -13,10 +17,6 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
-
-import { ActivityStatus, ActivityType } from 'types/activity.type';
-import type { StoriesData } from 'types/story.type';
-import { UserType } from 'types/user.type';
 
 const StoryStep5 = () => {
   const router = useRouter();

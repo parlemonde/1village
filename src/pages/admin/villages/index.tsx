@@ -9,6 +9,8 @@ import IconButton from '@mui/material/IconButton';
 import MaterialLink from '@mui/material/Link';
 import Tooltip from '@mui/material/Tooltip';
 
+import type { Country } from 'types/country.type';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -20,8 +22,6 @@ import { useVillages, useVillageRequests } from 'src/services/useVillages';
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import { countryToFlag } from 'src/utils';
 import { SSO_HOSTNAME } from 'src/utils/sso';
-
-import type { Country } from 'types/country.type';
 
 const Villages = () => {
   const router = useRouter();

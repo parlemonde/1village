@@ -1,6 +1,6 @@
-import AWS from 'aws-sdk';
-
 import type { Request, Response, NextFunction } from 'express';
+
+import AWS from 'aws-sdk';
 
 import { UserType } from '../entities/user';
 import { streamFile } from '../fileUpload/streamFile';

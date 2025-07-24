@@ -1,6 +1,6 @@
-import React from 'react';
-
 import type { EditorProps } from '../../content.types';
+
+import React from 'react';
 
 import { EditorContainer } from '../EditorContainer';
 import { SimpleTextEditor } from './SimpleTextEditor';

@@ -1,3 +1,6 @@
+import { ActivityType } from 'types/activity.type';
+import { UserType } from 'types/user.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -7,9 +10,6 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-
-import { ActivityType } from 'types/activity.type';
-import { UserType } from 'types/user.type';
 
 const ContenuLibre = () => {
   const router = useRouter();

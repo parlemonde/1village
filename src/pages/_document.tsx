@@ -1,12 +1,12 @@
 /* eslint-disable react/display-name */
+import type { DocumentInitialProps, DocumentContext } from 'next/document';
+
 import createEmotionServer from '@emotion/server/create-instance';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import * as React from 'react';
 
 import createEmotionCache from 'src/styles/createEmotionCache';
 import { primaryColor } from 'src/styles/variables.const';
-
-import type { DocumentInitialProps, DocumentContext } from 'next/document';
 
 const APP_URL = process.env.NEXT_PUBLIC_HOST_URL || 'https://1village.parlemonde.org';
 const APP_NAME = '1Village';

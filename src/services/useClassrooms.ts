@@ -1,11 +1,11 @@
+import type { Classroom, ClassroomFilter } from 'types/classroom.type';
+
+import type { QueryFunction } from 'react-query';
+
 import React from 'react';
 import { useQueryClient, useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { Classroom, ClassroomFilter } from 'types/classroom.type';
-
-import type { QueryFunction } from 'react-query';
 
 export const useClassrooms = (options?: ClassroomFilter): { classrooms: Classroom[]; setClassrooms(newClassrooms: Classroom[]): void } => {
   const queryClient = useQueryClient();

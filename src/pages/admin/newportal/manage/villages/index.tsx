@@ -8,6 +8,9 @@ import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 
+import type { Country } from 'types/country.type';
+import { UserType } from 'types/user.type';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -21,9 +24,6 @@ import BackArrow from 'src/svg/back-arrow.svg';
 import { countryToFlag } from 'src/utils';
 import { SSO_HOSTNAME } from 'src/utils/sso';
 import { normalizeString } from 'src/utils/string';
-
-import type { Country } from 'types/country.type';
-import { UserType } from 'types/user.type';
 
 const Villages = () => {
   const router = useRouter();

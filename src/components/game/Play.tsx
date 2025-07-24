@@ -8,12 +8,12 @@ import RadioGroup from '@mui/material/RadioGroup';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 
+import { InputTypeEnum } from 'types/game.type';
+import type { GameType } from 'types/game.type';
+
 import React from 'react';
 
 import { GAME_FIELDS_CONFIG } from 'src/config/games/game';
-
-import { InputTypeEnum } from 'types/game.type';
-import type { GameType } from 'types/game.type';
 
 interface PlayProps {
   gameType: GameType;

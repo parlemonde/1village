@@ -1,5 +1,7 @@
 import { Grid } from '@mui/material';
 
+import type { ActivityViewProps } from './activity-view.types';
+
 import Image from 'next/image';
 import React from 'react';
 
@@ -8,8 +10,6 @@ import type { DefiActivity } from 'src/activity-types/defi.types';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { LightBox } from 'src/components/lightbox/Lightbox';
 import { bgPage } from 'src/styles/variables.const';
-
-import type { ActivityViewProps } from './activity-view.types';
 
 export const DefiActivityView = ({ activity }: ActivityViewProps<DefiActivity>) => {
   return (

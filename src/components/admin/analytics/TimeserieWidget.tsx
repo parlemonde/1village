@@ -1,12 +1,12 @@
+import type { AnalyticData } from 'types/analytics.type';
+
+import type { ChartConfiguration } from 'chart.js';
+
 import { Chart, LineController, LineElement, PointElement, LinearScale, CategoryScale, Tooltip } from 'chart.js';
 import React from 'react';
 
 import { KeepRatio } from 'src/components/KeepRatio';
 import { primaryColor, primaryColorLight, primaryColorLight2 } from 'src/styles/variables.const';
-
-import type { AnalyticData } from 'types/analytics.type';
-
-import type { ChartConfiguration } from 'chart.js';
 
 Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryScale, Tooltip);
 

@@ -1,5 +1,7 @@
 import { ButtonBase, Card } from '@mui/material';
 
+import type { AnthemData } from 'types/anthem.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -12,8 +14,6 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import SyllableBackline from 'src/svg/anthem/syllable-backline.svg';
 import Syllable from 'src/svg/anthem/syllable.svg';
-
-import type { AnthemData } from 'types/anthem.type';
 
 import styles from '../../../../../styles/parametrer-hymne.module.css';
 

@@ -1,3 +1,5 @@
+import type { Activity as ActivityInterface, AnyData, ActivityContent } from '../../types/activity.type';
+
 import {
   Column,
   Entity,
@@ -10,8 +12,6 @@ import {
   OneToMany,
   Index,
 } from 'typeorm';
-
-import type { Activity as ActivityInterface, AnyData, ActivityContent } from '../../types/activity.type';
 
 import { ActivityType, ActivityStatus } from '../../types/activity.type';
 import { VillagePhase } from '../../types/village.type';

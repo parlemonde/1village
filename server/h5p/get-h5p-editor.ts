@@ -1,7 +1,7 @@
+import type { H5pUser } from './h5p.types';
+
 import * as H5P from '@lumieducation/h5p-server';
 import { v4 } from 'uuid';
-
-import type { H5pUser } from './h5p.types';
 
 import { logger } from '../utils/logger';
 import { AwsContentStorage } from './lib/AwsContentStorage';

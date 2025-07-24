@@ -1,3 +1,6 @@
+import type { Syllable } from 'types/anthem.type';
+import type { ClassAnthemData } from 'types/classAnthem.types';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -8,9 +11,6 @@ import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
-
-import type { Syllable } from 'types/anthem.type';
-import type { ClassAnthemData } from 'types/classAnthem.types';
 
 import styles from '../../styles/chanter-un-couplet.module.css';
 

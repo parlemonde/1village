@@ -1,3 +1,6 @@
+import { ActivityType } from 'types/activity.type';
+import { PhaseType } from 'types/phase.type';
+
 import AnthemIcon from 'src/svg/navigation/anthem-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
@@ -11,9 +14,6 @@ import StoryIcon from 'src/svg/navigation/story-icon.svg';
 import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
-
-import { ActivityType } from 'types/activity.type';
-import { PhaseType } from 'types/phase.type';
 
 export const titles = {
   [ActivityType.MASCOTTE]: 'créé une mascotte',

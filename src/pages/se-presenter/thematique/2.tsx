@@ -1,3 +1,5 @@
+import { ActivityStatus } from 'types/activity.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -9,8 +11,6 @@ import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
-
-import { ActivityStatus } from 'types/activity.type';
 
 const PresentationStep2 = () => {
   const router = useRouter();

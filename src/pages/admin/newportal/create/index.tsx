@@ -1,5 +1,8 @@
 import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 
+import { ActivityType } from 'types/activity.type';
+import { UserType } from 'types/user.type';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
@@ -8,9 +11,6 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivity } from 'src/hooks/useActivity';
 import DoubleChevronRightIcon from 'src/svg/mdi-light_chevron-double-right.svg';
-
-import { ActivityType } from 'types/activity.type';
-import { UserType } from 'types/user.type';
 
 type Link = {
   name: string;

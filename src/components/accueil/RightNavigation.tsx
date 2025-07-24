@@ -1,5 +1,10 @@
 import { Box, Button, Link, Tooltip } from '@mui/material';
 
+import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
+
+import type { ReactNode } from 'react';
+
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -10,11 +15,6 @@ import { Map } from 'src/components/Map';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/services/useActivity';
 import { getUserDisplayName } from 'src/utils';
-
-import type { User } from 'types/user.type';
-import { UserType } from 'types/user.type';
-
-import type { ReactNode } from 'react';
 
 import { AvatarImg } from '../Avatar';
 import { Flag } from '../Flag';

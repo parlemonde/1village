@@ -10,6 +10,9 @@ import MenuItem from '@mui/material/MenuItem';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import Select from '@mui/material/Select';
 
+import type { Activity } from 'types/activity.type';
+import { UserType } from 'types/user.type';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
@@ -23,9 +26,6 @@ import { useGetChildrenActivitiesById } from 'src/api/activities/activities.admi
 import { useGetOneActivityById } from 'src/api/activities/activities.getOneById';
 import { useGetVillages } from 'src/api/villages/villages.get';
 import { UserContext } from 'src/contexts/userContext';
-
-import type { Activity } from 'types/activity.type';
-import { UserType } from 'types/user.type';
 
 const ModifPrepublish = () => {
   const { user } = React.useContext(UserContext);

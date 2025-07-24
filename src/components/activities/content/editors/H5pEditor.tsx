@@ -1,6 +1,10 @@
 import { Button, Divider, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import TextField from '@mui/material/TextField';
 
+import { UserType } from 'types/user.type';
+
+import type { EditorProps } from '../content.types';
+
 import Link from 'next/link';
 import React from 'react';
 
@@ -11,10 +15,6 @@ import { H5p } from 'src/components/H5pOLD';
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
 import { fontDetailColor } from 'src/styles/variables.const';
-
-import { UserType } from 'types/user.type';
-
-import type { EditorProps } from '../content.types';
 
 import { EditorContainer } from './EditorContainer';
 

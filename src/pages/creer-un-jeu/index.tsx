@@ -1,3 +1,5 @@
+import { GameType } from 'types/game.type';
+
 import React from 'react';
 
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
@@ -6,8 +8,6 @@ import { PageLayout } from 'src/components/PageLayout';
 import ExpressionIcon from 'src/svg/jeu/expression.svg';
 import MimiqueIcon from 'src/svg/jeu/mimique.svg';
 import MonnaieIcon from 'src/svg/jeu/monnaie.svg';
-
-import { GameType } from 'types/game.type';
 
 const activities = [
   {

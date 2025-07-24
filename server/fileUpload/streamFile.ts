@@ -1,6 +1,6 @@
-import mime from 'mime-types';
-
 import type { Request, Response, NextFunction } from 'express';
+
+import mime from 'mime-types';
 
 import { getFileData, getFile } from './index';
 

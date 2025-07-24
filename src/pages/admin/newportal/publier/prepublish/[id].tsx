@@ -10,6 +10,8 @@ import MenuItem from '@mui/material/MenuItem';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import Select from '@mui/material/Select';
 
+import { UserType } from 'types/user.type';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
@@ -20,8 +22,6 @@ import { postAdminActivity } from 'src/api/activities/activities.admin.post';
 import { useGetOneActivityById } from 'src/api/activities/activities.getOneById';
 import { useGetVillages } from 'src/api/villages/villages.get';
 import { UserContext } from 'src/contexts/userContext';
-
-import { UserType } from 'types/user.type';
 
 const Prepublier = () => {
   const { user } = React.useContext(UserContext);

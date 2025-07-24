@@ -1,8 +1,8 @@
-import { getSubtype, getType } from 'src/activity-types/activity.constants';
-import { isGame } from 'src/activity-types/anyActivity';
-
 import type { Activity, AnyData } from 'types/activity.type';
 import { GameType } from 'types/game.type';
+
+import { getSubtype, getType } from 'src/activity-types/activity.constants';
+import { isGame } from 'src/activity-types/anyActivity';
 
 export function filterActivitiesWithLastGame(activitiesData: Activity<AnyData>[], subType: number = GameType.MIMIC): Activity<AnyData>[] {
   const indexOfLastMimic = activitiesData.findIndex((activity) => isGame(activity) && activity.subType === subType); // Get the index of this last mimic

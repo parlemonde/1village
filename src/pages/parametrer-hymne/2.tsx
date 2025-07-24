@@ -1,6 +1,10 @@
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { ActivityStatus } from 'types/activity.type';
+import { TrackType } from 'types/anthem.type';
+import type { AnthemData, Track } from 'types/anthem.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -18,10 +22,6 @@ import Vocal from 'src/svg/anthem/vocal.svg';
 import { getLongestVerseSampleDuration } from 'src/utils/audios';
 import instruments from 'src/utils/instruments';
 import { toTime } from 'src/utils/toTime';
-
-import { ActivityStatus } from 'types/activity.type';
-import { TrackType } from 'types/anthem.type';
-import type { AnthemData, Track } from 'types/anthem.type';
 
 import styles from '../../styles/parametrer-hymne.module.css';
 

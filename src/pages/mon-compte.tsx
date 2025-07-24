@@ -4,6 +4,9 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import NoSsr from '@mui/material/NoSsr';
 
+import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
+
 import { useSnackbar } from 'notistack';
 import React from 'react';
 
@@ -25,9 +28,6 @@ import { getUserDisplayName } from 'src/utils';
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from 'src/utils/accountChecks';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import { SSO_HOSTNAME } from 'src/utils/sso';
-
-import type { User } from 'types/user.type';
-import { UserType } from 'types/user.type';
 
 const Presentation = () => {
   const { user, setUser, logout } = React.useContext(UserContext);

@@ -1,12 +1,12 @@
 import { Button, Grid } from '@mui/material';
 
+import { UserType } from 'types/user.type';
+
 import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { secondaryColor } from 'src/styles/variables.const';
-
-import { UserType } from 'types/user.type';
 
 export const VillageSelect = () => {
   const { user } = React.useContext(UserContext);

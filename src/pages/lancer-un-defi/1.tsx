@@ -1,5 +1,7 @@
 import { TextField } from '@mui/material';
 
+import { ActivityStatus, ActivityType } from 'types/activity.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -13,8 +15,6 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
-
-import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const FreeDefiStep1 = () => {
   const router = useRouter();

@@ -1,5 +1,7 @@
 import { Button, Switch, TextField } from '@mui/material';
 
+import { UserType } from 'types/user.type';
+
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -18,8 +20,6 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { primaryColor } from 'src/styles/variables.const';
-
-import { UserType } from 'types/user.type';
 
 const ContenuLibre = () => {
   const router = useRouter();

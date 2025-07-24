@@ -1,6 +1,9 @@
 import { Divider } from '@mui/material';
 import Paper from '@mui/material/Paper';
 
+import type { LinkValue } from './toolbar/Link';
+import type { ContentBlock, DraftEditorCommand, DraftHandleValue } from 'draft-js';
+
 import classnames from 'classnames';
 import { CompositeDecorator, ContentState, convertToRaw, Editor, EditorState, Modifier, RichUtils } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
@@ -20,9 +23,6 @@ import htmlToDraft from 'html-to-draftjs';
 import React from 'react';
 
 import { errorColor, fontDetailColor, primaryColor } from 'src/styles/variables.const';
-
-import type { LinkValue } from './toolbar/Link';
-import type { ContentBlock, DraftEditorCommand, DraftHandleValue } from 'draft-js';
 
 import { ColorPicker } from './toolbar/ColorPicker';
 import { EmojiPicker } from './toolbar/EmojiPicker';

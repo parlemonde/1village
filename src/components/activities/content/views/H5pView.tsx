@@ -1,9 +1,9 @@
+import type { ViewProps } from '../content.types';
+
 import React from 'react';
 
 import { H5pPlayer } from 'src/components/h5p';
 import { H5p } from 'src/components/H5pOLD';
-
-import type { ViewProps } from '../content.types';
 
 export const H5pView = ({ activityId, value }: ViewProps) => {
   const contentId = value?.match(/^\/h5p\/data\/([\w|-]+)\/play$/)?.[1] ?? null;

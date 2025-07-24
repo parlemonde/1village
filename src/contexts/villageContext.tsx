@@ -5,6 +5,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
+import { UserType } from 'types/user.type';
+import type { Village } from 'types/village.type';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
@@ -14,9 +17,6 @@ import { Modal } from 'src/components/Modal';
 import PelicoVacances from 'src/svg/pelico/pelico_vacances.svg';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import { getCookie, setCookie } from 'src/utils/cookies';
-
-import { UserType } from 'types/user.type';
-import type { Village } from 'types/village.type';
 
 import { UserContext } from './userContext';
 

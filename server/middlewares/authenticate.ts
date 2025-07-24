@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken';
-
 import type { UserType } from '../entities/user';
 import type { NextFunction, Request, Response, RequestHandler } from 'express';
+
+import jwt from 'jsonwebtoken';
 
 import { getNewAccessToken } from '../authentication/lib/tokens';
 import { User } from '../entities/user';

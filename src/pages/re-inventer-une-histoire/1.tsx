@@ -1,6 +1,9 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Grid, ButtonBase, FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
 
+import { ActivityStatus } from 'types/activity.type';
+import type { StoriesData } from 'types/story.type';
+
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -17,9 +20,6 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { bgPage, primaryColor, errorColor } from 'src/styles/variables.const';
-
-import { ActivityStatus } from 'types/activity.type';
-import type { StoriesData } from 'types/story.type';
 
 const ReInventStoryStep1 = () => {
   const router = useRouter();

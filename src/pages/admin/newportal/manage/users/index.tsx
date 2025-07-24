@@ -2,6 +2,12 @@ import { Box, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/
 import Button from '@mui/material/Button';
 import NoSsr from '@mui/material/NoSsr';
 
+import type { UserFilter } from 'types/manage.type';
+import { UserType, userTypeNames } from 'types/user.type';
+import type { Village } from 'types/village.type';
+
+import type { SetStateAction } from 'react';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useMemo, useState } from 'react';
@@ -20,12 +26,6 @@ import BackArrow from 'src/svg/back-arrow.svg';
 import { countryToFlag } from 'src/utils';
 import { exportJsonToCsv } from 'src/utils/csv-export';
 import { normalizeString } from 'src/utils/string';
-
-import type { UserFilter } from 'types/manage.type';
-import { UserType, userTypeNames } from 'types/user.type';
-import type { Village } from 'types/village.type';
-
-import type { SetStateAction } from 'react';
 
 const Users = () => {
   const router = useRouter();

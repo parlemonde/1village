@@ -1,9 +1,9 @@
+import type { ActivityContent, ActivityContentType } from 'types/activity.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Sortable } from 'src/components/Sortable';
-
-import type { ActivityContent, ActivityContentType } from 'types/activity.type';
 
 import { AddContentCard } from './AddContentCard';
 import { DocumentEditor } from './editors/DocumentEditor/DocumentEditor';

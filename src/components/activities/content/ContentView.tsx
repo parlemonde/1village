@@ -1,6 +1,6 @@
-import React from 'react';
-
 import type { ActivityContent } from 'types/activity.type';
+
+import React from 'react';
 
 import { DocumentView } from './views/DocumentView';
 import { H5pView } from './views/H5pView';

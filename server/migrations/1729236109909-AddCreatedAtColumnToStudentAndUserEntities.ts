@@ -1,6 +1,6 @@
-import { TableColumn } from 'typeorm';
-
 import type { MigrationInterface, QueryRunner } from 'typeorm';
+
+import { TableColumn } from 'typeorm';
 
 export class AddCreatedAtColumnToStudentAndUserEntities1729236109909 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {

@@ -1,6 +1,9 @@
 import { Button } from '@mui/material';
 import Paper from '@mui/material/Paper';
 
+import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
+
 import Link from 'next/link';
 import React from 'react';
 
@@ -8,9 +11,6 @@ import { AvatarImg } from 'src/components/Avatar';
 import { UserDisplayName } from 'src/components/UserDisplayName';
 import { primaryColor } from 'src/styles/variables.const';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
-
-import type { User } from 'types/user.type';
-import { UserType } from 'types/user.type';
 
 export const MascotteTemplate = ({ user }: { user: User }) => (
   <Paper variant={'outlined'} square={true} elevation={0} style={{ margin: '0', cursor: 'unset' }}>

@@ -1,3 +1,9 @@
+import type { Activity } from 'types/activity.type';
+import { ActivityType } from 'types/activity.type';
+import { TrackType } from 'types/anthem.type';
+import type { AnthemData, Track } from 'types/anthem.type';
+import type { ClassAnthemData } from 'types/classAnthem.types';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -8,12 +14,6 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { Activity } from 'types/activity.type';
-import { ActivityType } from 'types/activity.type';
-import { TrackType } from 'types/anthem.type';
-import type { AnthemData, Track } from 'types/anthem.type';
-import type { ClassAnthemData } from 'types/classAnthem.types';
 
 const emptyAnthemActivity: AnthemData = {
   tracks: [],

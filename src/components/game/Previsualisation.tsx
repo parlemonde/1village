@@ -1,14 +1,14 @@
 import { FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 
+import type { inputType } from 'types/game.type';
+import { InputTypeEnum } from 'types/game.type';
+
 import Image from 'next/image';
 import router from 'next/router';
 import React, { useContext } from 'react';
 import ReactPlayer from 'react-player';
 
 import { GameContext } from 'src/contexts/gameContext';
-
-import type { inputType } from 'types/game.type';
-import { InputTypeEnum } from 'types/game.type';
 
 import { CustomRadio } from '../buttons/CustomRadio';
 import { EditButton } from '../buttons/EditButton';

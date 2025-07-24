@@ -1,9 +1,9 @@
-import { MeshBasicMaterial, Mesh, DoubleSide } from 'three';
-import { ConicPolygonBufferGeometry } from 'three-conic-polygon-geometry';
-
 import type { HoverableObject } from '../lib/hoverable-object';
 import type { FeatureCollection, Geometry, Position } from 'geojson';
 import type { ColorRepresentation } from 'three';
+
+import { MeshBasicMaterial, Mesh, DoubleSide } from 'three';
+import { ConicPolygonBufferGeometry } from 'three-conic-polygon-geometry';
 
 import { GLOBE_RADIUS } from '../world.constants';
 

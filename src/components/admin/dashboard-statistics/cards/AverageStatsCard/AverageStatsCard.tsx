@@ -1,7 +1,7 @@
-import React from 'react';
-
 import type { AverageStatsData } from 'types/dashboard.type';
 import { AverageStatsProcessingMethod } from 'types/dashboard.type';
+
+import React from 'react';
 
 import styles from './AverageStatsCard.module.css';
 

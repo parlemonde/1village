@@ -1,9 +1,9 @@
 import { Tab, Tabs } from '@mui/material';
 
-import React, { useState } from 'react';
-
 import { DashboardSummaryTab, DashboardType } from 'types/dashboard.type';
 import type { DashboardSummaryData } from 'types/dashboard.type';
+
+import React, { useState } from 'react';
 
 import TabPanel from '../TabPanel';
 import DashboardClassroomTab from './DashboardClassroomTab';

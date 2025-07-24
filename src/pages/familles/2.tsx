@@ -5,6 +5,8 @@ import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRound
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 
+import type { Student } from 'types/student.type';
+
 import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 
@@ -18,8 +20,6 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { ClassroomContext } from 'src/contexts/classroomContext';
 import { bgPage } from 'src/styles/variables.const';
 import { isNormalizedStringEqual } from 'src/utils/string';
-
-import type { Student } from 'types/student.type';
 
 const ClassroomParamStep2 = () => {
   const router = useRouter();

@@ -1,5 +1,7 @@
 import { Button, CircularProgress } from '@mui/material';
 
+import type { ViewProps } from '../../content.types';
+
 import { useSnackbar } from 'notistack';
 import React from 'react';
 import ReactPlayer from 'react-player';
@@ -7,8 +9,6 @@ import ReactPlayer from 'react-player';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { ViewProps } from '../../content.types';
 
 const VideoView = ({ value }: ViewProps) => {
   const { enqueueSnackbar } = useSnackbar();

@@ -1,5 +1,9 @@
 import { Button, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
+import { UserType } from 'types/user.type';
+import type { Village } from 'types/village.type';
+import { VillagePhase } from 'types/village.type';
+
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 
@@ -8,10 +12,6 @@ import { SavePhasesModal } from 'src/components/admin/manage/settings/SavePhases
 import { UserContext } from 'src/contexts/userContext';
 import { primaryColor } from 'src/styles/variables.const';
 import BackArrow from 'src/svg/back-arrow.svg';
-
-import { UserType } from 'types/user.type';
-import type { Village } from 'types/village.type';
-import { VillagePhase } from 'types/village.type';
 
 const Phases = () => {
   const { user } = React.useContext(UserContext);

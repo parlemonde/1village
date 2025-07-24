@@ -1,5 +1,9 @@
 import { Button } from '@mui/material';
 
+import type { Activity, AnyData } from 'types/activity.type';
+import { GameType } from 'types/game.type';
+import { UserType } from 'types/user.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -14,10 +18,6 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
-
-import type { Activity, AnyData } from 'types/activity.type';
-import { GameType } from 'types/game.type';
-import { UserType } from 'types/user.type';
 
 import { filterActivitiesByTerm, filterActivitiesWithLastGame } from './Filters/FilterActivities';
 import { LinkChild } from './LinkChild';

@@ -3,6 +3,11 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { ActivityStatus } from 'types/activity.type';
+import type { Track } from 'types/anthem.type';
+import { TrackType } from 'types/anthem.type';
+import type { ClassAnthemData } from 'types/classAnthem.types';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -21,11 +26,6 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { getLongestVerseSampleDuration, getVerseTracks } from 'src/utils/audios';
 import { toTime } from 'src/utils/toTime';
-
-import { ActivityStatus } from 'types/activity.type';
-import type { Track } from 'types/anthem.type';
-import { TrackType } from 'types/anthem.type';
-import type { ClassAnthemData } from 'types/classAnthem.types';
 
 import styles from '../../styles/chanter-un-couplet.module.css';
 

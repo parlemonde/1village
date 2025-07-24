@@ -1,14 +1,14 @@
 import { Typography } from '@mui/material';
 
+import type { Country } from 'types/country.type';
+import { UserType } from 'types/user.type';
+
 import * as React from 'react';
 
 import { Flag } from 'src/components/Flag';
 import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-
-import type { Country } from 'types/country.type';
-import { UserType } from 'types/user.type';
 
 export const VillageMonde = (): JSX.Element => {
   const { village, selectedPhase } = React.useContext(VillageContext);

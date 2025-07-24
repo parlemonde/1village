@@ -3,6 +3,9 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { ActivityStatus } from 'types/activity.type';
+import { UserType } from 'types/user.type';
+
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -21,9 +24,6 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { capitalize } from 'src/utils';
-
-import { ActivityStatus } from 'types/activity.type';
-import { UserType } from 'types/user.type';
 
 const DefiStep5 = () => {
   const router = useRouter();

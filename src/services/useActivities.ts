@@ -1,3 +1,9 @@
+import type { Activity } from 'types/activity.type';
+import type { Classroom } from 'types/classroom.type';
+import { UserType } from 'types/user.type';
+
+import type { QueryFunction } from 'react-query';
+
 import React from 'react';
 import { useQuery } from 'react-query';
 
@@ -6,12 +12,6 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { Activity } from 'types/activity.type';
-import type { Classroom } from 'types/classroom.type';
-import { UserType } from 'types/user.type';
-
-import type { QueryFunction } from 'react-query';
 
 export type Args = {
   limit?: number;

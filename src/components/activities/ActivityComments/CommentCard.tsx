@@ -1,5 +1,10 @@
 import { Box, Button, CircularProgress, Paper } from '@mui/material';
 
+import type { Activity, AnyData } from 'types/activity.type';
+import type { Comment } from 'types/comment.type';
+import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
+
 import dynamic from 'next/dynamic';
 import React from 'react';
 
@@ -14,11 +19,6 @@ import { useCommentRequests } from 'src/services/useComments';
 import { primaryColor } from 'src/styles/variables.const';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { toDate } from 'src/utils';
-
-import type { Activity, AnyData } from 'types/activity.type';
-import type { Comment } from 'types/comment.type';
-import type { User } from 'types/user.type';
-import { UserType } from 'types/user.type';
 
 const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
 

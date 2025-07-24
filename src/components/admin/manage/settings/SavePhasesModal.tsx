@@ -1,3 +1,5 @@
+import { VillagePhase } from 'types/village.type';
+
 import { useSnackbar } from 'notistack';
 import React, { useState, useEffect } from 'react';
 
@@ -5,8 +7,6 @@ import { softDeletePhaseHistory } from 'src/api/phaseHistory/phaseHistory.delete
 import { postPhaseHistory } from 'src/api/phaseHistory/phaseHistory.post';
 import { useUpdateVillages } from 'src/api/villages/villages.put';
 import { Modal } from 'src/components/Modal';
-
-import { VillagePhase } from 'types/village.type';
 
 interface SavePhasesModalProps {
   villagesToUpdate: { [villageId: number]: VillagePhase };

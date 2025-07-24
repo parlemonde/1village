@@ -1,6 +1,8 @@
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Card, CardHeader, Avatar, CardMedia, CardContent, Typography, Button, CardActions, Menu, MenuItem } from '@mui/material';
 
+import type { Activity } from 'server/entities/activity';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
@@ -11,8 +13,6 @@ import { useGetChildrenActivitiesById } from 'src/api/activities/activities.admi
 import { usePublishActivity } from 'src/api/activities/activities.put';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 import { htmlToText } from 'src/utils';
-
-import type { Activity } from 'server/entities/activity';
 
 export default function ActivityCard({
   activity,

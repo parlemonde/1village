@@ -1,8 +1,9 @@
 import path from 'path';
 
+import type { DataSourceOptions } from 'typeorm';
+
 import { DataSource } from 'typeorm';
 
-import type { DataSourceOptions } from 'typeorm';
 import 'dotenv/config';
 
 const DEFAULT_TYPE = 'mysql' as const;

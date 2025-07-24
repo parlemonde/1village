@@ -1,14 +1,14 @@
 import { Alert, Box, TextField } from '@mui/material';
 
+import type { Track } from 'types/anthem.type';
+
+import type { DisplayableInstrumentsType } from '../../../../utils/instruments';
+
 import React from 'react';
 
 import AddAudioButton from 'src/components/buttons/AddAudioButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { EditButton } from 'src/components/buttons/EditButton';
-
-import type { Track } from 'types/anthem.type';
-
-import type { DisplayableInstrumentsType } from '../../../../utils/instruments';
 
 import AudioEditor from '../../content/editors/AudioEditor/AudioEditor';
 import AnthemTrackIcon from '../AnthemTrackIcon/AnthemTrackIcon';

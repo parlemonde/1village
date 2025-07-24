@@ -8,6 +8,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 
+import type { User } from 'types/user.type';
+import { UserType, userTypeNames } from 'types/user.type';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
@@ -21,9 +24,6 @@ import { useVillages } from 'src/services/useVillages';
 import { getQueryString } from 'src/utils';
 import { isPseudoValid, isEmailValid } from 'src/utils/accountChecks';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { User } from 'types/user.type';
-import { UserType, userTypeNames } from 'types/user.type';
 
 const Required = (label: string) => (
   <>

@@ -1,5 +1,7 @@
 import { TextField, Box } from '@mui/material';
 
+import { ActivityStatus, ActivityType } from 'types/activity.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -17,8 +19,6 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { errorColor } from 'src/styles/variables.const';
 import { getUserDisplayName, pluralS } from 'src/utils';
-
-import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const MascotteStep1 = () => {
   const { selectedPhase } = React.useContext(VillageContext);

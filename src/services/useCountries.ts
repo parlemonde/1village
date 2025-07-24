@@ -1,11 +1,11 @@
+import type { Country } from 'types/country.type';
+
+import type { QueryFunction } from 'react-query';
+
 import { useCallback } from 'react';
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { Country } from 'types/country.type';
-
-import type { QueryFunction } from 'react-query';
 
 export const useCountries = (params?: { hasVillage: boolean }): { countries: Country[]; isLoading: boolean; error: unknown } => {
   const getCountries: QueryFunction<Country[]> = useCallback(async () => {

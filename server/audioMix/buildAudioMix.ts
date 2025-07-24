@@ -1,10 +1,10 @@
 import path from 'path';
 
+import type { Track } from '../../types/anthem.type';
+
 import { mixAudio } from 'ffmpeg-audio-mixer';
 import fs from 'fs-extra';
 import { v4 } from 'uuid';
-
-import type { Track } from '../../types/anthem.type';
 
 import { getFile, uploadFile } from '../fileUpload';
 

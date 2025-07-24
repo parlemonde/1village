@@ -1,13 +1,13 @@
 import { Button, TextField } from '@mui/material';
 
+import type { Student } from 'types/student.type';
+
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
 import { bgPage } from 'src/styles/variables.const';
-
-import type { Student } from 'types/student.type';
 
 import { DeleteButton } from '../buttons/DeleteButton';
 

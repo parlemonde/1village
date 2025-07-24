@@ -1,6 +1,6 @@
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-
 import type { Group } from 'three';
+
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const LOADER = new GLTFLoader();
 

@@ -3,6 +3,9 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { ActivityType, ActivityStatus } from 'types/activity.type';
+import { UserType } from 'types/user.type';
+
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -21,9 +24,6 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import { ActivityType, ActivityStatus } from 'types/activity.type';
-import { UserType } from 'types/user.type';
 
 const Question3 = () => {
   const router = useRouter();

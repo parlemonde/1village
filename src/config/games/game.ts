@@ -1,8 +1,8 @@
-import { getCurrencies } from 'src/api/currencie/currencies.get';
-import { getLanguages } from 'src/api/language/languages.get';
-
 import type { GameFieldConfigType } from 'types/game.type';
 import { GameType, InputTypeEnum, methodType } from 'types/game.type';
+
+import { getCurrencies } from 'src/api/currencie/currencies.get';
+import { getLanguages } from 'src/api/language/languages.get';
 
 export const keyMapping = {
   [methodType.CURRENCY]: 'name',

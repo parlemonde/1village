@@ -1,11 +1,11 @@
+import type { Video } from 'types/video.type';
+
+import type { QueryFunction } from 'react-query';
+
 import { useCallback } from 'react';
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { Video } from 'types/video.type';
-
-import type { QueryFunction } from 'react-query';
 
 export const useVideos = (): { videos: Video[] } => {
   const getVideos: QueryFunction<Video[]> = useCallback(async () => {

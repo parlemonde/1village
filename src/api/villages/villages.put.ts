@@ -1,8 +1,8 @@
+import type { Village } from 'server/entities/village';
+
 import { useMutation } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { Village } from 'server/entities/village';
 
 export const updateVillage = async (id: number, villageData: Partial<Village>) => {
   const response = await axiosRequest({

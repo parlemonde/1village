@@ -1,6 +1,6 @@
-import { Table, TableForeignKey, TableIndex } from 'typeorm';
-
 import type { MigrationInterface, QueryRunner } from 'typeorm';
+
+import { Table, TableForeignKey, TableIndex } from 'typeorm';
 
 export class AddPhaseHistory1731486908522 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {

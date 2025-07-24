@@ -1,5 +1,7 @@
 import { Typography, Box, List, ListItem } from '@mui/material';
 
+import { UserType } from 'types/user.type';
+
 import Link from 'next/link';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
@@ -7,8 +9,6 @@ import React, { useEffect, useState } from 'react';
 import { useListArchives } from 'src/api/archive/archive.get';
 import { UserContext } from 'src/contexts/userContext';
 import BackArrow from 'src/svg/back-arrow.svg';
-
-import { UserType } from 'types/user.type';
 
 const Archive = () => {
   const { user } = React.useContext(UserContext);

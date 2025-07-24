@@ -1,10 +1,10 @@
+import { DashboardType } from 'types/dashboard.type';
+import type { ClassroomsStats } from 'types/statistics.type';
+
 import React, { useState } from 'react';
 
 import { useGetOneVillageStats, useGetSessionsStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms } from 'src/services/useStatistics';
-
-import { DashboardType } from 'types/dashboard.type';
-import type { ClassroomsStats } from 'types/statistics.type';
 
 import ActivityTable from './ActivityTable';
 import DashboardSummary from './dashboard-summary/DashboardSummary';

@@ -1,5 +1,7 @@
 import { Button, TextField } from '@mui/material';
 
+import { ActivityStatus, ActivityType } from 'types/activity.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -15,8 +17,6 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { getQueryString } from 'src/utils';
-
-import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const EnigmeStep1 = () => {
   const router = useRouter();

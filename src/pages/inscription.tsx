@@ -2,6 +2,9 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Box, Button, Checkbox, FormControlLabel, Grid, IconButton, InputAdornment, Link, TextField, Typography } from '@mui/material';
 
+import { UserType } from 'types/user.type';
+import type { UserForm } from 'types/user.type';
+
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
@@ -14,9 +17,6 @@ import { useUserRequests } from 'src/services/useUsers';
 import ArrowBack from 'src/svg/arrow_back.svg';
 import Logo from 'src/svg/logo_1village_famille.svg';
 import { invalidPasswordMessageBuilder } from 'src/utils/invalidPasswordMessageBuilder';
-
-import { UserType } from 'types/user.type';
-import type { UserForm } from 'types/user.type';
 
 const Inscription = () => {
   const [email, setEmail] = useState<string>('');

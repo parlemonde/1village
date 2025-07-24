@@ -1,5 +1,9 @@
 import { TextField, Autocomplete, FormControlLabel, Grid, Radio, RadioGroup, FormControl } from '@mui/material';
 
+import { ActivityStatus, ActivityType } from 'types/activity.type';
+
+import type { SyntheticEvent } from 'react';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -19,10 +23,6 @@ import { useLanguages } from 'src/services/useLanguages';
 import { capitalize } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import { normalizeString } from 'src/utils/string';
-
-import { ActivityStatus, ActivityType } from 'types/activity.type';
-
-import type { SyntheticEvent } from 'react';
 
 const getArticle = (language: string) => {
   if (language.length === 0) {

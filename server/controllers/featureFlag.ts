@@ -1,7 +1,7 @@
-import { In } from 'typeorm';
-
 import type { FeatureFlagsNames } from '../../types/featureFlag.constant';
 import type { NextFunction, Request, Response } from 'express';
+
+import { In } from 'typeorm';
 
 import { FeatureFlag } from '../entities/featureFlag';
 import { User, UserType } from '../entities/user';

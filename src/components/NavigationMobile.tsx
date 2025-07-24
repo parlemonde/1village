@@ -6,9 +6,9 @@ import Drawer from '@mui/material/Drawer';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 
-import React, { useState } from 'react';
-
 import { UserType } from 'types/user.type';
+
+import React, { useState } from 'react';
 
 import { Navigation } from './Navigation';
 import ShowFor from './ShowFor';

@@ -1,8 +1,8 @@
+import type { FeatureCollection } from 'geojson';
+
 import { geoPath, geoMercator } from 'd3-geo';
 import React from 'react';
 import { useQuery } from 'react-query';
-
-import type { FeatureCollection } from 'geojson';
 
 import styles from './CountryMap.module.css';
 

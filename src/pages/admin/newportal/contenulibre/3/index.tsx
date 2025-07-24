@@ -2,6 +2,8 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { ActivityStatus } from 'types/activity.type';
+
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -17,8 +19,6 @@ import { EditButton } from 'src/components/buttons/EditButton';
 import { StepsButton } from 'src/components/StepsButtons';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/hooks/useActivity';
-
-import { ActivityStatus } from 'types/activity.type';
 
 import Layout from '../layout';
 

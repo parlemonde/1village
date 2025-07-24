@@ -1,11 +1,11 @@
+import type { User } from 'types/user.type';
+
+import type { HoverableObject } from '../lib/hoverable-object';
+
 import { Vector3, Color, CylinderGeometry, Group, Mesh, MeshStandardMaterial } from 'three';
 import { clamp } from 'three/src/math/MathUtils';
 
 import { getGravatarUrl } from 'src/utils';
-
-import type { User } from 'types/user.type';
-
-import type { HoverableObject } from '../lib/hoverable-object';
 
 import { polar2Cartesian } from '../lib/coords-utils';
 import { ImageTexture } from '../lib/image-texture';

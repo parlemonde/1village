@@ -1,3 +1,5 @@
+import { UserType } from 'types/user.type';
+
 import React from 'react';
 
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
@@ -7,8 +9,6 @@ import { UserContext } from 'src/contexts/userContext';
 import MascotteIcon from 'src/svg/presentation/mascotte.svg';
 import ThematiqueIcon from 'src/svg/presentation/thematique.svg';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import { UserType } from 'types/user.type';
 
 const suggestions = [
   {

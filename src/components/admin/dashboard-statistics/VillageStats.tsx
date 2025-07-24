@@ -2,12 +2,12 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box, Tab, Tabs } from '@mui/material';
 
+import type { ClassroomsStats, OneVillageTableRow, SessionsStats } from 'types/statistics.type';
+
 import React, { useEffect, useState } from 'react';
 
 import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
-
-import type { ClassroomsStats, OneVillageTableRow, SessionsStats } from 'types/statistics.type';
 
 import { OneVillageTable } from '../OneVillageTable';
 import { getCommentCount, getPublicationCount, getVideoCount } from '../StatisticsUtils';

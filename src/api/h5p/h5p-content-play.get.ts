@@ -1,7 +1,7 @@
+import type { IPlayerModel } from '@lumieducation/h5p-server';
+
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import type { IPlayerModel } from '@lumieducation/h5p-server';
 
 export type GetH5pContentPlayData = IPlayerModel;
 

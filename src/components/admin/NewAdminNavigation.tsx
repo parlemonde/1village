@@ -1,5 +1,7 @@
 import { Container, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 
+import { UserType } from 'types/user.type';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -10,8 +12,6 @@ import CreerIcon from 'src/svg/creer.svg';
 import GererIcon from 'src/svg/gerer.svg';
 import MediathequeIcon from 'src/svg/mediatheque.svg';
 import PublierIcon from 'src/svg/publier.svg';
-
-import { UserType } from 'types/user.type';
 
 interface NavItemProps {
   key?: number;

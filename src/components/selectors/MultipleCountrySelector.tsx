@@ -1,11 +1,11 @@
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
+import type { Country } from 'types/country.type';
+
 import React from 'react';
 
 import { useCountries } from 'src/services/useCountries';
-
-import type { Country } from 'types/country.type';
 
 type CountryOption = Country & {
   firstLetter: string;

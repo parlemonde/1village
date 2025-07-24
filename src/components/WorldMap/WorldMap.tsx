@@ -5,6 +5,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Button, ButtonGroup, IconButton, Typography } from '@mui/material';
 
+import { UserType } from 'types/user.type';
+
+import type { PopoverData } from './Popover';
+import type { GeoJSONCityData } from './world/objects/capital';
+import type { GeoJSONCountriesData } from './world/objects/country';
+
 import L from 'leaflet';
 import {} from 'leaflet.fullscreen';
 import { useRouter } from 'next/router';
@@ -16,12 +22,6 @@ import { useIsFeatureFlagEnabled } from 'src/api/featureFlag/featureFlag.get';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-import { UserType } from 'types/user.type';
-
-import type { PopoverData } from './Popover';
-import type { GeoJSONCityData } from './world/objects/capital';
-import type { GeoJSONCountriesData } from './world/objects/country';
 
 import { isUser, Popover } from './Popover';
 import { useFullScreen } from './use-full-screen';

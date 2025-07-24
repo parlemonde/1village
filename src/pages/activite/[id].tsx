@@ -1,5 +1,9 @@
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
+import type { AnyData, Activity as ActivityInterface } from 'types/activity.type';
+import { ActivityType } from 'types/activity.type';
+import type { User } from 'types/user.type';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
@@ -15,10 +19,6 @@ import { useActivity } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
 import { getQueryString } from 'src/utils';
-
-import type { AnyData, Activity as ActivityInterface } from 'types/activity.type';
-import { ActivityType } from 'types/activity.type';
-import type { User } from 'types/user.type';
 
 const titles: Record<number, (activity: ActivityInterface<AnyData>) => string> = {
   [ActivityType.MASCOTTE]: () => 'Mascotte',

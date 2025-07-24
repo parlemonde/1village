@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
-import { v4 } from 'uuid';
-
 import type { Request, Response } from 'express';
+
+import { v4 } from 'uuid';
 
 import { uploadFile } from '../fileUpload';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';

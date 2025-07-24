@@ -1,11 +1,11 @@
 import path from 'path';
 
-import fs from 'fs-extra';
-import { v4 as uuidv4 } from 'uuid';
-
 import type { Track } from '../../types/anthem.type';
 import type { JSONSchemaType } from 'ajv';
 import type { Request, Response, NextFunction } from 'express';
+
+import fs from 'fs-extra';
+import { v4 as uuidv4 } from 'uuid';
 
 import { buildAudioMix } from '../audioMix/buildAudioMix';
 import { UserType } from '../entities/user';

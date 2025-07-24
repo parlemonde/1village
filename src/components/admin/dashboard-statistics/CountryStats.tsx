@@ -1,11 +1,11 @@
 import Box from '@mui/material/Box';
 
+import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
+
 import React, { useState } from 'react';
 
 import { useGetCountriesStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
-
-import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
 
 import VillageListCard from './cards/VillageListCard/VillageListCard';
 import HorizontalBarsChart from './charts/HorizontalChart';

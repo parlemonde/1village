@@ -1,11 +1,11 @@
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Table, TableBody, TableCell, TableHead, TableRow, Tooltip, IconButton } from '@mui/material';
 
+import type { Video } from 'types/video.type';
+
 import React from 'react';
 
 import { bgPage } from 'src/styles/variables.const';
-
-import type { Video } from 'types/video.type';
 
 import { DeleteButton } from './buttons/DeleteButton';
 

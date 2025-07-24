@@ -1,11 +1,11 @@
+import type { ClassAnthemActivity } from 'types/classAnthem.types';
+
+import type { ActivityViewProps } from './activity-view.types';
+
 import React from 'react';
 
 import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
 import { bgPage } from 'src/styles/variables.const';
-
-import type { ClassAnthemActivity } from 'types/classAnthem.types';
-
-import type { ActivityViewProps } from './activity-view.types';
 
 export const VerseActivityView = ({ activity }: ActivityViewProps<ClassAnthemActivity>) => {
   return (

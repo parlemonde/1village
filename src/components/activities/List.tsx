@@ -1,6 +1,9 @@
 import type { SelectChangeEvent } from '@mui/material';
 import { Button } from '@mui/material';
 
+import type { Activity, AnyData } from 'types/activity.type';
+import type { User } from 'types/user.type';
+
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -11,9 +14,6 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import { defaultTextButtonStyle, primaryColor } from 'src/styles/variables.const';
 import ArrowRight from 'src/svg/arrow-right.svg';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
-
-import type { Activity, AnyData } from 'types/activity.type';
-import type { User } from 'types/user.type';
 
 import PaginationNav from '../PaginationNav/PaginationNav';
 import { ActivityCard } from './ActivityCard';

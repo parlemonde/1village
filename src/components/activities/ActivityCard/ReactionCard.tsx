@@ -1,5 +1,7 @@
 import { Button } from '@mui/material';
 
+import type { ActivityCardProps } from './activity-card.types';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -8,8 +10,6 @@ import type { ReactionActivity } from 'src/activity-types/reaction.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
-
-import type { ActivityCardProps } from './activity-card.types';
 
 import { CommentIcon } from './CommentIcon';
 
