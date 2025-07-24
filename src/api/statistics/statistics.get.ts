@@ -8,7 +8,7 @@ async function getSessionsStats(phase?: number): Promise<SessionsStats> {
     await axiosRequest({
       method: 'GET',
       baseURL: '/api',
-      url: `/statistics/sessions/${phase}`,
+      url: `/statistics/sessions?phase=${phase}`,
     })
   ).data;
 }
@@ -44,7 +44,11 @@ async function getCountriesStats(countryId?: string, phase?: number): Promise<Vi
 }
 
 export const useGetSessionsStats = (phase?: number) => {
-  return useQuery(['sessions-stats', phase], () => getSessionsStats(phase));
+  return useQuery(['sessions-stats', phase], () => getSessionsStats(phase), {
+    staleTime: 0,
+    cacheTime: 0,
+    refetchOnMount: true,
+  });
 };
 export const useGetOneVillageStats = () => {
   return useQuery(['1v-stats'], () => getOneVillageStats());
