@@ -1,4 +1,5 @@
 import { TableColumn } from 'typeorm';
+
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class AddCreatedAtColumnToStudentAndUserEntities1729236109909 implements MigrationInterface {

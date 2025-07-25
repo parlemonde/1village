@@ -1,6 +1,7 @@
+import type { VillagePhase } from '../entities/village';
+
 import { UserType } from '../../types/user.type';
 import { Classroom } from '../entities/classroom';
-import type { VillagePhase } from '../entities/village';
 import { AppDataSource } from '../utils/data-source';
 import { generateEmptyFilterParams } from './helpers';
 import { getChildrenCodesCount, getConnectedFamiliesCount, getFamiliesWithoutAccount } from './queryStatsByFilters';

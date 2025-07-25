@@ -1,18 +1,20 @@
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Button, IconButton, InputAdornment, Link, TextField } from '@mui/material';
 
-import { KeepRatio } from '../components/KeepRatio';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+
 import PasswordMessagesDisplayer from 'src/components/PasswordMessagesDisplayer';
 import { useUserRequests } from 'src/services/useUsers';
 import ArrowBack from 'src/svg/arrow_back.svg';
 import Logo from 'src/svg/logo_1village_famille.svg';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 import { invalidPasswordMessageBuilder } from 'src/utils/invalidPasswordMessageBuilder';
+
 import type { UserUpdatePassword } from 'types/user.type';
+
+import { KeepRatio } from '../components/KeepRatio';
 
 const UpdatePassword = () => {
   const [isPasswordTouched, setIsPasswordTouched] = useState(false);

@@ -1,5 +1,6 @@
 import { getSubtype, getType } from 'src/activity-types/activity.constants';
 import { isGame } from 'src/activity-types/anyActivity';
+
 import type { Activity, AnyData } from 'types/activity.type';
 import { GameType } from 'types/game.type';
 

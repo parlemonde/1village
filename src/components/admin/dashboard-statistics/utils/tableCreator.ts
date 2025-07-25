@@ -1,4 +1,5 @@
 import { formatDate } from 'src/utils';
+
 import type { FamiliesWithoutAccount, FloatingAccount, OneVillageTableRow } from 'types/statistics.type';
 
 export function createFamiliesWithoutAccountRows(data: FamiliesWithoutAccount[]): OneVillageTableRow[] {

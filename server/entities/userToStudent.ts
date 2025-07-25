@@ -1,5 +1,6 @@
-import type { EntityManager } from 'typeorm';
 import { Column, BeforeInsert, Not, Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn, BeforeRemove } from 'typeorm';
+
+import type { EntityManager } from 'typeorm';
 
 import { AppDataSource } from '../utils/data-source';
 import { Student } from './student';

@@ -1,31 +1,33 @@
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import MicNoneIcon from '@mui/icons-material/MicNone';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import styles from '../../styles/chanter-un-couplet.module.css';
+import { useRouter } from 'next/router';
+import React from 'react';
+
 import { postMixAudio } from 'src/api/audio/audio-mix.post';
 import { deleteAudio } from 'src/api/audio/audio.delete';
-import { Base } from 'src/components/Base';
-import { PageLayout } from 'src/components/PageLayout';
-import { Steps } from 'src/components/Steps';
-import { StepsButton } from 'src/components/StepsButtons';
 import AudioEditor from 'src/components/activities/content/editors/AudioEditor/AudioEditor';
 import { DraggableTrack } from 'src/components/audio/DraggableTrack';
 import VolumeControl from 'src/components/audio/VolumeControls/VolumeControl';
+import { Base } from 'src/components/Base';
 import AddAudioButton from 'src/components/buttons/AddAudioButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { EditButton } from 'src/components/buttons/EditButton';
+import { PageLayout } from 'src/components/PageLayout';
+import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { getLongestVerseSampleDuration, getVerseTracks } from 'src/utils/audios';
 import { toTime } from 'src/utils/toTime';
+
 import { ActivityStatus } from 'types/activity.type';
 import type { Track } from 'types/anthem.type';
 import { TrackType } from 'types/anthem.type';
 import type { ClassAnthemData } from 'types/classAnthem.types';
+
+import styles from '../../styles/chanter-un-couplet.module.css';
 
 const SongStep4 = () => {
   const router = useRouter();

@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
-
 import { Autocomplete, FormControl, TextField } from '@mui/material';
+
+import React, { useContext, useEffect, useState } from 'react';
 
 import { SelectTypeMappingMethode, keyMapping } from 'src/config/games/game';
 import { GameContext } from 'src/contexts/gameContext';
+
 import type { Currency } from 'types/currency.type';
 import type { inputType } from 'types/game.type';
 import type { Language } from 'types/language.type';

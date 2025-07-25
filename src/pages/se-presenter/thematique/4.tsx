@@ -1,21 +1,22 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import { Tooltip } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
+
 import { isPresentation } from 'src/activity-types/anyActivity';
 import { PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.constants';
+import { ContentView } from 'src/components/activities/content/ContentView';
 import { Base } from 'src/components/Base';
+import { EditButton } from 'src/components/buttons/EditButton';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ContentView } from 'src/components/activities/content/ContentView';
-import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+
 import { ActivityStatus } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 

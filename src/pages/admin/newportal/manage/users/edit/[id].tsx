@@ -1,8 +1,3 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useSnackbar } from 'notistack';
-import React from 'react';
-
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Button from '@mui/material/Button';
@@ -13,6 +8,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
+import React from 'react';
+
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { CountrySelector } from 'src/components/selectors/CountrySelector';
 import { UserContext } from 'src/contexts/userContext';
@@ -21,6 +21,7 @@ import { useVillages } from 'src/services/useVillages';
 import { getQueryString } from 'src/utils';
 import { isPseudoValid, isEmailValid } from 'src/utils/accountChecks';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { User } from 'types/user.type';
 import { UserType, userTypeNames } from 'types/user.type';
 

@@ -2,14 +2,15 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isReaction } from 'src/activity-types/anyActivity';
+import { ActivitySelect } from 'src/components/activities/ActivitySelect';
+import { DESC } from 'src/components/activities/utils';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
-import { ActivitySelect } from 'src/components/activities/ActivitySelect';
-import { DESC } from 'src/components/activities/utils';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { getQueryString } from 'src/utils';
+
 import { ActivityType } from 'types/activity.type';
 
 interface SelectedActivityInfos {

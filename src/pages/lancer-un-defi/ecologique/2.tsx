@@ -4,13 +4,14 @@ import React from 'react';
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isEco } from 'src/activity-types/defi.constants';
 import type { EcoDefiData } from 'src/activity-types/defi.types';
+import { ContentEditor } from 'src/components/activities/content/';
+import { getErrorSteps } from 'src/components/activities/defiEcologieChecks';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ContentEditor } from 'src/components/activities/content/';
-import { getErrorSteps } from 'src/components/activities/defiEcologieChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
+
 import type { ActivityContent } from 'types/activity.type';
 
 const DefiEcoStep2 = () => {

@@ -1,12 +1,14 @@
 import { useSnackbar } from 'notistack';
 import React from 'react';
-import type { QueryFunction } from 'react-query';
 import { useQueryClient, useQuery } from 'react-query';
 
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { Activity, AnyData } from 'types/activity.type';
+
+import type { QueryFunction } from 'react-query';
 
 export const useActivity = (activityId: number): { activity: Activity | null } => {
   const { village } = React.useContext(VillageContext);

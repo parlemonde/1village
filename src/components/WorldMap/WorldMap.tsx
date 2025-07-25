@@ -1,5 +1,10 @@
 import 'leaflet/dist/leaflet.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
+import RemoveIcon from '@mui/icons-material/Remove';
+import { Button, ButtonGroup, IconButton, Typography } from '@mui/material';
+
 import L from 'leaflet';
 import {} from 'leaflet.fullscreen';
 import { useRouter } from 'next/router';
@@ -7,23 +12,21 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { useQuery } from 'react-query';
 
-import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
-import RemoveIcon from '@mui/icons-material/Remove';
-import { Button, ButtonGroup, IconButton, Typography } from '@mui/material';
-
-import type { PopoverData } from './Popover';
-import { isUser, Popover } from './Popover';
-import { UserPopover } from './UserPopover';
-import { useFullScreen } from './use-full-screen';
-import { World } from './world';
-import type { GeoJSONCityData } from './world/objects/capital';
-import type { GeoJSONCountriesData } from './world/objects/country';
 import { useIsFeatureFlagEnabled } from 'src/api/featureFlag/featureFlag.get';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import { UserType } from 'types/user.type';
+
+import type { PopoverData } from './Popover';
+import type { GeoJSONCityData } from './world/objects/capital';
+import type { GeoJSONCountriesData } from './world/objects/country';
+
+import { isUser, Popover } from './Popover';
+import { useFullScreen } from './use-full-screen';
+import { UserPopover } from './UserPopover';
+import { World } from './world';
 
 const isWebGLAvailable = () => {
   try {

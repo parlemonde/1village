@@ -1,9 +1,10 @@
 import Image from 'next/image';
 import React from 'react';
 
-import type { ViewProps } from '../content.types';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { LightBox } from 'src/components/lightbox/Lightbox';
+
+import type { ViewProps } from '../content.types';
 
 export const ImageView = ({ value }: ViewProps) => {
   return (

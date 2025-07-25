@@ -1,8 +1,9 @@
-import type { JSONSchemaType } from 'ajv';
 import * as argon2 from 'argon2';
+import { IsNull, LessThan } from 'typeorm';
+
+import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 import type { FindOperator } from 'typeorm';
-import { IsNull, LessThan } from 'typeorm';
 
 import { ActivityStatus, ActivityType } from '../../types/activity.type';
 import { getAccessToken } from '../authentication/lib/tokens';

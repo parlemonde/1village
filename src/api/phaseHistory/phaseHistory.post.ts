@@ -1,6 +1,6 @@
-import type { PhaseHistory } from 'server/entities/phaseHistory';
-
 import { axiosRequest } from 'src/utils/axiosRequest';
+
+import type { PhaseHistory } from 'server/entities/phaseHistory';
 
 export async function postPhaseHistory(data: Partial<PhaseHistory> & { villageId: number }): Promise<PhaseHistory> {
   const response = await axiosRequest<PhaseHistory>({

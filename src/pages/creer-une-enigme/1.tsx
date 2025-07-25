@@ -1,20 +1,21 @@
+import { Button, TextField } from '@mui/material';
+
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { Button, TextField } from '@mui/material';
 
 import { isEnigme } from 'src/activity-types/anyActivity';
 import { ENIGME_TYPES, getCategoryName } from 'src/activity-types/enigme.constants';
 import type { EnigmeData } from 'src/activity-types/enigme.types';
 import { Base } from 'src/components/Base';
+import { BackButton } from 'src/components/buttons/BackButton';
+import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { BackButton } from 'src/components/buttons/BackButton';
-import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { getQueryString } from 'src/utils';
+
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const EnigmeStep1 = () => {

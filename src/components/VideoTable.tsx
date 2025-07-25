@@ -1,11 +1,13 @@
-import React from 'react';
-
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Table, TableBody, TableCell, TableHead, TableRow, Tooltip, IconButton } from '@mui/material';
 
-import { DeleteButton } from './buttons/DeleteButton';
+import React from 'react';
+
 import { bgPage } from 'src/styles/variables.const';
+
 import type { Video } from 'types/video.type';
+
+import { DeleteButton } from './buttons/DeleteButton';
 
 interface VideoTableProps {
   videos: Video[];

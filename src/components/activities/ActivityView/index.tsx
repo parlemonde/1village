@@ -1,14 +1,6 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { REACTIONS } from '../utils';
-import { DefiActivityView } from './DefiActivityView';
-import { EnigmeActivityView } from './EnigmeActivityView';
-import { FreeContentView } from './FreeContentView';
-import { MascotteActivityView } from './MascotteActivityView';
-import { StoryActivityView } from './StoryActivityView';
-import { VerseActivityView } from './VerseActivityView';
-import type { ActivityViewProps } from './activity-view.types';
 import {
   isDefi,
   isEnigme,
@@ -23,15 +15,26 @@ import {
   isSymbol,
   isClassAnthem,
 } from 'src/activity-types/anyActivity';
+import { ContentView } from 'src/components/activities/content/ContentView';
+import { Activities } from 'src/components/activities/List';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
 import { UserDisplayName } from 'src/components/UserDisplayName';
-import { Activities } from 'src/components/activities/List';
-import { ContentView } from 'src/components/activities/content/ContentView';
 import { useActivity } from 'src/services/useActivity';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { toDate } from 'src/utils';
+
 import { UserType } from 'types/user.type';
+
+import type { ActivityViewProps } from './activity-view.types';
+
+import { REACTIONS } from '../utils';
+import { DefiActivityView } from './DefiActivityView';
+import { EnigmeActivityView } from './EnigmeActivityView';
+import { FreeContentView } from './FreeContentView';
+import { MascotteActivityView } from './MascotteActivityView';
+import { StoryActivityView } from './StoryActivityView';
+import { VerseActivityView } from './VerseActivityView';
 
 export const ActivityView = ({ activity, user }: ActivityViewProps) => {
   const router = useRouter();

@@ -1,13 +1,14 @@
-import classNames from 'classnames';
-import React from 'react';
-
 import { Grid, Typography, CardMedia, Tooltip } from '@mui/material';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 
+import classNames from 'classnames';
+import React from 'react';
+
 import { useImageStories } from 'src/services/useImagesStory';
 import SlotMachineHandle from 'src/svg/story-activity/slot-machine-handle.svg';
 import SlotMachine from 'src/svg/story-activity/slot-machine.svg';
+
 import type { StoryElement } from 'types/story.type';
 
 type BackendImage = { id: number; imageUrl: string; inspiredStoryId: number };

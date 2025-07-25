@@ -1,5 +1,6 @@
-import type { MigrationInterface, QueryRunner } from 'typeorm';
 import { Table, TableForeignKey } from 'typeorm';
+
+import type { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateTableNotifications1726562257718 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {

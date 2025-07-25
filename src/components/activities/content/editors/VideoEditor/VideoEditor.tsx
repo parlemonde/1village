@@ -1,12 +1,14 @@
+import { Button } from '@mui/material';
+
 import React from 'react';
 import ReactPlayer from 'react-player';
 
-import { Button } from '@mui/material';
+import { primaryColor } from 'src/styles/variables.const';
 
 import type { EditorProps } from '../../content.types';
+
 import { EditorContainer } from '../EditorContainer';
 import { VideoModals } from './VideoModals';
-import { primaryColor } from 'src/styles/variables.const';
 
 export const VideoEditor = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const [isModalOpen, setIsModalOpen] = React.useState(value === '');

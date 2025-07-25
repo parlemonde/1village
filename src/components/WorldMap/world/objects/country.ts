@@ -1,9 +1,10 @@
-import type { FeatureCollection, Geometry, Position } from 'geojson';
-import type { ColorRepresentation } from 'three';
 import { MeshBasicMaterial, Mesh, DoubleSide } from 'three';
 import { ConicPolygonBufferGeometry } from 'three-conic-polygon-geometry';
 
 import type { HoverableObject } from '../lib/hoverable-object';
+import type { FeatureCollection, Geometry, Position } from 'geojson';
+import type { ColorRepresentation } from 'three';
+
 import { GLOBE_RADIUS } from '../world.constants';
 
 export type GeoJSONCountriesData = FeatureCollection<Geometry, { iso2: string; name: string; nameFR: string; continent: string }>;

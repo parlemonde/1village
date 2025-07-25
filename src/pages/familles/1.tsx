@@ -1,20 +1,20 @@
 // TODO : keep this import for delayed days logic
 // import debounce from 'lodash.debounce';
+import { Button, Card, CircularProgress, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useReducer } from 'react';
 
-import { Button, Card, CircularProgress, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-
 import AccessControl from 'src/components/AccessControl';
-import { Base } from 'src/components/Base';
-import OverflowContainer from 'src/components/OverflowContainer';
-import { Steps } from 'src/components/Steps';
-import { StepsButton } from 'src/components/StepsButtons';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
 import { filterActivitiesByTerm, filterActivitiesWithLastGame } from 'src/components/accueil/Filters/FilterActivities';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
+import { Base } from 'src/components/Base';
 import { BackButton } from 'src/components/buttons/BackButton';
+import OverflowContainer from 'src/components/OverflowContainer';
+import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -24,6 +24,7 @@ import { primaryColor } from 'src/styles/variables.const';
 import EyeClosed from 'src/svg/eye-closed.svg';
 import EyeVisibility from 'src/svg/eye-visibility.svg';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { Activity } from 'types/activity.type';
 import type { Classroom, InitialStateOptionsProps } from 'types/classroom.type';
 import { UserType } from 'types/user.type';

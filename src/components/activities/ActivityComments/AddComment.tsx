@@ -1,8 +1,8 @@
+import { Box, Button, CircularProgress, Tooltip } from '@mui/material';
+
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import React from 'react';
-
-import { Box, Button, CircularProgress, Tooltip } from '@mui/material';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
@@ -10,6 +10,7 @@ import { useCommentRequests } from 'src/services/useComments';
 import { primaryColor, bgPage } from 'src/styles/variables.const';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import RouletteIcon from 'src/svg/navigation/roulette-icon.svg';
+
 import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 

@@ -1,6 +1,7 @@
+import type { StatsFilterParams } from '../../../types/statistics.type';
+import type { StatisticsDto } from './statistics.dto';
 import type { Request } from 'express';
 
-import type { StatsFilterParams } from '../../../types/statistics.type';
 import { GroupType } from '../../../types/statistics.type';
 import { Classroom } from '../../entities/classroom';
 import {
@@ -30,7 +31,6 @@ import {
 import { getFamiliesWithoutAccountForVillage } from '../../stats/villageStats';
 import { AppDataSource } from '../../utils/data-source';
 import { Controller } from '../controller';
-import type { StatisticsDto } from './statistics.dto';
 import { getActivityTypeCountByVillages } from './statistics.repository';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);

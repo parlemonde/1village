@@ -1,15 +1,17 @@
+import { FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
+
 import Image from 'next/image';
 import router from 'next/router';
 import React, { useContext } from 'react';
 import ReactPlayer from 'react-player';
 
-import { FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
+import { GameContext } from 'src/contexts/gameContext';
+
+import type { inputType } from 'types/game.type';
+import { InputTypeEnum } from 'types/game.type';
 
 import { CustomRadio } from '../buttons/CustomRadio';
 import { EditButton } from '../buttons/EditButton';
-import { GameContext } from 'src/contexts/gameContext';
-import type { inputType } from 'types/game.type';
-import { InputTypeEnum } from 'types/game.type';
 
 type PrevisualisationProps = {
   baseUrl: string;

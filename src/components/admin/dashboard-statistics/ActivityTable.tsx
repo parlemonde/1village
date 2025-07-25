@@ -1,10 +1,12 @@
-import React from 'react';
-
 import { Box } from '@mui/material';
 
-import { OneVillageTable } from '../OneVillageTable';
+import React from 'react';
+
 import { countryToFlag } from 'src/utils';
+
 import type { Country } from 'types/country.type';
+
+import { OneVillageTable } from '../OneVillageTable';
 
 type CountryStatus = 'active' | 'observer' | 'ghost' | 'absent';
 

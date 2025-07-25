@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getLCP, getFID, getCLS } from 'web-vitals';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { NavigationPerf, BrowserPerf, EventName } from 'types/analytics.type';
 
 interface EventOptions {

@@ -1,13 +1,14 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
 import { StepsButton } from 'src/components/StepsButtons';
-import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
 import { TrackType } from 'types/anthem.type';

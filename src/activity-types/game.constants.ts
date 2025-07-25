@@ -8,6 +8,7 @@ import type {
   MimicData,
   ExpressionData,
 } from '../../types/game.type';
+
 import { GameType } from '../../types/game.type';
 
 export const DEFAULT_MIMIC_DATA: MimicsData = {

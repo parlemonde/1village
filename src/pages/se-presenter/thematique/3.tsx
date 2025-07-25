@@ -4,11 +4,12 @@ import React from 'react';
 import { isPresentation } from 'src/activity-types/anyActivity';
 import { PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.constants';
 import type { ThematiqueData } from 'src/activity-types/presentation.types';
+import { ContentEditor } from 'src/components/activities/content';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
+
 import type { ActivityContent } from 'types/activity.type';
 import { ActivityStatus } from 'types/activity.type';
 

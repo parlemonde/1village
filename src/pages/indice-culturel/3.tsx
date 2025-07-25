@@ -1,23 +1,24 @@
-import classNames from 'classnames';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import { Box, Tooltip } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import classNames from 'classnames';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
+
 import { isIndice } from 'src/activity-types/anyActivity';
 import { getIndice } from 'src/activity-types/indice.constants';
 import type { IndiceData } from 'src/activity-types/indice.types';
+import { ContentView } from 'src/components/activities/content/ContentView';
 import { Base } from 'src/components/Base';
+import { EditButton } from 'src/components/buttons/EditButton';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ContentView } from 'src/components/activities/content/ContentView';
-import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+
 import { ActivityStatus } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 

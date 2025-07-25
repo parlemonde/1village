@@ -1,21 +1,24 @@
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import type { ReactNode } from 'react';
-import React from 'react';
-
 import { Box, Button, Link, Tooltip } from '@mui/material';
 
-import { AvatarImg } from '../Avatar';
-import { Flag } from '../Flag';
-import { LastActivities } from './LastActivities';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import React from 'react';
+
 import { isMascotte } from 'src/activity-types/anyActivity';
 import { useWeather } from 'src/api/weather/weather.get';
 import { Map } from 'src/components/Map';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/services/useActivity';
 import { getUserDisplayName } from 'src/utils';
+
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
+
+import type { ReactNode } from 'react';
+
+import { AvatarImg } from '../Avatar';
+import { Flag } from '../Flag';
+import { LastActivities } from './LastActivities';
 
 interface LayoutProps {
   children: ReactNode;

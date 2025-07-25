@@ -5,10 +5,11 @@ import { isPresentation } from 'src/activity-types/anyActivity';
 import { PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.constants';
 import type { ThematiqueData } from 'src/activity-types/presentation.types';
 import { Base } from 'src/components/Base';
+import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+
 import { ActivityStatus } from 'types/activity.type';
 
 const PresentationStep2 = () => {

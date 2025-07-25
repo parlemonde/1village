@@ -1,18 +1,19 @@
+import { Button, Tooltip, Backdrop, CircularProgress } from '@mui/material';
+
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 
-import { Button, Tooltip, Backdrop, CircularProgress } from '@mui/material';
-
 import { postGameDataMonneyOrExpression } from 'src/api/game/game.post';
 import { Base } from 'src/components/Base';
-import { PageLayout } from 'src/components/PageLayout';
-import { Steps } from 'src/components/Steps';
 import CreateGame from 'src/components/game/CreateGame';
 import Previsualisation from 'src/components/game/Previsualisation';
+import { PageLayout } from 'src/components/PageLayout';
+import { Steps } from 'src/components/Steps';
 import { GameContext } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { getUserDisplayName } from 'src/utils';
+
 import { ActivityType } from 'types/activity.type';
 import type { StepsTypes, GameDataMonneyOrExpression } from 'types/game.type';
 import { GameType } from 'types/game.type';

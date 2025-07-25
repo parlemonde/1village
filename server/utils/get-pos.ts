@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import type { User } from '../entities/user';
+
 import { serializeToQueryUrl } from '../utils';
 
 type NominatimResponse = Array<{ lat: string; lon: string }>;

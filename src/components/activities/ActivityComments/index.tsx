@@ -1,9 +1,5 @@
 import React from 'react';
 
-import { ActivityCard } from '../ActivityCard';
-import StoriesDataCardView from '../ActivityView/StoriesDataCardView';
-import { AddComment } from './AddComment';
-import { CommentCard } from './CommentCard';
 import type { DataUse } from 'src/api/game/game.getOneGameById';
 import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
@@ -11,9 +7,15 @@ import { useActivities } from 'src/services/useActivities';
 import { useComments } from 'src/services/useComments';
 import { useImageStories } from 'src/services/useImagesStory';
 import { useVillageUsers } from 'src/services/useVillageUsers';
+
 import type { Activity, AnyData } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
+
+import { ActivityCard } from '../ActivityCard';
+import StoriesDataCardView from '../ActivityView/StoriesDataCardView';
+import { AddComment } from './AddComment';
+import { CommentCard } from './CommentCard';
 
 interface ActivityCommentsProps {
   activity: Activity<AnyData> | DataUse;

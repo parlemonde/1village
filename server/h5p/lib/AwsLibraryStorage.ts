@@ -1,3 +1,8 @@
+import * as path from 'path';
+
+import { InstalledLibrary, streamToString, LibraryName, H5pError } from '@lumieducation/h5p-server';
+import { ReadableStreamBuffer } from 'stream-buffers';
+
 import type {
   IAdditionalLibraryMetadata,
   IInstalledLibrary,
@@ -6,16 +11,13 @@ import type {
   ILibraryStorage,
   IFileStats,
 } from '@lumieducation/h5p-server';
-import { InstalledLibrary, streamToString, LibraryName, H5pError } from '@lumieducation/h5p-server';
 import type { ListObjectsV2Output } from 'aws-sdk/clients/s3';
-import * as path from 'path';
 import type { Readable } from 'stream';
-import { ReadableStreamBuffer } from 'stream-buffers';
 
 import { s3 } from '../../fileUpload';
 import { logger } from '../../utils/logger';
-import { validateFilename } from './S3Util';
 import { dynamoDb } from './dynamoDB';
+import { validateFilename } from './S3Util';
 
 const LIBRARY_TABLE_NAME = 'H5P_libraries';
 

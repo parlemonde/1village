@@ -1,7 +1,3 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React, { useCallback, useMemo, useState } from 'react';
-
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -13,13 +9,18 @@ import IconButton from '@mui/material/IconButton';
 import MaterialLink from '@mui/material/Link';
 import Tooltip from '@mui/material/Tooltip';
 
-import { Modal } from 'src/components/Modal';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React, { useCallback, useMemo, useState } from 'react';
+
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { OneVillageTable } from 'src/components/admin/OneVillageTable';
+import { Modal } from 'src/components/Modal';
 import { useVillages, useVillageRequests } from 'src/services/useVillages';
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import { countryToFlag } from 'src/utils';
 import { SSO_HOSTNAME } from 'src/utils/sso';
+
 import type { Country } from 'types/country.type';
 
 const Villages = () => {

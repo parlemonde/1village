@@ -1,23 +1,24 @@
+import { Button, Switch, TextField } from '@mui/material';
+
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { TextField, Switch, Button } from '@mui/material';
-
-import Layout from '../layout';
 import { isFreeContent } from 'src/activity-types/anyActivity';
 import { getImage } from 'src/activity-types/freeContent.constants';
 import type { FreeContentData } from 'src/activity-types/freeContent.types';
+import { ActivityCard } from 'src/components/activities/ActivityCard';
+import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
+import StepsNavigation from 'src/components/activities/StepsNavigation';
 import { Base } from 'src/components/Base';
+import { LightBox } from 'src/components/lightbox/Lightbox';
 import { Modal } from 'src/components/Modal';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ActivityCard } from 'src/components/activities/ActivityCard';
-import StepsNavigation from 'src/components/activities/StepsNavigation';
-import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
-import { LightBox } from 'src/components/lightbox/Lightbox';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/hooks/useActivity';
 import { primaryColor } from 'src/styles/variables.const';
+
+import Layout from '../layout';
 
 const ContenuLibre = () => {
   const router = useRouter();

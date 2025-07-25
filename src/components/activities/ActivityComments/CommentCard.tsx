@@ -1,19 +1,20 @@
+import { Box, Button, CircularProgress, Paper } from '@mui/material';
+
 import dynamic from 'next/dynamic';
 import React from 'react';
 
-import { Box, Button, CircularProgress, Paper } from '@mui/material';
-
 import type { DataUse } from 'src/api/game/game.getOneGameById';
 import { AvatarImg } from 'src/components/Avatar';
-import { Flag } from 'src/components/Flag';
-import { UserDisplayName } from 'src/components/UserDisplayName';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { EditButton } from 'src/components/buttons/EditButton';
+import { Flag } from 'src/components/Flag';
+import { UserDisplayName } from 'src/components/UserDisplayName';
 import { UserContext } from 'src/contexts/userContext';
 import { useCommentRequests } from 'src/services/useComments';
 import { primaryColor } from 'src/styles/variables.const';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { toDate } from 'src/utils';
+
 import type { Activity, AnyData } from 'types/activity.type';
 import type { Comment } from 'types/comment.type';
 import type { User } from 'types/user.type';

@@ -1,8 +1,8 @@
+import { Container, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { Container, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 
 import { UserContext } from 'src/contexts/userContext';
 import AnalyserIcon from 'src/svg/analyser.svg';
@@ -10,6 +10,7 @@ import CreerIcon from 'src/svg/creer.svg';
 import GererIcon from 'src/svg/gerer.svg';
 import MediathequeIcon from 'src/svg/mediatheque.svg';
 import PublierIcon from 'src/svg/publier.svg';
+
 import { UserType } from 'types/user.type';
 
 interface NavItemProps {

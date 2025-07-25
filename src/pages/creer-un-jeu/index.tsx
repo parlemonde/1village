@@ -1,11 +1,12 @@
 import React from 'react';
 
+import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
-import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import ExpressionIcon from 'src/svg/jeu/expression.svg';
 import MimiqueIcon from 'src/svg/jeu/mimique.svg';
 import MonnaieIcon from 'src/svg/jeu/monnaie.svg';
+
 import { GameType } from 'types/game.type';
 
 const activities = [

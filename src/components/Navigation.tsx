@@ -1,11 +1,9 @@
+import { Box, Button } from '@mui/material';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 
-import { Box, Button } from '@mui/material';
-
-import { AvatarImg } from './Avatar';
-import { VillageMonde } from './VillageMonde';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import AnthemIcon from 'src/svg/navigation/anthem-icon.svg';
@@ -23,9 +21,13 @@ import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { Activity } from 'types/activity.type';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
+
+import { AvatarImg } from './Avatar';
+import { VillageMonde } from './VillageMonde';
 
 interface Tab {
   label: string;

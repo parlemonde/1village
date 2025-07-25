@@ -1,4 +1,5 @@
 import path from 'path';
+
 import { DataSource } from 'typeorm';
 
 const appDataSource = new DataSource({

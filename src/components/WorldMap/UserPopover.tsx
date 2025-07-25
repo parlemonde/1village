@@ -4,6 +4,7 @@ import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
 import { UserContext } from 'src/contexts/userContext';
 import { getUserDisplayName } from 'src/utils';
+
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 

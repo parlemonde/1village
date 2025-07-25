@@ -1,9 +1,9 @@
-import React from 'react';
-
 import { Box } from '@mui/material';
 
-import { Base } from 'src/components/Base';
+import React from 'react';
+
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
+import { Base } from 'src/components/Base';
 import ArtIcon from 'src/svg/indice-culturel/art.svg';
 import CuisineIcon from 'src/svg/indice-culturel/cuisine.svg';
 import FloreFauneIcon from 'src/svg/indice-culturel/flore-faune.svg';

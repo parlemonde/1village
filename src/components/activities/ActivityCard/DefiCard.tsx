@@ -1,18 +1,21 @@
+import { Button } from '@mui/material';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button } from '@mui/material';
-
-import { CommentIcon } from './CommentIcon';
-import type { ActivityCardProps } from './activity-card.types';
 import { ECO_ACTIONS, getDefi, getLanguageTheme, isCooking, isEco, isLanguage } from 'src/activity-types/defi.constants';
 import type { DefiActivity, CookingDefiData } from 'src/activity-types/defi.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
+
 import { LinkNotAllowedInPath } from 'types/activity.type';
+
+import type { ActivityCardProps } from './activity-card.types';
+
+import { CommentIcon } from './CommentIcon';
 
 export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<DefiActivity>) => {
   const isCookingActivity = isCooking(activity);

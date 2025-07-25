@@ -1,18 +1,17 @@
-import { useRouter } from 'next/router';
-import type { SyntheticEvent } from 'react';
-import React from 'react';
-
 import { TextField, Autocomplete, FormControlLabel, Grid, Radio, RadioGroup, FormControl } from '@mui/material';
+
+import { useRouter } from 'next/router';
+import React from 'react';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { DEFI, isLanguage, LANGUAGE_SCHOOL } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import type { MascotteData } from 'src/activity-types/mascotte.types';
 import { Base } from 'src/components/Base';
+import { BackButton } from 'src/components/buttons/BackButton';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivity } from 'src/services/useActivity';
@@ -20,7 +19,10 @@ import { useLanguages } from 'src/services/useLanguages';
 import { capitalize } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import { normalizeString } from 'src/utils/string';
+
 import { ActivityStatus, ActivityType } from 'types/activity.type';
+
+import type { SyntheticEvent } from 'react';
 
 const getArticle = (language: string) => {
   if (language.length === 0) {

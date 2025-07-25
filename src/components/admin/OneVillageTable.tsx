@@ -1,5 +1,3 @@
-import React, { isValidElement, useMemo, useState } from 'react';
-
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Box, Paper, TableContainer, TableSortLabel, useTheme } from '@mui/material';
 import NoSsr from '@mui/material/NoSsr';
@@ -10,9 +8,12 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
-import removeCountryFlagFromText from './manage/utils/removeCountryFlagFromText';
+import React, { isValidElement, useMemo, useState } from 'react';
+
 import { primaryColorLight } from 'src/styles/variables.const';
 import { normalizeString } from 'src/utils/string';
+
+import removeCountryFlagFromText from './manage/utils/removeCountryFlagFromText';
 
 function paginate<T>(array: T[], pageSize: number, pageNumber: number): T[] {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument

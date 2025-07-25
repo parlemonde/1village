@@ -2,13 +2,14 @@ import { useSnackbar } from 'notistack';
 import React from 'react';
 import { useQueryClient } from 'react-query';
 
+import { VideoView } from 'src/components/activities/content/views/VideoView';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { PageLayout } from 'src/components/PageLayout';
 import { VideoTable } from 'src/components/VideoTable';
-import { VideoView } from 'src/components/activities/content/views/VideoView';
 import { useVideos } from 'src/services/useVideos';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { Video } from 'types/video.type';
 
 const MesVideos = () => {

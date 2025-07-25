@@ -1,8 +1,3 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useSnackbar } from 'notistack';
-import React, { useCallback } from 'react';
-
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -10,13 +5,20 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
-import { UserContext } from './userContext';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
+import React, { useCallback } from 'react';
+
 import { Modal } from 'src/components/Modal';
 import PelicoVacances from 'src/svg/pelico/pelico_vacances.svg';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import { getCookie, setCookie } from 'src/utils/cookies';
+
 import { UserType } from 'types/user.type';
 import type { Village } from 'types/village.type';
+
+import { UserContext } from './userContext';
 
 interface VillageContextValue {
   village: Village | null;

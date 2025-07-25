@@ -1,33 +1,35 @@
+import { Divider } from '@mui/material';
+import Paper from '@mui/material/Paper';
+
 import classnames from 'classnames';
-import type { DraftHandleValue, DraftEditorCommand, ContentBlock } from 'draft-js';
-import { Editor, RichUtils, CompositeDecorator, ContentState, convertToRaw, EditorState, Modifier } from 'draft-js';
+import { CompositeDecorator, ContentState, convertToRaw, Editor, EditorState, Modifier, RichUtils } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import {
-  setBlockData,
-  getSelectedBlock,
-  getSelectionEntity,
-  getSelectionText,
-  getEntityRange,
-  getSelectionInlineStyle,
   extractInlineStyle,
   getCustomStyleMap,
+  getEntityRange,
+  getSelectedBlock,
   getSelectionCustomInlineStyle,
+  getSelectionEntity,
+  getSelectionInlineStyle,
+  getSelectionText,
+  setBlockData,
   toggleCustomInlineStyle,
 } from 'draftjs-utils';
 import htmlToDraft from 'html-to-draftjs';
 import React from 'react';
 
-import { Divider } from '@mui/material';
-import Paper from '@mui/material/Paper';
+import { errorColor, fontDetailColor, primaryColor } from 'src/styles/variables.const';
+
+import type { LinkValue } from './toolbar/Link';
+import type { ContentBlock, DraftEditorCommand, DraftHandleValue } from 'draft-js';
 
 import { ColorPicker } from './toolbar/ColorPicker';
 import { EmojiPicker } from './toolbar/EmojiPicker';
 import { InlineButtons } from './toolbar/InlineButtons';
-import type { LinkValue } from './toolbar/Link';
-import { LinkPicker, LinkDecorator, linkToHTML } from './toolbar/Link';
+import { LinkDecorator, LinkPicker, linkToHTML } from './toolbar/Link';
 import { TextAlignButtons } from './toolbar/TextAlignButtons';
 import { TitleChoice } from './toolbar/TitleChoice';
-import { errorColor, fontDetailColor, primaryColor } from 'src/styles/variables.const';
 
 function blockStyleFn(block: ContentBlock): string {
   const blockAlignment = block.getData() && block.getData().get('text-align');

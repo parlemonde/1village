@@ -1,14 +1,16 @@
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
-import Layout from '../layout';
 import { isFreeContent } from 'src/activity-types/anyActivity';
+import { ContentEditor } from 'src/components/activities/content';
+import StepsNavigation from 'src/components/activities/StepsNavigation';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
-import StepsNavigation from 'src/components/activities/StepsNavigation';
-import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
+
 import type { ActivityContent } from 'types/activity.type';
+
+import Layout from '../layout';
 
 const ContenuLibreStep1: React.FC = () => {
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);

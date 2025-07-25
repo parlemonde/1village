@@ -3,6 +3,7 @@ import React from 'react';
 import { useQueryClient } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { User, UserUpdatePassword } from 'types/user.type';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

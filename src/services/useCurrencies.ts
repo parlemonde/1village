@@ -1,9 +1,11 @@
 import React from 'react';
-import type { QueryFunction } from 'react-query';
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { Currency } from 'types/currency.type';
+
+import type { QueryFunction } from 'react-query';
 
 export const useCurrencies = (): { currencies: Currency[] } => {
   const getCurrencies: QueryFunction<Currency[]> = React.useCallback(async () => {

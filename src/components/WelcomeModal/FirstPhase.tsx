@@ -1,17 +1,17 @@
-import { useSnackbar } from 'notistack';
-import React from 'react';
-
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { Checkbox, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import MobileStepper from '@mui/material/MobileStepper';
 
+import { useSnackbar } from 'notistack';
+import React from 'react';
+
+import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { CGU } from 'src/components/CGU';
 import { Flag } from 'src/components/Flag';
 import { Map } from 'src/components/Map';
 import { Modal } from 'src/components/Modal';
-import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -19,6 +19,7 @@ import { bgPage, defaultOutlinedButtonStyle, defaultTextButtonStyle } from 'src/
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
 import { getUserDisplayName, serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';

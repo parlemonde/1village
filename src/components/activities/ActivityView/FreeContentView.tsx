@@ -1,8 +1,9 @@
 import React from 'react';
 
-import type { ActivityViewProps } from './activity-view.types';
 import type { FreeContentActivity } from 'src/activity-types/freeContent.types';
 import { ContentView } from 'src/components/activities/content/ContentView';
+
+import type { ActivityViewProps } from './activity-view.types';
 
 export const FreeContentView = ({ activity }: ActivityViewProps<FreeContentActivity>) => {
   return (

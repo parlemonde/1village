@@ -1,16 +1,18 @@
-import type { ChangeEventHandler } from 'react';
+import { TextField, Grid, Button } from '@mui/material';
+
 import React from 'react';
 import ReactPlayer from 'react-player';
 
-import { TextField, Grid, Button } from '@mui/material';
-
+import { VideoModals } from 'src/components/activities/content/editors/VideoEditor/VideoModals';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
-import { VideoModals } from 'src/components/activities/content/editors/VideoEditor/VideoModals';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import UploadIcon from 'src/svg/jeu/add-video.svg';
+
 import type { MimicData } from 'types/game.type';
+
+import type { ChangeEventHandler } from 'react';
 
 interface MimicSelectorProps {
   MimicData: MimicData;

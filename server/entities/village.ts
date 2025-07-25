@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, PrimaryGeneratedColumn, OneToMany, OneToOne
 
 import type { Country } from '../../types/country.type';
 import type { Village as VillageInterface } from '../../types/village.type';
+
 import { VillagePhase } from '../../types/village.type';
 import { countriesMap } from '../utils/countries-map';
 import { Activity } from './activity';

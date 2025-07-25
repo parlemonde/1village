@@ -1,12 +1,14 @@
 import { useSnackbar } from 'notistack';
 import React from 'react';
-import type { QueryFunction } from 'react-query';
 import { useQueryClient, useQuery } from 'react-query';
 
 import { postPhaseHistory } from 'src/api/phaseHistory/phaseHistory.post';
 import { axiosRequest } from 'src/utils/axiosRequest';
+
 import type { Village, VillageFilter } from 'types/village.type';
 import { VillagePhase } from 'types/village.type';
+
+import type { QueryFunction } from 'react-query';
 
 export const useVillages = (options?: VillageFilter): { villages: Village[]; setVillages(newVillages: Village[]): void } => {
   const queryClient = useQueryClient();

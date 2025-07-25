@@ -1,27 +1,30 @@
+import { Button, Paper } from '@mui/material';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import router from 'next/router';
 import React from 'react';
 import ReactPlayer from 'react-player';
 
-import { Button, Paper } from '@mui/material';
-
-import { titles, REACTIONS, icons } from '../utils';
-import { CommentIcon } from './CommentIcon';
-import type { ActivityCardProps } from './activity-card.types';
 import { isReaction } from 'src/activity-types/anyActivity';
 import { AvatarImg } from 'src/components/Avatar';
+import { RedButton } from 'src/components/buttons/RedButton';
 import { Flag } from 'src/components/Flag';
 import { UserDisplayName } from 'src/components/UserDisplayName';
-import { RedButton } from 'src/components/buttons/RedButton';
 import { useActivity } from 'src/services/useActivity';
 import { bgPage, primaryColor } from 'src/styles/variables.const';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { toDate } from 'src/utils';
+
 import { LinkNotAllowedInPath } from 'types/activity.type';
 import { GameType } from 'types/game.type';
 import type { GameActivity } from 'types/game.type';
 import { UserType } from 'types/user.type';
+
+import type { ActivityCardProps } from './activity-card.types';
+
+import { titles, REACTIONS, icons } from '../utils';
+import { CommentIcon } from './CommentIcon';
 
 // TODO : Remove all ts-ignore when mimic is standardized
 

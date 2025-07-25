@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
 
-import { AvatarImg } from '../Avatar';
-import { Flag } from '../Flag';
 import type { GameResponse } from 'types/gameResponse.type';
 import { UserType } from 'types/user.type';
 import type { User } from 'types/user.type';
+
+import { AvatarImg } from '../Avatar';
+import { Flag } from '../Flag';
 
 type GameStatsProps = {
   gameResponses: GameResponse[];

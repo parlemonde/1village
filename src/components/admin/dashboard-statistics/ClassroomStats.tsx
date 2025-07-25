@@ -1,29 +1,31 @@
-import React, { useEffect, useState } from 'react';
-
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box, Tab, Tabs } from '@mui/material';
 
+import React, { useEffect, useState } from 'react';
+
+import { useGetClassroomsStats } from 'src/api/statistics/statistics.get';
+import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
+
+import type { ClassroomsStats, OneVillageTableRow, SessionsStats } from 'types/statistics.type';
+
 import { OneVillageTable } from '../OneVillageTable';
 import { getCommentCount, getPublicationCount, getVideoCount } from '../StatisticsUtils';
-import CountryActivityPhaseAccordion from './CountryActivityPhaseAccordion';
-import TabPanel from './TabPanel';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import ClassroomDetailsCard from './cards/ClassroomDetailsCard/ClassroomDetailsCard';
 import CommentCard from './cards/CommentCard/CommentCard';
 import StatsCard from './cards/StatsCard/StatsCard';
 import BarCharts from './charts/BarCharts';
+import CountryActivityPhaseAccordion from './CountryActivityPhaseAccordion';
 import StatisticFilters from './filters/StatisticFilters';
 import PhaseDetails from './menu/PhaseDetails';
 import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
+import TabPanel from './TabPanel';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
-import { useGetClassroomsStats } from 'src/api/statistics/statistics.get';
-import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
-import type { ClassroomsStats, OneVillageTableRow, SessionsStats } from 'types/statistics.type';
 
 const BarChartTitle = 'Evolution des connexions';
 

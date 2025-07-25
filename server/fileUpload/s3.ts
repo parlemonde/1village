@@ -1,8 +1,10 @@
-import type { S3 } from 'aws-sdk';
-import AWS from 'aws-sdk';
-import type { ListObjectsV2Output } from 'aws-sdk/clients/s3';
-import fs from 'fs-extra';
 import path from 'path';
+
+import AWS from 'aws-sdk';
+import fs from 'fs-extra';
+
+import type { S3 } from 'aws-sdk';
+import type { ListObjectsV2Output } from 'aws-sdk/clients/s3';
 import type { Readable } from 'stream';
 
 import { AppError } from '../middlewares/handleErrors';

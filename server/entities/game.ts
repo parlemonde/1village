@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 
 import type { Game as GameInterface } from '../../types/game.type';
+
 import { Activity } from './activity';
 import { GameResponse } from './gameResponse';
 import { User } from './user';

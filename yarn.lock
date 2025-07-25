@@ -139,6 +139,7 @@ __metadata:
     query-string: "npm:^7.1.1"
     react: "npm:^17.0.2"
     react-dom: "npm:^17.0.2"
+    react-hook-form: "npm:^7.60.0"
     react-pdf: "npm:^8.0.0"
     react-player: "npm:^2.10.1"
     react-query: "npm:^3.39.2"
@@ -14648,6 +14649,15 @@ __metadata:
   version: 3.2.1
   resolution: "react-fast-compare@npm:3.2.1"
   checksum: 10/f6394513cdb3f0dd0e54882d039b0f9333100aacdca14817fc9932b979227954a20c78785aa4da69e44de262995f6d34a98168a983d1c8543aed74624e1a7811
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.60.0":
+  version: 7.60.0
+  resolution: "react-hook-form@npm:7.60.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: 10/cc86ef4029f7b06f82dff919c8933156683b70669a6306d2471706443192b8916afaa07bc64452b590ecb18ea94f3d156f3fb38d59ada3462f5b108e89e186c9
   languageName: node
   linkType: hard
 

@@ -1,14 +1,15 @@
-import React, { useContext, useState } from 'react';
-
 import RefreshIcon from '@mui/icons-material/Refresh';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
 
-import FiltersActivities from './FiltersActivities';
+import React, { useContext, useState } from 'react';
+
 import CheckboxAdmin from 'src/components/admin/mediatheque/CheckboxAdmin';
 import MediathequeContext from 'src/contexts/mediathequeContext';
+
+import FiltersActivities from './FiltersActivities';
 
 const styleModal = {
   position: 'absolute' as const,

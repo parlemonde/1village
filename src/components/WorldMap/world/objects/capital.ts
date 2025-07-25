@@ -1,6 +1,7 @@
-import type { FeatureCollection, Point } from 'geojson';
 import { CircleGeometry, Group, Mesh, MeshLambertMaterial, Vector3 } from 'three';
 import { Text } from 'troika-three-text';
+
+import type { FeatureCollection, Point } from 'geojson';
 
 import { polar2Cartesian } from '../lib/coords-utils';
 import { GLOBE_RADIUS } from '../world.constants';

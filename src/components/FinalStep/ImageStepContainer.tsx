@@ -1,13 +1,14 @@
+import { Grid, ButtonBase } from '@mui/material';
+
 import classNames from 'classnames';
 import Image from 'next/image';
 import router from 'next/router';
 import React from 'react';
 
-import { Grid, ButtonBase } from '@mui/material';
-
-import { KeepRatio } from '../KeepRatio';
-import { EditButton } from '../buttons/EditButton';
 import { bgPage, primaryColor, warningColor } from 'src/styles/variables.const';
+
+import { EditButton } from '../buttons/EditButton';
+import { KeepRatio } from '../KeepRatio';
 
 type ImageStepContainerProps = {
   urlStep: string;

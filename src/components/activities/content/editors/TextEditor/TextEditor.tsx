@@ -1,6 +1,7 @@
 import React from 'react';
 
 import type { EditorProps } from '../../content.types';
+
 import { EditorContainer } from '../EditorContainer';
 import { SimpleTextEditor } from './SimpleTextEditor';
 

@@ -1,18 +1,17 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import type { SetStateAction } from 'react';
-import React, { useMemo, useState } from 'react';
-
 import { Box, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import NoSsr from '@mui/material/NoSsr';
 
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React, { useMemo, useState } from 'react';
+
 import { useUsers } from 'src/api/user/user.list';
-import { Modal } from 'src/components/Modal';
 import { AdminTile } from 'src/components/admin/AdminTile';
+import { ManageUsersHeaders } from 'src/components/admin/manage/utils/tableHeaders';
 import { OneVillageTable } from 'src/components/admin/OneVillageTable';
 import OneVillageTableActionMenu from 'src/components/admin/OneVillageTableActionMenu';
-import { ManageUsersHeaders } from 'src/components/admin/manage/utils/tableHeaders';
+import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
 import { useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
@@ -21,9 +20,12 @@ import BackArrow from 'src/svg/back-arrow.svg';
 import { countryToFlag } from 'src/utils';
 import { exportJsonToCsv } from 'src/utils/csv-export';
 import { normalizeString } from 'src/utils/string';
+
 import type { UserFilter } from 'types/manage.type';
 import { UserType, userTypeNames } from 'types/user.type';
 import type { Village } from 'types/village.type';
+
+import type { SetStateAction } from 'react';
 
 const Users = () => {
   const router = useRouter();

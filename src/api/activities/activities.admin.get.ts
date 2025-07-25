@@ -1,7 +1,8 @@
 import { useQuery } from 'react-query';
-import type { Activity } from 'server/entities/activity';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
+
+import type { Activity } from 'server/entities/activity';
 
 async function getActivitiesAdminDraft(params: { limit: number | null; isDraft: boolean; isDisplayed?: boolean }): Promise<Activity[]> {
   const { limit, isDraft, isDisplayed } = params;
