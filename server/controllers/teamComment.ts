@@ -1,32 +1,47 @@
 import type { NextFunction, Request, Response } from 'express';
 
-import { TeamComment } from '../entities/teamComment';
+import { TeamCommentEntity } from '../entities/teamComment';
 import { UserType } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';
 import { Controller } from './controller';
 
 const teamCommentController = new Controller('/team-comments');
+const teamCommentRepository = AppDataSource.getRepository(TeamCommentEntity);
 
-// --- Get all comments. ---
 teamCommentController.get({ path: '', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
-  const teamComments = await AppDataSource.getRepository(TeamComment).find();
+  const { type } = req.query;
+  const where = type ? { type: Number(type) } : {};
+
+  const teamComments = await teamCommentRepository.find({ where });
+
   res.sendJSON(teamComments);
 });
 
-// --- Edit one comment. ---
+teamCommentController.post({ path: '', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
+  const { type, comment } = req.body;
+
+  const teamComment = teamCommentRepository.create({
+    type: Number(type),
+    comment,
+  });
+
+  const savedTeamComment = await teamCommentRepository.save(teamComment);
+  res.sendJSON(savedTeamComment);
+});
+
 teamCommentController.put({ path: '/:commentId', userType: UserType.ADMIN }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   const id = parseInt(req.params.commentId, 10) ?? 0;
-  const teamComment = await AppDataSource.getRepository(TeamComment).findOne({ where: { id } });
+  const teamComment = await teamCommentRepository.findOne({ where: { id } });
+
   if (!teamComment) {
     next();
     return;
   }
 
-  const updatedTeamComment = new TeamComment();
-  updatedTeamComment.id = id;
-  updatedTeamComment.text = data.text;
-  await AppDataSource.getRepository(TeamComment).save(updatedTeamComment);
+  teamComment.comment = data.comment;
+  const updatedTeamComment = await teamCommentRepository.save(teamComment);
+
   res.sendJSON(updatedTeamComment);
 });
 

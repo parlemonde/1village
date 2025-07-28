@@ -102,7 +102,7 @@ export default function StatisticFilters({ onPhaseChange, onCountryChange, onVil
   };
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} mb={2}>
       {renderDropdown(phaseDropdownOptions, handlePhaseChange, 'Phase', false)}
       {onCountryChange && renderDropdown(countryDropdownOptions, handleCountryChange, 'Pays', true, selectedCountry)}
       {onVillageChange && renderDropdown(villageDropdownOptions, handleVillageChange, 'Village', true, selectedVillage?.toString())}

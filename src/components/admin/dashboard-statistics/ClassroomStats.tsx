@@ -4,14 +4,15 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box, Tab, Tabs } from '@mui/material';
 
+import { TeamCommentType } from '../../../../types/teamComment.type';
 import { OneVillageTable } from '../OneVillageTable';
 import { getCommentCount, getPublicationCount, getVideoCount } from '../StatisticsUtils';
 import CountryActivityPhaseAccordion from './CountryActivityPhaseAccordion';
 import TabPanel from './TabPanel';
+import TeamCommentCard from './TeamCommentCard';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import ClassroomDetailsCard from './cards/ClassroomDetailsCard/ClassroomDetailsCard';
-import CommentCard from './cards/CommentCard/CommentCard';
 import StatsCard from './cards/StatsCard/StatsCard';
 import BarCharts from './charts/BarCharts';
 import StatisticFilters from './filters/StatisticFilters';
@@ -63,6 +64,7 @@ const ClassroomStats = () => {
 
   return (
     <>
+      <TeamCommentCard type={TeamCommentType.CLASSROOM} />
       <StatisticFilters
         onPhaseChange={setSelectedPhase}
         onCountryChange={setSelectedCountry}
@@ -71,7 +73,6 @@ const ClassroomStats = () => {
       />
       {selectedCountry && selectedVillage && selectedClassroom ? (
         <Box mt={2}>
-          <CommentCard />
           <ClassroomDetailsCard />
           <Tabs value={selectedTab} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
             <Tab label="En classe" />

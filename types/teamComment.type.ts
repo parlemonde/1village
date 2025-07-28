@@ -1,13 +1,14 @@
-export interface TeamCommentInterface {
+export interface TeamComment {
   id: number;
   type: TeamCommentType;
-  createDate?: Date | string;
-  updateDate?: Date | string;
-  text: string;
+  createdAt: Date;
+  updatedAt: Date;
+  comment: string;
 }
 
 export enum TeamCommentType {
-  DASHBOARD_GLOBAL = 0,
-  DASHBOARD_VILLAGE = 1,
-  DASHBOARD_COUNTRY = 2,
+  GLOBAL,
+  COUNTRY,
+  VILLAGE,
+  CLASSROOM,
 }
