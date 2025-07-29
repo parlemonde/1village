@@ -65,7 +65,7 @@ export const IndiceCard = ({ activity, isSelf, noButtons, isDraft, showEditButto
               <>
                 <Link href={`/activite/${activity.id}`} passHref>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
-                    Voir l&apos;indice
+                    {"Voir l'indice"}
                   </Button>
                 </Link>
               </>

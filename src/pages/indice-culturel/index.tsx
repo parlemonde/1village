@@ -158,7 +158,7 @@ const Indice = () => {
         <div className="width-900">
           <h1 style={{ marginTop: '0.5rem' }}>Quel aspect de culture allez-vous présenter ?</h1>
           <p className="text">
-            Dans cette activité, nous vous proposons de présenter à vos pélicopains un paysage, un hymne, une danse, un emblème, un vêtement… un
+            Dans cette activité, nous vous proposons de présenter à vos pélicopains un paysage, un hymne, une danse, un emblème, un vêtement... un
             indice qui représente le pays ou la région dans lequel vous habitez.
           </p>
           <p className="text">

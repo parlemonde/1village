@@ -78,8 +78,8 @@ const IndiceStep1 = () => {
         <div className="width-900">
           {activity.subType === -1 ? (
             <>
-              <h1>Présenter un autre type d&apos;indice</h1>
-              <p className="text">Indiquez quel autre type d&apos;indice vous souhaitez présenter :</p>
+              <h1>{"Présenter un autre type d'indice"}</h1>
+              <p className="text">{"Indiquez quel autre type d'indice vous souhaitez présenter :"}</p>
               <TextField
                 value={data.indice}
                 onChange={(event) => {

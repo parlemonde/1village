@@ -137,7 +137,7 @@ export const Navigation = (): JSX.Element => {
         phase: 1,
         disabled: isParent,
       },
-      /* TODO:
+      /* TODO: Ticket JIRA : VIL-791
           Elise attend que l'équipe péda soit présente à partir de septembre 2025
           pour confirmer la suppression de ce bouton. Une fois valider :
             - supprimer ce bouton commenté
