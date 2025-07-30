@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 import Box from '@mui/material/Box';
 
+import { TeamCommentType } from '../../../../types/teamComment.type';
+import TeamCommentCard from './TeamCommentCard';
 import VillageListCard from './cards/VillageListCard/VillageListCard';
 import HorizontalBarsChart from './charts/HorizontalChart';
 import DashboardSummary from './dashboard-summary/DashboardSummary';
@@ -24,6 +26,7 @@ const CountryStats = () => {
 
   return (
     <>
+      <TeamCommentCard type={TeamCommentType.COUNTRY} />
       <StatisticFilters onPhaseChange={setSelectedPhase} onCountryChange={setSelectedCountry} />
       {!selectedCountry || !statisticsFamily.data ? (
         <PelicoCard message={pelicoMessage} />

@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-import type { TeamCommentInterface, TeamCommentType } from '../../types/teamComment.type';
+import type { TeamComment, TeamCommentType } from '../../types/teamComment.type';
 
-@Entity()
-export class TeamComment implements TeamCommentInterface {
+@Entity('team_comment')
+export class TeamCommentEntity implements TeamComment {
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -11,11 +11,11 @@ export class TeamComment implements TeamCommentInterface {
   public type: TeamCommentType;
 
   @CreateDateColumn()
-  public createDate: Date;
+  public createdAt: Date;
 
   @UpdateDateColumn()
-  public updateDate: Date;
+  public updatedAt: Date;
 
   @Column({ type: 'text' })
-  public text: string;
+  public comment: string;
 }
