@@ -16,7 +16,7 @@
     "typescript": "tsc -p . && yarn typescript:server",
     "test": "jest --runInBand",
     "test:cov": "jest --coverage",
-    "start-dev": "rm -rf dist && yarn build:server && node dist/server/start.js",
+    "start:dev": "rm -rf dist && yarn build:server && node dist/server/start.js",
     "start": "yarn migration:run && NODE_ENV=production node dist/server/start.js",
     "dev": "nodemon",
     "dev-staging": "NODE_USE_STAGING=true nodemon",
