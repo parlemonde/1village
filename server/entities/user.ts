@@ -122,11 +122,11 @@ export class User implements UserInterface {
   public mascotteId?: number;
 
   @Column({ type: 'boolean', default: false })
-  //TODO: add trigger to check if hasStudentLink has to be seted whenever a student is deleted.
+  //TODO: add trigger to check if hasStudentLink has to be set whenever a student is deleted.
   //TODO: add migration to add trigger...
   public hasStudentLinked: boolean;
 
-  @ManyToOne(() => Village, (village: Village) => village.users, { onDelete: 'SET NULL' })
+  @ManyToOne(() => Village, (village: Village) => village.users, { onDelete: 'SET NULL', nullable: true })
   @JoinColumn({ name: 'villageId' })
   public village: Village | null;
 
