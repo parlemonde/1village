@@ -4,6 +4,6 @@
   },
   "ignore": ["**/*.test.ts", "**/*.spec.ts", ".git", "node_modules", "src", "dist/*"],
   "watch": ["server", "types"],
-  "exec": "yarn start-dev",
+  "exec": "yarn start:dev",
   "ext": "ts, yaml"
 }
