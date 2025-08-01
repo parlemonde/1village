@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import type { FC } from 'react';
+import { useMemo, useState } from 'react';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box, Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
@@ -68,8 +69,8 @@ const getTargetPhase = (villageRow: VillageRowData, phaseId: number): PhaseData 
   }
 };
 
-const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }: { data?: VillageStats }) => {
-  const [expandedPhases, setExpandedPhases] = React.useState<Record<number, boolean>>({
+const OneVillagePhaseTable: FC<OneVillagePhaseTableProps> = ({ data }: { data?: VillageStats }) => {
+  const [expandedPhases, setExpandedPhases] = useState<Record<number, boolean>>({
     1: true,
     2: true,
     3: true,

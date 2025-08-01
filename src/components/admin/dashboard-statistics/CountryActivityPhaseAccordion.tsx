@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
@@ -22,7 +22,7 @@ const phaseLabels: Record<number, string> = {
   3: 'Phase 3',
 };
 
-const CountryActivityPhaseAccordion: React.FC<Props> = ({ phaseId, countryCode, villageId, classroomId, open, onClick }) => {
+const CountryActivityPhaseAccordion: FC<Props> = ({ phaseId, countryCode, villageId, classroomId, open, onClick }) => {
   return (
     <div style={{ marginTop: '1.5rem', borderRadius: 8, border: '1px solid #eee', background: '#fafbfc' }}>
       <div

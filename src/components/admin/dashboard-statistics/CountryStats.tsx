@@ -79,7 +79,14 @@ const CountryStats = () => {
     }, 5000);
   }, []);
 
-  const isLoadingCountryStatistics = isLoadingCountryEngagementStatus || loadingHighlightedCountry || loadingBarsChartData || loadingVillageList;
+  const isLoadingCountryStatisticsForGraphs =
+    isLoadingCountryEngagementStatus || loadingHighlightedCountry || loadingBarsChartData || loadingVillageList;
+  const isLoadingClassroomStatisticsForWidgets =
+    isLoadingClassroomStatistics ||
+    isLoadingSessionsStatistics ||
+    isLoadingFamilyStatistics ||
+    isLoadingEngagementStatusStatistics ||
+    isLoadingActivityCountDetails;
 
   const onCountrySelect = (_country: string) => {
     // TODO VIL-815 changer la valeur de selectedCountry quand on clique sur une barre du graphique
@@ -93,7 +100,7 @@ const CountryStats = () => {
         <PelicoCard message={'Merci de sélectionner un pays pour analyser ses statistiques'} />
       ) : (
         <Box mt={2}>
-          {isLoadingCountryStatistics ? (
+          {isLoadingCountryStatisticsForGraphs ? (
             <Loader analyticsDataType={AnalyticsDataType.GRAPHS} />
           ) : (
             <>
@@ -106,11 +113,7 @@ const CountryStats = () => {
               {villageList && <VillageListCard villageList={villageList} />}
             </>
           )}
-          {isLoadingClassroomStatistics ||
-          isLoadingSessionsStatistics ||
-          isLoadingFamilyStatistics ||
-          isLoadingEngagementStatusStatistics ||
-          isLoadingActivityCountDetails ? (
+          {isLoadingClassroomStatisticsForWidgets ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
           ) : (
             classroomsStatistics &&

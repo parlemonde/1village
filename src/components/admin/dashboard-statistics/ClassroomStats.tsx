@@ -53,7 +53,6 @@ const ClassroomStats = () => {
     selectedClassroom,
     selectedPhase,
   );
-
   const { data: classroomDetails, isLoading: isLoadingClassroomDetail } = useGetClassroomDetails(selectedClassroom);
   const { data: compareData, isLoading: isLoadingCompareData } = useGetCompareStats();
 

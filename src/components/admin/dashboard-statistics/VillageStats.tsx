@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { Box, Tab, Tabs } from '@mui/material';
+import { Tabs, Tab, Box } from '@mui/material';
 
 import { OneVillageTable } from '../OneVillageTable';
-import { getCommentCount, getPublicationCount, getVideoCount } from '../StatisticsUtils';
+import { getVideoCount, getCommentCount, getPublicationCount } from '../StatisticsUtils';
 import CountryActivityPhaseAccordion from './CountryActivityPhaseAccordion';
 import EntityEngagementStatus, { EntityType } from './EntityEngagementStatus';
 import Loader, { AnalyticsDataType } from './Loader';
@@ -26,10 +26,10 @@ import ClassroomsToMonitorTable from './tables/ClassroomsToMonitorTable';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
 import {
+  useGetVillagesStats,
+  useGetVillageEngagementStatus,
   useGetClassroomsEngagementStatus,
   useGetCompareStats,
-  useGetVillageEngagementStatus,
-  useGetVillagesStats,
 } from 'src/api/statistics/statistics.get';
 import { useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';

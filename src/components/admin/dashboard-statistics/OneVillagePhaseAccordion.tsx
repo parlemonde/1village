@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
@@ -11,7 +11,7 @@ interface PhaseTableRow {
   [key: string]: string | number;
 }
 
-interface Props {
+interface OneVillagePhaseAccordionProps {
   phaseId: number;
   data: PhaseTableRow[];
   columns: Array<{ key: string; label: string; sortable?: boolean }>;
@@ -26,7 +26,7 @@ const phaseLabels: Record<number, string> = {
   3: 'Phase 3',
 };
 
-const OneVillagePhaseAccordion: React.FC<Props> = ({ phaseId, data, columns, rowStyle, open, onClick }) => {
+const OneVillagePhaseAccordion: FC<OneVillagePhaseAccordionProps> = ({ phaseId, data, columns, rowStyle, open, onClick }) => {
   return (
     <div style={{ marginTop: '1.5rem', borderRadius: 8, border: '1px solid #eee', background: '#fafbfc' }}>
       <div

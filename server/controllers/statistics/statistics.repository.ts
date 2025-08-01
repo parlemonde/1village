@@ -194,15 +194,12 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
   const activityByType = groupBy(activities, (activity: Activity) => activity.type);
 
   if (phaseId === 1) {
-    // Phase 1 - Utiliser les types qui existent réellement dans la base
-    const indiceCount = activityByType.get(6)?.length || 0; // Type 6 = INDICE (n'existe pas dans la base récente)
-    const mascotCount = activityByType.get(8)?.length || 0; // Type 8 = MASCOTTE
-
-    // Utiliser les types qui existent réellement
-    const enigmaCount = activityByType.get(1)?.length || 0; // Type 1 = ENIGME
-    const challengeCount = activityByType.get(2)?.length || 0; // Type 2 = DEFI
-    const questionCount = activityByType.get(3)?.length || 0; // Type 3 = QUESTION
-    const gameCount = activityByType.get(4)?.length || 0; // Type 4 = GAME
+    const indiceCount = activityByType.get(6)?.length || 0;
+    const mascotCount = activityByType.get(8)?.length || 0;
+    const enigmaCount = activityByType.get(1)?.length || 0;
+    const challengeCount = activityByType.get(2)?.length || 0; // Challenge = Defi
+    const questionCount = activityByType.get(3)?.length || 0;
+    const gameCount = activityByType.get(4)?.length || 0;
 
     return {
       ...baseActivityCount,
@@ -214,13 +211,12 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
       gameCount,
     };
   } else if (phaseId === 2) {
-    // Phase 2
-    const reportingCount = activityByType.get(9)?.length || 0; // Type 9 = REPORTAGE
-    const challengeCount = activityByType.get(2)?.length || 0; // Type 2 = DEFI
-    const enigmaCount = activityByType.get(1)?.length || 0; // Type 1 = ENIGME
-    const gameCount = activityByType.get(4)?.length || 0; // Type 4 = GAME
-    const questionCount = activityByType.get(3)?.length || 0; // Type 3 = QUESTION
-    const reactionCount = activityByType.get(10)?.length || 0; // Type 10 = REACTION
+    const reportingCount = activityByType.get(9)?.length || 0;
+    const challengeCount = activityByType.get(2)?.length || 0; // Challenge = Defi
+    const enigmaCount = activityByType.get(1)?.length || 0;
+    const gameCount = activityByType.get(4)?.length || 0;
+    const questionCount = activityByType.get(3)?.length || 0;
+    const reactionCount = activityByType.get(10)?.length || 0;
 
     return {
       ...baseActivityCount,
@@ -234,8 +230,8 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
   } else if (phaseId === 3) {
     const reinventStoryCount = activityByType.get(14)?.length || 0;
     const anthemCount = (activityByType.get(11)?.length || 0) + (activityByType.get(12)?.length || 0);
-    const contentLibreCount = activityByType.get(5)?.length || 0; // Type 5 = CONTENU_LIBRE
-    const storyCount = activityByType.get(13)?.length || 0; // Type 13 = STORY
+    const contentLibreCount = activityByType.get(5)?.length || 0;
+    const storyCount = activityByType.get(13)?.length || 0;
 
     return {
       ...baseActivityCount,

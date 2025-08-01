@@ -280,7 +280,6 @@ async function getCompareVillagesStats(villageId: number, phase?: number): Promi
     await axiosRequest({
       method: 'GET',
       baseURL: '/api',
-
       url: phase ? `/statistics/compare/villages/${villageId}?phase=${phase}` : `/statistics/compare/villages/${villageId}`,
     })
   ).data;
