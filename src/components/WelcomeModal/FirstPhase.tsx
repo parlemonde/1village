@@ -1,9 +1,9 @@
 import { useSnackbar } from 'notistack';
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import { Checkbox, Typography } from '@mui/material';
+import { Checkbox, Grid, Typography, useMediaQuery } from '@mui/material';
 import Button from '@mui/material/Button';
 import MobileStepper from '@mui/material/MobileStepper';
 
@@ -24,21 +24,22 @@ import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 export const FirstPhase = () => {
-  const { user, setUser } = React.useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
-  const { village } = React.useContext(VillageContext);
-  const [currentStep, setCurrentStep] = React.useState(0);
-  const [position, setPosition] = React.useState<{ lat: number; lng: number } | null>(null);
-  const [loading, setIsLoading] = React.useState(false);
-  const [newUser, setNewUser] = React.useState<Partial<User> | null>(user);
-  const [isVisible, setIsVisible] = React.useState<boolean>(false);
-  const [updateAsked, setUpdateAsked] = React.useState({
+  const { village } = useContext(VillageContext);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
+  const [loading, setIsLoading] = useState(false);
+  const [newUser, setNewUser] = useState<Partial<User> | null>(user);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [updateAsked, setUpdateAsked] = useState({
     village: false,
     country: false,
   });
-  const [cguChecked, setCguChecked] = React.useState(false);
+  const [cguChecked, setCguChecked] = useState(false);
+  const isMdScreen = useMediaQuery('(min-width: 900px)');
 
-  React.useEffect(() => {
+  useEffect(() => {
     setNewUser(user);
   }, [user]);
 
@@ -55,19 +56,18 @@ export const FirstPhase = () => {
         country: newUser.country?.name || '',
       })}`,
     });
-    if (response.error) {
-      setPosition({ lat: 0, lng: 0 });
-    } else {
-      setPosition(response.data);
-    }
+
+    setPosition(response.error ? { lat: 0, lng: 0 } : response.data);
   };
 
   const updateUser = async () => {
     if (!newUser.firstname || !newUser.lastname || !newUser.school || !newUser.level || !newUser.address || !newUser.city || !newUser.postalCode) {
       return;
     }
+
     setIsLoading(true);
-    const updatedValues: Partial<User> = {
+
+    const updatedUser: Partial<User> = {
       school: newUser.school,
       level: newUser.level || '',
       city: newUser.city,
@@ -80,21 +80,25 @@ export const FirstPhase = () => {
       firstLogin: 1,
       displayName: newUser.displayName || '',
     };
+
     if (position !== null) {
-      updatedValues.position = position;
+      updatedUser.position = position;
     }
+
     const response = await axiosRequest({
       method: 'PUT',
       url: `/users/${user.id}`,
-      data: updatedValues,
+      data: updatedUser,
     });
+
     if (response.error) {
       enqueueSnackbar('Une erreur inconnue est survenue...', {
         variant: 'error',
       });
     } else {
-      setUser({ ...(user || {}), ...updatedValues });
+      setUser({ ...(user || {}), ...updatedUser });
     }
+
     setIsLoading(false);
   };
 
@@ -119,6 +123,7 @@ export const FirstPhase = () => {
         error,
       },
     });
+
     if (response.error) {
       enqueueSnackbar('Une erreur inconnue est survenue...', {
         variant: 'error',
@@ -132,9 +137,11 @@ export const FirstPhase = () => {
           variant: 'success',
         },
       );
+
       setUpdateAsked({ ...updateAsked, [error]: true });
     }
   };
+
   return (
     <Modal
       open={true}
@@ -209,7 +216,7 @@ export const FirstPhase = () => {
         </div>
       }
     >
-      <div id="new-user-desc" style={{ height: '60vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <div id="new-user-desc" style={{ height: isMdScreen ? '75vh' : '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         {currentStep === 0 && (
           <div className="text-center">
             <span style={{ fontSize: '1.1rem' }}>Votre classe appartient au village</span>
@@ -279,14 +286,14 @@ export const FirstPhase = () => {
                 ?
               </span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'stretch' }}>
-              <div style={{ flex: 1, marginRight: '1rem', minWidth: 0 }}>
+            <Grid container spacing={2}>
+              <Grid item sm={12} md={6}>
                 <Typography variant="h3" mx={1} mb={2}>
-                  Professionnel de l&apos;éducation
+                  {"Professionnel de l'éducation"}
                 </Typography>
                 <PanelInput
                   value={newUser.lastname || ''}
-                  defaultValue={'non renseignée'}
+                  defaultValue="non renseignée"
                   label="Nom : "
                   placeholder="Nom : "
                   hasError={!newUser.lastname}
@@ -298,7 +305,7 @@ export const FirstPhase = () => {
                 />
                 <PanelInput
                   value={newUser.firstname || ''}
-                  defaultValue={'non renseignée'}
+                  defaultValue="non renseignée"
                   label="Prénom : "
                   placeholder="Prénom : "
                   hasError={!newUser.firstname}
@@ -313,7 +320,7 @@ export const FirstPhase = () => {
                 </Typography>
                 <PanelInput
                   value={newUser.school || ''}
-                  defaultValue={'non renseignée'}
+                  defaultValue="non renseignée"
                   label="École : "
                   placeholder="Nom de votre école : "
                   hasError={!newUser.school}
@@ -325,7 +332,7 @@ export const FirstPhase = () => {
                 />
                 <PanelInput
                   value={newUser.level || ''}
-                  defaultValue={'non renseigné'}
+                  defaultValue="non renseigné"
                   label="Niveau de la classe : "
                   placeholder="Niveau de votre classe"
                   hasError={!newUser.level}
@@ -337,7 +344,7 @@ export const FirstPhase = () => {
                 />
                 <PanelInput
                   value={newUser.address || ''}
-                  defaultValue={'non renseigné'}
+                  defaultValue="non renseigné"
                   label="Adresse de l'école : "
                   placeholder="Adresse"
                   hasError={!newUser.address}
@@ -349,7 +356,7 @@ export const FirstPhase = () => {
                 />
                 <PanelInput
                   value={newUser.city || ''}
-                  defaultValue={'non renseigné'}
+                  defaultValue="non renseigné"
                   label="Ville : "
                   placeholder="Ville"
                   hasError={!newUser.city}
@@ -361,7 +368,7 @@ export const FirstPhase = () => {
                 />
                 <PanelInput
                   value={newUser.postalCode || ''}
-                  defaultValue={'non renseigné'}
+                  defaultValue="non renseigné"
                   label="Code postal : "
                   placeholder="Code postal"
                   hasError={!newUser.postalCode}
@@ -371,13 +378,11 @@ export const FirstPhase = () => {
                     setNewUser((u) => ({ ...u, postalCode }));
                   }}
                 />
-                {user.country?.name && (
-                  <PanelInput value={user.country.name} defaultValue={''} label="Pays :" placeholder="Pays" isEditMode={false} />
-                )}
+                {user.country?.name && <PanelInput value={user.country.name} defaultValue="" label="Pays :" placeholder="Pays" isEditMode={false} />}
                 <PanelInput
                   style={{ marginTop: '1rem' }}
                   value={newUser.displayName || ''}
-                  defaultValue={'non renseigné'}
+                  defaultValue="non renseigné"
                   label="Pseudo : "
                   placeholder={getUserDisplayName({ ...user, ...newUser, type: user?.type }, false)}
                   isEditMode
@@ -385,8 +390,16 @@ export const FirstPhase = () => {
                     setNewUser((u) => ({ ...u, displayName }));
                   }}
                 />
-              </div>
-              <div style={{ flex: 1, backgroundColor: bgPage, padding: '0.5rem 1rem', minWidth: 0 }}>
+              </Grid>
+              <Grid
+                item
+                sm={12}
+                md={6}
+                bgcolor={bgPage}
+                px={1}
+                py={2}
+                style={{ borderRadius: '0.25rem', ...(isMdScreen ? { height: '100%', width: '100%' } : {}) }}
+              >
                 <span className="text text--bold">Les activités de votre classe apparaîtront comme ci-dessous :</span>
                 <ActivityCard
                   activity={{
@@ -413,8 +426,8 @@ export const FirstPhase = () => {
                   user={{ ...user, ...newUser, type: user.type, id: -1 }}
                   noButtons
                 />
-              </div>
-            </div>
+              </Grid>
+            </Grid>
           </>
         )}
         {currentStep === 4 && (
