@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 
-import Box from '@mui/material/Box';
+import { Box } from '@mui/material';
 
 import EntityEngagementStatus, { EntityType } from './EntityEngagementStatus';
 import Loader, { AnalyticsDataType } from './Loader';
 import TeamCommentCard from './TeamCommentCard';
 import VillageListCard from './cards/VillageListCard/VillageListCard';
-import HorizontalBarsChart from './charts/HorizontalChart';
+import HorizontalChart from './charts/HorizontalChart';
 import DashboardSummary from './dashboard-summary/DashboardSummary';
 import StatisticFilters from './filters/StatisticFilters';
-import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import {
@@ -101,7 +100,7 @@ const CountryStats = () => {
               {countryEngagementStatus && <EntityEngagementStatus entityType={EntityType.COUNTRY} entityEngagementStatus={countryEngagementStatus} />}
               {highlightedCountry && barsChartData && (
                 <div className={styles.simpleContainer}>
-                  <HorizontalBarsChart highlightedCountry={highlightedCountry} barsChartData={barsChartData} onCountrySelect={onCountrySelect} />
+                  <HorizontalChart highlightedCountry={highlightedCountry} barsChartData={barsChartData} onCountrySelect={onCountrySelect} />
                 </div>
               )}
               {villageList && <VillageListCard villageList={villageList} />}
@@ -123,7 +122,7 @@ const CountryStats = () => {
                   ...sessionsStatistics,
                   ...familyStatistics,
                   ...activityCountDetails,
-                  barChartData: mockDataByMonth,
+                  barChartData: sessionsStatistics?.barChartData || [],
                   engagementStatusData: engagementStatusStatistics,
                 }}
                 selectedCountry={selectedCountry}

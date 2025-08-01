@@ -23,7 +23,7 @@ import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
-import { useGetClassroomEngagementStatus, useGetClassroomsStats } from 'src/api/statistics/statistics.get';
+import { useGetClassroomEngagementStatus, useGetClassroomsStats, useGetCompareStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
@@ -53,6 +53,7 @@ const ClassroomStats = () => {
     selectedClassroom,
     selectedPhase,
   );
+  const { data: compareData, isLoading: isLoadingCompareData } = useGetCompareStats();
 
   const videoCount = getVideoCount(selectedClassroomStatistics);
   const commentCount = getCommentCount(selectedClassroomStatistics);
@@ -100,7 +101,7 @@ const ClassroomStats = () => {
               {classroomDetails && <ClassroomDetailsCard classroomDetails={classroomDetails} />}
             </>
           )}
-          {isLoadingSessionsStatistics || isLoadingSelectedClassroomsStatistics || isLoadingClassroomsStatistics ? (
+          {isLoadingSessionsStatistics || isLoadingSelectedClassroomsStatistics || isLoadingClassroomsStatistics || isLoadingCompareData ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
           ) : (
             <>
@@ -155,6 +156,7 @@ const ClassroomStats = () => {
                 )}
                 {selectedClassroom &&
                   selectedVillage &&
+                  compareData &&
                   (selectedPhase === 0 ? (
                     [1, 2, 3].map((phase) => (
                       <CountryActivityPhaseAccordion
