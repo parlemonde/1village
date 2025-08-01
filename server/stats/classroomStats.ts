@@ -82,6 +82,7 @@ export const getContributedClassroomsCount = async (
     .select('COUNT(DISTINCT classroom.id)', 'classroomsCount')
     .innerJoin('activity', 'activity', 'activity.classroomId = classroom.id')
     .groupBy('classroom.id');
+
   if (classroomId) {
     queryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
   } else if (villageId) {
@@ -89,6 +90,7 @@ export const getContributedClassroomsCount = async (
   } else if (countryCode) {
     queryBuilder.andWhere('classroom.countryCode = :countryCode', { countryCode });
   }
+
   if (nbPhases || nbPhases === 0) {
     if (nbPhases === 0) {
       // Condition: classroom must have at least one activity with phase 1, one with phase 2, and one with phase 3

@@ -77,7 +77,6 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
   const countryCode = req.query.countryCode ? (req.query.countryCode as string) : undefined;
   const classroomId = req.query.classroomId ? parseInt(req.query.classroomId as string) : undefined;
   const phase = req.query.phase ? parseInt(req.query.phase as string) : undefined;
-  // const phase = req.params.phase ? parseInt(req.params.phase) : null;
 
   const filters: StatsFilterParams = { villageId, countryId: countryCode, classroomId, phase: undefined };
 
