@@ -10,7 +10,9 @@ export const getCountries = async (hasVillage: boolean) => {
 
   const setCountryCodes = new Set(request.flatMap((obj) => obj.countryCodes.split(',')));
 
-  return countries.filter((country) => {
+  const filteredCountries = countries.filter((country) => {
     return setCountryCodes.has(country.isoCode);
   });
+
+  return filteredCountries;
 };

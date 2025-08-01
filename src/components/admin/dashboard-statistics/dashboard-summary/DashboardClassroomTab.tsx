@@ -92,7 +92,7 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
         </Grid>
         {dashboardType === DashboardType.ONE_VILLAGE_PANEL ? (
           <Grid item xs={12} lg={12}>
-            <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+            <BarCharts className={styles.midContainer} dataByMonth={data.barChartData || []} title={ENGAGEMENT_BAR_CHAR_TITLE} />
           </Grid>
         ) : (
           <>
@@ -100,7 +100,7 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
               <PieCharts className={styles.minContainer} pieChartData={mockPieChartData} />
             </Grid>
             <Grid item xs={12} lg={6}>
-              <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+              <BarCharts className={styles.midContainer} dataByMonth={data.barChartData || []} title={ENGAGEMENT_BAR_CHAR_TITLE} />
             </Grid>
           </>
         )}
@@ -108,7 +108,7 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
           <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
         </Grid>
         <Grid item xs={12} lg={12}>
-          <BarCharts dataByMonth={data.barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
+          <BarCharts dataByMonth={data.barChartData || []} title={CONTRIBUTION_BAR_CHAR_TITLE} />
         </Grid>
 
         {data?.phases && (

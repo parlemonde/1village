@@ -2,15 +2,19 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import React from 'react';
 
-import ClassroomActivityTable from './ClassroomActivityTable';
-import CountryActivityTable from './CountryActivityTable';
-import VillageActivityTable from './VillageActivityTable';
+import { OneVillageTable } from '../OneVillageTable';
+
+interface PhaseTableRow {
+  id: string | number;
+  villageName: string;
+  [key: string]: string | number;
+}
 
 interface Props {
   phaseId: number;
-  countryCode?: string;
-  villageId?: number;
-  classroomId?: string;
+  data: PhaseTableRow[];
+  columns: Array<{ key: string; label: string; sortable?: boolean }>;
+  rowStyle: (row: PhaseTableRow) => React.CSSProperties;
   open: boolean;
   onClick: () => void;
 }
@@ -21,7 +25,7 @@ const phaseLabels: Record<number, string> = {
   3: 'Phase 3',
 };
 
-const CountryActivityPhaseAccordion: React.FC<Props> = ({ phaseId, countryCode, villageId, classroomId, open, onClick }) => {
+const OneVillagePhaseAccordion: React.FC<Props> = ({ phaseId, data, columns, rowStyle, open, onClick }) => {
   return (
     <div style={{ marginTop: '1.5rem', borderRadius: 8, border: '1px solid #eee', background: '#fafbfc' }}>
       <div
@@ -42,13 +46,18 @@ const CountryActivityPhaseAccordion: React.FC<Props> = ({ phaseId, countryCode, 
       </div>
       {open && (
         <div style={{ padding: '1rem' }}>
-          {countryCode && <CountryActivityTable countryCode={countryCode} phaseId={phaseId} mode="country" />}
-          {villageId && !classroomId && <VillageActivityTable villageId={villageId} phaseId={phaseId} />}
-          {villageId && classroomId && <ClassroomActivityTable classroomId={parseInt(classroomId)} phaseId={phaseId} />}
+          <OneVillageTable
+            admin={false}
+            emptyPlaceholder={<p>Aucune donnée disponible pour la {phaseLabels[phaseId]}</p>}
+            data={data}
+            columns={columns}
+            rowStyle={rowStyle}
+            tableLayout="auto"
+          />
         </div>
       )}
     </div>
   );
 };
 
-export default CountryActivityPhaseAccordion;
+export default OneVillagePhaseAccordion;

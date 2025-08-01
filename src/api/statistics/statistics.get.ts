@@ -1,5 +1,6 @@
 import { useQuery } from 'react-query';
 
+import type { ComparisonStatistic } from './compare.api';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { SessionsStats, VillageStats, ClassroomToMonitor } from 'types/statistics.type';
 
@@ -131,6 +132,70 @@ async function getClassroomsToMonitor(countryId?: string, villageId?: number): P
   ).data;
 }
 
+async function getCompareStats(): Promise<ComparisonStatistic[]> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: `/statistics/compare`,
+    })
+  ).data;
+}
+
 export const useGetClassroomsToMonitorStats = (countryId?: string, villageId?: number) => {
   return useQuery(['classrooms-to_monitor-stats', countryId, villageId], () => getClassroomsToMonitor(countryId, villageId));
+};
+// [Onglet Pays] : /statistics/compare/countries/FR?phase=1
+async function getCompareCountriesStats(countryCode: string, phase?: number): Promise<ComparisonStatistic[]> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: phase ? `/statistics/compare/countries/${countryCode}?phase=${phase}` : `/statistics/compare/countries/${countryCode}`,
+    })
+  ).data;
+}
+
+// [Onglet Village] : /statistics/compare/villages/{villageId}?phase={phaseId}
+async function getCompareVillagesStats(villageId: number, phase?: number): Promise<ComparisonStatistic[]> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: phase ? `/statistics/compare/villages/${villageId}?phase=${phase}` : `/statistics/compare/villages/${villageId}`,
+    })
+  ).data;
+}
+
+// [Onglet Classe] : /statistics/compare/classes/{classroomId}?phase={phaseId}
+async function getCompareClassesStats(classroomId: number, phase?: number): Promise<ComparisonStatistic[]> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: phase ? `/statistics/compare/classes/${classroomId}?phase=${phase}` : `/statistics/compare/classes/${classroomId}`,
+    })
+  ).data;
+}
+
+export const useGetCompareStats = () => {
+  return useQuery(['compare-stats'], () => getCompareStats());
+};
+
+export const useGetCompareCountriesStats = (countryCode: string, phase?: number) => {
+  return useQuery(['compare-countries-stats', countryCode, phase], () => getCompareCountriesStats(countryCode, phase), {
+    enabled: !!countryCode,
+  });
+};
+
+export const useGetCompareVillagesStats = (villageId: number, phase?: number) => {
+  return useQuery(['compare-villages-stats', villageId, phase], () => getCompareVillagesStats(villageId, phase), {
+    enabled: villageId !== null,
+  });
+};
+
+export const useGetCompareClassesStats = (classroomId: number, phase?: number) => {
+  return useQuery(['compare-classes-stats', classroomId, phase], () => getCompareClassesStats(classroomId, phase), {
+    enabled: classroomId !== null,
+  });
 };

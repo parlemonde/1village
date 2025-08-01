@@ -5,26 +5,49 @@ import { getClassroomActivityTableHeaders } from './utils/tableHeaders';
 import { useClassroomActivityTable } from 'src/services/useClassroomActivityTable';
 
 interface ClassroomActivityTableProps {
-  villageId: number;
-  classroomId: string;
+  classroomId: number;
   phaseId: number;
 }
 
 type TableRow = {
   id: string | number;
+  name: string;
+  totalPublications?: number;
+  commentCount?: number;
+  draftCount?: number;
+  mascotCount?: number;
+  videoCount?: number;
+  challengeCount?: number;
+  enigmaCount?: number;
+  gameCount?: number;
+  questionCount?: number;
+  reactionCount?: number;
+  reportingCount?: number;
+  storyCount?: number;
+  anthemCount?: number;
+  reinventStoryCount?: number;
   isSelected?: boolean;
+  _highlight?: boolean;
 };
 
 const ClassroomActivityTable: React.FC<ClassroomActivityTableProps> = (props: ClassroomActivityTableProps) => {
-  const { villageId, classroomId, phaseId } = props;
-  const data = useClassroomActivityTable(villageId, classroomId, phaseId);
+  const { classroomId, phaseId } = props;
+  const data = useClassroomActivityTable(classroomId, phaseId);
 
   if (!data || data.length === 0) {
     return <div>Aucune donnée disponible pour cette phase.</div>;
   }
 
+  // On adapte les données pour le tableau
+  const tableData: TableRow[] = data.map((row: any, idx: number) => ({
+    ...row,
+    id: row.id || idx,
+    _highlight: row.isSelected,
+  }));
+
   const columns = getClassroomActivityTableHeaders(phaseId);
 
+  // Custom row style: bleu si _highlight
   const rowStyle = (row: TableRow) => {
     if (row.id === 'total') {
       return { color: 'black', fontWeight: 'bold', borderBottom: '2px solid black' };
@@ -40,7 +63,7 @@ const ClassroomActivityTable: React.FC<ClassroomActivityTableProps> = (props: Cl
       <OneVillageTable
         admin={false}
         emptyPlaceholder={<p>Aucune donnée pour cette classe</p>}
-        data={data}
+        data={tableData}
         columns={columns}
         rowStyle={rowStyle}
         tableLayout="auto"
