@@ -76,7 +76,7 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
   const villageId = req.query.villageId ? parseInt(req.query.villageId as string) : undefined;
   const countryCode = req.query.countryCode ? (req.query.countryCode as string) : undefined;
   const classroomId = req.query.classroomId ? parseInt(req.query.classroomId as string) : undefined;
-  // const phase = req.params.phase ? parseInt(req.params.phase) : null;
+  const phase = req.query.phase ? parseInt(req.query.phase as string) : undefined;
 
   const filters: StatsFilterParams = { villageId, countryId: countryCode, classroomId, phase: undefined };
 
@@ -93,7 +93,7 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
     const testConnections = await getUserConnectionsList();
     const registeredClassroomsCount = await getClassroomCount(villageId, countryCode, classroomId);
     const connectedClassroomsCount = await getConnectedClassroomsCount(villageId, countryCode, classroomId);
-    const contributedClassroomsCount = await getContributedClassroomsCount(villageId, countryCode, classroomId);
+    const contributedClassroomsCount = await getContributedClassroomsCount(villageId, countryCode, classroomId, phase);
     const connectedFamiliesCount = await getConnectedFamiliesCount(filters);
     const familyAccountCount = await getFamilyAccountsCount(filters);
     const childrenCodesCount = await getChildrenCodesCount(filters);

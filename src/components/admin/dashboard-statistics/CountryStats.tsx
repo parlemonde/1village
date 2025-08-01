@@ -21,7 +21,7 @@ const CountryStats = () => {
   const pelicoMessage = 'Merci de sélectionner un pays pour analyser ses statistiques ';
 
   const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
-  const statisticsSessions: SessionsStats = useStatisticsSessions(null, selectedCountry, null) as SessionsStats;
+  const statisticsSessions: SessionsStats = useStatisticsSessions(null, selectedCountry, null, selectedPhase) as SessionsStats;
   const statisticsFamily = useGetCountriesStats(selectedCountry, selectedPhase);
 
   return (
@@ -37,7 +37,7 @@ const CountryStats = () => {
           </div>
           <VillageListCard />
           <DashboardSummary
-            data={{ ...statisticsSessions, ...statisticsClassrooms, ...statisticsFamily.data, barChartData: mockDataByMonth }}
+            data={{ ...statisticsClassrooms, ...statisticsSessions, ...statisticsFamily.data, barChartData: mockDataByMonth }}
             selectedCountry={selectedCountry}
             selectedPhase={selectedPhase}
           />

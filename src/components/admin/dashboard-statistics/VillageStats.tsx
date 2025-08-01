@@ -44,7 +44,7 @@ const VillageStats = () => {
 
   const { data: villageStatistics } = useGetVillagesStats(selectedVillage, selectedPhase);
   const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
-  const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(Number(selectedVillage), selectedCountry, null);
+  const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(Number(selectedVillage), null, null, selectedPhase);
 
   const videoCount = getVideoCount(villageStatistics);
   const commentCount = getCommentCount(villageStatistics);
