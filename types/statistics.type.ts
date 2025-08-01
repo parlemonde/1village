@@ -1,5 +1,6 @@
 import type { PhaseDetail } from '../src/api/statistics/compare.api';
 import type { BarChartDataByMonth } from './dashboard.type';
+import type { User } from './user.type';
 import type { VillagePhase } from './village.type';
 
 export interface ClassroomsStats {
@@ -169,4 +170,5 @@ export interface ClassroomToMonitor {
   vm: string;
   teacher: string;
   status: ClassroomMonitoringStatus;
+  user: User;
 }
