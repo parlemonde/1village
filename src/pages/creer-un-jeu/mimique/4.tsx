@@ -9,6 +9,7 @@ import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import CreateGame from 'src/components/game/CreateGame';
 import Previsualisation from 'src/components/game/Previsualisation';
+import { ClassroomContext } from 'src/contexts/classroomContext';
 import { GameContext } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -22,6 +23,7 @@ const MimiqueStep4 = () => {
   const router = useRouter();
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
+  const { classroom } = React.useContext(ClassroomContext);
   const isObservator = user?.type === UserType.OBSERVATOR;
   const { selectedPhase } = React.useContext(VillageContext);
   const labelPresentation = user ? getUserDisplayName(user, false) : '';
@@ -33,6 +35,7 @@ const MimiqueStep4 = () => {
     const data: GameDataMonneyOrExpression = {
       userId: user?.id || 0,
       villageId: village?.id || 0,
+      classroomId: classroom?.id || 0,
       type: ActivityType.GAME,
       subType: GameType.MIMIC,
       game1: {
