@@ -4,6 +4,7 @@ export type ComparisonStatistic = {
   countryCodes: string[];
   classrooms: {
     name: string;
+    classroomName: string;
     countryCode: string;
     classroomId: string;
     totalPublications: number;
@@ -26,4 +27,5 @@ export type PhaseDetail = {
   storyCount?: number;
   anthemCount?: number;
   reinventStoryCount?: number;
+  contentLibreCount?: number;
 };

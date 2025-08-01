@@ -5,7 +5,7 @@ export const getVideoCount = (data?: VillageStats, countryCode?: string) => {
 
   return data.activityCountDetails.reduce((total, detail) => {
     const classroomVideos = detail.classrooms
-      .filter((classroom) => classroom.countryCode === countryCode)
+      .filter((classroom) => !countryCode || classroom.countryCode === countryCode)
       .reduce((sumClass, classroom) => {
         const phaseVideos = classroom.phaseDetails.reduce((sumPhase, phase) => {
           return sumPhase + phase.videoCount;
@@ -21,7 +21,7 @@ export const getCommentCount = (data?: VillageStats, countryCode?: string) => {
 
   return data.activityCountDetails.reduce((total, detail) => {
     const classroomComments = detail.classrooms
-      .filter((classroom) => classroom.countryCode === countryCode)
+      .filter((classroom) => !countryCode || classroom.countryCode === countryCode)
       .reduce((sumClass, classroom) => {
         const phaseComments = classroom.phaseDetails.reduce((sumPhase, phase) => {
           return sumPhase + phase.commentCount;
@@ -37,7 +37,7 @@ export const getPublicationCount = (data?: VillageStats, countryCode?: string) =
 
   return data.activityCountDetails
     .flatMap((detail) => detail.classrooms ?? [])
-    .filter((classroom) => classroom.countryCode === countryCode)
+    .filter((classroom) => !countryCode || classroom.countryCode === countryCode)
     .flatMap((classroom) => classroom.phaseDetails ?? [])
     .reduce((total, phase) => {
       Object.entries(phase).forEach(([key, value]) => {

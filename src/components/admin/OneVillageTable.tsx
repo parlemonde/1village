@@ -1,5 +1,3 @@
-import React, { isValidElement, useMemo, useState } from 'react';
-
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Box, Paper, TableContainer, TableSortLabel, useTheme } from '@mui/material';
 import NoSsr from '@mui/material/NoSsr';
@@ -9,6 +7,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import React, { isValidElement, useMemo, useState } from 'react';
 
 import removeCountryFlagFromText from './manage/utils/removeCountryFlagFromText';
 import { primaryColorLight } from 'src/styles/variables.const';
@@ -264,7 +263,7 @@ export const OneVillageTable = ({
               )}
             />
           ) : (
-            <p style={{ margin: 0, padding: '1rem', textAlign: 'right', fontSize: '14px' }}>{`${data.length} ${footerElementsLabel}${
+            <p style={{ margin: 0, padding: '0rem', textAlign: 'right', fontSize: '14px' }}>{`${data.length} ${footerElementsLabel}${
               displayedData.length > 1 ? 's' : ''
             }`}</p>
           )}

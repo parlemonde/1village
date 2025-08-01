@@ -2,14 +2,9 @@ import React from 'react';
 
 import { OneVillageTable } from '../OneVillageTable';
 import { CountryActivityTableHeaders, getCountryActivityTableHeaders } from './utils/tableHeaders';
-import { useCountryActivityTable } from 'src/services/useCountryActivityTable';
-import type { ClassroomActivity, PhaseDetail, CountryActivityMode } from 'src/services/useCountryActivityTable';
+import { useCountryActivityTable, type CountryRow } from 'src/services/useCountryActivityTable';
 
-interface CountryActivityTableProps {
-  countryCode: string;
-  phaseId: number;
-  mode?: CountryActivityMode;
-}
+export type CountryActivityMode = 'country' | 'class';
 
 type TableRow = {
   id: string | number;
@@ -32,9 +27,9 @@ type TableRow = {
   _highlight?: boolean;
 };
 
-const CountryActivityTable: React.FC<CountryActivityTableProps> = (props: CountryActivityTableProps) => {
+const CountryActivityTable: React.FC<{ countryCode: string; phaseId: number; mode?: CountryActivityMode }> = (props) => {
   const { countryCode, phaseId, mode = 'class' } = props;
-  const data = useCountryActivityTable(countryCode, phaseId, mode);
+  const data = useCountryActivityTable(countryCode, phaseId);
 
   if (!data || data.length === 0) {
     return <div>Aucune donnée disponible pour cette phase.</div>;
@@ -43,17 +38,29 @@ const CountryActivityTable: React.FC<CountryActivityTableProps> = (props: Countr
   // On adapte les données pour le tableau (plat, phaseDetail à la racine)
   const tableData: TableRow[] =
     mode === 'country'
-      ? data.map((row: any, idx: number) => ({
+      ? data.map((row: CountryRow, idx: number) => ({
           ...row,
           id: row.id || idx,
           _highlight: row.isSelected,
         }))
-      : (data as (ClassroomActivity & { phaseDetail?: PhaseDetail })[]).map((row, idx: number) => ({
-          id: row.classroomId || idx,
+      : data.map((row: CountryRow, idx: number) => ({
+          id: row.id || idx,
           name: row.name,
           totalPublications: row.totalPublications,
-          ...row.phaseDetail,
-          _highlight: true,
+          commentCount: row.commentCount,
+          draftCount: row.draftCount,
+          mascotCount: row.mascotCount,
+          videoCount: row.videoCount,
+          challengeCount: row.challengeCount,
+          enigmaCount: row.enigmaCount,
+          gameCount: row.gameCount,
+          questionCount: row.questionCount,
+          reactionCount: row.reactionCount,
+          reportingCount: row.reportingCount,
+          storyCount: row.storyCount,
+          anthemCount: row.anthemCount,
+          reinventStoryCount: row.reinventStoryCount,
+          _highlight: row.isSelected,
         }));
 
   const columns = mode === 'country' ? getCountryActivityTableHeaders(phaseId) : CountryActivityTableHeaders;

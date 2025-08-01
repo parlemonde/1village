@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
-
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box, Tab, Tabs } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 
 import { TeamCommentType } from '../../../../types/teamComment.type';
 import { OneVillageTable } from '../OneVillageTable';
@@ -22,7 +21,7 @@ import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
-import { useGetClassroomsStats } from 'src/api/statistics/statistics.get';
+import { useGetClassroomsStats, useGetCompareStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import type { ClassroomsStats, OneVillageTableRow, SessionsStats } from 'types/statistics.type';
 
@@ -44,6 +43,7 @@ const ClassroomStats = () => {
   const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(null, null, 1);
   const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
   const { data: classroomStatistics } = useGetClassroomsStats(selectedClassroom, selectedPhase);
+  const { data: compareData } = useGetCompareStats();
 
   const pelicoMessage = 'Merci de sélectionner une classe pour analyser ses statistiques ';
   const noDataFoundMessage = 'Pas de données pour la classe sélectionnée';
@@ -125,6 +125,7 @@ const ClassroomStats = () => {
             )}
             {selectedClassroom &&
               selectedVillage &&
+              compareData &&
               (selectedPhase === 0 ? (
                 [1, 2, 3].map((phase) => (
                   <CountryActivityPhaseAccordion

@@ -10,27 +10,27 @@ type GetClassroomsParams = {
 const classroomRepository = AppDataSource.getRepository(Classroom);
 
 export const getClassrooms = async ({ countryCode, villageId, classroomId }: GetClassroomsParams) => {
-  const classroomQB = classroomRepository
-    .createQueryBuilder('classroom')
-    .select(['classroom.id', 'classroom.villageId', 'classroom.name', 'classroom.countryCode']);
+  // Try simple find first
+  const allClassrooms = await classroomRepository.find({
+    relations: {
+      user: true,
+    },
+  });
 
-  if (countryCode) {
-    classroomQB.where('classroom.countryCode = :countryCode', { countryCode });
-  }
+  // Filter manually
+  let filteredClassrooms = allClassrooms;
 
   if (classroomId) {
-    classroomQB.andWhere('classroom.id = :classroomId', { classroomId });
+    filteredClassrooms = filteredClassrooms.filter((c: any) => c.id === classroomId);
+  }
+
+  if (countryCode) {
+    filteredClassrooms = filteredClassrooms.filter((c: any) => c.countryCode === countryCode);
   }
 
   if (villageId) {
-    classroomQB.andWhere('classroom.villageId = :villageId', { villageId });
+    filteredClassrooms = filteredClassrooms.filter((c: any) => c.villageId === villageId);
   }
 
-  return await classroomQB
-    .setFindOptions({
-      relations: {
-        user: true,
-      },
-    })
-    .getMany();
+  return filteredClassrooms;
 };

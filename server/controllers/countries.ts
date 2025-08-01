@@ -5,7 +5,7 @@ import { Controller } from './controller';
 const countryController = new Controller('/countries');
 
 //--- Get all countries ---
-countryController.get({ path: '', userType: UserType.TEACHER }, async (req, res) => {
+countryController.get({ path: '', userType: undefined }, async (req: any, res: any) => {
   const hasVillage = req.query.hasVillage ? true : false;
   res.sendJSON(await getCountries(hasVillage));
 });
