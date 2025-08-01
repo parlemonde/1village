@@ -1,6 +1,7 @@
+import React, { useMemo } from 'react';
+
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box, Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
-import React, { useMemo } from 'react';
 
 import type { VillageStats } from 'types/statistics.type';
 
@@ -121,7 +122,7 @@ const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }) => 
             targetPhase.storyCount += phase.storyCount || 0;
             targetPhase.anthemCount += phase.anthemCount || 0;
             targetPhase.reinventStoryCount += phase.reinventStoryCount || 0;
-            targetPhase.contentLibreCount += (phase as any).contentLibreCount || 0;
+            targetPhase.contentLibreCount += (phase as { contentLibreCount?: number }).contentLibreCount || 0;
           }
         });
       });
@@ -190,7 +191,7 @@ const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }) => 
       },
     };
 
-    villageData.forEach((village) => {
+    villageData.forEach((village: VillageRowData) => {
       total.phase1.mascotCount += village.phase1.mascotCount;
       total.phase1.videoCount += village.phase1.videoCount;
       total.phase1.draftCount += village.phase1.draftCount;
@@ -333,13 +334,17 @@ const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }) => 
                   ))}
                 </TableRow>
                 {!isTotal &&
-                  villageData.map((village, index) => (
+                  villageData.map((village: VillageRowData, index: number) => (
                     <TableRow key={index}>
                       <TableCell>{village.villageName}</TableCell>
                       {columns.map((col) => {
                         const villagePhaseData =
                           phaseId === 1 ? village.phase1 : phaseId === 2 ? village.phase2 : phaseId === 3 ? village.phase3 : null;
-                        return <TableCell key={col.key}>{villagePhaseData ? villagePhaseData[col.key as keyof PhaseData] || 0 : 0}</TableCell>;
+                        return (
+                          <TableCell key={col.key}>
+                            {villagePhaseData ? (villagePhaseData as unknown as Record<string, number>)[col.key] || 0 : 0}
+                          </TableCell>
+                        );
                       })}
                     </TableRow>
                   ))}

@@ -1,7 +1,8 @@
+import React, { useEffect, useState } from 'react';
+
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box, Tab, Tabs } from '@mui/material';
-import React, { useEffect, useState } from 'react';
 
 import { TeamCommentType } from '../../../../types/teamComment.type';
 import { OneVillageTable } from '../OneVillageTable';

@@ -39,11 +39,14 @@ const VillageActivityTable: React.FC<VillageActivityTableProps> = (props: Villag
   }
 
   // On adapte les données pour le tableau
-  const tableData: TableRow[] = data.map((row: any, idx: number) => ({
-    ...row,
-    id: row.id || idx,
-    _highlight: row.isSelected,
-  }));
+  const tableData: TableRow[] = data.map(
+    (row: { id?: string | number; name?: string; isSelected?: boolean; [key: string]: unknown }, idx: number) => ({
+      ...row,
+      id: row.id || idx,
+      name: row.name || `Row ${idx}`,
+      _highlight: row.isSelected,
+    }),
+  );
 
   const columns = getCountryActivityTableHeaders(phaseId);
 

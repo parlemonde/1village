@@ -1,5 +1,6 @@
-import { Box, Tab, Tabs } from '@mui/material';
 import React, { useState } from 'react';
+
+import { Box, Tab, Tabs } from '@mui/material';
 
 import { TeamCommentType } from '../../../../types/teamComment.type';
 import ActivityTable from './ActivityTable';

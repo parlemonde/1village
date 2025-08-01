@@ -1,6 +1,7 @@
+import React from 'react';
+
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
-import React from 'react';
 
 import ClassroomActivityTable from './ClassroomActivityTable';
 import CountryActivityTable from './CountryActivityTable';

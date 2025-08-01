@@ -62,39 +62,35 @@ export interface VillageStats {
     familiesWithoutAccount: FamiliesWithoutAccount[];
     floatingAccounts: FloatingAccount[];
   };
-  activityCountDetails: ActivityCountDetails[];
+  activityCountDetails: Array<{
+    villageName: string;
+    classrooms: Array<{
+      name: string;
+      classroomId: string | null;
+      totalPublications: number;
+      classroomName: string;
+      countryCode: string;
+      phaseDetails: Array<{
+        phaseId: number;
+        commentCount: number;
+        draftCount: number;
+        mascotCount?: number;
+        videoCount?: number;
+        challengeCount?: number;
+        enigmaCount?: number;
+        gameCount?: number;
+        questionCount?: number;
+        reactionCount?: number;
+        reportingCount?: number;
+        storyCount?: number;
+        anthemCount?: number;
+        reinventStoryCount?: number;
+        contentLibreCount?: number;
+        [key: string]: unknown;
+      }>;
+    }>;
+  }>;
 }
-
-export type ActivityCountDetails = {
-  villageName: string;
-  classrooms: ClassroomCountDetails[];
-};
-
-type ClassroomCountDetails = {
-  name: string;
-  classroomId: string;
-  totalPublications: number;
-  classroomName: string;
-  countryCode: string;
-  phaseDetails: PhaseDetails[];
-};
-
-type PhaseDetails = {
-  phaseId: number;
-  videoCount: number;
-  commentCount: number;
-  draftCount: number;
-  mascotCount?: number;
-  challengeCount?: number;
-  enigmaCount?: number;
-  gameCount?: number;
-  questionCount?: number;
-  reactionCount?: number;
-  reportingCount?: number;
-  storyCount?: number;
-  anthemCount?: number;
-  reinventStoryCount?: number;
-};
 
 export interface FamiliesWithoutAccount {
   student_id: number;
@@ -153,6 +149,46 @@ export type VillageActivity = {
 };
 
 export interface StatisticsDto {
-  family: any;
-  activityCountDetails: VillageActivity[];
+  family: {
+    minDuration: number;
+    maxDuration: number;
+    averageDuration: number;
+    medianDuration: number;
+    minConnections: number;
+    maxConnections: number;
+    averageConnections: number;
+    medianConnections: number;
+    familyAccountsCount: number;
+    childrenCodesCount: number;
+    connectedFamiliesCount: number;
+    floatingAccounts: FloatingAccount[];
+  };
+  activityCountDetails: Array<{
+    villageName: string;
+    classrooms: Array<{
+      name: string;
+      classroomId: string | null;
+      totalPublications: number;
+      classroomName: string;
+      countryCode: string;
+      phaseDetails: Array<{
+        phaseId: number;
+        commentCount: number;
+        draftCount: number;
+        mascotCount?: number;
+        videoCount?: number;
+        challengeCount?: number;
+        enigmaCount?: number;
+        gameCount?: number;
+        questionCount?: number;
+        reactionCount?: number;
+        reportingCount?: number;
+        storyCount?: number;
+        anthemCount?: number;
+        reinventStoryCount?: number;
+        contentLibreCount?: number;
+        [key: string]: unknown;
+      }>;
+    }>;
+  }>;
 }

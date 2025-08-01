@@ -1,3 +1,5 @@
+import React, { isValidElement, useMemo, useState } from 'react';
+
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Box, Paper, TableContainer, TableSortLabel, useTheme } from '@mui/material';
 import NoSsr from '@mui/material/NoSsr';
@@ -7,7 +9,6 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import React, { isValidElement, useMemo, useState } from 'react';
 
 import removeCountryFlagFromText from './manage/utils/removeCountryFlagFromText';
 import { primaryColorLight } from 'src/styles/variables.const';
@@ -29,7 +30,7 @@ interface OneVillageTableProps {
   'aria-label'?: string;
   admin: boolean;
   emptyPlaceholder: React.ReactNode | React.ReactNodeArray;
-  data: Array<{ id: string | number; [key: string]: string | boolean | number | React.ReactNode }>;
+  data: Array<{ id: string | number;[key: string]: string | boolean | number | React.ReactNode }>;
   columns: Array<{ key: string; label: string; sortable?: boolean }>;
   actions?(id: string | number, index: number): React.ReactNode | React.ReactNodeArray;
   titleContent?: string;
@@ -98,35 +99,35 @@ export const OneVillageTable = ({
     const useSort = options.sort !== undefined && options.order !== undefined;
     const sortedData = useSort
       ? [...data].sort((a, b) => {
-          const exactKey = Object.keys(a).find((key) => key.toLowerCase() === (options.order || '').toLowerCase()) || '';
-          let aValue = a[exactKey] || '';
-          let bValue = b[exactKey] || '';
+        const exactKey = Object.keys(a).find((key) => key.toLowerCase() === (options.order || '').toLowerCase()) || '';
+        let aValue = a[exactKey] || '';
+        let bValue = b[exactKey] || '';
 
-          if (options.order?.toLowerCase() === 'country' || options.order?.toLowerCase() === 'countries') {
-            aValue = removeCountryFlagFromText(aValue as string);
-            bValue = removeCountryFlagFromText(bValue as string);
-          }
+        if (options.order?.toLowerCase() === 'country' || options.order?.toLowerCase() === 'countries') {
+          aValue = removeCountryFlagFromText(aValue as string);
+          bValue = removeCountryFlagFromText(bValue as string);
+        }
 
-          if (typeof aValue === 'string') aValue = normalizeString(aValue.toLowerCase());
-          if (typeof bValue === 'string') bValue = normalizeString(bValue.toLowerCase());
+        if (typeof aValue === 'string') aValue = normalizeString(aValue.toLowerCase());
+        if (typeof bValue === 'string') bValue = normalizeString(bValue.toLowerCase());
 
-          if (isValidElement(aValue)) {
-            const key = aValue.key?.toString() || '';
-            aValue = key.toLowerCase();
-          }
-          if (isValidElement(bValue)) {
-            const key = bValue.key?.toString() || '';
-            bValue = key.toLowerCase();
-          }
+        if (isValidElement(aValue)) {
+          const key = aValue.key?.toString() || '';
+          aValue = key.toLowerCase();
+        }
+        if (isValidElement(bValue)) {
+          const key = bValue.key?.toString() || '';
+          bValue = key.toLowerCase();
+        }
 
-          if (aValue > bValue) {
-            return options.sort === 'asc' ? 1 : -1;
-          } else if (aValue < bValue) {
-            return options.sort === 'asc' ? -1 : 1;
-          } else {
-            return 0;
-          }
-        })
+        if (aValue > bValue) {
+          return options.sort === 'asc' ? 1 : -1;
+        } else if (aValue < bValue) {
+          return options.sort === 'asc' ? -1 : 1;
+        } else {
+          return 0;
+        }
+      })
       : data;
     return usePagination ? paginate(sortedData, options.limit || 10, options.page || 1) : sortedData;
   }, [data, options.sort, options.order, options.limit, options.page, usePagination]);
@@ -263,9 +264,8 @@ export const OneVillageTable = ({
               )}
             />
           ) : (
-            <p style={{ margin: 0, padding: '0rem', textAlign: 'right', fontSize: '14px' }}>{`${data.length} ${footerElementsLabel}${
-              displayedData.length > 1 ? 's' : ''
-            }`}</p>
+            <p style={{ margin: 0, padding: '0rem', textAlign: 'right', fontSize: '14px' }}>{`${data.length} ${footerElementsLabel}${displayedData.length > 1 ? 's' : ''
+              }`}</p>
           )}
         </Box>
       </Paper>

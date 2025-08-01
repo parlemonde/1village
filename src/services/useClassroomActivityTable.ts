@@ -146,29 +146,31 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number) 
           });
         }
 
-        const classroomRow = classroomMap.get(classroomKey)!;
-        const classroomTotal =
-          phaseId === 0
-            ? calculateTotalPublications(classroom.phaseDetails, 1) +
-              calculateTotalPublications(classroom.phaseDetails, 2) +
-              calculateTotalPublications(classroom.phaseDetails, 3)
-            : calculateTotalPublications(classroom.phaseDetails, phaseId);
+        const classroomRow = classroomMap.get(classroomKey);
+        if (classroomRow) {
+          const classroomTotal =
+            phaseId === 0
+              ? calculateTotalPublications(classroom.phaseDetails, 1) +
+                calculateTotalPublications(classroom.phaseDetails, 2) +
+                calculateTotalPublications(classroom.phaseDetails, 3)
+              : calculateTotalPublications(classroom.phaseDetails, phaseId);
 
-        classroomRow.totalPublications += classroomTotal;
-        classroomRow.commentCount += aggregatedPhase.commentCount;
-        classroomRow.draftCount += aggregatedPhase.draftCount;
-        classroomRow.mascotCount += aggregatedPhase.mascotCount;
-        classroomRow.videoCount += aggregatedPhase.videoCount;
-        classroomRow.challengeCount += aggregatedPhase.challengeCount;
-        classroomRow.enigmaCount += aggregatedPhase.enigmaCount;
-        classroomRow.gameCount += aggregatedPhase.gameCount;
-        classroomRow.questionCount += aggregatedPhase.questionCount;
-        classroomRow.reactionCount += aggregatedPhase.reactionCount;
-        classroomRow.reportingCount += aggregatedPhase.reportingCount;
-        classroomRow.storyCount += aggregatedPhase.storyCount;
-        classroomRow.anthemCount += aggregatedPhase.anthemCount;
-        classroomRow.reinventStoryCount += aggregatedPhase.reinventStoryCount;
-        classroomRow.contentLibreCount += aggregatedPhase.contentLibreCount;
+          classroomRow.totalPublications += classroomTotal;
+          classroomRow.commentCount += aggregatedPhase.commentCount;
+          classroomRow.draftCount += aggregatedPhase.draftCount;
+          classroomRow.mascotCount += aggregatedPhase.mascotCount;
+          classroomRow.videoCount += aggregatedPhase.videoCount;
+          classroomRow.challengeCount += aggregatedPhase.challengeCount;
+          classroomRow.enigmaCount += aggregatedPhase.enigmaCount;
+          classroomRow.gameCount += aggregatedPhase.gameCount;
+          classroomRow.questionCount += aggregatedPhase.questionCount;
+          classroomRow.reactionCount += aggregatedPhase.reactionCount;
+          classroomRow.reportingCount += aggregatedPhase.reportingCount;
+          classroomRow.storyCount += aggregatedPhase.storyCount;
+          classroomRow.anthemCount += aggregatedPhase.anthemCount;
+          classroomRow.reinventStoryCount += aggregatedPhase.reinventStoryCount;
+          classroomRow.contentLibreCount += aggregatedPhase.contentLibreCount;
+        }
       });
     });
 
