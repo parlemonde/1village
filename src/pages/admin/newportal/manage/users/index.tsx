@@ -39,6 +39,8 @@ const Users = () => {
   const { deleteUser } = useUserRequests();
   const [deleteIndex, setDeleteIndex] = React.useState(-1);
 
+  const userIsAdminOrSad = Boolean(user && (user.type === UserType.SUPER_ADMIN || user.type === UserType.ADMIN));
+
   const TABLE_ENTRIES_BY_PAGE = 5;
 
   const filteredUsers = useMemo(
@@ -139,10 +141,10 @@ const Users = () => {
       >
         Modifier
       </MenuItem>
-      <MenuItem aria-label="analyse" onClick={() => {}} disabled>
+      <MenuItem aria-label="analyse" disabled>
         Analyser
       </MenuItem>
-      <MenuItem aria-label="unblock" onClick={() => {}} disabled>
+      <MenuItem aria-label="unblock" disabled>
         Débloquer
       </MenuItem>
       <MenuItem
@@ -150,6 +152,7 @@ const Users = () => {
         onClick={() => {
           setDeleteIndex(users.findIndex((u) => u.id === id));
         }}
+        disabled={!userIsAdminOrSad}
       >
         Supprimer
       </MenuItem>
@@ -167,8 +170,7 @@ const Users = () => {
       <AdminTile
         title="Il y a ici la liste complète des utilisateurs de 1Village"
         toolbarButton={
-          user &&
-          (user.type === UserType.SUPER_ADMIN || user.type === UserType.ADMIN) && (
+          userIsAdminOrSad && (
             <Box style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', margin: '16px 0' }}>
               <Button className="like-button blue" component="a" onClick={handleExportToCSV} disabled={filteredUsers.length === 0}>
                 Exporter en CSV
