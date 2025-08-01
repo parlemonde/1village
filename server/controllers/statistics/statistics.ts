@@ -1,7 +1,7 @@
 import type { Request } from 'express';
 
-import type { StatsFilterParams } from '../../../types/statistics.type';
-import { GroupType } from '../../../types/statistics.type';
+import type { ClassroomToMonitor, StatsFilterParams } from '../../../types/statistics.type';
+import { ClassroomMonitoringStatus, GroupType } from '../../../types/statistics.type';
 import { Classroom } from '../../entities/classroom';
 import {
   getConnectedClassroomsCount,
@@ -139,6 +139,45 @@ statisticsController.get({ path: '/sessions/:phase' }, async (req: Request, res)
     connectedClassroomsCount: await getConnectedClassroomsCount(), // TODO - add phase
     // contributedClassroomsCount: await getContributedClassroomsCount(phase),
   });
+});
+
+statisticsController.get({ path: '/classrooms-to-monitor' }, async (req, res) => {
+  const villageId = req.query.village ? parseInt(req.query.village as string) : null;
+  const countryCode = req.query.country ? (req.query.country as string) : null;
+  let queryBuilder = classroomRepository
+    .createQueryBuilder('classroom')
+    .select([
+      'classroom.id AS id',
+      'user.displayName AS name',
+      'village.name AS vm',
+      "CONCAT(user.firstname, ' ', user.lastname) AS teacher",
+      `CASE
+      WHEN MAX(a.date) IS NULL THEN 0
+      WHEN MAX(a.date) < (NOW() - INTERVAL 21 DAY) THEN 1
+      ELSE NULL
+    END AS status`,
+    ])
+    .innerJoin('classroom.user', 'user')
+    .innerJoin('classroom.village', 'village')
+    .leftJoin('analytic_session', 'a', 'a.userId = classroom.userId')
+    .groupBy('classroom.id')
+    .addGroupBy('user.displayName')
+    .addGroupBy('village.name')
+    .addGroupBy('village.id')
+    .addGroupBy('user.firstname')
+    .addGroupBy('user.lastname')
+    .having('MAX(a.date) IS NULL OR MAX(a.date) < (NOW() - INTERVAL 21 DAY)');
+
+  if (countryCode) {
+    queryBuilder = queryBuilder.andWhere('FIND_IN_SET(:countryCode, village.countryCodes) > 0', { countryCode });
+  }
+  if (villageId) {
+    queryBuilder = queryBuilder.andWhere('village.id = :villageId', { villageId });
+  }
+
+  const classroomsData = await queryBuilder.getRawMany();
+
+  res.sendJSON(classroomsData);
 });
 
 statisticsController.get({ path: '/classrooms' }, async (req, res) => {

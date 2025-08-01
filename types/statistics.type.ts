@@ -156,3 +156,19 @@ export interface StatisticsDto {
   family: any;
   activityCountDetails: VillageActivity[];
 }
+
+export enum ClassroomMonitoringStatus {
+  NO_CONNECTION = '0',
+  THREE_WEEK_WITHOUT_CONNECTION = '1',
+  AT_LEAST_THREE_DRAFTS_IN_PROGRESS = '2',
+}
+
+export interface ClassroomToMonitor {
+  id: number;
+  name: string;
+  vm: string;
+  teacher: string;
+  status: ClassroomMonitoringStatus;
+  countryId: string;
+  phaseId: number;
+}
