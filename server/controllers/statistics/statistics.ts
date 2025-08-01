@@ -141,6 +141,46 @@ statisticsController.get({ path: '/sessions/:phase' }, async (req: Request, res)
   });
 });
 
+statisticsController.get({ path: '/classrooms-to-monitor' }, async (req, res) => {
+  const villageId = req.query.village ? parseInt(req.query.village as string) : null;
+  const countryCode = req.query.country ? (req.query.country as string) : null;
+  let queryBuilder = classroomRepository
+    .createQueryBuilder('classroom')
+    .select([
+      'classroom.id AS id',
+      'COALESCE(classroom.name, user.displayName) AS name',
+      'village.name AS vm',
+      "COALESCE(NULLIF(CONCAT(user.firstname, ' ', user.lastname), ' '), user.pseudo) AS teacher",
+      `CASE
+      WHEN MAX(a.date) IS NULL THEN 0
+      WHEN MAX(a.date) < (NOW() - INTERVAL 21 DAY) THEN 1
+      WHEN COUNT(act.id) >= 3 THEN 2
+      ELSE NULL
+    END AS status`,
+    ])
+    .innerJoin('classroom.user', 'user')
+    .innerJoin('classroom.village', 'village')
+    .leftJoin('analytic_session', 'a', 'a.userId = classroom.userId')
+    .leftJoin('activity', 'act', 'act.userId = classroom.userId AND act.publishDate IS NULL')
+    .groupBy('classroom.id')
+    .addGroupBy('village.name')
+    .addGroupBy('village.id')
+    .addGroupBy('user.firstname')
+    .addGroupBy('user.lastname')
+    .having('(MAX(a.date) IS NULL OR MAX(a.date) < (NOW() - INTERVAL 21 DAY)) OR COUNT(act.id) >= 3');
+
+  if (countryCode) {
+    queryBuilder = queryBuilder.andWhere('FIND_IN_SET(:countryCode, village.countryCodes) > 0', { countryCode });
+  }
+  if (villageId) {
+    queryBuilder = queryBuilder.andWhere('village.id = :villageId', { villageId });
+  }
+
+  const classroomsData = await queryBuilder.getRawMany();
+
+  res.sendJSON(classroomsData);
+});
+
 statisticsController.get({ path: '/classrooms' }, async (req, res) => {
   const villageId = req.query.villageId ? parseInt(req.query.villageId as string) : null;
   const countryCode = req.query.countryCode ? (req.query.countryCode as string) : null;

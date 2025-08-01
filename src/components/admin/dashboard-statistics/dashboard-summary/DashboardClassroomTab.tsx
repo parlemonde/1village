@@ -13,6 +13,7 @@ import BarCharts from '../charts/BarCharts';
 import PieCharts from '../charts/PieCharts';
 import PhaseDetails from '../menu/PhaseDetails';
 import styles from '../styles/charts.module.css';
+import ClassroomsToMonitorTable from '../tables/ClassroomsToMonitorTable';
 import { AverageStatsProcessingMethod, DashboardType } from 'types/dashboard.type';
 import type { DashboardSummaryData } from 'types/dashboard.type';
 
@@ -45,9 +46,10 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
   const videoCount = getVideoCount(data);
   const commentCount = getCommentCount(data);
   const publicationCount = getPublicationCount(data);
-
   return (
     <>
+      <ClassroomsToMonitorTable countryId={selectedCountry} />
+      <br />
       <Grid container spacing={4} direction={{ xs: 'column', md: 'row' }}>
         <Grid item xs={12} lg={4}>
           <StatsCard data={data.registeredClassroomsCount}>Nombre de classes inscrites</StatsCard>

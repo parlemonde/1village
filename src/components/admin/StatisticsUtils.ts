@@ -1,4 +1,5 @@
-import type { VillageStats } from '../../../types/statistics.type';
+import type { ClassroomToMonitor, OneVillageTableRow, VillageStats } from '../../../types/statistics.type';
+import { ClassroomMonitoringStatus } from '../../../types/statistics.type';
 
 export const getVideoCount = (data?: VillageStats) => {
   if (!data?.activityCountDetails?.length) return 0;
@@ -42,4 +43,19 @@ export const getPublicationCount = (data?: VillageStats) => {
       });
       return total;
     }, 0);
+};
+
+export const getStatusLabel = (status: ClassroomMonitoringStatus): string => {
+  return (
+    new Map<ClassroomMonitoringStatus, string>([
+      [ClassroomMonitoringStatus.NO_CONNECTION_SINCE_FIRST, '1 seule connexion'],
+      [ClassroomMonitoringStatus.AT_LEAST_THREE_DRAFTS_IN_PROGRESS, '3 brouillons en plus'],
+      [ClassroomMonitoringStatus.THREE_WEEK_WITHOUT_CONNECTION, 'Au moins 3 semaines sans connexion'],
+    ]).get(status) ?? 'Statut inconnu'
+  );
+};
+
+export const getClassroomsToMonitorRows = (data: ClassroomToMonitor[] | undefined): OneVillageTableRow[] => {
+  if (!data || !Array.isArray(data)) return [];
+  return data.map((classroom) => ({ ...classroom, status: getStatusLabel(classroom.status) } as OneVillageTableRow));
 };

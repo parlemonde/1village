@@ -21,6 +21,7 @@ import PhaseDetails from './menu/PhaseDetails';
 import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
+import ClassroomsToMonitorTable from './tables/ClassroomsToMonitorTable';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
 import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
@@ -100,6 +101,8 @@ const VillageStats = () => {
             <Tab label="En famille" />
           </Tabs>
           <TabPanel value={selectedTab} index={0}>
+            <ClassroomsToMonitorTable villageId={selectedVillage} countryId={selectedCountry} />
+            <br />
             <div className="statistic--container">
               <StatsCard data={statisticsSessions.registeredClassroomsCount ? statisticsSessions.registeredClassroomsCount : 0}>
                 Nombre de classes inscrites
