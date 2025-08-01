@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isFree } from 'src/activity-types/defi.constants';
@@ -15,18 +15,18 @@ import type { ActivityContent } from 'types/activity.type';
 
 const FreeDefiStep2 = () => {
   const router = useRouter();
-  const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
+  const { activity, updateActivity, addContent, deleteContent, save } = useContext(ActivityContext);
 
   const data = (activity?.data as FreeDefiData) || null;
 
-  const errorSteps = React.useMemo(() => {
+  const errorSteps = useMemo(() => {
     if (data !== null) {
       return getErrorSteps(data, 1);
     }
     return [];
   }, [data]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/lancer-un-defi');
     } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isFree(activity)))) {
@@ -51,7 +51,7 @@ const FreeDefiStep2 = () => {
     <Base>
       <PageLayout>
         <Steps
-          steps={[data.themeName || 'Théme', 'Action', 'Le défi', 'Prévisualisation']}
+          steps={[data.themeName || 'Thème', 'Action', 'Le défi', 'Prévisualisation']}
           urls={['/lancer-un-defi/1?edit', '/lancer-un-defi/2', '/lancer-un-defi/3', '/lancer-un-defi/4']}
           activeStep={1}
           errorSteps={errorSteps}

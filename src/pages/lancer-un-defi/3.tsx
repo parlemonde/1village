@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import { TextField, Button } from '@mui/material';
 
@@ -17,11 +17,11 @@ import { replaceTokens } from 'src/utils';
 
 const FreeDefiStep3 = () => {
   const router = useRouter();
-  const { activity, updateActivity } = React.useContext(ActivityContext);
-  const [otherOpen, setIsOtherOpen] = React.useState(false);
+  const { activity, updateActivity } = useContext(ActivityContext);
+  const [otherOpen, setIsOtherOpen] = useState(false);
 
   const data = (activity?.data as FreeDefiData) || null;
-  const errorSteps = React.useMemo(() => {
+  const errorSteps = useMemo(() => {
     const fieldStep2 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 2
     if (data !== null && fieldStep2?.length === 0) {
       const errors = getErrorSteps(data, 1);
@@ -33,15 +33,15 @@ const FreeDefiStep3 = () => {
   }, [activity?.content, data]);
 
   const c = data?.defi || '';
-  const opened = React.useRef(false);
-  React.useEffect(() => {
+  const opened = useRef(false);
+  useEffect(() => {
     if (c && !opened.current) {
       setIsOtherOpen(true);
       opened.current = true;
     }
   }, [c]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/lancer-un-defi');
     } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isFree(activity)))) {
@@ -71,7 +71,7 @@ const FreeDefiStep3 = () => {
     <Base>
       <PageLayout>
         <Steps
-          steps={[data.themeName || 'Théme', 'Action', 'Le défi', 'Prévisualisation']}
+          steps={[data.themeName || 'Thème', 'Action', 'Le défi', 'Prévisualisation']}
           urls={['/lancer-un-defi/1?edit', '/lancer-un-defi/2', '/lancer-un-defi/3', '/lancer-un-defi/4']}
           activeStep={2}
           errorSteps={errorSteps}
