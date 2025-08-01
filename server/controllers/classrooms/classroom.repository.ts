@@ -21,15 +21,15 @@ export const getClassrooms = async ({ countryCode, villageId, classroomId }: Get
   let filteredClassrooms = allClassrooms;
 
   if (classroomId) {
-    filteredClassrooms = filteredClassrooms.filter((c: any) => c.id === classroomId);
+    filteredClassrooms = filteredClassrooms.filter((c: Classroom) => c.id === classroomId);
   }
 
   if (countryCode) {
-    filteredClassrooms = filteredClassrooms.filter((c: any) => c.countryCode === countryCode);
+    filteredClassrooms = filteredClassrooms.filter((c: Classroom) => c.countryCode === countryCode);
   }
 
   if (villageId) {
-    filteredClassrooms = filteredClassrooms.filter((c: any) => c.villageId === villageId);
+    filteredClassrooms = filteredClassrooms.filter((c: Classroom) => c.villageId === villageId);
   }
 
   return filteredClassrooms;
