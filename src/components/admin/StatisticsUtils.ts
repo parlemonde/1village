@@ -8,7 +8,7 @@ export const getVideoCount = (data?: VillageStats, countryCode?: string) => {
       .filter((classroom) => !countryCode || classroom.countryCode === countryCode)
       .reduce((sumClass, classroom) => {
         const phaseVideos = classroom.phaseDetails.reduce((sumPhase, phase) => {
-          return sumPhase + phase.videoCount;
+          return sumPhase + (phase.videoCount || 0);
         }, 0);
         return sumClass + phaseVideos;
       }, 0);
@@ -24,7 +24,7 @@ export const getCommentCount = (data?: VillageStats, countryCode?: string) => {
       .filter((classroom) => !countryCode || classroom.countryCode === countryCode)
       .reduce((sumClass, classroom) => {
         const phaseComments = classroom.phaseDetails.reduce((sumPhase, phase) => {
-          return sumPhase + phase.commentCount;
+          return sumPhase + (phase.commentCount || 0);
         }, 0);
         return sumClass + phaseComments;
       }, 0);
