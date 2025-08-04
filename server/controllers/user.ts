@@ -8,6 +8,7 @@ import { ActivityStatus, ActivityType } from '../../types/activity.type';
 import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
 import { Activity } from '../entities/activity';
+import { AnalyticSession } from '../entities/analytic';
 import { Classroom } from '../entities/classroom';
 import { FeatureFlag } from '../entities/featureFlag';
 import { Notifications } from '../entities/notifications';
@@ -458,26 +459,34 @@ userController.put({ path: '/:id/password', userType: UserType.OBSERVATOR }, asy
 });
 
 // --- Delete an user. ---
-userController.delete({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: Request, res: Response) => {
-  if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+userController.delete({ path: '/:id', userType: UserType.SUPER_ADMIN | UserType.ADMIN }, async (req: Request, res: Response) => {
+  const currentUser = req.user;
+  if (!currentUser) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
 
   const classroomRepository = AppDataSource.getRepository(Classroom);
 
-  const id = parseInt(req.params.id, 10) || 0;
-  const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
+  const idUserToDelete = parseInt(req.params.id, 10);
+  const userToDelete = await AppDataSource.getRepository(User).findOne({ where: { id: idUserToDelete } });
 
-  const isSelfProfile = req.user && req.user.id === id;
-  const isAdmin = req.user && req.user.type <= UserType.ADMIN;
-
-  if (!user || (!isSelfProfile && !isAdmin)) {
-    res.status(204).send();
+  if (!userToDelete) {
+    res.status(404).send(`L'utilisateur ${idUserToDelete} n'existe pas.`);
+    return;
+  }
+  if (currentUser.id === idUserToDelete) {
+    res.status(403).send('Vous ne pouvez pas supprimer votre propre compte.');
     return;
   }
 
-  if (user.type === UserType.FAMILY && user.hasStudentLinked) {
+  const userToDeleteHigherThanCurrentUser = currentUser.type > userToDelete.type;
+  if (userToDeleteHigherThanCurrentUser) {
+    res.status(403).send('Vous ne pouvez pas supprimer un compte ayant une autorisation supérieure à la vôtre.');
+    return;
+  }
+
+  if (userToDelete.type === UserType.FAMILY && userToDelete.hasStudentLinked) {
     const studentRelations = await AppDataSource.getRepository(UserToStudent).find({
       relations: { student: true },
-      where: { user: { id: user.id } },
+      where: { user: { id: idUserToDelete } },
       select: { student: { id: true } },
     });
 
@@ -485,13 +494,12 @@ userController.delete({ path: '/:id', userType: UserType.OBSERVATOR }, async (re
     await AppDataSource.getRepository(Student).update(studentsIds, { numLinkedAccount: () => 'numLinkedAccount - 1' });
   }
 
-  const affectedUserIds: number[] = [];
-
   // Fetch the related classroom and its students
-  const classroom = await classroomRepository.findOne({ where: { user: { id: user.id } }, relations: ['students'] });
+  const classroom = await classroomRepository.findOne({ where: { user: { id: idUserToDelete } }, relations: ['students'] });
 
   if (classroom) {
     // Collect the affected user IDs from the classroom's students
+    const affectedUserIds: number[] = [];
     for (const student of classroom.students) {
       const studentWithRelations = await AppDataSource.getRepository(Student).findOne({
         where: { id: student.id },
@@ -499,20 +507,20 @@ userController.delete({ path: '/:id', userType: UserType.OBSERVATOR }, async (re
       });
       if (studentWithRelations) {
         for (const userToStudent of studentWithRelations.userToStudents) {
-          if (userToStudent && userToStudent.user) {
+          if (userToStudent.user) {
             affectedUserIds.push(userToStudent.user.id);
           }
         }
       }
     }
+
+    // Update the hasStudentLinked field for affected users
+    await updateHasStudentLinkedForAffectedUsers(affectedUserIds);
   }
 
-  await AppDataSource.getRepository(User).delete({ id });
-  const notificationRepository = AppDataSource.getRepository(Notifications);
-  await notificationRepository.delete({ userId: id });
-
-  // Update the hasStudentLinked field for affected users
-  await updateHasStudentLinkedForAffectedUsers(affectedUserIds);
+  await AppDataSource.getRepository(AnalyticSession).delete({ userId: idUserToDelete });
+  await AppDataSource.getRepository(User).delete({ id: idUserToDelete });
+  await AppDataSource.getRepository(Notifications).delete({ userId: idUserToDelete });
 
   res.status(204).send();
 });
@@ -547,9 +555,8 @@ userController.post({ path: '/verify-email' }, async (req: Request, res: Respons
 
   let isverifyTokenCorrect: boolean = false;
 
-  if (user && user.verificationHash && data.verificationHash && !user.isVerified) {
+  if (user?.verificationHash && data.verificationHash && !user.isVerified) {
     try {
-      /* const cleanedVerificationHash = data.verificationHash.replace(/ /g, '+'); */
       isverifyTokenCorrect = await argon2.verify(user.verificationHash, data.verificationHash);
     } catch (e) {
       logger.error(JSON.stringify(e));
@@ -863,7 +870,6 @@ userController.get({ path: '/:id/linked-students' }, async (req: Request, res: R
     return;
   }
 
-  // const { student } = userToStudent;
   const students = user.userToStudents.map((userToStudent) => userToStudent.student);
   res.json(students);
 });
