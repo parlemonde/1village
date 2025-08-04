@@ -264,7 +264,7 @@ export const OneVillageTable = ({
               )}
             />
           ) : (
-            <p style={{ margin: 0, padding: '1rem', textAlign: 'right', fontSize: '14px' }}>{`${data.length} ${footerElementsLabel}${
+            <p style={{ margin: 0, padding: '0rem', textAlign: 'right', fontSize: '14px' }}>{`${data.length} ${footerElementsLabel}${
               displayedData.length > 1 ? 's' : ''
             }`}</p>
           )}
