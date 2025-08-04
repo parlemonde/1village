@@ -39,7 +39,8 @@ const Users = () => {
   const { deleteUser } = useUserRequests();
   const [deleteIndex, setDeleteIndex] = React.useState(-1);
 
-  const userIsAdminOrSad = Boolean(user && (user.type === UserType.SUPER_ADMIN || user.type === UserType.ADMIN));
+  const userIsAdminOrSad = !!(user && [UserType.SUPER_ADMIN, UserType.ADMIN].includes(user.type));
+  const userIsAdminSadOrMediator = !!(user && [UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR].includes(user.type));
 
   const TABLE_ENTRIES_BY_PAGE = 5;
 
@@ -141,21 +142,20 @@ const Users = () => {
       >
         Modifier
       </MenuItem>
-      <MenuItem aria-label="analyse" disabled>
-        Analyser
-      </MenuItem>
-      <MenuItem aria-label="unblock" disabled>
-        Débloquer
-      </MenuItem>
-      <MenuItem
-        aria-label="delete"
-        onClick={() => {
-          setDeleteIndex(users.findIndex((u) => u.id === id));
-        }}
-        disabled={!userIsAdminOrSad}
-      >
-        Supprimer
-      </MenuItem>
+      {userIsAdminSadOrMediator && <MenuItem aria-label="analyse">Analyser</MenuItem>}
+      {userIsAdminOrSad && (
+        <>
+          <MenuItem aria-label="unblock">Débloquer</MenuItem>
+          <MenuItem
+            aria-label="delete"
+            onClick={() => {
+              setDeleteIndex(users.findIndex((u) => u.id === id));
+            }}
+          >
+            Supprimer
+          </MenuItem>
+        </>
+      )}
     </OneVillageTableActionMenu>
   );
 
