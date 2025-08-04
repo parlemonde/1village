@@ -161,6 +161,6 @@ export const isFree = (activity: DefiActivity): activity is FreeDefiActivity => 
 };
 
 export function getDefiType(activity: DefiActivity): DefiTypeEnum {
-  if (activity.subType) return defiTypeMap[activity.subType];
-  else throw new Error('Unknown défi type');
+  if (activity.subType !== null && activity.subType !== undefined) return defiTypeMap[activity.subType];
+  else throw new Error(`Défi type is missing`);
 }
