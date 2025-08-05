@@ -135,7 +135,7 @@ const IndiceStep3 = () => {
             <p style={{ margin: '0.5rem 0' }}>{getIndice(activity.subType, data).title}</p>
           </div>
 
-          <span className={`text text--small ${isValid ? 'text--success' : 'text--warning'}`}>Indice culturel</span>
+          <span className={`text text--small ${isValid ? 'text--success' : 'text--warning'}`}>Indice</span>
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid })}>
             <EditButton
               onClick={() => {

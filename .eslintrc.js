@@ -78,6 +78,7 @@ module.exports = {
     // react
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
+    'react/react-in-jsx-scope': 'off',
 
     // typescript
     '@typescript-eslint/no-empty-function': 'off',

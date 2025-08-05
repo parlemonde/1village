@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 import Box from '@mui/material/Box';
 
+import { TeamCommentType } from '../../../../types/teamComment.type';
+import TeamCommentCard from './TeamCommentCard';
 import VillageListCard from './cards/VillageListCard/VillageListCard';
 import HorizontalBarsChart from './charts/HorizontalChart';
 import DashboardSummary from './dashboard-summary/DashboardSummary';
@@ -19,11 +21,12 @@ const CountryStats = () => {
   const pelicoMessage = 'Merci de sélectionner un pays pour analyser ses statistiques ';
 
   const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
-  const statisticsSessions: SessionsStats = useStatisticsSessions(null, selectedCountry, null) as SessionsStats;
+  const statisticsSessions: SessionsStats = useStatisticsSessions(null, selectedCountry, null, selectedPhase) as SessionsStats;
   const statisticsFamily = useGetCountriesStats(selectedCountry, selectedPhase);
 
   return (
     <>
+      <TeamCommentCard type={TeamCommentType.COUNTRY} />
       <StatisticFilters onPhaseChange={setSelectedPhase} onCountryChange={setSelectedCountry} />
       {!selectedCountry || !statisticsFamily.data ? (
         <PelicoCard message={pelicoMessage} />
@@ -34,7 +37,7 @@ const CountryStats = () => {
           </div>
           <VillageListCard />
           <DashboardSummary
-            data={{ ...statisticsSessions, ...statisticsClassrooms, ...statisticsFamily.data, barChartData: mockDataByMonth }}
+            data={{ ...statisticsClassrooms, ...statisticsSessions, ...statisticsFamily.data, barChartData: mockDataByMonth }}
             selectedCountry={selectedCountry}
             selectedPhase={selectedPhase}
           />

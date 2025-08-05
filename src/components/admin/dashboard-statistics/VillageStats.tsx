@@ -4,11 +4,12 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box, Tab, Tabs } from '@mui/material';
 
+import { TeamCommentType } from '../../../../types/teamComment.type';
 import { OneVillageTable } from '../OneVillageTable';
 import { getCommentCount, getPublicationCount, getVideoCount } from '../StatisticsUtils';
 import CountryActivityPhaseAccordion from './CountryActivityPhaseAccordion';
 import TabPanel from './TabPanel';
-import TeamComments from './TeamComments';
+import TeamCommentCard from './TeamCommentCard';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesContributionCard from './cards/ClassesContributionCard/ClassesContributionCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
@@ -44,7 +45,7 @@ const VillageStats = () => {
 
   const { data: villageStatistics } = useGetVillagesStats(selectedVillage, selectedPhase);
   const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
-  const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(Number(selectedVillage), selectedCountry, null);
+  const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(Number(selectedVillage), null, null, selectedPhase);
 
   const videoCount = getVideoCount(villageStatistics);
   const commentCount = getCommentCount(villageStatistics);
@@ -91,10 +92,10 @@ const VillageStats = () => {
 
   return (
     <>
+      <TeamCommentCard type={TeamCommentType.VILLAGE} />
       <StatisticFilters onPhaseChange={setSelectedPhase} onCountryChange={setSelectedCountry} onVillageChange={setSelectedVillage} />
       {selectedCountry && selectedVillage ? (
         <>
-          <TeamComments />
           <DualBarChart firstTable={firstTable} secondTable={secondTable} />
           <Tabs value={selectedTab} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
             <Tab label="En classe" />

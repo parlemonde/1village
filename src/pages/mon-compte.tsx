@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack';
-import React from 'react';
+import React, { useContext, useState } from 'react';
 
 import { Alert, AlertTitle, Checkbox, Grid, TextField } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
@@ -7,12 +7,9 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import NoSsr from '@mui/material/NoSsr';
 
-import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import LanguageFilter from 'src/components/LanguageFilter';
 import { Modal } from 'src/components/Modal';
-// import { LinkChild } from 'src/components/accueil/LinkChild';
-import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { QuestionButton } from 'src/components/buttons/QuestionButton';
 import { RedButton } from 'src/components/buttons/RedButton';
@@ -29,20 +26,20 @@ import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 const Presentation = () => {
-  const { user, setUser, logout } = React.useContext(UserContext);
+  const { user, setUser, logout } = useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
-  const [newUser, setNewUser] = React.useState<User | null>(user);
+  const [newUser, setNewUser] = useState<User | null>(user);
   const { languages } = useLanguages();
-  const [pwd, setPwd] = React.useState({
+  const [pwd, setPwd] = useState({
     new: '',
     confirmNew: '',
     current: '',
   });
-  const [language, setLanguage] = React.useState(user?.language || 'francais');
-  const [deleteConfirm, setDeleteConfirm] = React.useState('');
-  const [editMode, setEditMode] = React.useState(-1);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [errors, setErrors] = React.useState({
+  const [language, setLanguage] = useState(user?.language || 'francais');
+  const [deleteConfirm, setDeleteConfirm] = useState('');
+  const [editMode, setEditMode] = useState(-1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({
     email: false,
     pseudo: false,
     pwd: false,
@@ -125,30 +122,7 @@ const Presentation = () => {
     }
     setIsLoading(false);
   };
-  const updateAvatar = async (avatar: string) => {
-    if (!newUser) return;
-    if (!user) return;
-    setIsLoading(true);
-    const response = await axiosRequest({
-      method: 'PUT',
-      url: `/users/${user.id}`,
-      data: {
-        avatar,
-      },
-    });
-    if (response.error) {
-      setNewUser(user);
-      enqueueSnackbar('Une erreur inconnue est survenue...', {
-        variant: 'error',
-      });
-    } else {
-      setUser({ ...user, avatar });
-      enqueueSnackbar('Avatar mis à jour avec succès !', {
-        variant: 'success',
-      });
-    }
-    setIsLoading(false);
-  };
+
   const updatePwd = async () => {
     if (!newUser) return;
     if (!user) return;
@@ -257,19 +231,6 @@ const Presentation = () => {
         <div className="account__panel">
           <h2>Paramètres du profil</h2>
           <div className="account__panel-edit-button">{editMode !== 0 && <EditButton onClick={updateEditMode(0)} />}</div>
-
-          <div style={{ margin: '0.5rem' }}>
-            <label className="text text--bold" style={{ display: 'block' }}>
-              Photo de profil :
-            </label>
-            <div style={{ display: 'flex', alignItems: 'flex-start', marginTop: '0.5rem' }}>
-              {editMode === 0 ? (
-                <AvatarEditor id={0} value={user.avatar || undefined} onChange={updateAvatar} />
-              ) : (
-                <AvatarImg user={user} size="small" noLink displayAsUser />
-              )}
-            </div>
-          </div>
 
           <PanelInput
             value={newUser.school}
@@ -498,18 +459,8 @@ const Presentation = () => {
           </div>
         </div>
       ) : null}
-      {/* {user.type === UserType.FAMILY ? (
-        <div className="account__panel">
-          <LinkChild />
-        </div>
-      ) : null} */}
       <div className="account__panel">
         <h2>Données et confidentialité</h2>
-        {/* <div style={{ margin: '1rem 0.5rem' }}>
-          <Button variant="contained" color="secondary" size="small">
-            Télécharger toutes mes données
-          </Button>
-        </div> */}
         <div style={{ margin: '1rem 0.5rem' }}>
           <RedButton variant="contained" color="secondary" size="small" onClick={updateEditMode(3)}>
             Supprimer mon compte

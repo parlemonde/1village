@@ -1,32 +1,52 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Button } from '@mui/material';
 
+import type { CookingDefiData, DefiActivity } from '../../../activity-types/defi.types';
 import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';
-import { ECO_ACTIONS, getDefi, getLanguageTheme, isCooking, isEco, isLanguage } from 'src/activity-types/defi.constants';
-import type { DefiActivity, CookingDefiData } from 'src/activity-types/defi.types';
+import {
+  DefiTypeEnum,
+  ECO_ACTIONS,
+  getDefi,
+  getDefiType,
+  getLanguageTheme,
+  isCooking,
+  isEco,
+  isFree,
+  isLanguage,
+} from 'src/activity-types/defi.constants';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
+import type { ActivityContent } from 'types/activity.type';
 import { LinkNotAllowedInPath } from 'types/activity.type';
 
-export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<DefiActivity>) => {
-  const isCookingActivity = isCooking(activity);
-  const link = isCookingActivity ? 'culinaire/4' : isEco(activity) ? 'ecologique/4' : 'linguistique/5';
+const defiTypeTitle: Record<DefiTypeEnum, (activity: DefiActivity) => string> = {
+  [DefiTypeEnum.COOKING]: (activity) => (isCooking(activity) ? activity.data.name : ''),
+  [DefiTypeEnum.ECOLOGICAL]: (activity) => (isEco(activity) ? ECO_ACTIONS[activity.data.type] : ''),
+  [DefiTypeEnum.LINGUISTIC]: (activity) => (isLanguage(activity) ? getLanguageTheme(activity.data) : ''),
+  [DefiTypeEnum.OTHER]: (activity) => (isFree(activity) ? activity.data.themeName : ''),
+};
 
-  const firstImage = React.useMemo(() => {
-    if (isCookingActivity) {
-      return (activity.data as CookingDefiData).image || activity.content.find((c) => c.type === 'image')?.value || null;
-    } else {
-      return activity.content.find((c) => c.type === 'image')?.value || null;
-    }
-  }, [isCookingActivity, activity]);
-  const firstTextContent = React.useMemo(() => activity.content.find((c) => c.type === 'text'), [activity.content]);
-  const firstText = firstTextContent ? htmlToText(firstTextContent.value) : '';
+const defiTypeLink: Record<DefiTypeEnum, string> = {
+  [DefiTypeEnum.COOKING]: 'culinaire/4',
+  [DefiTypeEnum.ECOLOGICAL]: 'ecologique/4',
+  [DefiTypeEnum.LINGUISTIC]: 'linguistique/5',
+  [DefiTypeEnum.OTHER]: 'linguistique/5',
+};
+
+export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<DefiActivity>) => {
+  const defiActivityType = getDefiType(activity);
+  const link = defiTypeLink[defiActivityType];
+
+  const defiImage = React.useMemo(() => getDefiImage(activity, defiActivityType), [activity, defiActivityType]);
+  const defiTitle: string = defiTypeTitle[defiActivityType](activity);
+  const defiDescription = useMemo(() => getDefiDescription(activity, defiActivityType), [activity, defiActivityType]);
+
   const router = useRouter();
 
   return (
@@ -37,7 +57,7 @@ export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
         justifyContent: 'flex-start',
       }}
     >
-      {firstImage && (
+      {defiImage && (
         <div style={{ width: '40%', flexShrink: 0, padding: '0.25rem' }}>
           <div
             style={{
@@ -50,32 +70,20 @@ export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
           >
             {/* Link is disabled for reaction activity */}
             {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
-              <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
+              <Image layout="fill" objectFit="contain" src={defiImage} unoptimized />
             ) : (
               <Link href={`/activite/${activity.id}`} passHref>
-                <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
+                <Image layout="fill" objectFit="contain" src={defiImage} unoptimized />
               </Link>
             )}
           </div>
         </div>
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
-        <h3 style={{ margin: '0 0.5rem 0.5rem' }}>
-          {isCooking(activity)
-            ? activity.data.name
-            : isEco(activity)
-            ? ECO_ACTIONS[activity.data.type]
-            : isLanguage(activity)
-            ? getLanguageTheme(activity.data)
-            : null}
-        </h3>
+        <h3 style={{ margin: '0 0.5rem 0.5rem' }}>{defiTitle}</h3>
         <div style={{ margin: '0 0.5rem 1rem', textAlign: 'justify' }}>
-          <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `${firstImage ? 4 : 2}rem` }}>
-            {isCooking(activity)
-              ? `${activity.data.history}. ${activity.data.explanation}`
-              : isEco(activity) || isLanguage(activity)
-              ? firstText
-              : null}
+          <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `${defiImage ? 4 : 2}rem` }}>
+            {defiDescription}
           </div>
         </div>
         <div style={{ margin: '0 0.5rem 0.5rem' }}>
@@ -86,13 +94,11 @@ export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
           <div style={{ textAlign: 'right' }}>
             <CommentIcon count={activity.commentCount} activityId={activity.id} />
             {!showEditButtons && (
-              <>
-                <Link href={`/activite/${activity.id}`} passHref>
-                  <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
-                    Relever le défi
-                  </Button>
-                </Link>
-              </>
+              <Link href={`/activite/${activity.id}`} passHref>
+                <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
+                  Relever le défi
+                </Button>
+              </Link>
             )}
             {isSelf && showEditButtons && (
               <>
@@ -129,3 +135,29 @@ export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
     </div>
   );
 };
+
+function getDefiImage(activity: DefiActivity, defiActivityType: DefiTypeEnum): string | null {
+  if (defiActivityType === DefiTypeEnum.COOKING) {
+    return (activity.data as CookingDefiData).image || activity.content.find((c) => c.type === 'image')?.value || null;
+  } else {
+    return activity.content.find((c) => c.type === 'image')?.value || null;
+  }
+}
+
+function getDefiDescription(activity: DefiActivity, defiActivityType: DefiTypeEnum): string {
+  switch (defiActivityType) {
+    case DefiTypeEnum.COOKING:
+      return isCooking(activity) ? `${activity.data.history}. ${activity.data.explanation}` : '';
+    case DefiTypeEnum.ECOLOGICAL:
+    case DefiTypeEnum.LINGUISTIC:
+    case DefiTypeEnum.OTHER:
+      return getDefiContent(activity);
+    default:
+      return '';
+  }
+}
+
+function getDefiContent(activity: DefiActivity): string {
+  const firstTextContent = activity.content.find((content: ActivityContent) => content.type === 'text');
+  return firstTextContent ? htmlToText(firstTextContent.value) : '';
+}

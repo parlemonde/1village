@@ -283,14 +283,22 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
   const game2 = data.game2;
   const game3 = data.game3;
 
-  createGame(game1, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
-  createGame(game2, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
-  createGame(game3, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
+  createGame(game1, data.userId, data.villageId, data.classroomId, data.type, data.subType, data.selectedPhase);
+  createGame(game2, data.userId, data.villageId, data.classroomId, data.type, data.subType, data.selectedPhase);
+  createGame(game3, data.userId, data.villageId, data.classroomId, data.type, data.subType, data.selectedPhase);
 
   res.sendStatus(200);
 });
 
-async function createGame(data: ActivityContent[], userId: number, villageId: number, type: number, subType: number, selectedPhase: number) {
+async function createGame(
+  data: ActivityContent[],
+  userId: number,
+  villageId: number,
+  classroomId: number,
+  type: number,
+  subType: number,
+  selectedPhase: number,
+) {
   const activity = new Activity();
   activity.type = type;
   activity.subType = subType;
@@ -301,6 +309,7 @@ async function createGame(data: ActivityContent[], userId: number, villageId: nu
   activity.content = data;
   activity.userId = userId;
   activity.villageId = villageId;
+  activity.classroomId = classroomId;
   activity.responseActivityId = null;
   activity.responseType = null;
   activity.isPinned = false;

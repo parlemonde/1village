@@ -154,6 +154,7 @@ export type GameDataStep = {
 export type GameDataMonneyOrExpression = {
   userId: number;
   villageId: number;
+  classroomId: number;
   type: number;
   subType: number;
   game1: GameDataStep;

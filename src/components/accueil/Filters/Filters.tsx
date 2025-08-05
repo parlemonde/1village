@@ -11,8 +11,7 @@ import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
 export const ACTIVITIES_PER_PHASE: { key: number; label: string; value: 'all' | number[] }[][] = [
   [
     { key: 0, label: 'Toutes', value: 'all' },
-    // Commented for a try in 1Village 2024-2025
-    // { key: 1, label: 'Indices culturels', value: [6] },
+    { key: 1, label: 'Indices', value: [6] },
     // { key: 2, label: 'Symboles', value: [7] },
     // { key: 3, label: 'Questions', value: [3] },
     { key: 4, label: 'Mascottes', value: [8] },
@@ -25,13 +24,11 @@ export const ACTIVITIES_PER_PHASE: { key: number; label: string; value: 'all' | 
     { key: 4, label: 'Énigmes', value: [1] },
     { key: 5, label: 'Questions', value: [3] },
     { key: 6, label: 'Réactions', value: [10] },
-    { key: 7, label: 'Histoires', value: [13] },
   ],
   [
     { key: 0, label: 'Toutes', value: 'all' },
     { key: 1, label: 'Couplets', value: [12] },
-    // Commented for a try in 1Village 2024-2025 and moved to phase 2
-    // { key: 2, label: 'Histoire', value: [13] },
+    { key: 2, label: 'Histoires', value: [13] },
     { key: 3, label: 'Histoires ré-inventées', value: [14] },
   ],
   // ! Special for teacher in there dashboard (Better Comments to highlight)
@@ -41,7 +38,7 @@ export const ACTIVITIES_PER_PHASE: { key: number; label: string; value: 'all' | 
     { key: 2, label: 'Défis', value: [2] },
     { key: 3, label: 'Questions', value: [3] },
     { key: 4, label: 'Jeux', value: [4] },
-    { key: 5, label: 'Indices culturels', value: [6] },
+    { key: 5, label: 'Indices', value: [6] },
     { key: 6, label: 'Symboles', value: [7] },
     { key: 7, label: 'Mascottes', value: [8] },
     { key: 8, label: 'Reportages', value: [9] },

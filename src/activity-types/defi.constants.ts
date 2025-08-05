@@ -1,13 +1,13 @@
 import type {
-  LanguageDefiData,
-  DefiActivity,
   CookingDefiActivity,
   CookingDefiData,
+  DefiActivity,
   EcoDefiActivity,
   EcoDefiData,
-  LanguageDefiActivity,
   FreeDefiActivity,
   FreeDefiData,
+  LanguageDefiActivity,
+  LanguageDefiData,
 } from './defi.types';
 import { capitalize, replaceTokens } from 'src/utils';
 
@@ -102,6 +102,20 @@ export const DEFI = {
   FREE: 3,
 };
 
+export enum DefiTypeEnum {
+  COOKING = 'COOKING',
+  ECOLOGICAL = 'ECOLOGICAL',
+  LINGUISTIC = 'LINGUISTIC',
+  OTHER = 'OTHER',
+}
+
+const defiTypeMap: Record<number, DefiTypeEnum> = {
+  0: DefiTypeEnum.COOKING,
+  1: DefiTypeEnum.ECOLOGICAL,
+  2: DefiTypeEnum.LINGUISTIC,
+  3: DefiTypeEnum.OTHER,
+};
+
 //TODO : factoriser en mode clean code le getDefi
 //https://stackoverflow.com/questions/8900652/what-does-do-in-javascript
 export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | LanguageDefiData | FreeDefiData): string => {
@@ -145,3 +159,8 @@ export const isLanguage = (activity: DefiActivity): activity is LanguageDefiActi
 export const isFree = (activity: DefiActivity): activity is FreeDefiActivity => {
   return activity.subType === DEFI.FREE;
 };
+
+export function getDefiType(activity: DefiActivity): DefiTypeEnum {
+  if (activity.subType) return defiTypeMap[activity.subType];
+  else throw new Error('Unknown défi type');
+}

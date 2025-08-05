@@ -39,7 +39,7 @@ export const LastActivities: React.FC<Props> = ({ title, activityUser }) => {
               <>
                 <div style={{ fontSize: 'smaller', paddingBottom: '1rem' }}>
                   <strong>{DESC[activity.type]},&nbsp;</strong>
-                  le {toDate(activity.createDate as string)}
+                  le {toDate(activity.publishDate as string)}
                   {ActivityIcon && (
                     <ActivityIcon
                       style={{

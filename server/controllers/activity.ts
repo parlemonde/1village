@@ -254,6 +254,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   activity.isPinned = data.isPinned || false;
   activity.displayAsUser = data.displayAsUser || false;
   activity.classroomId = data.classroomId ?? null;
+  activity.publishDate = new Date();
 
   await AppDataSource.getRepository(Activity).save(activity);
 
@@ -464,7 +465,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   activity.displayAsUser = data.displayAsUser !== undefined ? data.displayAsUser : activity.displayAsUser;
   activity.data = data.data ?? activity.data;
   activity.content = data.content ?? activity.content;
-  activity.classroomId = data.classroomId ?? null;
+  activity.classroomId = data.classroomId ?? activity.classroomId;
 
   // update activity children
   if (!activity.parentActivityId && activity.status === ActivityStatus.PUBLISHED) {

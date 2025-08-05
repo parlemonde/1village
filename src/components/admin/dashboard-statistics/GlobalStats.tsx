@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
+import { TeamCommentType } from '../../../../types/teamComment.type';
 import ActivityTable from './ActivityTable';
-import TeamComments from './TeamComments';
+import TeamCommentCard from './TeamCommentCard';
 import DashboardSummary from './dashboard-summary/DashboardSummary';
 import StatisticFilters from './filters/StatisticFilters';
 import DashboardWorldMap from './map/DashboardWorldMap/DashboardWorldMap';
@@ -20,8 +21,8 @@ const GlobalStats = () => {
 
   return (
     <>
+      <TeamCommentCard type={TeamCommentType.GLOBAL} />
       <StatisticFilters onPhaseChange={setSelectedPhase} />
-      <TeamComments />
       <DashboardWorldMap />
       <ActivityTable />
       {sessionStatistics && oneVillageStatistics && (

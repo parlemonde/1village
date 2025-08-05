@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 
 import { Tooltip } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isFree, getDefi, DEFI } from 'src/activity-types/defi.constants';
+import { DEFI, getDefi, isFree } from 'src/activity-types/defi.constants';
 import type { FreeDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
@@ -25,15 +25,15 @@ import { UserType } from 'types/user.type';
 
 const FreeDefiStep4 = () => {
   const router = useRouter();
-  const { activity, save } = React.useContext(ActivityContext);
-  const { user } = React.useContext(UserContext);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const { activity, save } = useContext(ActivityContext);
+  const { user } = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const data = (activity?.data as FreeDefiData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const isObservator = user?.type === UserType.OBSERVATOR;
 
-  const errorSteps = React.useMemo(() => {
+  const errorSteps = useMemo(() => {
     const fieldStep2 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 2
     if (data !== null && fieldStep2?.length === 0) {
       const errors = getErrorSteps(data, 2);
@@ -45,7 +45,7 @@ const FreeDefiStep4 = () => {
   }, [activity?.content, data]);
   const isValid = errorSteps.length === 0;
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/lancer-un-defi');
     } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isFree(activity)))) {
@@ -70,13 +70,13 @@ const FreeDefiStep4 = () => {
     <Base>
       <PageLayout>
         <Steps
-          steps={[data.themeName || 'Théme', 'Action', 'Le défi', 'Prévisualisation']}
+          steps={[data.themeName || 'Thème', 'Action', 'Le défi', 'Prévisualisation']}
           urls={['/lancer-un-defi/1?edit', '/lancer-un-defi/2', '/lancer-un-defi/3', '/lancer-un-defi/4']}
           activeStep={3}
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Pré-visualisez votre défi{!isEdit && ', et publiez-la'}</h1>
+          <h1>Pré-visualisez votre défi{!isEdit && ', et publiez-le'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
             Voici la pré-visualisation de votre défi.
             {isEdit

@@ -4,6 +4,7 @@ import { useQueryClient } from 'react-query';
 
 import { Card, CircularProgress } from '@mui/material';
 
+import { ClassroomContext } from './classroomContext';
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
 import { Modal } from 'src/components/Modal';
@@ -75,7 +76,8 @@ const debouncedSaveActivityInSession = debounce(saveActivityInSession, 400, fals
 export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { user, classroom } = React.useContext(UserContext);
+  const { user } = React.useContext(UserContext);
+  const { classroom } = React.useContext(ClassroomContext);
   const { village } = React.useContext(VillageContext);
   const [activity, setActivity] = React.useState<Activity | null>(null);
   const [draft, setDraft] = React.useState<Activity | null>(null);
