@@ -1,5 +1,6 @@
 import type { PhaseDetail } from '../src/api/statistics/compare.api';
 import type { BarChartDataByMonth } from './dashboard.type';
+import type { User } from './user.type';
 import type { VillagePhase } from './village.type';
 
 export interface ClassroomsStats {
@@ -155,4 +156,19 @@ export type VillageActivity = {
 export interface StatisticsDto {
   family: any;
   activityCountDetails: VillageActivity[];
+}
+
+export enum ClassroomMonitoringStatus {
+  NO_CONNECTION_SINCE_FIRST = '0',
+  THREE_WEEK_WITHOUT_CONNECTION = '1',
+  AT_LEAST_THREE_DRAFTS_IN_PROGRESS = '2',
+}
+
+export interface ClassroomToMonitor {
+  id: number;
+  name: string;
+  vm: string;
+  teacher: string;
+  status: ClassroomMonitoringStatus;
+  user: User;
 }

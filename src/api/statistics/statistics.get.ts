@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { SessionsStats, VillageStats } from 'types/statistics.type';
+import type { SessionsStats, VillageStats, ClassroomToMonitor } from 'types/statistics.type';
 
 async function getSessionsStats(phase?: number): Promise<SessionsStats> {
   return (
@@ -79,4 +79,33 @@ export const useGetClassroomsStats = (classroomId?: number, phase?: number) => {
   return useQuery(['classrooms-stats', classroomId, phase], () => getClassroomsStats(classroomId, phase), {
     enabled: classroomId !== null,
   });
+};
+
+function getClassroomsUrl(countryId?: string, villageId?: number): string {
+  let baseClassroomsURL = `/statistics/classrooms-to-monitor`;
+  if (countryId || villageId) {
+    baseClassroomsURL += '?';
+    if (countryId) {
+      baseClassroomsURL = `${baseClassroomsURL}&country=${countryId}`;
+    }
+    if (villageId) {
+      baseClassroomsURL = `${baseClassroomsURL}&village=${villageId}`;
+    }
+  }
+
+  return baseClassroomsURL;
+}
+
+async function getClassroomsToMonitor(countryId?: string, villageId?: number): Promise<ClassroomToMonitor[]> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: getClassroomsUrl(countryId, villageId),
+    })
+  ).data;
+}
+
+export const useGetClassroomsToMonitorStats = (countryId?: string, villageId?: number) => {
+  return useQuery(['classrooms-to_monitor-stats', countryId, villageId], () => getClassroomsToMonitor(countryId, villageId));
 };
