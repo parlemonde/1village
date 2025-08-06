@@ -58,7 +58,7 @@ const FreeDefiStep1 = () => {
   }, []);
 
   const theme = React.useMemo(() => {
-    if (!data || (data && data.themeName.length === 0)) return 'Theme';
+    if (!data || (data && !data.themeName)) return 'Thème';
     return data.themeName;
   }, [data]);
 
