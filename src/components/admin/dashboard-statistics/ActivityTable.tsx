@@ -1,99 +1,42 @@
-import React from 'react';
+import type { JSX } from 'react';
 
 import { Box } from '@mui/material';
 
 import { OneVillageTable } from '../OneVillageTable';
 import { countryToFlag } from 'src/utils';
+import type { VillageInteractionsActivity } from 'types/analytics/village-interactions-activity';
+import { VillageInteractionsStatus } from 'types/analytics/village-interactions-activity';
 import type { Country } from 'types/country.type';
 
-type CountryStatus = 'active' | 'observer' | 'ghost' | 'absent';
+type FormatedVillageActivity = {
+  countries: string;
+  status: JSX.Element;
+  id: number;
+  totalConnections: number;
+  totalActivities: number;
+};
 
 const countriesToText = (countries: Country[]) => {
   return countries.map((c) => `${countryToFlag(c.isoCode)} ${c.name}`).join(' - ');
 };
 
-const getCountryColor = (status: CountryStatus) => {
+const getCountryColor = (status: VillageInteractionsStatus) => {
   switch (status) {
-    case 'active':
+    case VillageInteractionsStatus.ACTIVE:
       return '#4CC64A';
-    case 'observer':
+    case VillageInteractionsStatus.OBSERVER:
       return '#6082FC';
-    case 'ghost':
+    case VillageInteractionsStatus.GHOST:
       return '#FFD678';
-    case 'absent':
+    case VillageInteractionsStatus.ABSENT:
       return '#D11818';
     default:
       return '#FFF';
   }
 };
 
-// Même structure de données que dans la table villages-mondes (manage/villages)
-
-const fakeData = [
-  {
-    id: 1,
-    countries: [
-      {
-        isoCode: 'FR',
-        name: 'France',
-      },
-      {
-        isoCode: 'LU',
-        name: 'Luxembourg',
-      },
-    ],
-    totalConnections: 240,
-    totalActivities: 853,
-    status: 'active',
-  },
-  {
-    id: 2,
-    countries: [
-      {
-        isoCode: 'FR',
-        name: 'France',
-      },
-      {
-        isoCode: 'US',
-        name: 'United States',
-      },
-    ],
-    totalConnections: 35,
-    totalActivities: 140,
-    status: 'observer',
-  },
-  {
-    id: 3,
-    countries: [
-      {
-        isoCode: 'FR',
-        name: 'France',
-      },
-      {
-        isoCode: 'GB',
-        name: 'United Kingdom',
-      },
-    ],
-    totalConnections: 56,
-    totalActivities: 593,
-    status: 'ghost',
-  },
-];
-
-// On prépare les données déjà formatées pour l'affichage
-const tableData = fakeData.map((row) => {
-  return {
-    ...row,
-    countries: countriesToText(row.countries),
-    status: (
-      <span key={row.status} style={{ color: getCountryColor(row.status as CountryStatus), fontSize: 24 }}>
-        ●
-      </span>
-    ),
-  };
-});
-
-const ActivityTable = () => {
+const ActivityTable = ({ activityTableData }: { activityTableData: VillageInteractionsActivity[] }) => {
+  const tableData = formatVillagesData(activityTableData);
   return (
     <Box sx={{ overflow: 'auto', marginTop: 2 }}>
       <OneVillageTable
@@ -113,3 +56,15 @@ const ActivityTable = () => {
 };
 
 export default ActivityTable;
+
+function formatVillagesData(activityData: VillageInteractionsActivity[]): FormatedVillageActivity[] {
+  return activityData.map((villageActivity) => ({
+    ...villageActivity,
+    countries: countriesToText(villageActivity.countries),
+    status: (
+      <span key={villageActivity.status} style={{ color: getCountryColor(villageActivity.status), fontSize: 24 }}>
+        ●
+      </span>
+    ),
+  }));
+}
