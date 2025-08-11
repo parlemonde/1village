@@ -1,22 +1,22 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
-interface Data {
+interface ClassroomChartData {
   name: string;
   value: number;
 }
 
-interface Table {
+export interface CountryChartData {
   country: string;
-  data: Data[];
+  data: ClassroomChartData[];
 }
 
 interface DualBarChartProps {
-  firstTable: Table;
-  secondTable: Table;
+  firstTable: CountryChartData;
+  secondTable: CountryChartData;
 }
 
-export default function DualBarChart({ firstTable, secondTable }: DualBarChartProps) {
+export default function DualBarChart({ firstTable, secondTable }: Readonly<DualBarChartProps>) {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-around', padding: '20px', backgroundColor: '#f7f7f9', borderRadius: '10px' }}>
       <ResponsiveContainer width="45%" height={300}>
