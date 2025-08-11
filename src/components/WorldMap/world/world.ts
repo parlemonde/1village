@@ -31,17 +31,17 @@ type PopoverDataSetter = (popoverData: PopoverData | null) => void;
 
 export class World {
   // -- global objects --
-  private scene: Scene;
-  private renderer: WebGLRenderer;
-  private raycaster: Raycaster;
-  private camera: PerspectiveCamera;
-  private controls: OrbitControls;
-  private animations: Animations;
+  private readonly scene: Scene;
+  private readonly renderer: WebGLRenderer;
+  private readonly raycaster: Raycaster;
+  private readonly camera: PerspectiveCamera;
+  private readonly controls: OrbitControls;
+  private readonly animations: Animations;
 
   // -- scene objects --
-  private earth: Earth;
-  private pelico: Pelico;
-  private pelicoPin: Pin;
+  private readonly earth: Earth;
+  private readonly pelico: Pelico;
+  private readonly pelicoPin: Pin;
 
   // -- mouse pos --
   public canvasRect: DOMRect;
@@ -49,8 +49,8 @@ export class World {
     x: number;
     y: number;
   } | null;
-  private setMouseStyle: MouseStyleSetter;
-  private setPopoverData: PopoverDataSetter;
+  private readonly setMouseStyle: MouseStyleSetter;
+  private readonly setPopoverData: PopoverDataSetter;
   private hoveredObject: HoverableObject | null;
 
   private view: 'earth' | 'global' | 'pelico';
@@ -119,9 +119,7 @@ export class World {
     this.controls.rotateSpeed = 0.2;
     this.controls.zoomSpeed = 0.2;
     this.controls.addEventListener('change', this.onCameraChange.bind(this));
-    this.controls.addEventListener('start', this.onUserCameraMove.bind(this));
-    this.controls.autoRotate = true;
-    this.controls.autoRotateSpeed = 0.4;
+    this.controls.autoRotate = false;
 
     // -- Add animations
     this.animations = new Animations();
@@ -302,18 +300,6 @@ export class World {
     }, 250);
   }
 
-  private onUserCameraMove() {
-    if (this.controls.autoRotate) {
-      this.controls.autoRotate = false;
-      setTimeout(
-        () => {
-          this.controls.autoRotate = true;
-        },
-        this.view === 'earth' ? 1000 * 5 : 1000,
-      );
-    }
-  }
-
   public onMouseMove(event: React.MouseEvent) {
     const { top, left, width, height } = this.canvasRect;
     // calculate mouse position in normalized device coordinates, (-1 to +1) for both components
@@ -398,7 +384,6 @@ export class World {
       this.setAltitude(START_DISTANCE);
       this.controls.target = CENTERS[this.view].clone();
       this.controls.enabled = true;
-      this.controls.autoRotate = true;
       this.animations.cancelAnimations();
       this.earth.rotation.set(0, 0, 0);
       this.earth.visible = true;
@@ -410,7 +395,6 @@ export class World {
       this.setAltitude(START_DISTANCE);
       this.controls.target = CENTERS[this.view].clone();
       this.controls.enabled = true;
-      this.controls.autoRotate = true;
       this.pelico.rotation.set(0, 0, 0);
       this.animations.cancelAnimations();
       this.pelico.visible = true;
