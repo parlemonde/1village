@@ -256,7 +256,7 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.language = data.language || 'français';
   user.hasStudentLinked = data.hasStudentLinked || false;
   user.countryCode = data.countryCode || '';
-  user.type = data.type || UserType.TEACHER || UserType.FAMILY;
+  user.type = data.type ?? UserType.TEACHER;
   if (user.type === UserType.TEACHER) {
     user.isVerified = true;
     user.accountRegistration = 0;
