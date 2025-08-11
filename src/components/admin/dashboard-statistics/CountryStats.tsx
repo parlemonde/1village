@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
 
-import LoaderComponent, { AnalyticsDataType } from './Loader';
+import Loader, { AnalyticsDataType } from './Loader';
 import TeamCommentCard from './TeamCommentCard';
 import VillageListCard from './cards/VillageListCard/VillageListCard';
 import HorizontalBarsChart from './charts/HorizontalChart';
@@ -15,7 +15,6 @@ import { useGetCountriesStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import type { CountryStat } from 'types/analytics/country-stat';
 import type { VillageListItem } from 'types/analytics/village-list-item';
-import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
 const CountryStats = () => {
@@ -29,9 +28,9 @@ const CountryStats = () => {
   const [villageList, setVillageList] = useState<VillageListItem[]>([]);
   const [loadingVillageList, setLoadingVillageList] = useState<boolean>(true);
 
-  const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
-  const statisticsSessions: SessionsStats = useStatisticsSessions(null, selectedCountry, null, selectedPhase) as SessionsStats;
-  const statisticsFamily = useGetCountriesStats(selectedCountry, selectedPhase);
+  const { data: classroomsStatistics, isLoading: isLoadingClassroomStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
+  const { data: sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, selectedCountry, null, selectedPhase);
+  const { data: familyStatistics, isLoading: isLoadingFamilyStatistics } = useGetCountriesStats(selectedCountry, selectedPhase);
 
   // On mocke l'asynchronisme en attendant d'avoir l'appel serveur censé retourner les interactions des villages-mondes
   // A refacto lors de l'implémentation des tickets VIL-407 et VIL-63
@@ -73,12 +72,12 @@ const CountryStats = () => {
     <>
       <TeamCommentCard type={TeamCommentType.COUNTRY} />
       <StatisticFilters onPhaseChange={setSelectedPhase} onCountryChange={setSelectedCountry} />
-      {!selectedCountry || !statisticsFamily.data ? (
+      {!selectedCountry || !familyStatistics ? (
         <PelicoCard message={'Merci de sélectionner un pays pour analyser ses statistiques'} />
       ) : (
         <Box mt={2}>
           {loadingHighlightedCountry || loadingBarsChartData || loadingVillageList ? (
-            <LoaderComponent analyticsDataType={AnalyticsDataType.GRAPHS} />
+            <Loader analyticsDataType={AnalyticsDataType.GRAPHS} />
           ) : (
             highlightedCountry &&
             barsChartData &&
@@ -91,11 +90,19 @@ const CountryStats = () => {
               </>
             )
           )}
-          <DashboardSummary
-            data={{ ...statisticsClassrooms, ...statisticsSessions, ...statisticsFamily.data, barChartData: mockDataByMonth }}
-            selectedCountry={selectedCountry}
-            selectedPhase={selectedPhase}
-          />
+          {isLoadingClassroomStatistics || isLoadingSessionsStatistics || isLoadingFamilyStatistics ? (
+            <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
+          ) : (
+            classroomsStatistics &&
+            sessionsStatistics &&
+            familyStatistics && (
+              <DashboardSummary
+                data={{ ...classroomsStatistics, ...sessionsStatistics, ...familyStatistics, barChartData: mockDataByMonth }}
+                selectedCountry={selectedCountry}
+                selectedPhase={selectedPhase}
+              />
+            )
+          )}
         </Box>
       )}
     </>

@@ -1,103 +1,111 @@
-import { useCallback } from 'react';
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
 
-/*const generateUrl = (baseUrl: string, params: any): string => {
-  const queryString = Object.keys(params)
-    .filter((key) => params[key] !== undefined)
-    .map((key) => `${key}=${params[key]}`)
-    .join('&');
+interface RequestParams {
+  [key: string]: string;
+}
 
-  return queryString ? `${baseUrl}?${queryString}` : baseUrl;
-};*/
+function buildUrl(baseUrl: string, params: { [key: string]: string }): string {
+  if (Object.keys(params).length > 0) {
+    const requestParams: string = Object.entries(params)
+      .flatMap(([key, value]) => `${key}=${value}`)
+      .join('&');
 
-export const useStatisticsClassrooms = (
+    return `${baseUrl}?${requestParams}`;
+  }
+
+  return baseUrl;
+}
+
+async function getClassroomStatistics(
   villageId?: number | null,
   countryCode?: string | null,
   classroomId?: number | null,
   phase?: number | null,
-) => {
-  const getStatisticsClassrooms = useCallback(async () => {
-    let url = '/statistics/sessions';
-    const params = [];
-    if (villageId !== null && villageId !== undefined) {
-      params.push(`villageId=${villageId}`);
-    }
-    if (countryCode !== null && countryCode !== undefined) {
-      params.push(`countryCode=${countryCode}`);
-    }
-    if (classroomId !== null && classroomId !== undefined) {
-      params.push(`classroomId=${classroomId}`);
-    }
-    if (phase !== null && phase !== undefined) {
-      params.push(`phase=${phase}`);
-    }
+): Promise<ClassroomsStats> {
+  const baseUrl: string = '/statistics/sessions';
+  const params: RequestParams = {};
 
-    if (params) {
-      // params.join('&');
-      url += '?';
-      url += params.join('&');
-    }
+  if (villageId != null) params.villageId = villageId.toString();
+  if (countryCode != null) params.countryCode = countryCode;
+  if (classroomId != null) params.classroomId = classroomId.toString();
+  if (phase != null) params.phase = phase.toString();
 
-    const response = await axiosRequest({
+  const finalUrl = buildUrl(baseUrl, params);
+
+  return (
+    await axiosRequest({
       method: 'GET',
-      url,
-    });
-    if (response.error) {
-      return null;
-    }
-    return response.data;
-  }, [villageId, countryCode, classroomId, phase]);
+      url: finalUrl,
+    })
+  ).data;
+}
 
-  const { data, isLoading, error } = useQuery<ClassroomsStats>(['classrooms', villageId, countryCode, classroomId], getStatisticsClassrooms);
+async function getSessionsStatistics(
+  villageId?: number | null,
+  countryCode?: string | null,
+  classroomId?: number | null,
+  phase?: number | null,
+): Promise<SessionsStats> {
+  const baseUrl: string = '/statistics/sessions';
+  const params: RequestParams = {};
 
-  return isLoading || error ? [] : data || [];
-};
+  if (villageId != null) params.villageId = villageId.toString();
+  if (countryCode != null) params.countryCode = countryCode;
+  if (classroomId != null) params.classroomId = classroomId.toString();
+  if (phase != null) params.phase = phase.toString();
+
+  const finalUrl = buildUrl(baseUrl, params);
+
+  return (
+    await axiosRequest({
+      method: 'GET',
+      url: finalUrl,
+    })
+  ).data;
+}
+
+export function useStatisticsClassrooms(villageId?: number | null, countryCode?: string | null, classroomId?: number | null, phase?: number | null) {
+  const queryResult = useQuery<ClassroomsStats>(
+    ['classrooms', villageId, countryCode, classroomId],
+    () => getClassroomStatistics(villageId, countryCode, classroomId, phase),
+    {
+      enabled: villageId != null || countryCode != null,
+    },
+  );
+
+  const emptyStats: ClassroomsStats = {
+    classroomId: 0,
+    classroomCountryCode: '',
+    villageId: 0,
+    villageName: '',
+    userFirstName: 0,
+    userLastName: 0,
+    commentsCount: 0,
+    videosCount: 0,
+    activities: [],
+  };
+
+  return {
+    ...queryResult,
+    data: queryResult.isLoading || queryResult.error || !queryResult.data ? emptyStats : queryResult.data,
+  };
+}
 
 export const useStatisticsSessions = (villageId?: number | null, countryCode?: string | null, classroomId?: number | null, phase?: number | null) => {
-  const getStatisticsSessions = useCallback(async () => {
-    let url = '/statistics/sessions';
-    const params = [];
-    if (villageId !== null && villageId !== undefined) {
-      params.push(`villageId=${villageId}`);
-    }
-    if (countryCode !== null && countryCode !== undefined) {
-      params.push(`countryCode=${countryCode}`);
-    }
-    if (classroomId !== null && classroomId !== undefined) {
-      params.push(`classroomId=${classroomId}`);
-    }
-    if (phase !== null && phase !== undefined) {
-      params.push(`phase=${phase}`);
-    }
-
-    if (params) {
-      // params.join('&');
-      url += '?';
-      url += params.join('&');
-    }
-
-    const response = await axiosRequest({
-      method: 'GET',
-      url,
-    });
-    if (response.error) {
-      return null;
-    }
-    return response.data;
-  }, [villageId, countryCode, classroomId, phase]);
-
-  const { data, isLoading, error } = useQuery<SessionsStats[], unknown>(
+  const queryResult = useQuery<SessionsStats>(
     ['session', villageId, countryCode, classroomId, phase],
-    getStatisticsSessions,
+    () => getSessionsStatistics(villageId, countryCode, classroomId, phase),
     {
       staleTime: 0,
       cacheTime: 0,
       refetchOnMount: true,
     },
   );
-
-  return isLoading || error ? {} : data || {};
+  return {
+    ...queryResult,
+    data: queryResult.isLoading || queryResult.error || !queryResult.data ? ({} as SessionsStats) : queryResult.data,
+  };
 };

@@ -4,7 +4,6 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box, Tab, Tabs } from '@mui/material';
 
-import { TeamCommentType } from '../../../../types/teamComment.type';
 import { OneVillageTable } from '../OneVillageTable';
 import { getCommentCount, getPublicationCount, getVideoCount } from '../StatisticsUtils';
 import CountryActivityPhaseAccordion from './CountryActivityPhaseAccordion';
@@ -24,7 +23,8 @@ import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
 import { useGetClassroomsStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
-import type { ClassroomsStats, OneVillageTableRow, SessionsStats } from 'types/statistics.type';
+import type { OneVillageTableRow } from 'types/statistics.type';
+import { TeamCommentType } from 'types/teamComment.type';
 
 const BarChartTitle = 'Evolution des connexions';
 
@@ -41,22 +41,19 @@ const ClassroomStats = () => {
     3: false,
   });
 
-  const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(null, null, 1);
-  const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
-  const { data: classroomStatistics } = useGetClassroomsStats(selectedClassroom, selectedPhase);
-
-  const pelicoMessage = 'Merci de sélectionner une classe pour analyser ses statistiques ';
-  const noDataFoundMessage = 'Pas de données pour la classe sélectionnée';
+  const { data: classroomsStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
+  const { data: sessionsStatistics } = useStatisticsSessions(null, null, 1);
+  const { data: selectedClassroomStatistics } = useGetClassroomsStats(selectedClassroom, selectedPhase);
 
   useEffect(() => {
-    if (classroomStatistics?.family?.familiesWithoutAccount) {
-      setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(classroomStatistics.family.familiesWithoutAccount));
+    if (selectedClassroomStatistics?.family?.familiesWithoutAccount) {
+      setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(selectedClassroomStatistics.family.familiesWithoutAccount));
     }
-  }, [classroomStatistics?.family?.familiesWithoutAccount]);
+  }, [selectedClassroomStatistics?.family?.familiesWithoutAccount]);
 
-  const videoCount = getVideoCount(classroomStatistics);
-  const commentCount = getCommentCount(classroomStatistics);
-  const publicationCount = getPublicationCount(classroomStatistics);
+  const videoCount = getVideoCount(selectedClassroomStatistics);
+  const commentCount = getCommentCount(selectedClassroomStatistics);
+  const publicationCount = getPublicationCount(selectedClassroomStatistics);
 
   const handleTabChange = (_event: React.SyntheticEvent, selectedTab: number) => {
     setSelectedTab(selectedTab);
@@ -82,10 +79,10 @@ const ClassroomStats = () => {
             <div className="statistic__average--container">
               <AverageStatsCard
                 data={{
-                  min: statisticsSessions.minDuration ? Math.floor(statisticsSessions.minDuration / 60) : 0,
-                  max: statisticsSessions.maxDuration ? Math.floor(statisticsSessions.maxDuration / 60) : 0,
-                  average: statisticsSessions.averageDuration ? Math.floor(statisticsSessions.averageDuration / 60) : 0,
-                  median: statisticsSessions.medianDuration ? Math.floor(statisticsSessions.medianDuration / 60) : 0,
+                  min: sessionsStatistics.minDuration ? Math.floor(sessionsStatistics.minDuration / 60) : 0,
+                  max: sessionsStatistics.maxDuration ? Math.floor(sessionsStatistics.maxDuration / 60) : 0,
+                  average: sessionsStatistics.averageDuration ? Math.floor(sessionsStatistics.averageDuration / 60) : 0,
+                  median: sessionsStatistics.medianDuration ? Math.floor(sessionsStatistics.medianDuration / 60) : 0,
                 }}
                 unit="min"
                 icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}
@@ -94,10 +91,10 @@ const ClassroomStats = () => {
               </AverageStatsCard>
               <AverageStatsCard
                 data={{
-                  min: statisticsSessions.minConnections ? statisticsSessions.minConnections : 0,
-                  max: statisticsSessions.maxConnections ? statisticsSessions.maxConnections : 0,
-                  average: statisticsSessions.averageConnections ? statisticsSessions.averageConnections : 0,
-                  median: statisticsSessions.medianConnections ? statisticsSessions.medianConnections : 0,
+                  min: sessionsStatistics.minConnections ? sessionsStatistics.minConnections : 0,
+                  max: sessionsStatistics.maxConnections ? sessionsStatistics.maxConnections : 0,
+                  average: sessionsStatistics.averageConnections ? sessionsStatistics.averageConnections : 0,
+                  median: sessionsStatistics.medianConnections ? sessionsStatistics.medianConnections : 0,
                 }}
                 icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
               >
@@ -110,16 +107,16 @@ const ClassroomStats = () => {
             <div className="statistic__average--container">
               <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
             </div>
-            {statisticsClassrooms && statisticsClassrooms.phases && (
+            {classroomsStatistics?.phases && (
               <div className="statistic__phase--container">
                 <div>
-                  <PhaseDetails phase={1} data={statisticsClassrooms.phases[0].data} />
+                  <PhaseDetails phase={1} data={classroomsStatistics.phases[0].data} />
                 </div>
                 <div className="statistic__phase">
-                  <PhaseDetails phase={2} data={statisticsClassrooms.phases[1].data} />
+                  <PhaseDetails phase={2} data={classroomsStatistics.phases[1].data} />
                 </div>
                 <div className="statistic__phase">
-                  <PhaseDetails phase={3} data={statisticsClassrooms.phases[1].data} />
+                  <PhaseDetails phase={3} data={classroomsStatistics.phases[1].data} />
                 </div>
               </div>
             )}
@@ -159,7 +156,7 @@ const ClassroomStats = () => {
           <TabPanel value={selectedTab} index={1}>
             <OneVillageTable
               admin={false}
-              emptyPlaceholder={<p>{noDataFoundMessage}</p>}
+              emptyPlaceholder={<p>Pas de données pour la classe sélectionnée</p>}
               data={familiesWithoutAccountRows}
               columns={FamiliesWithoutAccountHeaders}
               titleContent={`À surveiller : comptes non créés (${familiesWithoutAccountRows.length})`}
@@ -175,13 +172,13 @@ const ClassroomStats = () => {
                 gap: 2,
               }}
             >
-              <StatsCard data={classroomStatistics?.family?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
-              <StatsCard data={classroomStatistics?.family?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
+              <StatsCard data={selectedClassroomStatistics?.family?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
+              <StatsCard data={selectedClassroomStatistics?.family?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
             </Box>
           </TabPanel>
         </Box>
       ) : (
-        <PelicoCard message={pelicoMessage} />
+        <PelicoCard message={'Merci de sélectionner une classe pour analyser ses statistiques'} />
       )}
     </>
   );
