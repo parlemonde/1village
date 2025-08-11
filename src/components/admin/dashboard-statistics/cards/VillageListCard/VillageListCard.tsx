@@ -1,26 +1,17 @@
-import React from 'react';
-
 import styles from './VillageListCard.module.css'; // Import du CSS modulaire
+import type { VillageListItem } from 'types/analytics/village-list-item';
 
-const villages = [
-  { name: 'Village France - Canada', color: 'green' },
-  { name: 'Village France - Liban', color: 'orange' },
-  { name: 'Village France - Italie', color: 'gold' },
-  { name: 'Village France - Canada', color: 'yellow' },
-  { name: 'Village France - Liban', color: 'green' },
-  { name: 'Village France - Italie', color: 'limegreen' },
-  { name: 'Village France - Canada', color: 'blue' },
-  { name: 'Village France - Liban', color: 'red' },
-  { name: 'Village France - Italie', color: 'orange' },
-];
+interface VillageListCardProps {
+  villageList: VillageListItem[];
+}
 
-const VillageListCard = () => {
+const VillageListCard = ({ villageList }: Readonly<VillageListCardProps>) => {
   return (
     <div className={styles.villageListContainer}>
       <h3>Ce pays participe dans les villages-monde suivants :</h3>
       <div className={styles.villageList}>
-        {villages.map((village, index) => (
-          <div key={index} className={styles.villageItem}>
+        {villageList.map((village) => (
+          <div key={village.name} className={styles.villageItem}>
             <span className={styles.villageBullet} style={{ backgroundColor: village.color }}></span>
             <a href="#">{village.name}</a>
           </div>
