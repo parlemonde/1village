@@ -28,11 +28,17 @@ import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
 import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
+import type { PieChartDataItem } from 'types/dashboard.type';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
 const VillageStats = () => {
-  const data = { data: [{ label: 'test1', id: 1, value: 1 }] };
+  const mockPieChartData: PieChartDataItem[] = [
+    { value: 10, label: 'Absentes', color: '#D11818' },
+    { value: 15, label: 'Fantômes', color: '#FFD678' },
+    { value: 20, label: 'Observatrices', color: '#6082FC' },
+    { value: 30, label: 'Actives', color: '#4CC64A' },
+  ];
 
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedPhase, setSelectedPhase] = useState<number>();
@@ -158,7 +164,7 @@ const VillageStats = () => {
                   </AverageStatsCard>
                 </div>
                 <div className="statistic__average--container">
-                  <PieCharts pieChartData={data} />
+                  <PieCharts pieChartData={mockPieChartData} />
                   <BarCharts dataByMonth={mockDataByMonth} title="Évolution des connexions" />
                 </div>
                 <div className="statistic__average--container">

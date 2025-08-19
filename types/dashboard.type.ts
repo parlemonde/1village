@@ -15,6 +15,16 @@ export interface BarChartDataByMonth {
   barChartData: BarChartData[];
 }
 
+export interface PieChartDataItem {
+  value: number;
+  label: string;
+  color: string;
+}
+
+export interface PieChartData {
+  pieChartData?: PieChartDataItem[];
+}
+
 export interface AverageStatsData {
   min?: number;
   max?: number;
@@ -27,7 +37,7 @@ export enum AverageStatsProcessingMethod {
   BY_MIN = 1,
 }
 
-export interface DashboardSummaryData extends SessionsStats, ClassroomsStats, VillageStats {}
+export interface DashboardSummaryData extends SessionsStats, ClassroomsStats, VillageStats, PieChartData {}
 
 export enum DashboardType {
   ONE_VILLAGE_PANEL,
