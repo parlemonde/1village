@@ -105,7 +105,7 @@ const GlobalStats = () => {
         oneVillageStatistics && (
           <DashboardSummary
             dashboardType={DashboardType.ONE_VILLAGE_PANEL}
-            data={{ ...classroomsStatistics, ...sessionStatistics, ...oneVillageStatistics, barChartData: mockDataByMonth }}
+            dashboardSummaryData={{ ...classroomsStatistics, ...sessionStatistics, ...oneVillageStatistics, barChartData: mockDataByMonth }}
           />
         )
       )}

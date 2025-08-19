@@ -21,13 +21,13 @@ const ENGAGEMENT_BAR_CHAR_TITLE = 'Évolution des connexions';
 const CONTRIBUTION_BAR_CHAR_TITLE = 'Contribution des classes';
 
 export interface DashboardClassroomTabProps {
-  data: DashboardSummaryData;
+  dashboardSummaryData: DashboardSummaryData;
   dashboardType: DashboardType;
   selectedCountry?: string;
   selectedPhase?: number;
 }
 
-const DashboardClassroomTab = ({ data: dashboardSummaryData, dashboardType, selectedCountry, selectedPhase = 0 }: DashboardClassroomTabProps) => {
+const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCountry, selectedPhase = 0 }: DashboardClassroomTabProps) => {
   const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
     1: false,
     2: false,
@@ -86,9 +86,9 @@ const DashboardClassroomTab = ({ data: dashboardSummaryData, dashboardType, sele
           </Grid>
         ) : (
           <>
-            {dashboardSummaryData.pieChartData && (
+            {dashboardSummaryData.engagementLevelData && (
               <Grid item xs={12} lg={6}>
-                <PieCharts className={styles.minContainer} pieChartData={dashboardSummaryData.pieChartData} />
+                <PieCharts className={styles.minContainer} engagementLevelData={dashboardSummaryData.engagementLevelData} />
               </Grid>
             )}
 
