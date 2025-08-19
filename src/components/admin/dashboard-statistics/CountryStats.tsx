@@ -11,21 +11,11 @@ import StatisticFilters from './filters/StatisticFilters';
 import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
-import { useGetCountriesStats } from 'src/api/statistics/statistics.get';
+import { useGetClassroomsEngagementLevel, useGetCountriesStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import type { CountryStat } from 'types/analytics/country-stat';
 import type { VillageListItem } from 'types/analytics/village-list-item';
-import type { EngagementLevel } from 'types/statistics.type';
-import { EngagementStatus } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
-
-// TODO : delete when call to backend is implemented
-const mockEngagementLevelData: EngagementLevel[] = [
-  { statusCount: 10, status: EngagementStatus.ABSENT },
-  { statusCount: 15, status: EngagementStatus.GHOST },
-  { statusCount: 20, status: EngagementStatus.OBSERVER },
-  { statusCount: 30, status: EngagementStatus.ACTIVE },
-];
 
 const CountryStats = () => {
   const [selectedPhase, setSelectedPhase] = useState<number>();
@@ -41,6 +31,9 @@ const CountryStats = () => {
   const { data: classroomsStatistics, isLoading: isLoadingClassroomStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
   const { data: sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, selectedCountry, null, selectedPhase);
   const { data: familyStatistics, isLoading: isLoadingFamilyStatistics } = useGetCountriesStats(selectedCountry, selectedPhase);
+  const { data: engagementLevelStatistics, isLoading: isLoadingEngagementLevelStatistics } = useGetClassroomsEngagementLevel({
+    countryCode: selectedCountry,
+  });
 
   // On mocke l'asynchronisme en attendant d'avoir l'appel serveur censé retourner les interactions des villages-mondes
   // A refacto lors de l'implémentation des tickets VIL-407 et VIL-63
@@ -100,7 +93,7 @@ const CountryStats = () => {
               </>
             )
           )}
-          {isLoadingClassroomStatistics || isLoadingSessionsStatistics || isLoadingFamilyStatistics ? (
+          {isLoadingClassroomStatistics || isLoadingSessionsStatistics || isLoadingFamilyStatistics || isLoadingEngagementLevelStatistics ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
           ) : (
             classroomsStatistics &&
@@ -112,7 +105,7 @@ const CountryStats = () => {
                   ...sessionsStatistics,
                   ...familyStatistics,
                   barChartData: mockDataByMonth,
-                  engagementLevelData: mockEngagementLevelData,
+                  engagementLevelData: engagementLevelStatistics,
                 }}
                 selectedCountry={selectedCountry}
                 selectedPhase={selectedPhase}
