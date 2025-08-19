@@ -1,8 +1,12 @@
 import type { Request } from 'express';
 
-import type { StatsFilterParams } from '../../../types/statistics.type';
+import type { EngagementStatus, StatsFilterParams } from '../../../types/statistics.type';
 import { GroupType } from '../../../types/statistics.type';
+import { Activity } from '../../entities/activity';
+import { AnalyticSession } from '../../entities/analytic';
 import { Classroom } from '../../entities/classroom';
+import { Comment } from '../../entities/comment';
+import { User } from '../../entities/user';
 import {
   getConnectedClassroomsCount,
   getRegisteredClassroomsCount,
@@ -124,8 +128,6 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
 });
 
 statisticsController.get({ path: '/sessions/:phase' }, async (req: Request, res) => {
-  // const phase = req.params.phase ? parseInt(req.params.phase) : null;
-
   res.sendJSON({
     minDuration: await getMinDuration(), // TODO - add phase
     maxDuration: await getMaxDuration(), // TODO - add phase
@@ -137,7 +139,6 @@ statisticsController.get({ path: '/sessions/:phase' }, async (req: Request, res)
     medianConnections: await getMedianConnections(), // TODO - add phase
     registeredClassroomsCount: await getRegisteredClassroomsCount(),
     connectedClassroomsCount: await getConnectedClassroomsCount(), // TODO - add phase
-    // contributedClassroomsCount: await getContributedClassroomsCount(phase),
   });
 });
 
@@ -278,30 +279,57 @@ statisticsController.get({ path: '/classrooms' }, async (req, res) => {
 
   const classroomsData = await queryBuilder.getRawMany();
 
-  // const transformedData = classroomsData.map((classroom) => ({
-  //   classroomId: classroom.classroomId,
-  //   classroomName: classroom.classroomName,
-  //   classroomCountryCode: classroom.classroomCountryCode,
-  //   villageId: classroom.villageId,
-  //   villageName: classroom.villageName,
-  //   commentsCount: parseInt(classroom.commentsCount, 10),
-  //   videosCount: parseInt(classroom.videosCount, 10),
-  //   userFirstName: classroom.userFirstname,
-  //   userLastName: classroom.userLastname,
-  //   activities: classroom.activitiesCount
-  //     ? classroom.activitiesCount.flatMap((phaseObj: { activities: any[]; phase: string }) =>
-  //         phaseObj.activities.map((activity) => ({
-  //           count: activity.count,
-  //           type: activity.type,
-  //           phase: phaseObj.phase,
-  //         })),
-  //       )
-  //     : [],
-  // }));
-
-  // const result = { data: [...transformedData], phases: normalizeForCountry(transformedData) };
-
   res.sendJSON(classroomsData);
+});
+
+statisticsController.get({ path: '/classrooms-engagement-level' }, async (req, res) => {
+  const villageId = req.query.villageId ? parseInt(req.query.villageId as string) : null;
+  const countryCode = req.query.countryCode ? (req.query.countryCode as string) : null;
+
+  const conditionOnVillageId = villageId ? ` AND cla.villageId = ${villageId}` : '';
+  const conditionOnCountryCode = countryCode ? ` AND cla.countryCode = '${countryCode}'` : '';
+
+  const additionalCondition: string = conditionOnVillageId || conditionOnCountryCode;
+  const queryBuilder = AppDataSource.createQueryBuilder()
+    .select('statusCounts.status', 'status')
+    .addSelect('COUNT(*)', 'statusCount')
+    .from((subQb) => {
+      return subQb
+        .select('u.id', 'userId')
+        .addSelect('cla.id', 'classroomId')
+        .addSelect(
+          `
+            CASE
+              WHEN MAX(sess.date) IS NULL THEN 'absent'
+              WHEN MAX(sess.date) < (NOW() - INTERVAL 21 DAY) THEN 'ghost'
+              WHEN MAX(act.publishDate) >= (NOW() - INTERVAL 21 DAY)
+                OR MAX(com.createDate) >= (NOW() - INTERVAL 21 DAY) THEN 'active'
+              ELSE 'observer'
+            END
+          `,
+          'status',
+        )
+        .from(User, 'u')
+        .leftJoin(AnalyticSession, 'sess', 'u.id = sess.userId')
+        .leftJoin(Activity, 'act', 'u.id = act.userId AND act.status = 0')
+        .leftJoin(Comment, 'com', 'u.id = com.userId')
+        .innerJoin(Classroom, 'cla', `u.id = cla.userId${additionalCondition}`)
+        .groupBy('u.id')
+        .addGroupBy('cla.id');
+    }, 'statusCounts')
+    .groupBy('statusCounts.status');
+
+  const classroomEngagementLevels = (
+    await queryBuilder.getRawMany<{
+      status: EngagementStatus;
+      statusCount: string;
+    }>()
+  ).map((engagementLevel) => ({
+    ...engagementLevel,
+    statusCount: Number(engagementLevel.statusCount),
+  }));
+
+  res.sendJSON(classroomEngagementLevels);
 });
 
 statisticsController.get({ path: '/one-village' }, async (req, res) => {
