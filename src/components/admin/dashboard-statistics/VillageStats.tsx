@@ -27,7 +27,7 @@ import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
 import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
-import type { ClassroomsStats, OneVillageTableRow, SessionsStats } from 'types/statistics.type';
+import type { OneVillageTableRow } from 'types/statistics.type';
 
 const VillageStats = () => {
   const data = { data: [{ label: 'test1', id: 1, value: 1 }] };
@@ -44,8 +44,8 @@ const VillageStats = () => {
   });
 
   const { data: villageStatistics } = useGetVillagesStats(selectedVillage, selectedPhase);
-  const statisticsClassrooms = useStatisticsClassrooms(null, selectedCountry, null) as ClassroomsStats;
-  const statisticsSessions: SessionsStats | Record<string, never> = useStatisticsSessions(Number(selectedVillage), null, null, selectedPhase);
+  const { data: classroomsStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
+  const { data: sessionsStatistics } = useStatisticsSessions(selectedVillage, null, null, selectedPhase);
 
   const videoCount = getVideoCount(villageStatistics);
   const commentCount = getCommentCount(villageStatistics);
@@ -105,23 +105,17 @@ const VillageStats = () => {
             <ClassroomsToMonitorTable villageId={selectedVillage} countryId={selectedCountry} />
             <br />
             <div className="statistic--container">
-              <StatsCard data={statisticsSessions.registeredClassroomsCount ? statisticsSessions.registeredClassroomsCount : 0}>
-                Nombre de classes inscrites
-              </StatsCard>
-              <StatsCard data={statisticsSessions.connectedClassroomsCount ? statisticsSessions.connectedClassroomsCount : 0}>
-                Nombre de classes connectées
-              </StatsCard>
-              <StatsCard data={statisticsSessions.contributedClassroomsCount ? statisticsSessions.contributedClassroomsCount : 0}>
-                Nombre de classes contributrices
-              </StatsCard>
+              <StatsCard data={sessionsStatistics.registeredClassroomsCount ?? 0}>Nombre de classes inscrites</StatsCard>
+              <StatsCard data={sessionsStatistics.connectedClassroomsCount ?? 0}>Nombre de classes connectées</StatsCard>
+              <StatsCard data={sessionsStatistics.contributedClassroomsCount ?? 0}>Nombre de classes contributrices</StatsCard>
             </div>
             <div className="statistic__average--container">
               <AverageStatsCard
                 data={{
-                  min: statisticsSessions.minDuration ? Math.floor(statisticsSessions.minDuration / 60) : 0,
-                  max: statisticsSessions.maxDuration ? Math.floor(statisticsSessions.maxDuration / 60) : 0,
-                  average: statisticsSessions.averageDuration ? Math.floor(statisticsSessions.averageDuration / 60) : 0,
-                  median: statisticsSessions.medianDuration ? Math.floor(statisticsSessions.medianDuration / 60) : 0,
+                  min: sessionsStatistics.minDuration ? Math.floor(sessionsStatistics.minDuration / 60) : 0,
+                  max: sessionsStatistics.maxDuration ? Math.floor(sessionsStatistics.maxDuration / 60) : 0,
+                  average: sessionsStatistics.averageDuration ? Math.floor(sessionsStatistics.averageDuration / 60) : 0,
+                  median: sessionsStatistics.medianDuration ? Math.floor(sessionsStatistics.medianDuration / 60) : 0,
                 }}
                 unit="min"
                 icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}
@@ -130,10 +124,10 @@ const VillageStats = () => {
               </AverageStatsCard>
               <AverageStatsCard
                 data={{
-                  min: statisticsSessions.minConnections ? statisticsSessions.minConnections : 0,
-                  max: statisticsSessions.maxConnections ? statisticsSessions.maxConnections : 0,
-                  average: statisticsSessions.averageConnections ? statisticsSessions.averageConnections : 0,
-                  median: statisticsSessions.medianConnections ? statisticsSessions.medianConnections : 0,
+                  min: sessionsStatistics.minConnections ?? 0,
+                  max: sessionsStatistics.maxConnections ?? 0,
+                  average: sessionsStatistics.averageConnections ?? 0,
+                  median: sessionsStatistics.medianConnections ?? 0,
                 }}
                 icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
               >
@@ -148,16 +142,16 @@ const VillageStats = () => {
               <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
               <ClassesContributionCard />
             </div>
-            {statisticsClassrooms && statisticsClassrooms.phases && (
+            {classroomsStatistics?.phases && (
               <div className="statistic__phase--container">
                 <div>
-                  <PhaseDetails phase={1} data={statisticsClassrooms.phases[0].data} />
+                  <PhaseDetails phase={1} data={classroomsStatistics.phases[0].data} />
                 </div>
                 <div className="statistic__phase">
-                  <PhaseDetails phase={2} data={statisticsClassrooms.phases[1].data} />
+                  <PhaseDetails phase={2} data={classroomsStatistics.phases[1].data} />
                 </div>
                 <div className="statistic__phase">
-                  <PhaseDetails phase={3} data={statisticsClassrooms.phases[1].data} />
+                  <PhaseDetails phase={3} data={classroomsStatistics.phases[1].data} />
                 </div>
               </div>
             )}

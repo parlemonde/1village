@@ -12,17 +12,16 @@ import { useStatisticsClassrooms } from 'src/services/useStatistics';
 import type { VillageInteractionsActivity } from 'types/analytics/village-interactions-activity';
 import { VillageInteractionsStatus } from 'types/analytics/village-interactions-activity';
 import { DashboardType } from 'types/dashboard.type';
-import type { ClassroomsStats } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
 const GlobalStats = () => {
   const [selectedPhase, setSelectedPhase] = useState<number>();
-  const classroomStatistics = useStatisticsClassrooms(null, null, null) as ClassroomsStats;
 
   const [mapData, setMapData] = useState<VillageInteractionsActivity[]>([]);
   const [loadingMapData, setLoadingMapData] = useState<boolean>(true);
 
   const { data: sessionStatistics, isLoading: isLoadingSessionStats } = useGetSessionsStats(selectedPhase);
+  const { data: classroomsStatistics, isLoading: isLoadingClassroomStatistics } = useStatisticsClassrooms(null, null, null);
   const { data: oneVillageStatistics, isLoading: isLoadingWebsiteStats } = useGetOneVillageStats();
 
   // On mocke l'asynchronisme en attendant d'avoir l'appel serveur censé retourner les interactions des villages-mondes
@@ -97,14 +96,16 @@ const GlobalStats = () => {
           <ActivityTable activityTableData={mapData} />
         </>
       )}
-      {isLoadingSessionStats || isLoadingWebsiteStats ? (
+
+      {isLoadingClassroomStatistics || isLoadingSessionStats || isLoadingWebsiteStats ? (
         <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
       ) : (
+        classroomsStatistics &&
         sessionStatistics &&
         oneVillageStatistics && (
           <DashboardSummary
             dashboardType={DashboardType.ONE_VILLAGE_PANEL}
-            data={{ ...classroomStatistics, ...sessionStatistics, ...oneVillageStatistics, barChartData: mockDataByMonth }}
+            data={{ ...classroomsStatistics, ...sessionStatistics, ...oneVillageStatistics, barChartData: mockDataByMonth }}
           />
         )
       )}
