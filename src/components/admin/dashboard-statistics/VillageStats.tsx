@@ -26,21 +26,12 @@ import styles from './styles/charts.module.css';
 import ClassroomsToMonitorTable from './tables/ClassroomsToMonitorTable';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
-import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
+import { useGetClassroomsEngagementLevel, useGetVillagesStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
-import type { EngagementLevel, OneVillageTableRow } from 'types/statistics.type';
-import { EngagementStatus } from 'types/statistics.type';
+import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
 const VillageStats = () => {
-  // TODO : delete when call to backend is implemented
-  const mockEngagementLevelData: EngagementLevel[] = [
-    { statusCount: 10, status: EngagementStatus.ABSENT },
-    { statusCount: 15, status: EngagementStatus.GHOST },
-    { statusCount: 20, status: EngagementStatus.OBSERVER },
-    { statusCount: 30, status: EngagementStatus.ACTIVE },
-  ];
-
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedPhase, setSelectedPhase] = useState<number>();
   const [selectedCountry, setSelectedCountry] = useState<string>();
@@ -60,6 +51,9 @@ const VillageStats = () => {
   const { data: villageStatistics, isLoading: isLoadingVillageStatistics } = useGetVillagesStats(selectedVillage, selectedPhase);
   const { data: classroomsStatistics, isLoading: isLoadingClassroomsStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
   const { data: sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(selectedVillage, null, null, selectedPhase);
+  const { data: engagementLevelStatistics, isLoading: isLoadingEngagementLevelStatistics } = useGetClassroomsEngagementLevel({
+    villageId: selectedVillage,
+  });
 
   const videoCount = getVideoCount(villageStatistics);
   const commentCount = getCommentCount(villageStatistics);
@@ -123,7 +117,7 @@ const VillageStats = () => {
           ) : (
             firstChartData && secondChartData && <DualBarChart firstTable={firstChartData} secondTable={secondChartData} />
           )}
-          {isLoadingClassroomsStatistics || isLoadingSessionsStatistics || isLoadingVillageStatistics ? (
+          {isLoadingClassroomsStatistics || isLoadingSessionsStatistics || isLoadingVillageStatistics || isLoadingEngagementLevelStatistics ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
           ) : (
             <>
@@ -165,7 +159,7 @@ const VillageStats = () => {
                   </AverageStatsCard>
                 </div>
                 <div className="statistic__average--container">
-                  <PieCharts engagementLevelData={mockEngagementLevelData} />
+                  {engagementLevelStatistics && <PieCharts engagementLevelData={engagementLevelStatistics} />}
                   <BarCharts dataByMonth={mockDataByMonth} title="Évolution des connexions" />
                 </div>
                 <div className="statistic__average--container">
