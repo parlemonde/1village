@@ -17,15 +17,6 @@ import ClassroomsToMonitorTable from '../tables/ClassroomsToMonitorTable';
 import { AverageStatsProcessingMethod, DashboardType } from 'types/dashboard.type';
 import type { DashboardSummaryData } from 'types/dashboard.type';
 
-// To delete when pie chart data is done
-const mockPieChartData = {
-  data: [
-    { id: 0, value: 10, label: 'series A' },
-    { id: 1, value: 15, label: 'series B' },
-    { id: 2, value: 20, label: 'series C' },
-  ],
-};
-
 const ENGAGEMENT_BAR_CHAR_TITLE = 'Évolution des connexions';
 const CONTRIBUTION_BAR_CHAR_TITLE = 'Contribution des classes';
 
@@ -36,38 +27,38 @@ export interface DashboardClassroomTabProps {
   selectedPhase?: number;
 }
 
-const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedPhase = 0 }: DashboardClassroomTabProps) => {
+const DashboardClassroomTab = ({ data: dashboardSummaryData, dashboardType, selectedCountry, selectedPhase = 0 }: DashboardClassroomTabProps) => {
   const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
     1: false,
     2: false,
     3: false,
   });
 
-  const videoCount = getVideoCount(data);
-  const commentCount = getCommentCount(data);
-  const publicationCount = getPublicationCount(data);
+  const videoCount = getVideoCount(dashboardSummaryData);
+  const commentCount = getCommentCount(dashboardSummaryData);
+  const publicationCount = getPublicationCount(dashboardSummaryData);
   return (
     <>
       <ClassroomsToMonitorTable countryId={selectedCountry} />
       <br />
       <Grid container spacing={4} direction={{ xs: 'column', md: 'row' }}>
         <Grid item xs={12} lg={4}>
-          <StatsCard data={data.registeredClassroomsCount}>Nombre de classes inscrites</StatsCard>
+          <StatsCard data={dashboardSummaryData.registeredClassroomsCount}>Nombre de classes inscrites</StatsCard>
         </Grid>
         <Grid item xs={12} lg={4}>
-          <StatsCard data={data.connectedClassroomsCount}>Nombre de classes connectées</StatsCard>
+          <StatsCard data={dashboardSummaryData.connectedClassroomsCount}>Nombre de classes connectées</StatsCard>
         </Grid>
         <Grid item xs={12} lg={4}>
-          <StatsCard data={data.contributedClassroomsCount}>Nombre de classes contributrices</StatsCard>
+          <StatsCard data={dashboardSummaryData.contributedClassroomsCount}>Nombre de classes contributrices</StatsCard>
         </Grid>
 
         <Grid item xs={12} lg={6}>
           <AverageStatsCard
             data={{
-              min: data.minDuration,
-              max: data.maxDuration,
-              average: data.averageDuration,
-              median: data.medianDuration,
+              min: dashboardSummaryData.minDuration,
+              max: dashboardSummaryData.maxDuration,
+              average: dashboardSummaryData.averageDuration,
+              median: dashboardSummaryData.medianDuration,
             }}
             unit="min"
             processingMethod={AverageStatsProcessingMethod.BY_MIN}
@@ -79,10 +70,10 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
         <Grid item xs={12} lg={6}>
           <AverageStatsCard
             data={{
-              min: data.minConnections,
-              max: data.maxConnections,
-              average: data.averageConnections,
-              median: data.medianConnections,
+              min: dashboardSummaryData.minConnections,
+              max: dashboardSummaryData.maxConnections,
+              average: dashboardSummaryData.averageConnections,
+              median: dashboardSummaryData.medianConnections,
             }}
             icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
           >
@@ -91,15 +82,18 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
         </Grid>
         {dashboardType === DashboardType.ONE_VILLAGE_PANEL ? (
           <Grid item xs={12} lg={12}>
-            <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+            <BarCharts className={styles.midContainer} dataByMonth={dashboardSummaryData.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
           </Grid>
         ) : (
           <>
+            {dashboardSummaryData.pieChartData && (
+              <Grid item xs={12} lg={6}>
+                <PieCharts className={styles.minContainer} pieChartData={dashboardSummaryData.pieChartData} />
+              </Grid>
+            )}
+
             <Grid item xs={12} lg={6}>
-              <PieCharts className={styles.minContainer} pieChartData={mockPieChartData} />
-            </Grid>
-            <Grid item xs={12} lg={6}>
-              <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+              <BarCharts className={styles.midContainer} dataByMonth={dashboardSummaryData.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
             </Grid>
           </>
         )}
@@ -107,20 +101,20 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
           <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
         </Grid>
         <Grid item xs={12} lg={12}>
-          <BarCharts dataByMonth={data.barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
+          <BarCharts dataByMonth={dashboardSummaryData.barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
         </Grid>
 
-        {data && data.phases && (
+        {dashboardSummaryData?.phases && (
           <Grid item xs={12} lg={12}>
             <div className="statistic__phase--container">
               <div>
-                <PhaseDetails phase={1} data={data.phases[0].data} />
+                <PhaseDetails phase={1} data={dashboardSummaryData.phases[0].data} />
               </div>
               <div className="statistic__phase">
-                <PhaseDetails phase={2} data={data.phases[1].data} />
+                <PhaseDetails phase={2} data={dashboardSummaryData.phases[1].data} />
               </div>
               <div className="statistic__phase">
-                <PhaseDetails phase={3} data={data.phases[1].data} />
+                <PhaseDetails phase={3} data={dashboardSummaryData.phases[1].data} />
               </div>
             </div>
           </Grid>
