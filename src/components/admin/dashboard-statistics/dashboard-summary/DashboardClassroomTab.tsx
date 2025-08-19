@@ -10,6 +10,7 @@ import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from '../cards/StatsCard/StatsCard';
 import BarCharts from '../charts/BarCharts';
+import ContributionBarChart from '../charts/ContributionBarChart';
 import PieCharts from '../charts/PieCharts';
 import PhaseDetails from '../menu/PhaseDetails';
 import styles from '../styles/charts.module.css';
@@ -23,6 +24,16 @@ const mockPieChartData = {
     { id: 0, value: 10, label: 'series A' },
     { id: 1, value: 15, label: 'series B' },
     { id: 2, value: 20, label: 'series C' },
+  ],
+};
+
+// To delete when pie chart data is done
+const mockContributionBarChartData = {
+  total: 3,
+  data: [
+    { step: 'Phase 1', contributions: 2 },
+    { step: 'Phase 2', contributions: 1 },
+    { step: 'Phase 3', contributions: 1 },
   ],
 };
 
@@ -107,7 +118,7 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
           <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
         </Grid>
         <Grid item xs={12} lg={12}>
-          <BarCharts dataByMonth={data.barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
+          <ContributionBarChart dataByStep={mockContributionBarChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
         </Grid>
 
         {data && data.phases && (
