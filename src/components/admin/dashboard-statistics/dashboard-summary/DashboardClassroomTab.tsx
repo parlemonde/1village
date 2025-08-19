@@ -10,6 +10,7 @@ import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from '../cards/StatsCard/StatsCard';
 import BarCharts from '../charts/BarCharts';
+import ContributionBarChart from '../charts/ContributionBarChart';
 import PieCharts from '../charts/PieCharts';
 import PhaseDetails from '../menu/PhaseDetails';
 import styles from '../styles/charts.module.css';
@@ -97,11 +98,13 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
             </Grid>
           </>
         )}
-        <Grid item xs={12} lg={12}>
-          <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
-        </Grid>
-        <Grid item xs={12} lg={12}>
-          <BarCharts dataByMonth={dashboardSummaryData.barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
+        <Grid container spacing={2} alignItems="stretch" style={{ paddingLeft: '32px', paddingTop: '32px', display: 'flex' }}>
+          <Grid item xs={12} md={6} style={{ display: 'flex' }}>
+            <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
+          </Grid>
+          <Grid item xs={12} md={6} style={{ paddingLeft: '32px', display: 'flex' }}>
+            <ContributionBarChart dataByStep={dashboardSummaryData.contributionsBarChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
+          </Grid>
         </Grid>
 
         {dashboardSummaryData?.phases && (

@@ -5,6 +5,16 @@ export enum DashboardSummaryTab {
   FAMILY = 2,
 }
 
+export interface ContributionBarChartData {
+  total: number;
+  dataBySteps: ContributionBySteps[];
+}
+
+export interface ContributionBySteps {
+  step: string;
+  contributionCount: number;
+}
+
 export interface BarChartData {
   value: number;
   isSelected: boolean;

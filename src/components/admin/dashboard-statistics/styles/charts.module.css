@@ -5,6 +5,17 @@
   line-height: 27px;
 }
 
+.verticalTitle {
+  writing-mode: vertical-rl; /* vertical-rl ou vertical-lr selon la direction voulue */
+  transform: rotate(180deg); /* Pour lire de bas en haut, sinon à enlever */
+  margin-right: 1rem; /* espace entre le titre et le graphe */
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 27px;
+  display: flex;
+  align-items: center;
+}
+
 .filtersContainer {
   display: flex;
   padding: 5% 0;
@@ -74,6 +85,18 @@
   border-radius: 20px;
 }
 
+.contributionBarContainer {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  align-items: center;
+  padding: .5rem 1rem;
+  background-color: #f3f3f3;
+  width: 100%;
+  max-height: 318px;
+  border-radius: 20px;
+}
+
 .engagementContainer {
   display: flex;
   flex-direction: row;
@@ -124,6 +147,13 @@
 
 .chart {
   height: 350px;
+}
+
+.contributionChart {
+  height: 350px;
+  flex: 1;                /* pour prendre tout l'espace restant */
+  display: flex;
+  align-items: center;
 }
 
 .minContainer {
