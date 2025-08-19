@@ -39,6 +39,9 @@ const Users = () => {
   const { deleteUser } = useUserRequests();
   const [deleteIndex, setDeleteIndex] = React.useState(-1);
 
+  const userIsAdminOrSad = !!(user && [UserType.SUPER_ADMIN, UserType.ADMIN].includes(user.type));
+  const userIsAdminSadOrMediator = !!(user && [UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR].includes(user.type));
+
   const TABLE_ENTRIES_BY_PAGE = 5;
 
   const filteredUsers = useMemo(
@@ -139,20 +142,20 @@ const Users = () => {
       >
         Modifier
       </MenuItem>
-      <MenuItem aria-label="analyse" onClick={() => {}} disabled>
-        Analyser
-      </MenuItem>
-      <MenuItem aria-label="unblock" onClick={() => {}} disabled>
-        Débloquer
-      </MenuItem>
-      <MenuItem
-        aria-label="delete"
-        onClick={() => {
-          setDeleteIndex(users.findIndex((u) => u.id === id));
-        }}
-      >
-        Supprimer
-      </MenuItem>
+      {userIsAdminSadOrMediator && <MenuItem aria-label="analyse">Analyser</MenuItem>}
+      {userIsAdminOrSad && (
+        <>
+          <MenuItem aria-label="unblock">Débloquer</MenuItem>
+          <MenuItem
+            aria-label="delete"
+            onClick={() => {
+              setDeleteIndex(users.findIndex((u) => u.id === id));
+            }}
+          >
+            Supprimer
+          </MenuItem>
+        </>
+      )}
     </OneVillageTableActionMenu>
   );
 
@@ -167,8 +170,7 @@ const Users = () => {
       <AdminTile
         title="Il y a ici la liste complète des utilisateurs de 1Village"
         toolbarButton={
-          user &&
-          (user.type === UserType.SUPER_ADMIN || user.type === UserType.ADMIN) && (
+          userIsAdminOrSad && (
             <Box style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', margin: '16px 0' }}>
               <Button className="like-button blue" component="a" onClick={handleExportToCSV} disabled={filteredUsers.length === 0}>
                 Exporter en CSV
