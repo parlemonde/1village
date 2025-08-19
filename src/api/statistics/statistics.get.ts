@@ -134,7 +134,7 @@ async function getClassroomsEngagementStatus(engagementStatusParams: EngagementS
 
 export function useGetClassroomsEngagementStatus(engagementStatusParams: EngagementStatusParams) {
   return useQuery(
-    ['classrooms-engagement-level-stats', engagementStatusParams.countryCode, engagementStatusParams.villageId],
+    ['classrooms-engagement-status-stats', engagementStatusParams.countryCode, engagementStatusParams.villageId],
     () => getClassroomsEngagementStatus(engagementStatusParams),
     {
       enabled: !!engagementStatusParams.countryCode || !!engagementStatusParams.villageId,
