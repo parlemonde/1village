@@ -28,16 +28,17 @@ import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
 import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
-import type { PieChartDataItem } from 'types/dashboard.type';
-import type { OneVillageTableRow } from 'types/statistics.type';
+import type { EngagementLevel, OneVillageTableRow } from 'types/statistics.type';
+import { EngagementStatus } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
 const VillageStats = () => {
-  const mockPieChartData: PieChartDataItem[] = [
-    { value: 10, label: 'Absentes', color: '#D11818' },
-    { value: 15, label: 'Fantômes', color: '#FFD678' },
-    { value: 20, label: 'Observatrices', color: '#6082FC' },
-    { value: 30, label: 'Actives', color: '#4CC64A' },
+  // TODO : delete when call to backend is implemented
+  const mockEngagementLevelData: EngagementLevel[] = [
+    { statusCount: 10, status: EngagementStatus.ABSENT },
+    { statusCount: 15, status: EngagementStatus.GHOST },
+    { statusCount: 20, status: EngagementStatus.OBSERVER },
+    { statusCount: 30, status: EngagementStatus.ACTIVE },
   ];
 
   const [selectedTab, setSelectedTab] = useState(0);
@@ -164,7 +165,7 @@ const VillageStats = () => {
                   </AverageStatsCard>
                 </div>
                 <div className="statistic__average--container">
-                  <PieCharts pieChartData={mockPieChartData} />
+                  <PieCharts engagementLevelData={mockEngagementLevelData} />
                   <BarCharts dataByMonth={mockDataByMonth} title="Évolution des connexions" />
                 </div>
                 <div className="statistic__average--container">

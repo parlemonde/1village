@@ -6,25 +6,36 @@ import { PieChart } from '@mui/x-charts/PieChart';
 
 import styles from '../styles/charts.module.css';
 import type { PieChartDataItem } from 'types/dashboard.type';
+import type { EngagementLevel } from 'types/statistics.type';
+import { EngagementStatus } from 'types/statistics.type';
 
-const RED = '#D11818';
-const YELLOW = '#FFD678';
-const BLUE = '#6082FC';
-const GREEN = '#4CC64A';
+export const RED = '#D11818';
+export const YELLOW = '#FFD678';
+export const BLUE = '#6082FC';
+export const GREEN = '#4CC64A';
+
+const engagementLevelToPieChartItem: Record<EngagementStatus, (engagementLevel: EngagementLevel) => PieChartDataItem> = {
+  [EngagementStatus.ABSENT]: (engagementLevel) => ({ value: engagementLevel.statusCount, label: 'Absentes', color: RED }),
+  [EngagementStatus.GHOST]: (engagementLevel) => ({ value: engagementLevel.statusCount, label: 'Fantômes', color: YELLOW }),
+  [EngagementStatus.OBSERVER]: (engagementLevel) => ({ value: engagementLevel.statusCount, label: 'Observatrices', color: BLUE }),
+  [EngagementStatus.ACTIVE]: (engagementLevel) => ({ value: engagementLevel.statusCount, label: 'Actives', color: GREEN }),
+};
 
 interface Props {
-  pieChartData: PieChartDataItem[];
+  engagementLevelData: EngagementLevel[];
   className?: string;
 }
 
-const PieCharts: React.FC<Props> = ({ pieChartData, className }) => {
+const PieCharts: React.FC<Props> = ({ engagementLevelData, className }) => {
+  const pieChartData: PieChartDataItem[] = formatEngagementLevelForPieChart(engagementLevelData);
+
   return (
     <div className={classNames(styles.pieContainer, className)}>
       <div className={styles.title}>{"Niveau d'engagement"}</div>
       <PieChart
         colors={[RED, YELLOW, BLUE, GREEN]}
         series={[{ data: pieChartData }]}
-        width={400}
+        width={300}
         height={200}
         slotProps={{
           legend: { hidden: true },
@@ -44,3 +55,7 @@ const PieCharts: React.FC<Props> = ({ pieChartData, className }) => {
 };
 
 export default PieCharts;
+
+function formatEngagementLevelForPieChart(engagementLevelData: EngagementLevel[]): PieChartDataItem[] {
+  return engagementLevelData.map((engagementLevel) => engagementLevelToPieChartItem[engagementLevel.status](engagementLevel));
+}

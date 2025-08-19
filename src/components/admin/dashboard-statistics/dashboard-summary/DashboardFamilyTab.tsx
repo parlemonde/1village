@@ -18,11 +18,11 @@ import { AverageStatsProcessingMethod } from 'types/dashboard.type';
 const ENGAGEMENT_BAR_CHAR_TITLE = 'Évolution des connexions';
 
 export interface DashboardFamilyTabProps {
-  data: DashboardSummaryData;
+  dashboardSummaryData: DashboardSummaryData;
 }
 
-const DashboardFamilyTab = ({ data }: DashboardFamilyTabProps) => {
-  const familyData = data.family;
+const DashboardFamilyTab = ({ dashboardSummaryData }: DashboardFamilyTabProps) => {
+  const familyData = dashboardSummaryData.family;
 
   if (!familyData) {
     return null;

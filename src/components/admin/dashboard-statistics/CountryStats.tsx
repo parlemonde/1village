@@ -15,15 +15,16 @@ import { useGetCountriesStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import type { CountryStat } from 'types/analytics/country-stat';
 import type { VillageListItem } from 'types/analytics/village-list-item';
-import type { PieChartDataItem } from 'types/dashboard.type';
+import type { EngagementLevel } from 'types/statistics.type';
+import { EngagementStatus } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
 // TODO : delete when call to backend is implemented
-const mockPieChartData: PieChartDataItem[] = [
-  { value: 10, label: 'Absentes', color: '#D11818' },
-  { value: 15, label: 'Fantômes', color: '#FFD678' },
-  { value: 20, label: 'Observatrices', color: '#6082FC' },
-  { value: 30, label: 'Actives', color: '#4CC64A' },
+const mockEngagementLevelData: EngagementLevel[] = [
+  { statusCount: 10, status: EngagementStatus.ABSENT },
+  { statusCount: 15, status: EngagementStatus.GHOST },
+  { statusCount: 20, status: EngagementStatus.OBSERVER },
+  { statusCount: 30, status: EngagementStatus.ACTIVE },
 ];
 
 const CountryStats = () => {
@@ -106,12 +107,12 @@ const CountryStats = () => {
             sessionsStatistics &&
             familyStatistics && (
               <DashboardSummary
-                data={{
+                dashboardSummaryData={{
                   ...classroomsStatistics,
                   ...sessionsStatistics,
                   ...familyStatistics,
                   barChartData: mockDataByMonth,
-                  pieChartData: mockPieChartData,
+                  engagementLevelData: mockEngagementLevelData,
                 }}
                 selectedCountry={selectedCountry}
                 selectedPhase={selectedPhase}
