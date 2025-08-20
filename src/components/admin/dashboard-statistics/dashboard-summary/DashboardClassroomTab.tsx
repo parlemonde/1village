@@ -27,16 +27,6 @@ const mockPieChartData = {
   ],
 };
 
-// To delete when pie chart data is done
-const mockContributionBarChartData = {
-  total: 3,
-  data: [
-    { step: 'Phase 1', contributions: 2 },
-    { step: 'Phase 2', contributions: 1 },
-    { step: 'Phase 3', contributions: 1 },
-  ],
-};
-
 const ENGAGEMENT_BAR_CHAR_TITLE = 'Évolution des connexions';
 const CONTRIBUTION_BAR_CHAR_TITLE = 'Contribution des classes';
 
@@ -118,7 +108,7 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
           <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
         </Grid>
         <Grid item xs={12} lg={12}>
-          <ContributionBarChart dataByStep={mockContributionBarChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
+          <ContributionBarChart dataByStep={data.contributionsBarChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
         </Grid>
 
         {data && data.phases && (
