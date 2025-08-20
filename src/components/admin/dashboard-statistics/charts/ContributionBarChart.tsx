@@ -1,62 +1,48 @@
 import classNames from 'classnames';
 import React from 'react';
-
-import { BarChart } from '@mui/x-charts/BarChart';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 import styles from '../styles/charts.module.css';
+import type { ContributionBarChartData, ContributionBySteps } from 'types/dashboard.type';
 
 interface Props {
-  dataByStep: { total: number; data: { step: string; contributions: number }[] };
+  dataByStep: ContributionBarChartData;
   title?: string;
   className?: string;
 }
 
 const ContributionBarChart: React.FC<Props> = ({ dataByStep, title, className }) => {
-  const dataWithPercent = dataByStep.data.map((d) => ({
+  const dataWithPercent = dataByStep.dataBySteps.map((d: ContributionBySteps) => ({
     ...d,
-    percent: Math.round((d.contributions / dataByStep.total) * 100), // arrondi à l'entier
+    percent: Math.round((d.contributions / dataByStep.total) * 100),
   }));
 
   return (
     <div className={classNames(styles.contributionBarContainer, className)}>
       {title && <div className={styles.verticalTitle}>{title}</div>}
       <div className={styles.contributionChart}>
-        <BarChart
-          sx={{
-            '& .MuiChartsAxis-bottom .MuiChartsAxis-line': {
-              strokeWidth: 0,
-            },
-            '& .MuiChartsAxis-left .MuiChartsAxis-line': {
-              strokeWidth: 0,
-            },
-          }}
-          xAxis={[
-            {
-              scaleType: 'band',
-              data: dataWithPercent.map((data) => data.step),
-              tickSize: 0,
-            },
-          ]}
-          yAxis={[
-            {
-              tickSize: 0,
-              valueFormatter: (value) => `${value}%`, // <-- Ajout ici
-              min: 0,
-              max: 100,
-            },
-          ]}
-          series={[
-            {
-              data: dataWithPercent.map((data) => data.percent),
-              valueFormatter: (value) => `${value}%`,
-            },
-          ]}
-          slotProps={{
-            bar: {
-              clipPath: `inset(0px round 40px)`,
-            },
-          }}
-        />
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart
+            data={dataWithPercent}
+            margin={{ top: 20, right: 10, left: 10, bottom: 0 }}
+            barCategoryGap="35%" // espace entre les barres
+          >
+            <XAxis
+              dataKey="step"
+              tick={{ fontSize: 12 }}
+              interval={0} // force chaque label à s'afficher
+              height={55} // adapte selon besoin
+              axisLine={false}
+            />
+            <YAxis domain={[0, 100]} tickFormatter={(value) => `${value}%`} axisLine={false} width={50} />
+            <Tooltip formatter={(value) => `${value}%`} labelFormatter={(label) => `${label}`} cursor={{ fill: '#f3f3f3' }} />
+            <Bar dataKey="percent" radius={[20, 20, 20, 20]}>
+              {dataWithPercent.map((index) => (
+                <Cell key={`cell-${index}`} fill="#69b3f0ff" />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
