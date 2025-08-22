@@ -7,6 +7,7 @@ import { Box, Tab, Tabs } from '@mui/material';
 import { OneVillageTable } from '../OneVillageTable';
 import { getCommentCount, getPublicationCount, getVideoCount } from '../StatisticsUtils';
 import CountryActivityPhaseAccordion from './CountryActivityPhaseAccordion';
+import EntityEngagementStatus, { EntityType } from './EntityEngagementStatus';
 import Loader, { AnalyticsDataType } from './Loader';
 import TabPanel from './TabPanel';
 import TeamCommentCard from './TeamCommentCard';
@@ -25,6 +26,7 @@ import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
 import { useGetClassroomsStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';
+import { EngagementStatus } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
 const BarChartTitle = 'Evolution des connexions';
@@ -88,6 +90,7 @@ const ClassroomStats = () => {
       />
       {selectedCountry && selectedVillage && selectedClassroom ? (
         <Box mt={2}>
+          <EntityEngagementStatus entityType={EntityType.CLASSROOM} entityEngagementStatus={EngagementStatus.ABSENT} />
           {loadingClassroomDetails ? (
             <Loader analyticsDataType={AnalyticsDataType.GRAPHS} />
           ) : (
