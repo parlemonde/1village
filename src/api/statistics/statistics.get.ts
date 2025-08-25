@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { SessionsStats, VillageStats, ClassroomToMonitor, EngagementLevelParams, EngagementLevel } from 'types/statistics.type';
+import type { SessionsStats, VillageStats, ClassroomToMonitor, EngagementStatusParams, EngagementStatusData } from 'types/statistics.type';
 
 async function getSessionsStats(phase?: number): Promise<SessionsStats> {
   return (
@@ -110,34 +110,34 @@ export const useGetClassroomsToMonitorStats = (countryId?: string, villageId?: n
   return useQuery(['classrooms-to_monitor-stats', countryId, villageId], () => getClassroomsToMonitor(countryId, villageId));
 };
 
-function getClassroomsEngagementLevelUrl(engagementLevelParams: EngagementLevelParams): string {
-  let baseClassroomsURL = `/statistics/classrooms-engagement-level`;
-  if (engagementLevelParams.countryCode) {
-    baseClassroomsURL = `${baseClassroomsURL}?&countryCode=${engagementLevelParams.countryCode}`;
+function getClassroomsEngagementStatusUrl(engagementStatusParams: EngagementStatusParams): string {
+  let baseClassroomsURL = `/statistics/classrooms-engagement-status`;
+  if (engagementStatusParams.countryCode) {
+    baseClassroomsURL = `${baseClassroomsURL}?&countryCode=${engagementStatusParams.countryCode}`;
   }
-  if (engagementLevelParams.villageId) {
-    baseClassroomsURL = `${baseClassroomsURL}?&villageId=${engagementLevelParams.villageId}`;
+  if (engagementStatusParams.villageId) {
+    baseClassroomsURL = `${baseClassroomsURL}?&villageId=${engagementStatusParams.villageId}`;
   }
 
   return baseClassroomsURL;
 }
 
-async function getClassroomsEngagementLevel(engagementLevelParams: EngagementLevelParams): Promise<EngagementLevel[]> {
+async function getClassroomsEngagementStatus(engagementStatusParams: EngagementStatusParams): Promise<EngagementStatusData[]> {
   return (
     await axiosRequest({
       method: 'GET',
       baseURL: '/api',
-      url: getClassroomsEngagementLevelUrl(engagementLevelParams),
+      url: getClassroomsEngagementStatusUrl(engagementStatusParams),
     })
   ).data;
 }
 
-export function useGetClassroomsEngagementLevel(engagementLevelParams: EngagementLevelParams) {
+export function useGetClassroomsEngagementStatus(engagementStatusParams: EngagementStatusParams) {
   return useQuery(
-    ['classrooms-engagement-level-stats', engagementLevelParams.countryCode, engagementLevelParams.villageId],
-    () => getClassroomsEngagementLevel(engagementLevelParams),
+    ['classrooms-engagement-level-stats', engagementStatusParams.countryCode, engagementStatusParams.villageId],
+    () => getClassroomsEngagementStatus(engagementStatusParams),
     {
-      enabled: !!engagementLevelParams.countryCode || !!engagementLevelParams.villageId,
+      enabled: !!engagementStatusParams.countryCode || !!engagementStatusParams.villageId,
     },
   );
 }

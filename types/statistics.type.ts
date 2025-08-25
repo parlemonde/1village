@@ -173,12 +173,12 @@ export interface ClassroomToMonitor {
   user: User;
 }
 
-export interface EngagementLevelParams {
+export interface EngagementStatusParams {
   countryCode?: string;
   villageId?: Village['id'];
 }
 
-export interface EngagementLevel {
+export interface EngagementStatusData {
   status: EngagementStatus;
   statusCount: number;
 }

@@ -282,7 +282,7 @@ statisticsController.get({ path: '/classrooms' }, async (req, res) => {
   res.sendJSON(classroomsData);
 });
 
-statisticsController.get({ path: '/classrooms-engagement-level' }, async (req, res) => {
+statisticsController.get({ path: '/classrooms-engagement-status' }, async (req, res) => {
   const villageId = req.query.villageId ? parseInt(req.query.villageId as string) : null;
   const countryCode = req.query.countryCode ? (req.query.countryCode as string) : null;
 
@@ -319,17 +319,17 @@ statisticsController.get({ path: '/classrooms-engagement-level' }, async (req, r
     }, 'statusCounts')
     .groupBy('statusCounts.status');
 
-  const classroomEngagementLevels = (
+  const classroomEngagementStatuses = (
     await queryBuilder.getRawMany<{
       status: EngagementStatus;
       statusCount: string;
     }>()
-  ).map((engagementLevel) => ({
-    ...engagementLevel,
-    statusCount: Number(engagementLevel.statusCount),
+  ).map((engagementStatus) => ({
+    ...engagementStatus,
+    statusCount: Number(engagementStatus.statusCount),
   }));
 
-  res.sendJSON(classroomEngagementLevels);
+  res.sendJSON(classroomEngagementStatuses);
 });
 
 statisticsController.get({ path: '/one-village' }, async (req, res) => {

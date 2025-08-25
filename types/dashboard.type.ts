@@ -1,4 +1,4 @@
-import type { ClassroomsStats, EngagementLevel, SessionsStats, VillageStats } from './statistics.type';
+import type { ClassroomsStats, EngagementStatusData, SessionsStats, VillageStats } from './statistics.type';
 
 export enum DashboardSummaryTab {
   CLASSROOM = 1,
@@ -22,7 +22,7 @@ export interface PieChartDataItem {
 }
 
 export interface PieChartData {
-  engagementLevelData?: EngagementLevel[];
+  engagementStatusData?: EngagementStatusData[];
 }
 
 export interface AverageStatsData {

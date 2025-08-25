@@ -86,9 +86,9 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
           </Grid>
         ) : (
           <>
-            {dashboardSummaryData.engagementLevelData && (
+            {dashboardSummaryData.engagementStatusData && (
               <Grid item xs={12} lg={6}>
-                <PieCharts className={styles.minContainer} engagementLevelData={dashboardSummaryData.engagementLevelData} />
+                <PieCharts className={styles.minContainer} engagementStatusData={dashboardSummaryData.engagementStatusData} />
               </Grid>
             )}
 
