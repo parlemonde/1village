@@ -1,7 +1,6 @@
-import React from 'react';
-
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
+import React from 'react';
 
 import { OneVillageTable } from '../OneVillageTable';
 
@@ -28,7 +27,7 @@ const phaseLabels: Record<number, string> = {
 
 const OneVillagePhaseAccordion: React.FC<Props> = ({ phaseId, data, columns, rowStyle, open, onClick }) => {
   return (
-    <div style={{ marginTop: '1.5rem', borderRadius: 8, border: '1px solid #eee', background: '#fafbfc' }}>
+    <div role="button" style={{ marginTop: '1.5rem', borderRadius: 8, border: '1px solid #eee', background: '#fafbfc' }}>
       <div
         style={{
           display: 'flex',

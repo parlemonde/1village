@@ -1,5 +1,11 @@
+.root {
+  --card-bg-color: #f5f5f5;
+  --primary-color: #4c3ed9;
+  --secondary-color: #dad7fe;
+}
+
 .cardContainer {
-  background-color: #f5f5f5;
+  background-color: var(--card-bg-color);
   padding: 0.5rem 1rem;
   border-radius: 1rem;
   flex: 1;
@@ -17,11 +23,11 @@
   font-size: 3rem;
   margin: 0;
   padding: 0;
-  color: #4c3ed9;
+  color: var(--primary-color);
 }
 
 .cardContainerAverage > p:first-child {
-  color: #dad7fe;
+  color: var(--secondary-color);
   display: flex;
   align-items: center;
 }

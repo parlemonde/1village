@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
-
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box, Tab, Tabs } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 
 import { TeamCommentType } from '../../../../types/teamComment.type';
 import { OneVillageTable } from '../OneVillageTable';
@@ -49,6 +48,9 @@ const VillageStats = () => {
   const videoCount = getVideoCount(villageStatistics);
   const commentCount = getCommentCount(villageStatistics);
   const publicationCount = getPublicationCount(villageStatistics);
+
+  // Extract barChartData for better readability
+  const barChartData = statisticsSessions?.barChartData || [];
 
   useEffect(() => {
     if (villageStatistics?.family?.familiesWithoutAccount) {
@@ -107,15 +109,9 @@ const VillageStats = () => {
           </Tabs>
           <TabPanel value={selectedTab} index={0}>
             <div className="statistic--container">
-              <StatsCard data={statisticsSessions.registeredClassroomsCount ? statisticsSessions.registeredClassroomsCount : 0}>
-                Nombre de classes inscrites
-              </StatsCard>
-              <StatsCard data={statisticsSessions.connectedClassroomsCount ? statisticsSessions.connectedClassroomsCount : 0}>
-                Nombre de classes connectées
-              </StatsCard>
-              <StatsCard data={statisticsSessions.contributedClassroomsCount ? statisticsSessions.contributedClassroomsCount : 0}>
-                Nombre de classes contributrices
-              </StatsCard>
+              <StatsCard data={statisticsSessions.registeredClassroomsCount ?? 0}>Nombre de classes inscrites</StatsCard>
+              <StatsCard data={statisticsSessions.connectedClassroomsCount ?? 0}>Nombre de classes connectées</StatsCard>
+              <StatsCard data={statisticsSessions.contributedClassroomsCount ?? 0}>Nombre de classes contributrices</StatsCard>
             </div>
             <div className="statistic__average--container">
               <AverageStatsCard
@@ -132,10 +128,10 @@ const VillageStats = () => {
               </AverageStatsCard>
               <AverageStatsCard
                 data={{
-                  min: statisticsSessions.minConnections ? statisticsSessions.minConnections : 0,
-                  max: statisticsSessions.maxConnections ? statisticsSessions.maxConnections : 0,
-                  average: statisticsSessions.averageConnections ? statisticsSessions.averageConnections : 0,
-                  median: statisticsSessions.medianConnections ? statisticsSessions.medianConnections : 0,
+                  min: statisticsSessions.minConnections ?? 0,
+                  max: statisticsSessions.maxConnections ?? 0,
+                  average: statisticsSessions.averageConnections ?? 0,
+                  median: statisticsSessions.medianConnections ?? 0,
                 }}
                 icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
               >
@@ -144,7 +140,7 @@ const VillageStats = () => {
             </div>
             <div className="statistic__average--container">
               <PieCharts pieChartData={data} />
-              <BarCharts dataByMonth={statisticsSessions?.barChartData || []} title="Évolution des connexions" />
+              <BarCharts dataByMonth={barChartData} title="Évolution des connexions" />
             </div>
             <div className="statistic__average--container">
               <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />

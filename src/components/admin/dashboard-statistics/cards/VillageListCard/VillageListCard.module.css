@@ -1,7 +1,6 @@
 .villageListContainer {
   display: flex;
   flex-direction: column;
-  border: 1px solid #cfd8dc;
   padding: 15px;
   border: 1px solid #4c3ed9;
   border-radius: 8px;

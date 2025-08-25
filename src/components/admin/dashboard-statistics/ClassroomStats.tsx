@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
-
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box, Tab, Tabs } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 
 import { TeamCommentType } from '../../../../types/teamComment.type';
 import { OneVillageTable } from '../OneVillageTable';
@@ -74,7 +73,7 @@ const ClassroomStats = () => {
       />
       {selectedCountry && selectedVillage && selectedClassroom ? (
         <Box mt={2}>
-          <ClassroomDetailsCard />
+          <ClassroomDetailsCard selectedClassroom={selectedClassroom} selectedCountry={selectedCountry} selectedVillage={selectedVillage} />
           <Tabs value={selectedTab} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
             <Tab label="En classe" />
             <Tab label="En famille" />

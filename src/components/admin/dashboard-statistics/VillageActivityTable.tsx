@@ -27,7 +27,6 @@ type TableRow = {
   anthemCount?: number;
   reinventStoryCount?: number;
   isSelected?: boolean;
-  _highlight?: boolean;
 };
 
 const VillageActivityTable: React.FC<VillageActivityTableProps> = (props: VillageActivityTableProps) => {
@@ -44,7 +43,6 @@ const VillageActivityTable: React.FC<VillageActivityTableProps> = (props: Villag
       ...row,
       id: row.id || idx,
       name: row.name || `Row ${idx}`,
-      _highlight: row.isSelected,
     }),
   );
 

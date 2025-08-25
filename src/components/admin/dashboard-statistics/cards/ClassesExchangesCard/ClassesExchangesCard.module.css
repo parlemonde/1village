@@ -1,6 +1,12 @@
+.root {
+  --card-bg-color: #f5f5f5;
+  --primary-color: #4c3ed9;
+  --secondary-color: #dad7fe;
+}
+
 .cardContainer {
   flex: 3;
-  background-color: #f5f5f5;
+  background-color: var(--card-bg-color);
   padding: 0.5rem 1rem;
   border-radius: 1rem;
   font-weight: 600;
@@ -19,12 +25,12 @@
   align-items: center;
   margin: 0;
   padding: 0;
-  color: #dad7fe;
+  color: var(--secondary-color);
 }
 
 .cardContainerExchange > div > p {
   align-items: center;
-  color: #4c3ed9;
+  color: var(--primary-color);
   margin: 0;
   padding: 0;
   display: flex;

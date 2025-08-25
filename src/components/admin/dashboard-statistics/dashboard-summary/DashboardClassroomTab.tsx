@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Grid from '@mui/material/Grid';
+import React, { useState } from 'react';
 
 import { getCommentCount, getPublicationCount, getVideoCount } from '../../StatisticsUtils';
 import CountryActivityPhaseAccordion from '../CountryActivityPhaseAccordion';
@@ -45,6 +44,9 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
   const videoCount = getVideoCount(data, selectedCountry);
   const commentCount = getCommentCount(data, selectedCountry);
   const publicationCount = getPublicationCount(data, selectedCountry);
+
+  // Extract barChartData for better readability
+  const barChartData = data.barChartData || [];
 
   return (
     <>
@@ -89,7 +91,7 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
         </Grid>
         {dashboardType === DashboardType.ONE_VILLAGE_PANEL ? (
           <Grid item xs={12} lg={12}>
-            <BarCharts className={styles.midContainer} dataByMonth={data.barChartData || []} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+            <BarCharts className={styles.midContainer} dataByMonth={barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
           </Grid>
         ) : (
           <>
@@ -97,7 +99,7 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
               <PieCharts className={styles.minContainer} pieChartData={mockPieChartData} />
             </Grid>
             <Grid item xs={12} lg={6}>
-              <BarCharts className={styles.midContainer} dataByMonth={data.barChartData || []} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+              <BarCharts className={styles.midContainer} dataByMonth={barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
             </Grid>
           </>
         )}
@@ -105,7 +107,7 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
           <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
         </Grid>
         <Grid item xs={12} lg={12}>
-          <BarCharts dataByMonth={data.barChartData || []} title={CONTRIBUTION_BAR_CHAR_TITLE} />
+          <BarCharts dataByMonth={barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
         </Grid>
 
         {data && data.phases && (

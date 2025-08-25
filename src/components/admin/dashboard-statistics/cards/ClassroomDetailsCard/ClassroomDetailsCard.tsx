@@ -2,24 +2,53 @@ import React from 'react';
 
 import CountryMap from '../../map/CountryMap/CountryMap';
 import styles from './ClassroomDetailsCard.module.css';
+import { useStatisticsClassrooms } from 'src/services/useStatistics';
 
-const ClassroomDetailsCard = () => {
+interface ClassroomDetailsCardProps {
+  selectedClassroom?: number;
+  selectedCountry?: string;
+  selectedVillage?: number;
+}
+
+const ClassroomDetailsCard = ({ selectedClassroom, selectedCountry, selectedVillage }: ClassroomDetailsCardProps) => {
+  const statisticsClassrooms = useStatisticsClassrooms(selectedClassroom, selectedCountry, selectedVillage);
+
+  // If no classroom is selected, show a placeholder
+  if (!selectedClassroom || !statisticsClassrooms) {
+    return (
+      <div className={`${styles.root} ${styles.mainContainer}`}>
+        <CountryMap countryIso2="VN" />
+        <div className={styles.infoContainer}>
+          <h3>Détails de la classe</h3>
+          <p>Sélectionnez une classe pour voir ses détails</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Extract classroom data from statistics
+  const classroom = statisticsClassrooms as any; // Type assertion for now
+
   return (
-    <div className={styles.mainContainer}>
-      <CountryMap countryIso2="VN" />
+    <div className={`${styles.root} ${styles.mainContainer}`}>
+      <CountryMap countryIso2={selectedCountry || 'VN'} />
       <div className={styles.infoContainer}>
-        <h1>Ecole</h1>
+        <h3>Détails de la classe</h3>
         <ul>
-          <li>Adresse</li>
-          <li>Pays: </li>
-          <li>Village Monde: </li>
-          <li>Adresse Mail: </li>
-          <li>Dernière connexion: </li>
           <li>
-            <a href="#">Lien vers la fiche civicrm</a>
+            <strong>Nom de la classe :</strong> {classroom?.classroomName || 'N/A'}
           </li>
           <li>
-            <a href="#">Lien vers la salle des professeurs</a>
+            <strong>Pays :</strong> {classroom?.classroomCountryCode || 'N/A'}
+          </li>
+          <li>
+            <strong>Village :</strong> {classroom?.villageName || 'N/A'}
+          </li>
+          <li>
+            <strong>Nombre de commentaires :</strong> {classroom?.commentsCount || 0}
+          </li>
+          <li>
+            <strong>Nombre de vidéos :</strong> {classroom?.videosCount || 0}
           </li>
         </ul>
       </div>

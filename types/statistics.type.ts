@@ -44,6 +44,38 @@ export interface SessionsStats {
   barChartData: BarChartDataByMonth[];
 }
 
+type ActivityCountDetails = {
+  villageName: string;
+  classrooms: ClassroomCountDetails[];
+};
+
+type ClassroomCountDetails = {
+  name: string;
+  classroomId: string | null;
+  totalPublications: number;
+  classroomName: string;
+  countryCode: string;
+  phaseDetails: PhaseDetails[];
+};
+
+type PhaseDetails = {
+  phaseId: number;
+  commentCount: number;
+  draftCount: number;
+  mascotCount?: number;
+  videoCount?: number;
+  challengeCount?: number;
+  enigmaCount?: number;
+  gameCount?: number;
+  questionCount?: number;
+  reactionCount?: number;
+  reportingCount?: number;
+  storyCount?: number;
+  anthemCount?: number;
+  reinventStoryCount?: number;
+  contentLibreCount?: number;
+};
+
 export interface VillageStats {
   family: {
     minDuration: number;
@@ -62,34 +94,7 @@ export interface VillageStats {
     familiesWithoutAccount: FamiliesWithoutAccount[];
     floatingAccounts: FloatingAccount[];
   };
-  activityCountDetails: Array<{
-    villageName: string;
-    classrooms: Array<{
-      name: string;
-      classroomId: string | null;
-      totalPublications: number;
-      classroomName: string;
-      countryCode: string;
-      phaseDetails: Array<{
-        phaseId: number;
-        commentCount: number;
-        draftCount: number;
-        mascotCount?: number;
-        videoCount?: number;
-        challengeCount?: number;
-        enigmaCount?: number;
-        gameCount?: number;
-        questionCount?: number;
-        reactionCount?: number;
-        reportingCount?: number;
-        storyCount?: number;
-        anthemCount?: number;
-        reinventStoryCount?: number;
-        contentLibreCount?: number;
-        [key: string]: unknown;
-      }>;
-    }>;
-  }>;
+  activityCountDetails: ActivityCountDetails[];
 }
 
 export interface FamiliesWithoutAccount {
@@ -163,32 +168,5 @@ export interface StatisticsDto {
     connectedFamiliesCount: number;
     floatingAccounts: FloatingAccount[];
   };
-  activityCountDetails: Array<{
-    villageName: string;
-    classrooms: Array<{
-      name: string;
-      classroomId: string | null;
-      totalPublications: number;
-      classroomName: string;
-      countryCode: string;
-      phaseDetails: Array<{
-        phaseId: number;
-        commentCount: number;
-        draftCount: number;
-        mascotCount?: number;
-        videoCount?: number;
-        challengeCount?: number;
-        enigmaCount?: number;
-        gameCount?: number;
-        questionCount?: number;
-        reactionCount?: number;
-        reportingCount?: number;
-        storyCount?: number;
-        anthemCount?: number;
-        reinventStoryCount?: number;
-        contentLibreCount?: number;
-        [key: string]: unknown;
-      }>;
-    }>;
-  }>;
+  activityCountDetails: ActivityCountDetails[];
 }

@@ -1,6 +1,5 @@
-import React, { useMemo, useState } from 'react';
-
 import Grid from '@mui/material/Grid';
+import React, { useMemo, useState } from 'react';
 
 import { useClassrooms } from '../../../../services/useClassrooms';
 import { useCountries } from '../../../../services/useCountries';
@@ -23,7 +22,7 @@ export default function StatisticFilters({
   onVillageChange,
   onClassroomChange,
   selectedPhase,
-}: StatisticFiltersProps) {
+}: Readonly<StatisticFiltersProps>) {
   const [selectedCountry, setSelectedCountry] = useState<string>();
   const [selectedVillage, setSelectedVillage] = useState<number>();
   const [selectedClassroom, setSelectedClassroom] = useState<number>();
@@ -36,8 +35,7 @@ export default function StatisticFilters({
     { key: '3', value: 'Phase 3' },
   ];
   const handlePhaseChange = (phaseId: string) => {
-    const phaseNumber = phaseId === '' ? 0 : +phaseId;
-    onPhaseChange(phaseNumber);
+    onPhaseChange(+phaseId || 0);
   };
 
   // COUNTRY
@@ -111,7 +109,7 @@ export default function StatisticFilters({
 
   return (
     <Grid container spacing={2} mb={2}>
-      {renderDropdown(phaseDropdownOptions, handlePhaseChange, 'Phase', false, selectedPhase === 0 ? '' : selectedPhase?.toString())}
+      {renderDropdown(phaseDropdownOptions, handlePhaseChange, 'Phase', false, String(selectedPhase || ''))}
       {onCountryChange && renderDropdown(countryDropdownOptions, handleCountryChange, 'Pays', true, selectedCountry)}
       {onVillageChange && renderDropdown(villageDropdownOptions, handleVillageChange, 'Village', true, selectedVillage?.toString())}
       {onClassroomChange && renderDropdown(classroomDropdownOptions, handleClassroomChange, 'Classe', true, selectedClassroom?.toString())}

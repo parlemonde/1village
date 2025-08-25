@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-
 import { Box, Tab, Tabs } from '@mui/material';
+import React, { useState } from 'react';
 
 import { TeamCommentType } from '../../../../types/teamComment.type';
 import ActivityTable from './ActivityTable';
@@ -46,14 +45,52 @@ const GlobalStats = () => {
     }));
   };
 
+  const getPhaseColumns = (phaseId: number) => {
+    const baseColumns = [{ key: 'villageName', label: 'Nom du village', sortable: true }];
+
+    switch (phaseId) {
+      case 1:
+        return [
+          ...baseColumns,
+          { key: 'mascotCount', label: 'Mascottes', sortable: true },
+          { key: 'videoCount', label: 'Vidéos', sortable: true },
+          { key: 'draftCount', label: 'Brouillons', sortable: true },
+          { key: 'commentCount', label: 'Commentaires', sortable: true },
+        ];
+      case 2:
+        return [
+          ...baseColumns,
+          { key: 'reportingCount', label: 'Reportages', sortable: true },
+          { key: 'challengeCount', label: 'Défis', sortable: true },
+          { key: 'enigmaCount', label: 'Énigmes', sortable: true },
+          { key: 'gameCount', label: 'Jeux', sortable: true },
+          { key: 'questionCount', label: 'Questions', sortable: true },
+          { key: 'reactionCount', label: 'Réactions', sortable: true },
+          { key: 'storyCount', label: 'Histoire', sortable: true },
+          { key: 'videoCount', label: 'Vidéos', sortable: true },
+          { key: 'commentCount', label: 'Commentaires', sortable: true },
+        ];
+      case 3:
+        return [
+          ...baseColumns,
+          { key: 'anthemCount', label: 'Hymne', sortable: true },
+          { key: 'reinventStoryCount', label: 'Réécriture', sortable: true },
+          { key: 'videoCount', label: 'Vidéos', sortable: true },
+          { key: 'commentCount', label: 'Commentaires', sortable: true },
+          { key: 'draftCount', label: 'Brouillons', sortable: true },
+        ];
+      default:
+        return baseColumns;
+    }
+  };
+
   const createPhaseTableData = (phaseId: number): PhaseTableRow[] => {
     if (!oneVillageStatistics?.activityCountDetails) return [];
 
     const villages: PhaseTableRow[] = [];
 
-    // Calculate totals
-    const totals: Record<string, number> = {
-      villageName: 'Total' as unknown as number,
+    const totals: Record<string, string | number> = {
+      villageName: 'Total',
     };
 
     oneVillageStatistics.activityCountDetails.forEach(
@@ -93,10 +130,7 @@ const GlobalStats = () => {
                 const value = phase[key] || 0;
                 villageRow[column.key] = ((villageRow[column.key] as number) || 0) + (value as number);
 
-                if (totals[column.key] === undefined) {
-                  totals[column.key] = 0;
-                }
-                totals[column.key] += value as number;
+                totals[column.key] = ((totals[column.key] as number) || 0) + (value as number);
               });
             }
           });
@@ -106,7 +140,6 @@ const GlobalStats = () => {
       },
     );
 
-    // Add total row
     const totalRow: PhaseTableRow = {
       id: 'total',
       villageName: 'Total',
@@ -114,45 +147,6 @@ const GlobalStats = () => {
     };
 
     return [totalRow, ...villages];
-  };
-
-  // Function to get columns based on phase
-  const getPhaseColumns = (phaseId: number) => {
-    const baseColumns = [{ key: 'villageName', label: 'Nom du village', sortable: true }];
-
-    if (phaseId === 1) {
-      return [
-        ...baseColumns,
-        { key: 'mascotCount', label: 'Mascottes', sortable: true },
-        { key: 'videoCount', label: 'Vidéos', sortable: true },
-        { key: 'draftCount', label: 'Brouillons', sortable: true },
-        { key: 'commentCount', label: 'Commentaires', sortable: true },
-      ];
-    } else if (phaseId === 2) {
-      return [
-        ...baseColumns,
-        { key: 'reportingCount', label: 'Reportages', sortable: true },
-        { key: 'challengeCount', label: 'Défis', sortable: true },
-        { key: 'enigmaCount', label: 'Énigmes', sortable: true },
-        { key: 'gameCount', label: 'Jeux', sortable: true },
-        { key: 'questionCount', label: 'Questions', sortable: true },
-        { key: 'reactionCount', label: 'Réactions', sortable: true },
-        { key: 'storyCount', label: 'Histoire', sortable: true },
-        { key: 'videoCount', label: 'Vidéos', sortable: true },
-        { key: 'commentCount', label: 'Commentaires', sortable: true },
-      ];
-    } else if (phaseId === 3) {
-      return [
-        ...baseColumns,
-        { key: 'anthemCount', label: 'Hymne', sortable: true },
-        { key: 'reinventStoryCount', label: 'Réécriture', sortable: true },
-        { key: 'videoCount', label: 'Vidéos', sortable: true },
-        { key: 'commentCount', label: 'Commentaires', sortable: true },
-        { key: 'draftCount', label: 'Brouillons', sortable: true },
-      ];
-    }
-
-    return baseColumns;
   };
 
   const rowStyle = (row: PhaseTableRow) => {

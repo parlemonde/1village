@@ -20,7 +20,7 @@ const DashboardSummary = ({
   selectedCountry,
   selectedPhase,
   activeTab = DashboardSummaryTab.CLASSROOM,
-}: DashboardSummaryProps) => {
+}: DashboardSummaryProps): JSX.Element | null => {
   if (!data) {
     return null;
   }

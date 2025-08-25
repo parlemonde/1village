@@ -1,7 +1,12 @@
+.root {
+  --card-bg-color: #f5f5f5;
+  --border-color: #dad7fe;
+}
+
 .mainContainer {
   display: flex;
   gap: 10px;
-  background-color: #f5f5f5;
+  background-color: var(--card-bg-color);
   border-radius: 20px;
   padding: 1rem;
 }
@@ -12,7 +17,7 @@
 
 .infoContainer {
   flex: 3;
-  border: 2px solid #dad7fe;
+  border: 2px solid var(--border-color);
   border-radius: 20px;
   padding: 0 1rem;
 }

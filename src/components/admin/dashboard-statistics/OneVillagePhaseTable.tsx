@@ -1,7 +1,6 @@
-import React, { useMemo } from 'react';
-
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box, Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import React, { useMemo } from 'react';
 
 import type { VillageStats } from 'types/statistics.type';
 
@@ -34,7 +33,55 @@ interface VillageRowData {
   phase3: PhaseData;
 }
 
-const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }) => {
+const createEmptyPhaseData = (phaseId: number): PhaseData => ({
+  phaseId,
+  mascotCount: 0,
+  videoCount: 0,
+  draftCount: 0,
+  commentCount: 0,
+  challengeCount: 0,
+  enigmaCount: 0,
+  gameCount: 0,
+  questionCount: 0,
+  reactionCount: 0,
+  reportingCount: 0,
+  storyCount: 0,
+  anthemCount: 0,
+  reinventStoryCount: 0,
+  contentLibreCount: 0,
+});
+
+const aggregatePhaseData = (targetPhase: PhaseData, phase: any) => {
+  targetPhase.mascotCount += phase.mascotCount || 0;
+  targetPhase.videoCount += phase.videoCount || 0;
+  targetPhase.draftCount += phase.draftCount || 0;
+  targetPhase.commentCount += phase.commentCount || 0;
+  targetPhase.challengeCount += phase.challengeCount || 0;
+  targetPhase.enigmaCount += phase.enigmaCount || 0;
+  targetPhase.gameCount += phase.gameCount || 0;
+  targetPhase.questionCount += phase.questionCount || 0;
+  targetPhase.reactionCount += phase.reactionCount || 0;
+  targetPhase.reportingCount += phase.reportingCount || 0;
+  targetPhase.storyCount += phase.storyCount || 0;
+  targetPhase.anthemCount += phase.anthemCount || 0;
+  targetPhase.reinventStoryCount += phase.reinventStoryCount || 0;
+  targetPhase.contentLibreCount += phase.contentLibreCount || 0;
+};
+
+const getTargetPhase = (villageRow: VillageRowData, phaseId: number): PhaseData | null => {
+  switch (phaseId) {
+    case 1:
+      return villageRow.phase1;
+    case 2:
+      return villageRow.phase2;
+    case 3:
+      return villageRow.phase3;
+    default:
+      return null;
+  }
+};
+
+const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }: { data?: VillageStats }) => {
   const [expandedPhases, setExpandedPhases] = React.useState<Record<number, boolean>>({
     1: true,
     2: true,
@@ -46,83 +93,19 @@ const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }) => 
 
     const villages: VillageRowData[] = [];
 
-    data.activityCountDetails.forEach((villageDetail) => {
+    data.activityCountDetails.forEach((villageDetail: any) => {
       const villageRow: VillageRowData = {
         villageName: villageDetail.villageName,
-        phase1: {
-          phaseId: 1,
-          mascotCount: 0,
-          videoCount: 0,
-          draftCount: 0,
-          commentCount: 0,
-          challengeCount: 0,
-          enigmaCount: 0,
-          gameCount: 0,
-          questionCount: 0,
-          reactionCount: 0,
-          reportingCount: 0,
-          storyCount: 0,
-          anthemCount: 0,
-          reinventStoryCount: 0,
-          contentLibreCount: 0,
-        },
-        phase2: {
-          phaseId: 2,
-          mascotCount: 0,
-          videoCount: 0,
-          draftCount: 0,
-          commentCount: 0,
-          challengeCount: 0,
-          enigmaCount: 0,
-          gameCount: 0,
-          questionCount: 0,
-          reactionCount: 0,
-          reportingCount: 0,
-          storyCount: 0,
-          anthemCount: 0,
-          reinventStoryCount: 0,
-          contentLibreCount: 0,
-        },
-        phase3: {
-          phaseId: 3,
-          mascotCount: 0,
-          videoCount: 0,
-          draftCount: 0,
-          commentCount: 0,
-          challengeCount: 0,
-          enigmaCount: 0,
-          gameCount: 0,
-          questionCount: 0,
-          reactionCount: 0,
-          reportingCount: 0,
-          storyCount: 0,
-          anthemCount: 0,
-          reinventStoryCount: 0,
-          contentLibreCount: 0,
-        },
+        phase1: createEmptyPhaseData(1),
+        phase2: createEmptyPhaseData(2),
+        phase3: createEmptyPhaseData(3),
       };
 
-      // Aggregate data from all classrooms in the village
-      villageDetail.classrooms.forEach((classroom) => {
-        classroom.phaseDetails.forEach((phase) => {
-          const targetPhase =
-            phase.phaseId === 1 ? villageRow.phase1 : phase.phaseId === 2 ? villageRow.phase2 : phase.phaseId === 3 ? villageRow.phase3 : null;
-
+      villageDetail.classrooms.forEach((classroom: any) => {
+        classroom.phaseDetails.forEach((phase: any) => {
+          const targetPhase = getTargetPhase(villageRow, phase.phaseId);
           if (targetPhase) {
-            targetPhase.mascotCount += phase.mascotCount || 0;
-            targetPhase.videoCount += phase.videoCount || 0;
-            targetPhase.draftCount += phase.draftCount || 0;
-            targetPhase.commentCount += phase.commentCount || 0;
-            targetPhase.challengeCount += phase.challengeCount || 0;
-            targetPhase.enigmaCount += phase.enigmaCount || 0;
-            targetPhase.gameCount += phase.gameCount || 0;
-            targetPhase.questionCount += phase.questionCount || 0;
-            targetPhase.reactionCount += phase.reactionCount || 0;
-            targetPhase.reportingCount += phase.reportingCount || 0;
-            targetPhase.storyCount += phase.storyCount || 0;
-            targetPhase.anthemCount += phase.anthemCount || 0;
-            targetPhase.reinventStoryCount += phase.reinventStoryCount || 0;
-            targetPhase.contentLibreCount += (phase as { contentLibreCount?: number }).contentLibreCount || 0;
+            aggregatePhaseData(targetPhase, phase);
           }
         });
       });
@@ -138,151 +121,65 @@ const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }) => 
 
     const total: VillageRowData = {
       villageName: 'Total',
-      phase1: {
-        phaseId: 1,
-        mascotCount: 0,
-        videoCount: 0,
-        draftCount: 0,
-        commentCount: 0,
-        challengeCount: 0,
-        enigmaCount: 0,
-        gameCount: 0,
-        questionCount: 0,
-        reactionCount: 0,
-        reportingCount: 0,
-        storyCount: 0,
-        anthemCount: 0,
-        reinventStoryCount: 0,
-        contentLibreCount: 0,
-      },
-      phase2: {
-        phaseId: 2,
-        mascotCount: 0,
-        videoCount: 0,
-        draftCount: 0,
-        commentCount: 0,
-        challengeCount: 0,
-        enigmaCount: 0,
-        gameCount: 0,
-        questionCount: 0,
-        reactionCount: 0,
-        reportingCount: 0,
-        storyCount: 0,
-        anthemCount: 0,
-        reinventStoryCount: 0,
-        contentLibreCount: 0,
-      },
-      phase3: {
-        phaseId: 3,
-        mascotCount: 0,
-        videoCount: 0,
-        draftCount: 0,
-        commentCount: 0,
-        challengeCount: 0,
-        enigmaCount: 0,
-        gameCount: 0,
-        questionCount: 0,
-        reactionCount: 0,
-        reportingCount: 0,
-        storyCount: 0,
-        anthemCount: 0,
-        reinventStoryCount: 0,
-        contentLibreCount: 0,
-      },
+      phase1: createEmptyPhaseData(1),
+      phase2: createEmptyPhaseData(2),
+      phase3: createEmptyPhaseData(3),
     };
 
     villageData.forEach((village: VillageRowData) => {
-      total.phase1.mascotCount += village.phase1.mascotCount;
-      total.phase1.videoCount += village.phase1.videoCount;
-      total.phase1.draftCount += village.phase1.draftCount;
-      total.phase1.commentCount += village.phase1.commentCount;
-      total.phase1.contentLibreCount += village.phase1.contentLibreCount;
-
-      total.phase2.reportingCount += village.phase2.reportingCount;
-      total.phase2.challengeCount += village.phase2.challengeCount;
-      total.phase2.enigmaCount += village.phase2.enigmaCount;
-      total.phase2.gameCount += village.phase2.gameCount;
-      total.phase2.questionCount += village.phase2.questionCount;
-      total.phase2.reactionCount += village.phase2.reactionCount;
-      total.phase2.storyCount += village.phase2.storyCount;
-      total.phase2.videoCount += village.phase2.videoCount;
-      total.phase2.commentCount += village.phase2.commentCount;
-
-      total.phase3.anthemCount += village.phase3.anthemCount;
-      total.phase3.reinventStoryCount += village.phase3.reinventStoryCount;
-      total.phase3.videoCount += village.phase3.videoCount;
-      total.phase3.commentCount += village.phase3.commentCount;
-      total.phase3.draftCount += village.phase3.draftCount;
+      aggregatePhaseData(total.phase1, village.phase1);
+      aggregatePhaseData(total.phase2, village.phase2);
+      aggregatePhaseData(total.phase3, village.phase3);
     });
 
     return total;
   }, [villageData]);
 
   const handlePhaseToggle = (phaseId: number) => {
-    setExpandedPhases((prev) => ({
+    setExpandedPhases((prev: Record<number, boolean>) => ({
       ...prev,
       [phaseId]: !prev[phaseId],
     }));
   };
 
+  const getPhaseColumns = (phaseId: number): { key: string; label: string }[] => {
+    switch (phaseId) {
+      case 1:
+        return [
+          { key: 'mascotCount', label: 'Mascottes' },
+          { key: 'videoCount', label: 'Vidéos' },
+          { key: 'draftCount', label: 'Brouillons' },
+          { key: 'commentCount', label: 'Commentaires' },
+        ];
+      case 2:
+        return [
+          { key: 'reportingCount', label: 'Reportages' },
+          { key: 'challengeCount', label: 'Défis' },
+          { key: 'enigmaCount', label: 'Énigmes' },
+          { key: 'gameCount', label: 'Jeux' },
+          { key: 'questionCount', label: 'Questions' },
+          { key: 'reactionCount', label: 'Réactions' },
+          { key: 'storyCount', label: 'Histoire' },
+          { key: 'videoCount', label: 'Vidéos' },
+          { key: 'commentCount', label: 'Commentaires' },
+        ];
+      case 3:
+        return [
+          { key: 'anthemCount', label: 'Hymne' },
+          { key: 'reinventStoryCount', label: 'Réécriture' },
+          { key: 'videoCount', label: 'Vidéos' },
+          { key: 'commentCount', label: 'Commentaires' },
+          { key: 'draftCount', label: 'Brouillons' },
+        ];
+      default:
+        return [];
+    }
+  };
+
   const renderPhaseTable = (phaseId: number, phaseData: PhaseData, isTotal: boolean = false) => {
     const isExpanded = expandedPhases[phaseId];
-
-    let columns: { key: string; label: string }[] = [];
-    let rowData: Record<string, number> = {};
-
-    if (phaseId === 1) {
-      columns = [
-        { key: 'mascotCount', label: 'Mascottes' },
-        { key: 'videoCount', label: 'Vidéos' },
-        { key: 'draftCount', label: 'Brouillons' },
-        { key: 'commentCount', label: 'Commentaires' },
-      ];
-      rowData = {
-        mascotCount: phaseData.mascotCount,
-        videoCount: phaseData.videoCount,
-        draftCount: phaseData.draftCount,
-        commentCount: phaseData.commentCount,
-      };
-    } else if (phaseId === 2) {
-      columns = [
-        { key: 'reportingCount', label: 'Reportages' },
-        { key: 'challengeCount', label: 'Défis' },
-        { key: 'enigmaCount', label: 'Énigmes' },
-        { key: 'gameCount', label: 'Jeux' },
-        { key: 'questionCount', label: 'Questions' },
-        { key: 'reactionCount', label: 'Réactions' },
-        { key: 'storyCount', label: 'Histoire' },
-        { key: 'videoCount', label: 'Vidéos' },
-        { key: 'commentCount', label: 'Commentaires' },
-      ];
-      rowData = {
-        reportingCount: phaseData.reportingCount,
-        challengeCount: phaseData.challengeCount,
-        enigmaCount: phaseData.enigmaCount,
-        gameCount: phaseData.gameCount,
-        questionCount: phaseData.questionCount,
-        reactionCount: phaseData.reactionCount,
-        storyCount: phaseData.storyCount,
-        videoCount: phaseData.videoCount,
-        commentCount: phaseData.commentCount,
-      };
-    } else if (phaseId === 3) {
-      columns = [
-        { key: 'anthemCount', label: 'Hymne' },
-        { key: 'reinventStoryCount', label: 'Réécriture' },
-        { key: 'videoCount', label: 'Vidéos' },
-        { key: 'commentCount', label: 'Commentaires' },
-        { key: 'draftCount', label: 'Brouillons' },
-      ];
-      rowData = {
-        anthemCount: phaseData.anthemCount,
-        reinventStoryCount: phaseData.reinventStoryCount,
-        videoCount: phaseData.videoCount,
-        commentCount: phaseData.commentCount,
-        draftCount: phaseData.draftCount,
-      };
-    }
+    const columns = getPhaseColumns(phaseId);
+    const rowData = phaseData as unknown as Record<string, number>;
 
     return (
       <Box key={phaseId} sx={{ mb: 2 }}>
@@ -326,7 +223,7 @@ const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }) => 
               </TableHead>
               <TableBody>
                 <TableRow sx={{ backgroundColor: isTotal ? '#f0f0f0' : 'inherit' }}>
-                  <TableCell sx={{ fontWeight: 'bold' }}>{isTotal ? 'Total' : 'Total'}</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>Total</TableCell>
                   {columns.map((col) => (
                     <TableCell key={col.key} sx={{ fontWeight: 'bold' }}>
                       {rowData[col.key] || 0}
@@ -338,8 +235,7 @@ const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }) => 
                     <TableRow key={index}>
                       <TableCell>{village.villageName}</TableCell>
                       {columns.map((col) => {
-                        const villagePhaseData =
-                          phaseId === 1 ? village.phase1 : phaseId === 2 ? village.phase2 : phaseId === 3 ? village.phase3 : null;
+                        const villagePhaseData = getTargetPhase(village, phaseId);
                         return (
                           <TableCell key={col.key}>
                             {villagePhaseData ? (villagePhaseData as unknown as Record<string, number>)[col.key] || 0 : 0}
@@ -372,9 +268,9 @@ const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }) => 
         Statistiques par village
       </Typography>
 
-      {renderPhaseTable(1, totalData?.phase1 || ({ phaseId: 1 } as PhaseData), true)}
-      {renderPhaseTable(2, totalData?.phase2 || ({ phaseId: 2 } as PhaseData), true)}
-      {renderPhaseTable(3, totalData?.phase3 || ({ phaseId: 3 } as PhaseData), true)}
+      {renderPhaseTable(1, totalData?.phase1 || createEmptyPhaseData(1), true)}
+      {renderPhaseTable(2, totalData?.phase2 || createEmptyPhaseData(2), true)}
+      {renderPhaseTable(3, totalData?.phase3 || createEmptyPhaseData(3), true)}
     </Box>
   );
 };

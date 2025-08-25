@@ -4,7 +4,7 @@ import type { ComparisonStatistic } from './compare.api';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { SessionsStats, VillageStats } from 'types/statistics.type';
 
-async function getSessionsStats(phase?: number): Promise<SessionsStats> {
+const getSessionsStats = async (phase?: number): Promise<SessionsStats> => {
   return (
     await axiosRequest({
       method: 'GET',
@@ -12,9 +12,9 @@ async function getSessionsStats(phase?: number): Promise<SessionsStats> {
       url: `/statistics/sessions?phase=${phase}`,
     })
   ).data;
-}
+};
 
-async function getOneVillageStats(): Promise<VillageStats> {
+const getOneVillageStats = async (): Promise<VillageStats> => {
   return (
     await axiosRequest({
       method: 'GET',
@@ -22,9 +22,9 @@ async function getOneVillageStats(): Promise<VillageStats> {
       url: `/statistics/one-village`,
     })
   ).data;
-}
+};
 
-async function getVillagesStats(villageId?: number, phase?: number): Promise<VillageStats> {
+const getVillagesStats = async (villageId?: number, phase?: number): Promise<VillageStats> => {
   return (
     await axiosRequest({
       method: 'GET',
@@ -32,9 +32,9 @@ async function getVillagesStats(villageId?: number, phase?: number): Promise<Vil
       url: phase ? `/statistics/villages/${villageId}?phase=${phase}` : `/statistics/villages/${villageId}`,
     })
   ).data;
-}
+};
 
-async function getCountriesStats(countryCode?: string, phase?: number): Promise<VillageStats> {
+const getCountriesStats = async (countryCode?: string, phase?: number): Promise<VillageStats> => {
   return (
     await axiosRequest({
       method: 'GET',
@@ -42,18 +42,14 @@ async function getCountriesStats(countryCode?: string, phase?: number): Promise<
       url: phase ? `/statistics/countries/${countryCode}?phase=${phase}` : `/statistics/countries/${countryCode}`,
     })
   ).data;
-}
+};
 
-async function getCompareGlobalStats(phase?: number) {
-  let params;
-
-  phase && (params = { phase });
-
+const getCompareGlobalStats = async (phase?: number) => {
   const response = await axiosRequest({
     method: 'GET',
     baseURL: '/api',
     url: `/statistics/compare/one-village`,
-    ...(params && { params }),
+    params: phase ? { phase } : undefined,
   });
 
   if (response.error) {
@@ -61,7 +57,7 @@ async function getCompareGlobalStats(phase?: number) {
   }
 
   return response.data;
-}
+};
 
 export const useGetCompareGlobalStats = (phase?: number) => {
   return useQuery(['compare-countries-stats', phase], () => getCompareGlobalStats(phase));
@@ -86,12 +82,12 @@ export const useGetVillagesStats = (villageId?: number, phase?: number) => {
 };
 
 export const useGetCountriesStats = (countryCode?: string, phase?: number) => {
-  return useQuery(['countries-stats', countryCode, phase], () => getCountriesStats(countryCode, phase), {
+  return useQuery<VillageStats>(['countries-stats', countryCode, phase], () => getCountriesStats(countryCode, phase), {
     enabled: !!countryCode,
   });
 };
 
-async function getClassroomsStats(classroomId?: number, phase?: number): Promise<VillageStats> {
+const getClassroomsStats = async (classroomId?: number, phase?: number): Promise<VillageStats> => {
   return (
     await axiosRequest({
       method: 'GET',
@@ -99,7 +95,7 @@ async function getClassroomsStats(classroomId?: number, phase?: number): Promise
       url: phase ? `/statistics/classrooms/${classroomId}?phase=${phase}` : `/statistics/classrooms/${classroomId}`,
     })
   ).data;
-}
+};
 
 export const useGetClassroomsStats = (classroomId?: number, phase?: number) => {
   return useQuery(['classrooms-stats', classroomId, phase], () => getClassroomsStats(classroomId, phase), {
@@ -107,7 +103,7 @@ export const useGetClassroomsStats = (classroomId?: number, phase?: number) => {
   });
 };
 
-async function getCompareStats(): Promise<ComparisonStatistic[]> {
+const getCompareStats = async (): Promise<ComparisonStatistic[]> => {
   return (
     await axiosRequest({
       method: 'GET',
@@ -115,10 +111,9 @@ async function getCompareStats(): Promise<ComparisonStatistic[]> {
       url: `/statistics/compare`,
     })
   ).data;
-}
+};
 
-// [Onglet Pays] : /statistics/compare/countries/FR?phase=1
-async function getCompareCountriesStats(countryCode: string, phase?: number): Promise<ComparisonStatistic[]> {
+const getCompareCountriesStats = async (countryCode: string, phase?: number): Promise<ComparisonStatistic[]> => {
   return (
     await axiosRequest({
       method: 'GET',
@@ -126,10 +121,9 @@ async function getCompareCountriesStats(countryCode: string, phase?: number): Pr
       url: phase ? `/statistics/compare/countries/${countryCode}?phase=${phase}` : `/statistics/compare/countries/${countryCode}`,
     })
   ).data;
-}
+};
 
-// [Onglet Village] : /statistics/compare/villages/{villageId}?phase={phaseId}
-async function getCompareVillagesStats(villageId: number, phase?: number): Promise<ComparisonStatistic[]> {
+const getCompareVillagesStats = async (villageId: number, phase?: number): Promise<ComparisonStatistic[]> => {
   return (
     await axiosRequest({
       method: 'GET',
@@ -137,10 +131,9 @@ async function getCompareVillagesStats(villageId: number, phase?: number): Promi
       url: phase ? `/statistics/compare/villages/${villageId}?phase=${phase}` : `/statistics/compare/villages/${villageId}`,
     })
   ).data;
-}
+};
 
-// [Onglet Classe] : /statistics/compare/classes/{classroomId}?phase={phaseId}
-async function getCompareClassesStats(classroomId: number, phase?: number): Promise<ComparisonStatistic[]> {
+const getCompareClassesStats = async (classroomId: number, phase?: number): Promise<ComparisonStatistic[]> => {
   return (
     await axiosRequest({
       method: 'GET',
@@ -148,7 +141,7 @@ async function getCompareClassesStats(classroomId: number, phase?: number): Prom
       url: phase ? `/statistics/compare/classes/${classroomId}?phase=${phase}` : `/statistics/compare/classes/${classroomId}`,
     })
   ).data;
-}
+};
 
 export const useGetCompareStats = () => {
   return useQuery(['compare-stats'], () => getCompareStats());
@@ -167,7 +160,7 @@ export const useGetCompareVillagesStats = (villageId: number, phase?: number) =>
 };
 
 export const useGetCompareClassesStats = (classroomId: number, phase?: number) => {
-  return useQuery(['compare-classes-stats', classroomId, phase], () => getCompareClassesStats(classroomId, phase), {
+  return useQuery<ComparisonStatistic[]>(['compare-classes-stats', classroomId, phase], () => getCompareClassesStats(classroomId, phase), {
     enabled: classroomId !== null,
   });
 };

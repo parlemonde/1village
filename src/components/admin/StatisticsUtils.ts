@@ -40,11 +40,21 @@ export const getPublicationCount = (data?: VillageStats, countryCode?: string) =
     .filter((classroom) => !countryCode || classroom.countryCode === countryCode)
     .flatMap((classroom) => classroom.phaseDetails ?? [])
     .reduce((total, phase) => {
-      Object.entries(phase).forEach(([key, value]) => {
-        if (key !== 'phaseId' && key !== 'draftCount' && typeof value === 'number') {
-          total += value;
-        }
-      });
-      return total;
+      const countKeys = [
+        'mascotCount',
+        'videoCount',
+        'challengeCount',
+        'enigmaCount',
+        'gameCount',
+        'questionCount',
+        'reactionCount',
+        'reportingCount',
+        'storyCount',
+        'anthemCount',
+        'reinventStoryCount',
+        'contentLibreCount',
+      ];
+
+      return total + countKeys.reduce((sum, key) => sum + ((phase[key as keyof typeof phase] as number) || 0), 0);
     }, 0);
 };
