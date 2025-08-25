@@ -189,3 +189,10 @@ export enum EngagementStatus {
   OBSERVER = 'observer',
   ACTIVE = 'active',
 }
+
+export enum EngagementStatusColor {
+  ABSENT = '#D11818',
+  GHOST = '#FFD678',
+  OBSERVER = '#6082FC',
+  ACTIVE = '#4CC64A',
+}

@@ -5,6 +5,7 @@ import CircleIcon from '@mui/icons-material/Circle';
 
 import TooltipMouseTracker from '../TooltipMouseTracker/TooltipMouseTracker';
 import styles from './DashboardWorldMap.module.css';
+import { EngagementStatusColor } from 'types/statistics.type';
 
 const DashboardWorldMap = () => {
   const [isTooltipVisible, setIsTooltipVisible] = React.useState(false);
@@ -59,20 +60,20 @@ const DashboardWorldMap = () => {
         <ul>
           <li>
             <p style={{ verticalAlign: 'middle' }}>
-              <CircleIcon fontSize="small" sx={{ color: '#4CC64A', verticalAlign: 'middle' }} /> <span>Actif</span>: la majorité des classes ont posté
-              ces 3 dernières semaines
+              <CircleIcon fontSize="small" sx={{ color: EngagementStatusColor.ACTIVE, verticalAlign: 'middle' }} /> <span>Actif</span>: la majorité
+              des classes ont posté ces 3 dernières semaines
             </p>
           </li>
           <li>
             <p>
-              <CircleIcon fontSize="small" sx={{ color: '#6082FC', verticalAlign: 'middle' }} /> <span>Observateur</span>: la majorité des classes ont
-              pas posté depuis 3 semaines
+              <CircleIcon fontSize="small" sx={{ color: EngagementStatusColor.OBSERVER, verticalAlign: 'middle' }} /> <span>Observateur</span>: la
+              majorité des classes ont pas posté depuis 3 semaines
             </p>
           </li>
           <li>
             <p>
-              <CircleIcon fontSize="small" sx={{ color: '#FFD678', verticalAlign: 'middle' }} /> <span>Fantôme</span>: la majorité des classes ne se
-              sont pas connectées depuis 3 semaines
+              <CircleIcon fontSize="small" sx={{ color: EngagementStatusColor.GHOST, verticalAlign: 'middle' }} /> <span>Fantôme</span>: la majorité
+              des classes ne se sont pas connectées depuis 3 semaines
             </p>
           </li>
         </ul>

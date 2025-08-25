@@ -10,8 +10,8 @@ import { mockDataByMonth } from './mocks/mocks';
 import { useGetOneVillageStats, useGetSessionsStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms } from 'src/services/useStatistics';
 import type { VillageInteractionsActivity } from 'types/analytics/village-interactions-activity';
-import { VillageInteractionsStatus } from 'types/analytics/village-interactions-activity';
 import { DashboardType } from 'types/dashboard.type';
+import { EngagementStatus } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
 const GlobalStats = () => {
@@ -43,7 +43,7 @@ const GlobalStats = () => {
           ],
           totalConnections: 240,
           totalActivities: 853,
-          status: VillageInteractionsStatus.ACTIVE,
+          status: EngagementStatus.ACTIVE,
         },
         {
           id: 2,
@@ -59,7 +59,7 @@ const GlobalStats = () => {
           ],
           totalConnections: 35,
           totalActivities: 140,
-          status: VillageInteractionsStatus.OBSERVER,
+          status: EngagementStatus.OBSERVER,
         },
         {
           id: 3,
@@ -75,7 +75,7 @@ const GlobalStats = () => {
           ],
           totalConnections: 56,
           totalActivities: 593,
-          status: VillageInteractionsStatus.GHOST,
+          status: EngagementStatus.GHOST,
         },
       ];
 
