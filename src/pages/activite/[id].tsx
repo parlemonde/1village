@@ -27,7 +27,6 @@ const titles: Record<number, (activity: ActivityInterface<AnyData>) => string> =
   [ActivityType.QUESTION]: () => 'Question',
   [ActivityType.CONTENU_LIBRE]: (a) => (a.displayAsUser ? `Message` : 'Message de Pélico'),
   [ActivityType.INDICE]: () => 'Indice',
-  [ActivityType.SYMBOL]: () => 'Symbole',
   [ActivityType.REPORTAGE]: () => 'Reportage',
   [ActivityType.REACTION]: () => 'Réaction',
   [ActivityType.STORY]: () => 'Histoire',

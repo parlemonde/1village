@@ -17,7 +17,6 @@ import { QuestionCard } from './QuestionCard';
 import { ReactionCard } from './ReactionCard';
 import { ReportageCard } from './ReportageCard';
 import { StoryCard } from './StoryCard';
-import { SymbolCard } from './SymbolCard';
 import { VerseRecordCard } from './VerseRecordCard';
 import type { ActivityCardProps } from './activity-card.types';
 import { isEnigme, isReaction } from 'src/activity-types/anyActivity';
@@ -42,7 +41,6 @@ const CardTypeMapper = {
   [ActivityType.DEFI]: DefiCard,
   [ActivityType.CONTENU_LIBRE]: FreeContentCard,
   [ActivityType.INDICE]: IndiceCard,
-  [ActivityType.SYMBOL]: SymbolCard,
   [ActivityType.GAME]: GameCard,
   [ActivityType.REPORTAGE]: ReportageCard,
   [ActivityType.REACTION]: ReactionCard,

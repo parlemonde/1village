@@ -8,7 +8,6 @@ import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import ReportageIcon from 'src/svg/navigation/reportage-icon.svg';
 import RouletteIcon from 'src/svg/navigation/roulette-icon.svg';
 import StoryIcon from 'src/svg/navigation/story-icon.svg';
-import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { ActivityType } from 'types/activity.type';
@@ -23,7 +22,6 @@ export const titles = {
   [ActivityType.QUESTION]: 'posé une question',
   [ActivityType.CONTENU_LIBRE]: 'envoyé un message à ses Pélicopains',
   [ActivityType.INDICE]: 'créé un indice',
-  [ActivityType.SYMBOL]: 'créé un symbole',
   [ActivityType.REPORTAGE]: 'réalisé un reportage',
   [ActivityType.REACTION]: 'réagi à',
   [ActivityType.STORY]: 'inventé une histoire',
@@ -41,7 +39,6 @@ export const icons = {
   [ActivityType.QUESTION]: QuestionIcon,
   [ActivityType.CONTENU_LIBRE]: '',
   [ActivityType.INDICE]: IndiceIcon,
-  [ActivityType.SYMBOL]: SymbolIcon,
   [ActivityType.REPORTAGE]: ReportageIcon,
   [ActivityType.REACTION]: ReactionIcon,
   [ActivityType.STORY]: StoryIcon,
@@ -59,7 +56,6 @@ export const DESC = {
   [ActivityType.QUESTION]: 'une question',
   [ActivityType.CONTENU_LIBRE]: 'un message',
   [ActivityType.INDICE]: 'un indice',
-  [ActivityType.SYMBOL]: 'un symbole',
   [ActivityType.REPORTAGE]: 'un reportage',
   [ActivityType.REACTION]: 'une réaction',
   [ActivityType.STORY]: 'une histoire',
@@ -77,7 +73,6 @@ export const REACTIONS = {
   [ActivityType.QUESTION]: 'cette question',
   [ActivityType.CONTENU_LIBRE]: 'ce message',
   [ActivityType.INDICE]: 'cet indice',
-  [ActivityType.SYMBOL]: 'ce symbole',
   [ActivityType.REPORTAGE]: 'ce reportage',
   [ActivityType.REACTION]: 'cette réaction',
   [ActivityType.STORY]: 'cette histoire',
@@ -95,7 +90,6 @@ export const labels = {
   [ActivityType.QUESTION]: 'Répondre à cette question par :',
   [ActivityType.CONTENU_LIBRE]: 'Répondre à cette publication par :',
   [ActivityType.INDICE]: 'Répondre à cet indice par :',
-  [ActivityType.SYMBOL]: 'Répondre à ce symbole par :',
   [ActivityType.REPORTAGE]: 'Répondre à ce reportage par :',
   [ActivityType.REACTION]: 'Répondre à cette réaction par :',
   [ActivityType.STORY]: 'Répondre à cette histoire par :',
@@ -112,7 +106,6 @@ export const specificActivityPhase = {
   [ActivityType.GAME]: [PhaseType.TWO],
   [ActivityType.CONTENU_LIBRE]: [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE],
   [ActivityType.INDICE]: [PhaseType.ONE],
-  [ActivityType.SYMBOL]: [PhaseType.ONE],
   [ActivityType.MASCOTTE]: [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE],
   [ActivityType.REPORTAGE]: [PhaseType.TWO],
   [ActivityType.REACTION]: [PhaseType.TWO],
