@@ -392,6 +392,54 @@ statisticsController.get({ path: '/countries/:countryCode' }, async (req, res) =
   });
 });
 
+statisticsController.get({ path: '/countries/:countryCode/engagement-status' }, async (req, res) => {
+  const countryCode = req.params.countryCode;
+
+  const countryEngagementStatus = await AppDataSource.query<
+    {
+      countryCode: string;
+      status: string;
+      statusCount: number;
+    }[]
+  >(`
+    WITH getCountries AS (
+      SELECT DISTINCT countryCode
+      FROM classroom
+    ),
+    getUsersStatus AS (
+      SELECT
+        u.id,
+        c.countryCode,
+        CASE
+          WHEN MAX(sess.date) IS NULL THEN 'absent'
+          WHEN MAX(sess.date) < (NOW() - INTERVAL 21 DAY) THEN 'ghost'
+          WHEN MAX(act.publishDate) >= (NOW() - INTERVAL 21 DAY)
+            OR MAX(com.createDate) >= (NOW() - INTERVAL 21 DAY) THEN 'active'
+          ELSE 'observer'
+        END AS status
+      FROM getCountries c
+      INNER JOIN classroom cla ON cla.countryCode = c.countryCode
+      INNER JOIN user u ON u.id = cla.userId
+      LEFT JOIN analytic_session sess ON sess.userId = u.id
+      LEFT JOIN activity act ON act.userId = u.id AND act.status = 0
+      LEFT JOIN comment com ON com.userId = u.id
+      WHERE c.countryCode = '${countryCode}'
+      GROUP BY u.id, u.villageId
+    )
+    SELECT countryCode, status, COUNT(*) AS statusCount
+    FROM getUsersStatus
+    GROUP BY countryCode, status
+    ORDER BY statusCount DESC;
+`);
+
+  if (countryEngagementStatus.length === 0) {
+    res.status(501).send(`Le pays sélectionné (${countryCode}) n'est associé à aucune classe. Impossible de déterminer son statut`);
+    return;
+  }
+
+  res.sendJSON(countryEngagementStatus[0]);
+});
+
 statisticsController.get({ path: '/classrooms/:classroomId' }, async (req, res) => {
   const classroomId = parseInt(req.params.classroomId);
   const { countryCode } = req.params;

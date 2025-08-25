@@ -67,11 +67,29 @@ export const useGetVillagesStats = (villageId?: number, phase?: number) => {
     enabled: villageId !== null,
   });
 };
+
 export const useGetCountriesStats = (countryId?: string, phase?: number) => {
   return useQuery(['countries-stats', countryId, phase], () => getCountriesStats(countryId, phase), {
     enabled: countryId !== null,
   });
 };
+
+async function getCountryEngagementStatus(countryCode?: string): Promise<EngagementStatus> {
+  const url = `/statistics/countries/${countryCode}/engagement-status`;
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url,
+    })
+  ).data.status;
+}
+
+export function useGetCountryEngagementStatus(countryCode?: string) {
+  return useQuery(['country-engagement-status', countryCode], () => getCountryEngagementStatus(countryCode), {
+    enabled: !!countryCode,
+  });
+}
 
 async function getClassroomsStats(classroomId?: number, phase?: number): Promise<VillageStats> {
   return (

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
 
+import EntityEngagementStatus, { EntityType } from './EntityEngagementStatus';
 import Loader, { AnalyticsDataType } from './Loader';
 import TeamCommentCard from './TeamCommentCard';
 import VillageListCard from './cards/VillageListCard/VillageListCard';
@@ -11,7 +12,7 @@ import StatisticFilters from './filters/StatisticFilters';
 import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
-import { useGetClassroomsEngagementStatus, useGetCountriesStats } from 'src/api/statistics/statistics.get';
+import { useGetClassroomsEngagementStatus, useGetCountriesStats, useGetCountryEngagementStatus } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import type { CountryStat } from 'types/analytics/country-stat';
 import type { VillageListItem } from 'types/analytics/village-list-item';
@@ -28,6 +29,7 @@ const CountryStats = () => {
   const [villageList, setVillageList] = useState<VillageListItem[]>([]);
   const [loadingVillageList, setLoadingVillageList] = useState<boolean>(true);
 
+  const { data: countryEngagementStatus, isLoading: isLoadingCountryEngagementStatus } = useGetCountryEngagementStatus(selectedCountry);
   const { data: classroomsStatistics, isLoading: isLoadingClassroomStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
   const { data: sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, selectedCountry, null, selectedPhase);
   const { data: familyStatistics, isLoading: isLoadingFamilyStatistics } = useGetCountriesStats(selectedCountry, selectedPhase);
@@ -54,12 +56,12 @@ const CountryStats = () => {
         { name: 'Village France - Canada', color: 'green' },
         { name: 'Village France - Liban', color: 'orange' },
         { name: 'Village France - Italie', color: 'gold' },
-        { name: 'Village France - Canada', color: 'yellow' },
-        { name: 'Village France - Liban', color: 'green' },
-        { name: 'Village France - Italie', color: 'limegreen' },
-        { name: 'Village France - Canada', color: 'blue' },
-        { name: 'Village France - Liban', color: 'red' },
-        { name: 'Village France - Italie', color: 'orange' },
+        { name: 'Village France - Hongrie', color: 'yellow' },
+        { name: 'Village France - Belgique', color: 'green' },
+        { name: 'Village France - Angleterre', color: 'limegreen' },
+        { name: 'Village France - Mexique', color: 'blue' },
+        { name: 'Village France - Russie', color: 'red' },
+        { name: 'Village France - Australie', color: 'orange' },
       ];
 
       setHighlightedCountry(fakeHighlightedCountry);
@@ -71,27 +73,28 @@ const CountryStats = () => {
     }, 5000);
   }, []);
 
+  const isLoadingCountryStatistics = isLoadingCountryEngagementStatus || loadingHighlightedCountry || loadingBarsChartData || loadingVillageList;
+
   return (
     <>
       <TeamCommentCard type={TeamCommentType.COUNTRY} />
       <StatisticFilters onPhaseChange={setSelectedPhase} onCountryChange={setSelectedCountry} />
-      {!selectedCountry || !familyStatistics ? (
+      {!selectedCountry ? (
         <PelicoCard message={'Merci de sélectionner un pays pour analyser ses statistiques'} />
       ) : (
         <Box mt={2}>
-          {loadingHighlightedCountry || loadingBarsChartData || loadingVillageList ? (
+          {isLoadingCountryStatistics ? (
             <Loader analyticsDataType={AnalyticsDataType.GRAPHS} />
           ) : (
-            highlightedCountry &&
-            barsChartData &&
-            villageList && (
-              <>
+            <>
+              {countryEngagementStatus && <EntityEngagementStatus entityType={EntityType.COUNTRY} entityEngagementStatus={countryEngagementStatus} />}
+              {highlightedCountry && barsChartData && (
                 <div className={styles.simpleContainer}>
                   <HorizontalBarsChart highlightedCountry={highlightedCountry} barsChartData={barsChartData} />
                 </div>
-                <VillageListCard villageList={villageList} />
-              </>
-            )
+              )}
+              {villageList && <VillageListCard villageList={villageList} />}
+            </>
           )}
           {isLoadingClassroomStatistics || isLoadingSessionsStatistics || isLoadingFamilyStatistics || isLoadingEngagementStatusStatistics ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
