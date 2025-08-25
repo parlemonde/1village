@@ -137,22 +137,6 @@ export const Navigation = (): JSX.Element => {
         phase: 1,
         disabled: isParent,
       },
-      /* TODO: Ticket JIRA : VIL-791
-          Elise attend que l'équipe péda soit présente à partir de septembre 2025
-          pour confirmer la suppression de ce bouton. Une fois valider :
-            - supprimer ce bouton commenté
-            - supprimer les fichiers dans le dossier src/pages/symbole
-            - supprimer ActivityType.SYMBOL et les lignes de code associé à ce type dans les différents fichiers
-            - supprimer themeOfIndiceSymbolique dans dataFilters.ts
-            - chercher le mot "symbole" dans le code et supprimer si plus utilisé
-      {
-        label: 'Présenter un symbole',
-        path: '/symbole',
-        icon: <SymbolIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-        phase: 1,
-        disabled: isParent,
-      },
-      */
       // ---- PHASE 2 ----
       {
         label: 'Publier un reportage',
