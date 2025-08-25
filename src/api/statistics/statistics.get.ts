@@ -1,7 +1,15 @@
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { SessionsStats, VillageStats, ClassroomToMonitor, EngagementStatusParams, EngagementStatusData } from 'types/statistics.type';
+import type { Classroom } from 'types/classroom.type';
+import type {
+  EngagementStatusParams,
+  EngagementStatusData,
+  SessionsStats,
+  VillageStats,
+  ClassroomToMonitor,
+  EngagementStatus,
+} from 'types/statistics.type';
 
 async function getSessionsStats(phase?: number): Promise<SessionsStats> {
   return (
@@ -140,4 +148,21 @@ export function useGetClassroomsEngagementStatus(engagementStatusParams: Engagem
       enabled: !!engagementStatusParams.countryCode || !!engagementStatusParams.villageId,
     },
   );
+}
+
+async function getClassroomEngagementStatus(classroomId?: Classroom['id']): Promise<EngagementStatus> {
+  const url = `/statistics/classrooms/${classroomId}/engagement-status`;
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url,
+    })
+  ).data.status;
+}
+
+export function useGetClassroomEngagementStatus(classroomId?: Classroom['id']) {
+  return useQuery(['classroom-engagement-status', classroomId], () => getClassroomEngagementStatus(classroomId), {
+    enabled: !!classroomId,
+  });
 }

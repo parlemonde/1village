@@ -436,3 +436,39 @@ statisticsController.get({ path: '/classrooms/:classroomId' }, async (req, res) 
 
   res.sendJSON(response);
 });
+
+statisticsController.get({ path: '/classrooms/:classroomId/engagement-status' }, async (req, res) => {
+  const classroomId = parseInt(req.params.classroomId);
+  if (isNaN(classroomId)) {
+    res.status(400).send(`L'identifiant de la classe est invalide.`);
+    return;
+  }
+
+  const queryBuilder = AppDataSource.createQueryBuilder()
+    .select('c.id', 'classroomId')
+    .addSelect(
+      `
+        CASE
+          WHEN MAX(sess.date) IS NULL THEN 'absent'
+          WHEN MAX(sess.date) < (NOW() - INTERVAL 21 DAY) THEN 'ghost'
+          WHEN MAX(act.publishDate) >= (NOW() - INTERVAL 21 DAY)
+            OR MAX(com.createDate) >= (NOW() - INTERVAL 21 DAY) THEN 'active'
+          ELSE 'observer'
+        END
+      `,
+      'status',
+    )
+    .from(Classroom, 'c')
+    .leftJoin(AnalyticSession, 'sess', 'sess.userId = c.userId')
+    .leftJoin(Activity, 'act', 'act.userId = c.userId AND act.status = 0')
+    .leftJoin(Comment, 'com', 'com.userId = c.userId')
+    .innerJoin(User, 'u', `u.id = c.userId`)
+    .where('c.id = :classroomId', { classroomId });
+
+  const classroomEngagementStatus = await queryBuilder.getRawOne<{
+    classroomId: Classroom['id'];
+    status: string;
+  }>();
+
+  res.sendJSON(classroomEngagementStatus);
+});
