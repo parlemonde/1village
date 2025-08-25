@@ -7,18 +7,17 @@ import { PieChart } from '@mui/x-charts/PieChart';
 import styles from '../styles/charts.module.css';
 import type { PieChartDataItem } from 'types/dashboard.type';
 import type { EngagementStatusData } from 'types/statistics.type';
-import { EngagementStatus } from 'types/statistics.type';
-
-export const RED = '#D11818';
-export const YELLOW = '#FFD678';
-export const BLUE = '#6082FC';
-export const GREEN = '#4CC64A';
+import { EngagementStatusColor, EngagementStatus } from 'types/statistics.type';
 
 const engagementStatusToPieChartItem: Record<EngagementStatus, (engagementStatus: EngagementStatusData) => PieChartDataItem> = {
-  [EngagementStatus.ABSENT]: (engagementStatus) => ({ value: engagementStatus.statusCount, label: 'Absentes', color: RED }),
-  [EngagementStatus.GHOST]: (engagementStatus) => ({ value: engagementStatus.statusCount, label: 'Fantômes', color: YELLOW }),
-  [EngagementStatus.OBSERVER]: (engagementStatus) => ({ value: engagementStatus.statusCount, label: 'Observatrices', color: BLUE }),
-  [EngagementStatus.ACTIVE]: (engagementStatus) => ({ value: engagementStatus.statusCount, label: 'Actives', color: GREEN }),
+  [EngagementStatus.ABSENT]: (engagementStatus) => ({ value: engagementStatus.statusCount, label: 'Absentes', color: EngagementStatusColor.ABSENT }),
+  [EngagementStatus.GHOST]: (engagementStatus) => ({ value: engagementStatus.statusCount, label: 'Fantômes', color: EngagementStatusColor.GHOST }),
+  [EngagementStatus.OBSERVER]: (engagementStatus) => ({
+    value: engagementStatus.statusCount,
+    label: 'Observatrices',
+    color: EngagementStatusColor.OBSERVER,
+  }),
+  [EngagementStatus.ACTIVE]: (engagementStatus) => ({ value: engagementStatus.statusCount, label: 'Actives', color: EngagementStatusColor.ACTIVE }),
 };
 
 interface Props {
@@ -33,7 +32,7 @@ const PieCharts: React.FC<Props> = ({ engagementStatusData, className }) => {
     <div className={classNames(styles.pieContainer, className)}>
       <div className={styles.title}>{"Niveau d'engagement"}</div>
       <PieChart
-        colors={[RED, YELLOW, BLUE, GREEN]}
+        colors={[EngagementStatusColor.ABSENT, EngagementStatusColor.GHOST, EngagementStatusColor.OBSERVER, EngagementStatusColor.ACTIVE]}
         series={[{ data: pieChartData }]}
         width={300}
         height={200}
