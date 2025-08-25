@@ -7,6 +7,7 @@ import { Box, Tab, Tabs } from '@mui/material';
 import { OneVillageTable } from '../OneVillageTable';
 import { getCommentCount, getPublicationCount, getVideoCount } from '../StatisticsUtils';
 import CountryActivityPhaseAccordion from './CountryActivityPhaseAccordion';
+import EntityEngagementStatus, { EntityType } from './EntityEngagementStatus';
 import Loader, { AnalyticsDataType } from './Loader';
 import TabPanel from './TabPanel';
 import TeamCommentCard from './TeamCommentCard';
@@ -26,7 +27,7 @@ import styles from './styles/charts.module.css';
 import ClassroomsToMonitorTable from './tables/ClassroomsToMonitorTable';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
-import { useGetClassroomsEngagementStatus, useGetVillagesStats } from 'src/api/statistics/statistics.get';
+import { useGetClassroomsEngagementStatus, useGetVillageEngagementStatus, useGetVillagesStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
@@ -49,6 +50,8 @@ const VillageStats = () => {
   const [loadingSecondChartData, setLoadingSecondChartData] = useState<boolean>(true);
 
   const { data: villageStatistics, isLoading: isLoadingVillageStatistics } = useGetVillagesStats(selectedVillage, selectedPhase);
+  const { data: villageEngagementStatus, isLoading: isLoadingVillageEngagementStatus } = useGetVillageEngagementStatus(selectedVillage);
+
   const { data: classroomsStatistics, isLoading: isLoadingClassroomsStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
   const { data: sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(selectedVillage, null, null, selectedPhase);
   const { data: engagementStatusStatistics, isLoading: isLoadingEngagementStatusStatistics } = useGetClassroomsEngagementStatus({
@@ -106,16 +109,21 @@ const VillageStats = () => {
     }, 5000);
   }, []);
 
+  const isLoadingGraphsData = isLoadingVillageEngagementStatus || loadingFirstChartData || loadingSecondChartData;
+
   return (
     <>
       <TeamCommentCard type={TeamCommentType.VILLAGE} />
       <StatisticFilters onPhaseChange={setSelectedPhase} onCountryChange={setSelectedCountry} onVillageChange={setSelectedVillage} />
       {selectedCountry && selectedVillage ? (
         <>
-          {loadingFirstChartData || loadingSecondChartData ? (
+          {isLoadingGraphsData ? (
             <Loader analyticsDataType={AnalyticsDataType.GRAPHS} />
           ) : (
-            firstChartData && secondChartData && <DualBarChart firstTable={firstChartData} secondTable={secondChartData} />
+            <>
+              {villageEngagementStatus && <EntityEngagementStatus entityType={EntityType.VILLAGE} entityEngagementStatus={villageEngagementStatus} />}
+              {firstChartData && secondChartData && <DualBarChart firstTable={firstChartData} secondTable={secondChartData} />}
+            </>
           )}
           {isLoadingClassroomsStatistics || isLoadingSessionsStatistics || isLoadingVillageStatistics || isLoadingEngagementStatusStatistics ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />

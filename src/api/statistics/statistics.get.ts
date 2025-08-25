@@ -68,6 +68,23 @@ export const useGetVillagesStats = (villageId?: number, phase?: number) => {
   });
 };
 
+async function getVillageEngagementStatus(villageId?: number): Promise<EngagementStatus> {
+  const url = `/statistics/villages/${villageId}/engagement-status`;
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url,
+    })
+  ).data.status;
+}
+
+export function useGetVillageEngagementStatus(villageId?: number) {
+  return useQuery(['village-engagement-status', villageId], () => getVillageEngagementStatus(villageId), {
+    enabled: !!villageId,
+  });
+}
+
 export const useGetCountriesStats = (countryId?: string, phase?: number) => {
   return useQuery(['countries-stats', countryId, phase], () => getCountriesStats(countryId, phase), {
     enabled: countryId !== null,

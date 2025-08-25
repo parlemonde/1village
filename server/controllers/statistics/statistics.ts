@@ -7,6 +7,7 @@ import { AnalyticSession } from '../../entities/analytic';
 import { Classroom } from '../../entities/classroom';
 import { Comment } from '../../entities/comment';
 import { User } from '../../entities/user';
+import { Village } from '../../entities/village';
 import {
   getConnectedClassroomsCount,
   getRegisteredClassroomsCount,
@@ -370,6 +371,56 @@ statisticsController.get({ path: '/villages/:villageId' }, async (req, res) => {
     family,
     activityCountDetails,
   });
+});
+
+statisticsController.get({ path: '/villages/:villageId/engagement-status' }, async (req, res) => {
+  const villageId = parseInt(req.params.villageId);
+  if (isNaN(villageId)) {
+    res.status(400).send(`L'identifiant du village est invalide.`);
+    return;
+  }
+
+  const queryBuilder = AppDataSource.createQueryBuilder()
+    .select('getUsersStatus.status', 'status')
+    .addSelect('COUNT(*)', 'statusCount')
+    .addSelect('getUsersStatus.villageId', 'villageId')
+    .from((subQb) => {
+      return subQb
+        .select('vil.id', 'villageId')
+        .addSelect('u.id', 'userId')
+        .addSelect(
+          `
+        CASE
+          WHEN MAX(sess.date) IS NULL THEN 'absent'
+          WHEN MAX(sess.date) < (NOW() - INTERVAL 21 DAY) THEN 'ghost'
+          WHEN MAX(act.publishDate) >= (NOW() - INTERVAL 21 DAY)
+            OR MAX(com.createDate) >= (NOW() - INTERVAL 21 DAY) THEN 'active'
+          ELSE 'observer'
+        END
+      `,
+          'status',
+        )
+        .from(Village, 'vil')
+        .innerJoin(User, 'u', `u.villageId = vil.id`)
+        .leftJoin(AnalyticSession, 'sess', 'sess.userId = u.id')
+        .leftJoin(Activity, 'act', 'act.userId = u.id AND act.status = 0')
+        .leftJoin(Comment, 'com', 'com.userId = u.id')
+        .where('vil.id = :villageId', { villageId })
+        .groupBy('userId')
+        .addGroupBy('villageId');
+    }, 'getUsersStatus')
+    .groupBy('getUsersStatus.status')
+    .addGroupBy('getUsersStatus.villageId')
+    .orderBy('statusCount', 'DESC')
+    .limit(1);
+
+  const villageEngagementStatus = await queryBuilder.getRawOne<{
+    villageId: Classroom['id'];
+    status: string;
+    statusCount: number;
+  }>();
+
+  res.sendJSON(villageEngagementStatus);
 });
 
 statisticsController.get({ path: '/countries/:countryCode' }, async (req, res) => {
