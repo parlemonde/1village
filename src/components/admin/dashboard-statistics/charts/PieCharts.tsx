@@ -6,7 +6,7 @@ import { PieChart } from '@mui/x-charts/PieChart';
 
 import styles from '../styles/charts.module.css';
 import type { PieChartDataItem } from 'types/dashboard.type';
-import type { EngagementLevel } from 'types/statistics.type';
+import type { EngagementStatusData } from 'types/statistics.type';
 import { EngagementStatus } from 'types/statistics.type';
 
 export const RED = '#D11818';
@@ -14,20 +14,20 @@ export const YELLOW = '#FFD678';
 export const BLUE = '#6082FC';
 export const GREEN = '#4CC64A';
 
-const engagementLevelToPieChartItem: Record<EngagementStatus, (engagementLevel: EngagementLevel) => PieChartDataItem> = {
-  [EngagementStatus.ABSENT]: (engagementLevel) => ({ value: engagementLevel.statusCount, label: 'Absentes', color: RED }),
-  [EngagementStatus.GHOST]: (engagementLevel) => ({ value: engagementLevel.statusCount, label: 'Fantômes', color: YELLOW }),
-  [EngagementStatus.OBSERVER]: (engagementLevel) => ({ value: engagementLevel.statusCount, label: 'Observatrices', color: BLUE }),
-  [EngagementStatus.ACTIVE]: (engagementLevel) => ({ value: engagementLevel.statusCount, label: 'Actives', color: GREEN }),
+const engagementStatusToPieChartItem: Record<EngagementStatus, (engagementStatus: EngagementStatusData) => PieChartDataItem> = {
+  [EngagementStatus.ABSENT]: (engagementStatus) => ({ value: engagementStatus.statusCount, label: 'Absentes', color: RED }),
+  [EngagementStatus.GHOST]: (engagementStatus) => ({ value: engagementStatus.statusCount, label: 'Fantômes', color: YELLOW }),
+  [EngagementStatus.OBSERVER]: (engagementStatus) => ({ value: engagementStatus.statusCount, label: 'Observatrices', color: BLUE }),
+  [EngagementStatus.ACTIVE]: (engagementStatus) => ({ value: engagementStatus.statusCount, label: 'Actives', color: GREEN }),
 };
 
 interface Props {
-  engagementLevelData: EngagementLevel[];
+  engagementStatusData: EngagementStatusData[];
   className?: string;
 }
 
-const PieCharts: React.FC<Props> = ({ engagementLevelData, className }) => {
-  const pieChartData: PieChartDataItem[] = formatEngagementLevelForPieChart(engagementLevelData);
+const PieCharts: React.FC<Props> = ({ engagementStatusData, className }) => {
+  const pieChartData: PieChartDataItem[] = formatEngagementStatusForPieChart(engagementStatusData);
 
   return (
     <div className={classNames(styles.pieContainer, className)}>
@@ -56,6 +56,6 @@ const PieCharts: React.FC<Props> = ({ engagementLevelData, className }) => {
 
 export default PieCharts;
 
-function formatEngagementLevelForPieChart(engagementLevelData: EngagementLevel[]): PieChartDataItem[] {
-  return engagementLevelData.map((engagementLevel) => engagementLevelToPieChartItem[engagementLevel.status](engagementLevel));
+function formatEngagementStatusForPieChart(engagementStatusData: EngagementStatusData[]): PieChartDataItem[] {
+  return engagementStatusData.map((engagementStatus) => engagementStatusToPieChartItem[engagementStatus.status](engagementStatus));
 }
