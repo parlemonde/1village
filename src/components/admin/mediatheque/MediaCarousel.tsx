@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Button from '@mui/material/Button';
 import CardMedia from '@mui/material/CardMedia';
+import React, { useState } from 'react';
 
 type Item = {
   type: string;

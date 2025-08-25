@@ -1,7 +1,6 @@
+import { Box, Button } from '@mui/material';
 import Link from 'next/link';
 import React from 'react';
-
-import { Box, Button } from '@mui/material';
 
 import { Base } from 'src/components/Base';
 import { bgPage } from 'src/styles/variables.const';

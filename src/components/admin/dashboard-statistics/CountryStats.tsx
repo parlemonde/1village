@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-
 import { Box } from '@mui/material';
+import React, { useState } from 'react';
 
 import { TeamCommentType } from '../../../../types/teamComment.type';
 import TeamCommentCard from './TeamCommentCard';

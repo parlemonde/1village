@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { Box } from '@mui/material';
+import React from 'react';
 
 import AnimalNationalIcon from '../../svg/symbole/animal-national.svg';
 import DeviseIcon from '../../svg/symbole/devise.svg';

@@ -1,8 +1,7 @@
-import React from 'react';
-
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box } from '@mui/material';
+import React from 'react';
 
 import { OneVillageTable } from '../../OneVillageTable';
 import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';

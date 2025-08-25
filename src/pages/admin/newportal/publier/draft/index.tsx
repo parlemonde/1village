@@ -1,7 +1,6 @@
+import { useMediaQuery } from '@mui/material';
 import Link from 'next/link';
 import React, { useState } from 'react';
-
-import { useMediaQuery } from '@mui/material';
 
 import { useGetActivitiesAdminDraft } from 'src/api/activities/activities.admin.get';
 import SearchField from 'src/components/SearchField';

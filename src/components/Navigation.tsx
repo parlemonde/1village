@@ -1,8 +1,7 @@
+import { Box, Button } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-
-import { Box, Button } from '@mui/material';
 
 import { AvatarImg } from './Avatar';
 import { VillageMonde } from './VillageMonde';

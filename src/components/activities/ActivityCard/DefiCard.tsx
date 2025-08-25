@@ -1,9 +1,8 @@
+import { Button } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
-
-import { Button } from '@mui/material';
 
 import type { CookingDefiData, DefiActivity } from '../../../activity-types/defi.types';
 import { CommentIcon } from './CommentIcon';

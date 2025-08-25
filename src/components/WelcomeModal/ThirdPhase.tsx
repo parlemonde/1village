@@ -1,7 +1,6 @@
+import Button from '@mui/material/Button';
 import { useSnackbar } from 'notistack';
 import React, { useContext, useState } from 'react';
-
-import Button from '@mui/material/Button';
 
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';

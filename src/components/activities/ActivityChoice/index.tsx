@@ -1,6 +1,5 @@
-import React, { useCallback, useContext } from 'react';
-
 import { Tooltip } from '@mui/material';
+import React, { useCallback, useContext } from 'react';
 
 import { ActivityChoiceButton } from './ActivityChoiceButton';
 import { GameContext } from 'src/contexts/gameContext';

@@ -1,9 +1,8 @@
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Button, IconButton, InputAdornment, Link, TextField } from '@mui/material';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 
 import { KeepRatio } from '../components/KeepRatio';
 import PasswordMessagesDisplayer from 'src/components/PasswordMessagesDisplayer';

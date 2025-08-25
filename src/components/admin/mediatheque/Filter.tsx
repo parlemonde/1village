@@ -1,5 +1,3 @@
-import React from 'react';
-
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -8,6 +6,7 @@ import Select from '@mui/material/Select';
 import Tooltip from '@mui/material/Tooltip';
 import { useTheme } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
+import React from 'react';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

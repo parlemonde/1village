@@ -1,3 +1,4 @@
+import { Tooltip } from '@mui/material';
 import 'leaflet/dist/leaflet.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import L from 'leaflet';
@@ -5,9 +6,6 @@ import {} from 'leaflet.fullscreen';
 import maplibregl from 'maplibre-gl';
 import { useRouter } from 'next/router';
 import React from 'react';
-
-// eslint-disable-next-line import/order
-import { Tooltip } from '@mui/material';
 
 import { useActivity } from 'src/services/useActivity';
 import { primaryColor } from 'src/styles/variables.const';

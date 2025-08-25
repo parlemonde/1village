@@ -16,6 +16,9 @@ import 'src/styles/statistic.scss';
 
 import type { EmotionCache } from '@emotion/react';
 import { CacheProvider } from '@emotion/react';
+import { Container } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import type { Request } from 'express';
 import App from 'next/app';
@@ -25,10 +28,6 @@ import { SnackbarProvider } from 'notistack';
 import NProgress from 'nprogress';
 import React, { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-
-import { Container } from '@mui/material';
-import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider } from '@mui/material/styles';
 
 import { Header } from 'src/components/Header';
 import { WelcomeModal } from 'src/components/WelcomeModal';

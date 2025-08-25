@@ -1,7 +1,6 @@
+import { Button } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { Button } from '@mui/material';
 
 import { filterActivitiesByTerm, filterActivitiesWithLastGame } from './Filters/FilterActivities';
 import { LinkChild } from './LinkChild';

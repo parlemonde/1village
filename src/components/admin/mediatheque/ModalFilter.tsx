@@ -1,10 +1,9 @@
-import React, { useContext, useState } from 'react';
-
 import RefreshIcon from '@mui/icons-material/Refresh';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
+import React, { useContext, useState } from 'react';
 
 import FiltersActivities from './FiltersActivities';
 import CheckboxAdmin from 'src/components/admin/mediatheque/CheckboxAdmin';

@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { Box } from '@mui/material';
+import React from 'react';
 
 import { OneVillageTable } from '../OneVillageTable';
 import { countryToFlag } from 'src/utils';

@@ -1,7 +1,6 @@
-import React from 'react';
-
 import MicNoneIcon from '@mui/icons-material/MicNone';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import React from 'react';
 
 import { useDragHandler } from 'src/hooks/useDragHandler';
 import { clamp } from 'src/utils';

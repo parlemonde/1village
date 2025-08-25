@@ -1,8 +1,7 @@
+import { TextField, Switch, Button } from '@mui/material';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-
-import { TextField, Switch, Button } from '@mui/material';
 
 import Layout from '../../../layout';
 import { getImage } from 'src/activity-types/freeContent.constants';
