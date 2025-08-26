@@ -7,7 +7,7 @@ import DashboardSummary from './dashboard-summary/DashboardSummary';
 import StatisticFilters from './filters/StatisticFilters';
 import DashboardWorldMap from './map/DashboardWorldMap/DashboardWorldMap';
 import { mockDataByMonth } from './mocks/mocks';
-import { useGetOneVillageStats, useGetSessionsStats } from 'src/api/statistics/statistics.get';
+import { useGetCountriesEngagementStatuses, useGetOneVillageStats, useGetSessionsStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms } from 'src/services/useStatistics';
 import type { VillageInteractionsActivity } from 'types/analytics/village-interactions-activity';
 import { DashboardType } from 'types/dashboard.type';
@@ -17,15 +17,16 @@ import { TeamCommentType } from 'types/teamComment.type';
 const GlobalStats = () => {
   const [selectedPhase, setSelectedPhase] = useState<number>();
 
-  const [mapData, setMapData] = useState<VillageInteractionsActivity[]>([]);
-  const [loadingMapData, setLoadingMapData] = useState<boolean>(true);
+  const [villagesActivityData, setVillagesActivityData] = useState<VillageInteractionsActivity[]>([]);
+  const [loadingActivityTableData, setLoadingActivityTableData] = useState<boolean>(true);
 
   const { data: sessionStatistics, isLoading: isLoadingSessionStats } = useGetSessionsStats(selectedPhase);
   const { data: classroomsStatistics, isLoading: isLoadingClassroomStatistics } = useStatisticsClassrooms(null, null, null);
   const { data: oneVillageStatistics, isLoading: isLoadingWebsiteStats } = useGetOneVillageStats();
+  const { data: countriesEngagementStatuses, isLoading: isLoadingCountriesEngagementStatuses } = useGetCountriesEngagementStatuses();
 
   // On mocke l'asynchronisme en attendant d'avoir l'appel serveur censé retourner les interactions des villages-mondes
-  // A refacto lors de l'implémentation du ticket VIL-10: Planisphère représentant l'activité d'1V
+  // A refacto lors de l'implémentation du ticket pour l'implémentation du composant ActivityTable
   useEffect(() => {
     setTimeout(() => {
       const fakeAnalyticsData: VillageInteractionsActivity[] = [
@@ -79,8 +80,8 @@ const GlobalStats = () => {
         },
       ];
 
-      setMapData(fakeAnalyticsData);
-      setLoadingMapData(false);
+      setVillagesActivityData(fakeAnalyticsData);
+      setLoadingActivityTableData(false);
     }, 2000);
   }, []);
 
@@ -88,12 +89,12 @@ const GlobalStats = () => {
     <>
       <TeamCommentCard type={TeamCommentType.GLOBAL} />
       <StatisticFilters onPhaseChange={setSelectedPhase} />
-      {loadingMapData ? (
+      {loadingActivityTableData || isLoadingCountriesEngagementStatuses ? (
         <Loader analyticsDataType={AnalyticsDataType.GRAPHS} />
       ) : (
         <>
-          <DashboardWorldMap />
-          <ActivityTable activityTableData={mapData} />
+          {countriesEngagementStatuses && <DashboardWorldMap countriesEngagementStatuses={countriesEngagementStatuses} />}
+          <ActivityTable activityTableData={villagesActivityData} />
         </>
       )}
 
