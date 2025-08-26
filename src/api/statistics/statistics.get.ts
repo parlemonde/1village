@@ -9,6 +9,7 @@ import type {
   VillageStats,
   ClassroomToMonitor,
   EngagementStatus,
+  CountryEngagementStatus,
 } from 'types/statistics.type';
 
 async function getSessionsStats(phase?: number): Promise<SessionsStats> {
@@ -58,9 +59,24 @@ export const useGetSessionsStats = (phase?: number) => {
     refetchOnMount: true,
   });
 };
+
 export const useGetOneVillageStats = () => {
   return useQuery(['1v-stats'], () => getOneVillageStats());
 };
+
+async function getCountriesEngagementStatuses(): Promise<CountryEngagementStatus[]> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: '/statistics/one-village/countries-engagement-statuses',
+    })
+  ).data;
+}
+
+export function useGetCountriesEngagementStatuses() {
+  return useQuery(['countries-engagement-statuses-stats'], () => getCountriesEngagementStatuses());
+}
 
 export const useGetVillagesStats = (villageId?: number, phase?: number) => {
   return useQuery(['villages-stats', villageId, phase], () => getVillagesStats(villageId, phase), {

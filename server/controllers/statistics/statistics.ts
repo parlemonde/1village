@@ -1,6 +1,6 @@
 import type { Request } from 'express';
 
-import type { EngagementStatus, StatsFilterParams } from '../../../types/statistics.type';
+import type { CountryEngagementStatus, EngagementStatus, StatsFilterParams } from '../../../types/statistics.type';
 import { GroupType } from '../../../types/statistics.type';
 import { Activity } from '../../entities/activity';
 import { AnalyticSession } from '../../entities/analytic';
@@ -351,6 +351,56 @@ statisticsController.get({ path: '/one-village' }, async (req, res) => {
   };
 
   res.sendJSON(response);
+});
+
+statisticsController.get({ path: '/one-village/countries-engagement-statuses' }, async (req, res) => {
+  const countryEngagementStatus = await AppDataSource.query<CountryEngagementStatus[]>(`
+    WITH countryCTE AS (
+      SELECT DISTINCT countryCode
+      FROM classroom
+    ),
+    getUsersStatus AS (
+      SELECT
+        u.id,
+        u.villageId,
+        cla.countryCode,
+        CASE
+          WHEN MAX(sess.date) IS NULL THEN 'absent'
+          WHEN MAX(sess.date) < (NOW() - INTERVAL 21 DAY) THEN 'ghost'
+          WHEN MAX(act.publishDate) >= (NOW() - INTERVAL 21 DAY)
+            OR MAX(com.createDate) >= (NOW() - INTERVAL 21 DAY) THEN 'active'
+          ELSE 'observer'
+        END AS status
+        FROM user u
+        LEFT JOIN analytic_session sess ON u.id = sess.userId
+        LEFT JOIN activity act ON u.id = act.userId AND act.status = 0
+        LEFT JOIN comment com ON u.id = com.userId
+        INNER JOIN classroom cla ON u.id = cla.userId
+        GROUP BY u.id, u.villageId
+    ),
+    countryStatuses as (
+      SELECT c.countryCode, us.status, COUNT(*) AS statusCount
+        FROM countryCTE c
+        LEFT OUTER JOIN getUsersStatus us ON us.countryCode = c.countryCode
+        GROUP BY c.countryCode, us.status
+    )
+    SELECT cc.countryCode, cs2.status
+      FROM countryCTE cc
+      LEFT JOIN (
+        SELECT cs1.countryCode, cs1.status, cs1.statusCount
+        FROM countryStatuses cs1
+        INNER JOIN (
+          SELECT countryCode, MAX(statusCount) AS maxCount
+          FROM countryStatuses
+          GROUP BY countryCode
+        ) maxCountryStatuses
+        ON cs1.countryCode = maxCountryStatuses.countryCode
+        AND cs1.statusCount = maxCountryStatuses.maxCount
+      ) cs2 ON cs2.countryCode = cc.countryCode
+      ORDER BY cc.countryCode;
+`);
+
+  res.sendJSON(countryEngagementStatus);
 });
 
 statisticsController.get({ path: '/villages/:villageId' }, async (req, res) => {
