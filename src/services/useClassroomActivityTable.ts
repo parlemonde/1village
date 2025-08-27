@@ -3,22 +3,13 @@ import { useMemo, type ReactNode } from 'react';
 import { type ComparisonStatistic, type PhaseDetail } from 'src/api/statistics/compare.api';
 import { useGetCompareClassesStats } from 'src/api/statistics/statistics.get';
 
-const calculateTotalPublications = (phaseDetails: PhaseDetail[], phaseId: number) => {
-  const phase = phaseDetails.find((p) => p.phaseId === phaseId);
+const calculateTotalPublications = (phaseDetails: PhaseDetail[], phaseId: number): number => {
+  const phase = phaseDetails.find((phase) => phase.phaseId === phaseId);
   if (!phase) return 0;
-  return (
-    (phase.mascotCount || 0) +
-    (phase.videoCount || 0) +
-    (phase.challengeCount || 0) +
-    (phase.enigmaCount || 0) +
-    (phase.gameCount || 0) +
-    (phase.questionCount || 0) +
-    (phase.reportingCount || 0) +
-    (phase.storyCount || 0) +
-    (phase.anthemCount || 0) +
-    (phase.reinventStoryCount || 0) +
-    (phase.contentLibreCount || 0)
-  );
+
+  return Object.entries(phase)
+    .filter(([key]) => key.endsWith('Count'))
+    .reduce((sum, [, value]) => sum + (value || 0), 0);
 };
 
 interface ClassroomRow {
@@ -43,15 +34,14 @@ interface ClassroomRow {
   [key: string]: string | number | boolean | ReactNode;
 }
 
-export function useClassroomActivityTable(classroomId: number, phaseId: number) {
+export function useClassroomActivityTable(classroomId: number, phaseId: number): ClassroomRow[] {
   const { data: compareData, isLoading, error } = useGetCompareClassesStats(classroomId, phaseId);
 
   return useMemo(() => {
-    if (isLoading || error || !compareData) {
-      return [];
-    }
+    const missingPhaseId = phaseId === undefined || phaseId === null;
+    const missingData = isLoading || error || !compareData;
 
-    if (phaseId === undefined || phaseId === null) {
+    if (missingPhaseId || missingData) {
       return [];
     }
 
@@ -146,29 +136,31 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number) 
           });
         }
 
-        const classroomRow = classroomMap.get(classroomKey)!;
-        const classroomTotal =
-          phaseId === 0
-            ? calculateTotalPublications(classroom.phaseDetails, 1) +
-              calculateTotalPublications(classroom.phaseDetails, 2) +
-              calculateTotalPublications(classroom.phaseDetails, 3)
-            : calculateTotalPublications(classroom.phaseDetails, phaseId);
+        const classroomRow = classroomMap.get(classroomKey);
+        if (classroomRow) {
+          const classroomTotal =
+            phaseId === 0
+              ? calculateTotalPublications(classroom.phaseDetails, 1) +
+                calculateTotalPublications(classroom.phaseDetails, 2) +
+                calculateTotalPublications(classroom.phaseDetails, 3)
+              : calculateTotalPublications(classroom.phaseDetails, phaseId);
 
-        classroomRow.totalPublications += classroomTotal;
-        classroomRow.commentCount += aggregatedPhase.commentCount;
-        classroomRow.draftCount += aggregatedPhase.draftCount;
-        classroomRow.mascotCount += aggregatedPhase.mascotCount;
-        classroomRow.videoCount += aggregatedPhase.videoCount;
-        classroomRow.challengeCount += aggregatedPhase.challengeCount;
-        classroomRow.enigmaCount += aggregatedPhase.enigmaCount;
-        classroomRow.gameCount += aggregatedPhase.gameCount;
-        classroomRow.questionCount += aggregatedPhase.questionCount;
-        classroomRow.reactionCount += aggregatedPhase.reactionCount;
-        classroomRow.reportingCount += aggregatedPhase.reportingCount;
-        classroomRow.storyCount += aggregatedPhase.storyCount;
-        classroomRow.anthemCount += aggregatedPhase.anthemCount;
-        classroomRow.reinventStoryCount += aggregatedPhase.reinventStoryCount;
-        classroomRow.contentLibreCount += aggregatedPhase.contentLibreCount;
+          classroomRow.totalPublications += classroomTotal;
+          classroomRow.commentCount += aggregatedPhase.commentCount;
+          classroomRow.draftCount += aggregatedPhase.draftCount;
+          classroomRow.mascotCount += aggregatedPhase.mascotCount;
+          classroomRow.videoCount += aggregatedPhase.videoCount;
+          classroomRow.challengeCount += aggregatedPhase.challengeCount;
+          classroomRow.enigmaCount += aggregatedPhase.enigmaCount;
+          classroomRow.gameCount += aggregatedPhase.gameCount;
+          classroomRow.questionCount += aggregatedPhase.questionCount;
+          classroomRow.reactionCount += aggregatedPhase.reactionCount;
+          classroomRow.reportingCount += aggregatedPhase.reportingCount;
+          classroomRow.storyCount += aggregatedPhase.storyCount;
+          classroomRow.anthemCount += aggregatedPhase.anthemCount;
+          classroomRow.reinventStoryCount += aggregatedPhase.reinventStoryCount;
+          classroomRow.contentLibreCount += aggregatedPhase.contentLibreCount;
+        }
       });
     });
 

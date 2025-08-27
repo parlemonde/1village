@@ -541,9 +541,7 @@ statisticsController.get({ path: '/compare/one-village' }, async (req, res) => {
   res.sendJSON(activityCountDetails);
 });
 
-// [Onglet Pays] : /statistics/compare/countries/FR?phase=1
 statisticsController.get({ path: '/compare/countries/:countryCode' }, async (req, res) => {
-  const { countryCode } = req.params;
   const phase = req.query.phase as unknown as number;
 
   const activityCountDetails = await getActivityTypeCountByVillages({ phase });
@@ -551,20 +549,16 @@ statisticsController.get({ path: '/compare/countries/:countryCode' }, async (req
   res.sendJSON(activityCountDetails);
 });
 
-// [Onglet Village] : /statistics/compare/villages/{villageId}?phase={phaseId}
 statisticsController.get({ path: '/compare/villages/:villageId' }, async (req, res) => {
   const villageId = parseInt(req.params.villageId);
   const phase = req.query.phase as unknown as number;
 
-  // Récupérer les countryCodes du village
   const villageRepo = AppDataSource.getRepository(Village);
   const village = await villageRepo.findOne({ where: { id: villageId } });
-  // countryCodes est déjà un tableau dans l'entité Village
   const countryCodes = village?.countryCodes || [];
 
   const activityCountDetails = await getActivityTypeCountByVillages({ phase, villageId });
 
-  // On agrège par pays
   const countryMap = new Map();
   if (Array.isArray(activityCountDetails)) {
     activityCountDetails.forEach((village: any) => {
@@ -618,7 +612,6 @@ statisticsController.get({ path: '/compare/villages/:villageId' }, async (req, r
   res.sendJSON(result);
 });
 
-// [Onglet Classe] : /statistics/compare/classes/{classroomId}?phase={phaseId}
 statisticsController.get({ path: '/compare/classes/:classroomId' }, async (req, res) => {
   const classroomId = parseInt(req.params.classroomId);
   const phase = req.query.phase as unknown as number;
@@ -628,7 +621,6 @@ statisticsController.get({ path: '/compare/classes/:classroomId' }, async (req, 
   res.sendJSON(activityCountDetails);
 });
 
-// [Onglet OneVillage] : /statistics/compare
 statisticsController.get({ path: '/compare' }, async (req, res) => {
   const phase = req.query.phase as unknown as number;
 
@@ -639,7 +631,6 @@ statisticsController.get({ path: '/compare' }, async (req, res) => {
 
 statisticsController.get({ path: '/classrooms/:classroomId' }, async (req, res) => {
   const classroomId = parseInt(req.params.classroomId);
-  const { countryCode } = req.params;
   const phase = req.query.phase as unknown as number;
 
   const filters: StatsFilterParams = { classroomId, phase };

@@ -19,10 +19,6 @@ const DashboardSummary = ({
   selectedPhase,
   activeTab = DashboardSummaryTab.CLASSROOM,
 }: DashboardSummaryProps) => {
-  if (!dashboardSummaryData) {
-    return null;
-  }
-
   return (
     dashboardSummaryData && (
       <>

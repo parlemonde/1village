@@ -38,6 +38,9 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
   const commentCount = getCommentCount(dashboardSummaryData, selectedCountry);
   const publicationCount = getPublicationCount(dashboardSummaryData, selectedCountry);
 
+  // Extract barChartData for better readability
+  const barChartData = dashboardSummaryData.barChartData || [];
+
   return (
     <>
       <ClassroomsToMonitorTable countryId={selectedCountry} />
@@ -83,7 +86,7 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
         </Grid>
         {dashboardType === DashboardType.ONE_VILLAGE_PANEL ? (
           <Grid item xs={12} lg={12}>
-            <BarCharts className={styles.midContainer} dataByMonth={dashboardSummaryData.barChartData || []} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+            <BarCharts className={styles.midContainer} dataByMonth={barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
           </Grid>
         ) : (
           <>
@@ -94,7 +97,7 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
             )}
 
             <Grid item xs={12} lg={6}>
-              <BarCharts className={styles.midContainer} dataByMonth={dashboardSummaryData.barChartData || []} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+              <BarCharts className={styles.midContainer} dataByMonth={barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
             </Grid>
           </>
         )}
@@ -102,7 +105,7 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
           <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
         </Grid>
         <Grid item xs={12} lg={12}>
-          <BarCharts dataByMonth={dashboardSummaryData.barChartData || []} title={CONTRIBUTION_BAR_CHAR_TITLE} />
+          <BarCharts dataByMonth={barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
         </Grid>
 
         {dashboardSummaryData?.phases && (

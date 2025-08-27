@@ -24,7 +24,6 @@ type TableRow = {
   anthemCount?: number;
   reinventStoryCount?: number;
   isSelected?: boolean;
-  _highlight?: boolean;
 };
 
 const CountryActivityTable: React.FC<{ countryCode: string; phaseId: number; mode?: CountryActivityMode }> = (props) => {
@@ -41,31 +40,16 @@ const CountryActivityTable: React.FC<{ countryCode: string; phaseId: number; mod
       ? data.map((row: CountryRow, idx: number) => ({
           ...row,
           id: row.id || idx,
-          _highlight: row.isSelected,
         }))
       : data.map((row: CountryRow, idx: number) => ({
+          ...row,
           id: row.id || idx,
-          name: row.name,
-          totalPublications: row.totalPublications,
-          commentCount: row.commentCount,
-          draftCount: row.draftCount,
-          mascotCount: row.mascotCount,
-          videoCount: row.videoCount,
-          challengeCount: row.challengeCount,
-          enigmaCount: row.enigmaCount,
-          gameCount: row.gameCount,
-          questionCount: row.questionCount,
-          reactionCount: row.reactionCount,
-          reportingCount: row.reportingCount,
-          storyCount: row.storyCount,
-          anthemCount: row.anthemCount,
-          reinventStoryCount: row.reinventStoryCount,
-          _highlight: row.isSelected,
+          contentLibreCount: undefined,
         }));
 
   const columns = mode === 'country' ? getCountryActivityTableHeaders(phaseId) : CountryActivityTableHeaders;
 
-  // Custom row style: bleu si _highlight
+  // Custom row style: bleu si isSelected
   const rowStyle = (row: TableRow) => {
     if (row.id === 'total') {
       return { color: 'black', fontWeight: 'bold', borderBottom: '2px solid black' };

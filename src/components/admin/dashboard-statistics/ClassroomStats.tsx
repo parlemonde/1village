@@ -98,14 +98,16 @@ const ClassroomStats = () => {
               {classroomEngagementStatus && (
                 <EntityEngagementStatus entityType={EntityType.CLASSROOM} entityEngagementStatus={classroomEngagementStatus} />
               )}
-              {classroomDetails && <ClassroomDetailsCard classroomDetails={classroomDetails} />}
+              {classroomDetails && (
+                <ClassroomDetailsCard selectedClassroom={selectedClassroom} selectedCountry={selectedCountry} selectedVillage={selectedVillage} />
+              )}
             </>
           )}
           {isLoadingSessionsStatistics || isLoadingSelectedClassroomsStatistics || isLoadingClassroomsStatistics || isLoadingCompareData ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
           ) : (
             <>
-              <Tabs value={selectedTab} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
+              <Tabs value={selectedTab} onChange={handleTabChange} aria-label="Données par classe ou par famille" sx={{ py: 3 }}>
                 <Tab label="En classe" />
                 <Tab label="En famille" />
               </Tabs>
@@ -125,10 +127,10 @@ const ClassroomStats = () => {
                   </AverageStatsCard>
                   <AverageStatsCard
                     data={{
-                      min: sessionsStatistics.minConnections ? sessionsStatistics.minConnections : 0,
-                      max: sessionsStatistics.maxConnections ? sessionsStatistics.maxConnections : 0,
-                      average: sessionsStatistics.averageConnections ? sessionsStatistics.averageConnections : 0,
-                      median: sessionsStatistics.medianConnections ? sessionsStatistics.medianConnections : 0,
+                      min: sessionsStatistics.minConnections ?? 0,
+                      max: sessionsStatistics.maxConnections ?? 0,
+                      average: sessionsStatistics.averageConnections ?? 0,
+                      median: sessionsStatistics.medianConnections ?? 0,
                     }}
                     icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
                   >
