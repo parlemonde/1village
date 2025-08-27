@@ -1,4 +1,3 @@
-import type { ComparePhaseDetail } from '../src/api/statistics/compare.api';
 import type { BarChartDataByMonth, ContributionBarChartData } from './dashboard.type';
 import type { User } from './user.type';
 import type { Village, VillagePhase } from './village.type';
@@ -50,13 +49,21 @@ type ActivityCountDetails = {
   classrooms: ClassroomCountDetails[];
 };
 
-type ClassroomCountDetails = {
+export type ClassroomCountDetails = {
+  id: number;
   name: string;
-  classroomId: string | null;
-  totalPublications: number;
-  classroomName: string;
+  phaseDetails: PhaseDetails;
+};
+
+export type CountryCountDetails = {
   countryCode: string;
-  phaseDetails: PhaseDetails[];
+  phaseDetails: PhaseDetails;
+};
+
+export type VillageCountDetails = {
+  id: number;
+  name: string;
+  phaseDetails: PhaseDetails;
 };
 
 export type PhaseDetails = {
@@ -90,6 +97,11 @@ interface FamillyStats
 export interface VillageStats {
   family: FamillyStats;
   activityCountDetails: ActivityCountDetails[];
+  totalActivityCounts: {
+    totalPublications: number;
+    totalComments: number;
+    totalVideos: number;
+  };
 }
 
 export interface FamiliesWithoutAccount {
@@ -135,17 +147,9 @@ export enum GroupType {
   All,
 }
 
-export type ClassroomActivity = {
-  name: string;
-  countryCode: string;
-  classroomId: string;
-  totalPublications: number;
-  phaseDetails: ComparePhaseDetail[];
-};
-
 export type VillageActivity = {
   villageName: string;
-  classrooms: ClassroomActivity[];
+  classrooms: ClassroomCountDetails[];
 };
 
 export interface StatisticsDto {

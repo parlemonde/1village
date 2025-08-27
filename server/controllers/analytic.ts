@@ -293,7 +293,6 @@ analyticController.router.post(
         AppDataSource.getRepository(AnalyticPerformance).save(pagePerf);
       }
 
-      // TODO: Nécessaire ?
       if (data.event === 'session' && data.params?.duration) {
         AppDataSource.getRepository(AnalyticSession).update({ id: data.sessionId }, { duration: data.params?.duration });
       }

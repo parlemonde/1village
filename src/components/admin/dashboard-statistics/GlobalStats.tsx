@@ -11,27 +11,12 @@ import DashboardSummary from './dashboard-summary/DashboardSummary';
 import StatisticFilters from './filters/StatisticFilters';
 import DashboardWorldMap from './map/DashboardWorldMap/DashboardWorldMap';
 import { mockDataByMonth } from './mocks/mocks';
-import { getVillageActivityTableHeaders } from './utils/tableHeaders';
-import type { ComparePhaseDetail } from 'src/api/statistics/compare.api';
 import { useGetSessionsStats, useGetOneVillageStats, useGetCountriesEngagementStatuses } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms } from 'src/services/useStatistics';
 import type { VillageInteractionsActivity } from 'types/analytics/village-interactions-activity';
 import { DashboardType, DashboardSummaryTab } from 'types/dashboard.type';
 import { EngagementStatus } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
-
-interface VillageDetail {
-  villageName: string;
-  classrooms: {
-    phaseDetails: ComparePhaseDetail[];
-  }[];
-}
-
-interface PhaseTableRow {
-  id: string | number;
-  villageName: string;
-  [key: string]: string | number;
-}
 
 const GlobalStats = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -47,7 +32,7 @@ const GlobalStats = () => {
 
   const { data: sessionStatistics, isLoading: isLoadingSessionStats } = useGetSessionsStats(selectedPhase);
   const { data: classroomsStatistics, isLoading: isLoadingClassroomStatistics } = useStatisticsClassrooms(null, null, null);
-  const { data: oneVillageStatistics, isLoading: isLoadingWebsiteStats } = useGetOneVillageStats();
+  const { data: oneVillageStatistics, isLoading: isLoadingWebsiteStats } = useGetOneVillageStats(selectedPhase);
   const { data: countriesEngagementStatuses, isLoading: isLoadingCountriesEngagementStatuses } = useGetCountriesEngagementStatuses();
 
   // On mocke l'asynchronisme en attendant d'avoir l'appel serveur censé retourner les interactions des villages-mondes
@@ -121,56 +106,6 @@ const GlobalStats = () => {
     }));
   };
 
-  const createPhaseTableData = (phaseId: number): PhaseTableRow[] => {
-    if (!oneVillageStatistics?.activityCountDetails) return [];
-
-    const villages: PhaseTableRow[] = [];
-
-    const totals: Record<string, string | number> = {
-      villageName: 'Total',
-    };
-
-    oneVillageStatistics.activityCountDetails.forEach((villageDetail: VillageDetail) => {
-      const villageRow: PhaseTableRow = {
-        id: villageDetail.villageName,
-        villageName: villageDetail.villageName,
-      };
-
-      villageDetail.classrooms.forEach((classroom) => {
-        classroom.phaseDetails.forEach((phase) => {
-          if (phase.phaseId === phaseId) {
-            const columns = getVillageActivityTableHeaders(phaseId);
-            // slice(1) skips the first column ('villageName') since it's not a numeric value to sum
-            columns.slice(1).forEach((column) => {
-              const key = column.key as keyof typeof phase;
-              const value = phase[key] || 0;
-              villageRow[column.key] = ((villageRow[column.key] as number) || 0) + value;
-
-              totals[column.key] = ((totals[column.key] as number) || 0) + value;
-            });
-          }
-        });
-      });
-
-      villages.push(villageRow);
-    });
-
-    const totalRow: PhaseTableRow = {
-      id: 'total',
-      villageName: 'Total',
-      ...totals,
-    };
-
-    return [totalRow, ...villages];
-  };
-
-  const rowStyle = (row: PhaseTableRow) => {
-    if (row.villageName === 'Total') {
-      return { color: 'black', fontWeight: 'bold', borderBottom: '2px solid black' };
-    }
-    return {};
-  };
-
   return (
     <>
       <TeamCommentCard type={TeamCommentType.GLOBAL} />
@@ -195,7 +130,6 @@ const GlobalStats = () => {
             </Tabs>
 
             <TabPanel value={selectedTab} index={0}>
-              {/* Original DashboardSummary with charts and data */}
               {sessionStatistics && oneVillageStatistics && (
                 <DashboardSummary
                   dashboardType={DashboardType.ONE_VILLAGE_PANEL}
@@ -205,31 +139,19 @@ const GlobalStats = () => {
               <Box mt={4}>
                 {selectedPhase ? (
                   <OneVillagePhaseAccordion
-                    phaseId={+selectedPhase}
+                    phaseId={selectedPhase}
                     open={openPhases[selectedPhase]}
                     onClick={() => handlePhaseToggle(selectedPhase)}
-                    data={createPhaseTableData(selectedPhase)}
-                    columns={getVillageActivityTableHeaders(selectedPhase)}
-                    rowStyle={rowStyle}
                   />
                 ) : (
                   [1, 2, 3].map((phase) => (
-                    <OneVillagePhaseAccordion
-                      key={phase}
-                      phaseId={phase}
-                      open={openPhases[phase]}
-                      onClick={() => handlePhaseToggle(phase)}
-                      data={createPhaseTableData(phase)}
-                      columns={getVillageActivityTableHeaders(phase)}
-                      rowStyle={rowStyle}
-                    />
+                    <OneVillagePhaseAccordion key={phase} phaseId={phase} open={openPhases[phase]} onClick={() => handlePhaseToggle(phase)} />
                   ))
                 )}
               </Box>
             </TabPanel>
 
             <TabPanel value={selectedTab} index={1}>
-              {/* EN FAMILLE tab - keep original content */}
               {sessionStatistics && oneVillageStatistics && (
                 <DashboardSummary
                   dashboardType={DashboardType.ONE_VILLAGE_PANEL}
