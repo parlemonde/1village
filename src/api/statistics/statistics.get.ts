@@ -45,15 +45,11 @@ async function getCountriesStats(countryCode?: string, phase?: number): Promise<
 }
 
 async function getCompareGlobalStats(phase?: number) {
-  let params;
-
-  phase && (params = { phase });
-
   const response = await axiosRequest({
     method: 'GET',
     baseURL: '/api',
     url: `/statistics/compare/one-village`,
-    ...(params && { params }),
+    params: phase ? { phase } : undefined,
   });
 
   if (response.error) {
@@ -63,33 +59,33 @@ async function getCompareGlobalStats(phase?: number) {
   return response.data;
 }
 
-export const useGetCompareGlobalStats = (phase?: number) => {
+export function useGetCompareGlobalStats(phase?: number) {
   return useQuery(['compare-countries-stats', phase], () => getCompareGlobalStats(phase));
-};
+}
 
-export const useGetSessionsStats = (phase?: number) => {
+export function useGetSessionsStats(phase?: number) {
   return useQuery(['sessions-stats', phase], () => getSessionsStats(phase), {
     staleTime: 0,
     cacheTime: 0,
     refetchOnMount: true,
   });
-};
+}
 
-export const useGetOneVillageStats = () => {
+export function useGetOneVillageStats() {
   return useQuery(['1v-stats'], () => getOneVillageStats());
-};
+}
 
-export const useGetVillagesStats = (villageId?: number, phase?: number) => {
+export function useGetVillagesStats(villageId?: number, phase?: number) {
   return useQuery(['villages-stats', villageId, phase], () => getVillagesStats(villageId, phase), {
     enabled: villageId !== null,
   });
-};
+}
 
-export const useGetCountriesStats = (countryCode?: string, phase?: number) => {
-  return useQuery(['countries-stats', countryCode, phase], () => getCountriesStats(countryCode, phase), {
+export function useGetCountriesStats(countryCode?: string, phase?: number) {
+  return useQuery<VillageStats>(['countries-stats', countryCode, phase], () => getCountriesStats(countryCode, phase), {
     enabled: !!countryCode,
   });
-};
+}
 
 async function getClassroomsStats(classroomId?: number, phase?: number): Promise<VillageStats> {
   return (
@@ -101,11 +97,11 @@ async function getClassroomsStats(classroomId?: number, phase?: number): Promise
   ).data;
 }
 
-export const useGetClassroomsStats = (classroomId?: number, phase?: number) => {
+export function useGetClassroomsStats(classroomId?: number, phase?: number) {
   return useQuery(['classrooms-stats', classroomId, phase], () => getClassroomsStats(classroomId, phase), {
     enabled: classroomId !== null,
   });
-};
+}
 
 function getClassroomsUrl(countryId?: string, villageId?: number): string {
   let baseClassroomsURL = `/statistics/classrooms-to-monitor`;
@@ -132,6 +128,10 @@ async function getClassroomsToMonitor(countryId?: string, villageId?: number): P
   ).data;
 }
 
+export const useGetClassroomsToMonitorStats = (countryId?: string, villageId?: number) => {
+  return useQuery(['classrooms-to_monitor-stats', countryId, villageId], () => getClassroomsToMonitor(countryId, villageId));
+};
+
 async function getCompareStats(): Promise<ComparisonStatistic[]> {
   return (
     await axiosRequest({
@@ -142,10 +142,6 @@ async function getCompareStats(): Promise<ComparisonStatistic[]> {
   ).data;
 }
 
-export const useGetClassroomsToMonitorStats = (countryId?: string, villageId?: number) => {
-  return useQuery(['classrooms-to_monitor-stats', countryId, villageId], () => getClassroomsToMonitor(countryId, villageId));
-};
-// [Onglet Pays] : /statistics/compare/countries/FR?phase=1
 async function getCompareCountriesStats(countryCode: string, phase?: number): Promise<ComparisonStatistic[]> {
   return (
     await axiosRequest({
@@ -156,7 +152,6 @@ async function getCompareCountriesStats(countryCode: string, phase?: number): Pr
   ).data;
 }
 
-// [Onglet Village] : /statistics/compare/villages/{villageId}?phase={phaseId}
 async function getCompareVillagesStats(villageId: number, phase?: number): Promise<ComparisonStatistic[]> {
   return (
     await axiosRequest({
@@ -167,7 +162,6 @@ async function getCompareVillagesStats(villageId: number, phase?: number): Promi
   ).data;
 }
 
-// [Onglet Classe] : /statistics/compare/classes/{classroomId}?phase={phaseId}
 async function getCompareClassesStats(classroomId: number, phase?: number): Promise<ComparisonStatistic[]> {
   return (
     await axiosRequest({
@@ -178,24 +172,24 @@ async function getCompareClassesStats(classroomId: number, phase?: number): Prom
   ).data;
 }
 
-export const useGetCompareStats = () => {
+export function useGetCompareStats() {
   return useQuery(['compare-stats'], () => getCompareStats());
-};
+}
 
-export const useGetCompareCountriesStats = (countryCode: string, phase?: number) => {
+export function useGetCompareCountriesStats(countryCode: string, phase?: number) {
   return useQuery(['compare-countries-stats', countryCode, phase], () => getCompareCountriesStats(countryCode, phase), {
     enabled: !!countryCode,
   });
-};
+}
 
-export const useGetCompareVillagesStats = (villageId: number, phase?: number) => {
+export function useGetCompareVillagesStats(villageId: number, phase?: number) {
   return useQuery(['compare-villages-stats', villageId, phase], () => getCompareVillagesStats(villageId, phase), {
     enabled: villageId !== null,
   });
-};
+}
 
-export const useGetCompareClassesStats = (classroomId: number, phase?: number) => {
-  return useQuery(['compare-classes-stats', classroomId, phase], () => getCompareClassesStats(classroomId, phase), {
+export function useGetCompareClassesStats(classroomId: number, phase?: number) {
+  return useQuery<ComparisonStatistic[]>(['compare-classes-stats', classroomId, phase], () => getCompareClassesStats(classroomId, phase), {
     enabled: classroomId !== null,
   });
-};
+}

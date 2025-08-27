@@ -11,7 +11,7 @@ interface StatsCardProps {
 const StatsCard = ({ children, data }: StatsCardProps) => {
   return (
     <Box
-      className={styles.cardContainer}
+      className={`${styles.root} ${styles.cardContainer}`}
       sx={{
         margin: {
           xs: '0',

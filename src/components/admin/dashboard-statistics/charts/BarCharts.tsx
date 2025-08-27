@@ -1,6 +1,7 @@
-import { BarChart } from '@mui/x-charts/BarChart';
 import classNames from 'classnames';
 import React, { useState } from 'react';
+
+import { BarChart } from '@mui/x-charts/BarChart';
 
 import styles from '../styles/charts.module.css';
 
@@ -22,7 +23,6 @@ const BarCharts: React.FC<Props> = ({ dataByMonth, title, className }) => {
     }
   };
 
-  // Return early if no data is available
   if (!dataByMonth || dataByMonth.length === 0 || !selectedData) {
     return (
       <div className={classNames(styles.barContainer, className)}>

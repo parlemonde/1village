@@ -27,7 +27,6 @@ type TableRow = {
   anthemCount?: number;
   reinventStoryCount?: number;
   isSelected?: boolean;
-  _highlight?: boolean;
 };
 
 const VillageActivityTable: React.FC<VillageActivityTableProps> = (props: VillageActivityTableProps) => {
@@ -39,15 +38,17 @@ const VillageActivityTable: React.FC<VillageActivityTableProps> = (props: Villag
   }
 
   // On adapte les données pour le tableau
-  const tableData: TableRow[] = data.map((row: any, idx: number) => ({
-    ...row,
-    id: row.id || idx,
-    _highlight: row.isSelected,
-  }));
+  const tableData: TableRow[] = data.map(
+    (row: { id?: string | number; name?: string; isSelected?: boolean; [key: string]: unknown }, idx: number) => ({
+      ...row,
+      id: row.id || idx,
+      name: row.name || `Row ${idx}`,
+    }),
+  );
 
   const columns = getCountryActivityTableHeaders(phaseId);
 
-  // Custom row style: bleu si _highlight
+  // Custom row style: bleu si isSelected
   const rowStyle = (row: TableRow) => {
     if (row.id === 'total') {
       return { color: 'black', fontWeight: 'bold', borderBottom: '2px solid black' };

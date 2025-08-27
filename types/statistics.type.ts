@@ -45,35 +45,14 @@ export interface SessionsStats {
   barChartData: BarChartDataByMonth[];
 }
 
-export interface VillageStats {
-  family: {
-    minDuration: number;
-    maxDuration: number;
-    medianDuration: number;
-    averageDuration: number;
-
-    minConnections: number;
-    maxConnections: number;
-    averageConnections: number;
-    medianConnections: number;
-
-    childrenCodesCount: number;
-    familyAccountsCount: number;
-    connectedFamiliesCount: number;
-    familiesWithoutAccount: FamiliesWithoutAccount[];
-    floatingAccounts: FloatingAccount[];
-  };
-  activityCountDetails: ActivityCountDetails[];
-}
-
-export type ActivityCountDetails = {
+type ActivityCountDetails = {
   villageName: string;
   classrooms: ClassroomCountDetails[];
 };
 
 type ClassroomCountDetails = {
   name: string;
-  classroomId: string;
+  classroomId: string | null;
   totalPublications: number;
   classroomName: string;
   countryCode: string;
@@ -82,10 +61,10 @@ type ClassroomCountDetails = {
 
 type PhaseDetails = {
   phaseId: number;
-  videoCount: number;
   commentCount: number;
   draftCount: number;
   mascotCount?: number;
+  videoCount?: number;
   challengeCount?: number;
   enigmaCount?: number;
   gameCount?: number;
@@ -95,7 +74,22 @@ type PhaseDetails = {
   storyCount?: number;
   anthemCount?: number;
   reinventStoryCount?: number;
+  contentLibreCount?: number;
 };
+
+interface FamillyStats
+  extends Omit<SessionsStats, 'registeredClassroomsCount' | 'connectedClassroomsCount' | 'contributedClassroomsCount' | 'barChartData'> {
+  childrenCodesCount: number;
+  familyAccountsCount: number;
+  connectedFamiliesCount: number;
+  familiesWithoutAccount: FamiliesWithoutAccount[];
+  floatingAccounts: FloatingAccount[];
+}
+
+export interface VillageStats {
+  family: FamillyStats;
+  activityCountDetails: ActivityCountDetails[];
+}
 
 export interface FamiliesWithoutAccount {
   student_id: number;
@@ -154,8 +148,8 @@ export type VillageActivity = {
 };
 
 export interface StatisticsDto {
-  family: any;
-  activityCountDetails: VillageActivity[];
+  family: Omit<FamillyStats, 'familiesWithoutAccount'>;
+  activityCountDetails: ActivityCountDetails[];
 }
 
 export enum ClassroomMonitoringStatus {

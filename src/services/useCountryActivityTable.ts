@@ -57,23 +57,16 @@ export function useCountryActivityTable(countryCode: string, phaseId: number) {
       return [];
     }
 
-    // Create a map of country codes to names
     const countryNameMap = new Map(countries.map((country) => [country.isoCode, country.name]));
-
-    // Aggregate data by countries instead of villages
     const countryMap = new Map<string, CountryRow>();
-
-    // Ensure compareData is an array
     const dataArray = Array.isArray(compareData) ? compareData : [compareData];
 
     dataArray.forEach((village: ComparisonStatistic) => {
       if (!village || !Array.isArray(village.classrooms)) return;
 
       village.classrooms.forEach((classroom) => {
-        // Process ALL countries, not just the selected one
         const countryKey = classroom.countryCode;
 
-        // Handle phase 0 (All phases) by aggregating all phases
         let aggregatedPhase = {
           commentCount: 0,
           draftCount: 0,
@@ -92,7 +85,6 @@ export function useCountryActivityTable(countryCode: string, phaseId: number) {
         };
 
         if (phaseId === 0) {
-          // Aggregate all phases (1, 2, 3)
           classroom.phaseDetails.forEach((phase) => {
             if (phase.phaseId && phase.phaseId >= 1 && phase.phaseId <= 3) {
               aggregatedPhase.commentCount += phase.commentCount || 0;
@@ -112,7 +104,6 @@ export function useCountryActivityTable(countryCode: string, phaseId: number) {
             }
           });
         } else {
-          // Use specific phase
           const phase = classroom.phaseDetails.find((p: PhaseDetail) => p.phaseId === phaseId);
           if (phase) {
             aggregatedPhase = {
@@ -153,7 +144,7 @@ export function useCountryActivityTable(countryCode: string, phaseId: number) {
             anthemCount: 0,
             reinventStoryCount: 0,
             contentLibreCount: 0,
-            isSelected: countryKey === countryCode, // Mark selected country
+            isSelected: countryKey === countryCode,
           });
         }
 

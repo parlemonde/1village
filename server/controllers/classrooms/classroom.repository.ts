@@ -1,36 +1,27 @@
 import { Classroom } from '../../entities/classroom';
 import { AppDataSource } from '../../utils/data-source';
 
-type GetClassroomsParams = {
+interface GetClassroomsParams {
   countryCode?: string;
   villageId?: number;
   classroomId?: number;
-};
+}
+
+interface ClassroomFilters {
+  id?: number;
+  countryCode?: string;
+  villageId?: number;
+}
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
 
 export const getClassrooms = async ({ countryCode, villageId, classroomId }: GetClassroomsParams) => {
-  // Try simple find first
-  const allClassrooms = await classroomRepository.find({
+  const classroomFilters: ClassroomFilters = { id: classroomId, countryCode, villageId };
+
+  return await classroomRepository.find({
     relations: {
       user: true,
     },
+    where: classroomFilters,
   });
-
-  // Filter manually
-  let filteredClassrooms = allClassrooms;
-
-  if (classroomId) {
-    filteredClassrooms = filteredClassrooms.filter((c: any) => c.id === classroomId);
-  }
-
-  if (countryCode) {
-    filteredClassrooms = filteredClassrooms.filter((c: any) => c.countryCode === countryCode);
-  }
-
-  if (villageId) {
-    filteredClassrooms = filteredClassrooms.filter((c: any) => c.villageId === villageId);
-  }
-
-  return filteredClassrooms;
 };

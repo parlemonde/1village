@@ -58,6 +58,9 @@ const VillageStats = () => {
   const commentCount = getCommentCount(villageStatistics);
   const publicationCount = getPublicationCount(villageStatistics);
 
+  // Extract barChartData for better readability
+  const barChartData = sessionsStatistics?.barChartData || [];
+
   useEffect(() => {
     if (villageStatistics?.family?.familiesWithoutAccount) {
       setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(villageStatistics.family.familiesWithoutAccount));
@@ -164,7 +167,7 @@ const VillageStats = () => {
                 </div>
                 <div className="statistic__average--container">
                   <PieCharts pieChartData={data} />
-                  <BarCharts dataByMonth={sessionsStatistics?.barChartData || []} title="Évolution des connexions" />
+                  <BarCharts dataByMonth={barChartData} title="Évolution des connexions" />
                 </div>
                 <div className="statistic__average--container">
                   <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
@@ -183,7 +186,7 @@ const VillageStats = () => {
                     </div>
                   </div>
                 )}
-                {selectedVillage &&
+                {!!selectedVillage &&
                   selectedPhase !== undefined &&
                   compareData &&
                   (selectedPhase === 0 ? (
@@ -238,9 +241,8 @@ const VillageStats = () => {
                   <StatsCard data={villageStatistics?.family?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
                   <StatsCard data={villageStatistics?.family?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
                 </Box>
-
                 {/* Phase tables for Familles tab */}
-                {selectedVillage &&
+                {!!selectedVillage &&
                   selectedPhase !== undefined &&
                   compareData &&
                   (selectedPhase === 0 ? (

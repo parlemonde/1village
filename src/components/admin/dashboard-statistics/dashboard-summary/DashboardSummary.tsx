@@ -21,19 +21,17 @@ const DashboardSummary = ({
   selectedPhase,
   activeTab = DashboardSummaryTab.CLASSROOM,
 }: DashboardSummaryProps) => {
-  if (!data) {
-    return null;
-  }
-
   return (
-    <>
-      <TabPanel value={activeTab} index={DashboardSummaryTab.CLASSROOM}>
-        <DashboardClassroomTab data={data} dashboardType={dashboardType} selectedCountry={selectedCountry} selectedPhase={selectedPhase} />
-      </TabPanel>
-      <TabPanel value={activeTab} index={DashboardSummaryTab.FAMILY}>
-        <DashboardFamilyTab data={data} />
-      </TabPanel>
-    </>
+    data && (
+      <>
+        <TabPanel value={activeTab} index={DashboardSummaryTab.CLASSROOM}>
+          <DashboardClassroomTab data={data} dashboardType={dashboardType} selectedCountry={selectedCountry} selectedPhase={selectedPhase} />
+        </TabPanel>
+        <TabPanel value={activeTab} index={DashboardSummaryTab.FAMILY}>
+          <DashboardFamilyTab data={data} />
+        </TabPanel>
+      </>
+    )
   );
 };
 
