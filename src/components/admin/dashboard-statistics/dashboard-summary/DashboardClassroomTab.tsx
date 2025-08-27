@@ -38,7 +38,6 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
   const commentCount = getCommentCount(dashboardSummaryData);
   const publicationCount = getPublicationCount(dashboardSummaryData);
 
-  // Extract barChartData for better readability
   const barChartData = dashboardSummaryData.barChartData || [];
 
   return (

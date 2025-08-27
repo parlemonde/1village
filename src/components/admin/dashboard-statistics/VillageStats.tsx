@@ -65,7 +65,6 @@ const VillageStats = () => {
   const commentCount = getCommentCount(villageStatistics);
   const publicationCount = getPublicationCount(villageStatistics);
 
-  // Extract barChartData for better readability
   const barChartData = sessionsStatistics?.barChartData || [];
 
   useEffect(() => {

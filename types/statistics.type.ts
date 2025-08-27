@@ -75,6 +75,7 @@ export type PhaseDetails = {
   anthemCount?: number;
   contentLibreCount?: number;
   reinventStoryCount?: number;
+  contentLibreCount?: number;
 };
 
 interface FamillyStats
