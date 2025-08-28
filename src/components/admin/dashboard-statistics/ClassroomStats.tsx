@@ -138,7 +138,7 @@ const ClassroomStats = () => {
                 <div className="statistic--container">
                   <BarCharts dataByMonth={mockDataByMonth} title={BarChartTitle} />
                 </div>
-                <div className="statistic__average--container">
+                <div style={{ marginTop: '2.5rem' }}>
                   <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
                 </div>
 
