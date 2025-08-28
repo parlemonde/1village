@@ -11,7 +11,7 @@ interface ClassroomDetailsCardProps {
 }
 
 const ClassroomDetailsCard = ({ selectedClassroom, selectedCountry, selectedVillage }: ClassroomDetailsCardProps) => {
-  const { data: classroomStatistics } = useStatisticsClassrooms(selectedClassroom, selectedCountry, selectedVillage);
+  const { data: classroomStatistics } = useStatisticsClassrooms(selectedVillage, selectedCountry, selectedClassroom);
 
   // If no classroom is selected, show a placeholder
   if (!selectedClassroom || !classroomStatistics) {

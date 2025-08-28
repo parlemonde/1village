@@ -256,7 +256,6 @@ const GlobalStats = () => {
                 />
               )}
 
-              {/* Phase Tables - NEW ADDITION */}
               <Box mt={4}>
                 {/* Phase 1 */}
                 <OneVillagePhaseAccordion
