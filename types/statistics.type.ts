@@ -3,8 +3,9 @@ import type { BarChartDataByMonth } from './dashboard.type';
 import type { User } from './user.type';
 import type { VillagePhase } from './village.type';
 
-export interface ClassroomsStats {
+export interface ClassroomStat {
   classroomId: number;
+  classroomName: string;
   classroomCountryCode: string;
   villageId: number;
   villageName: string;
@@ -21,11 +22,6 @@ export type ClassroomStats = Omit<VillageStats, 'floatingAccounts' | 'familyAcco
 export interface Phases {
   data: Record<string, string | number>[];
   phase: string;
-}
-
-export interface ClassroomStat {
-  data: ClassroomsStats[];
-  phases: Phases[];
 }
 
 export interface SessionsStats {

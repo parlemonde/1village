@@ -16,14 +16,13 @@ import ClassroomDetailsCard from './cards/ClassroomDetailsCard/ClassroomDetailsC
 import StatsCard from './cards/StatsCard/StatsCard';
 import BarCharts from './charts/BarCharts';
 import StatisticFilters from './filters/StatisticFilters';
-import PhaseDetails from './menu/PhaseDetails';
 import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
 import { useGetClassroomsStats, useGetCompareStats } from 'src/api/statistics/statistics.get';
-import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
+import { useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
@@ -45,7 +44,6 @@ const ClassroomStats = () => {
   const [classroomDetails, setClassroomDetails] = useState<string>();
   const [loadingClassroomDetails, setLoadingClassroomDetails] = useState<boolean>(true);
 
-  const { data: classroomsStatistics, isLoading: isLoadingClassroomsStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
   const { data: sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, null, 1);
   const { data: selectedClassroomStatistics, isLoading: isLoadingSelectedClassroomsStatistics } = useGetClassroomsStats(
     selectedClassroom,
@@ -96,7 +94,7 @@ const ClassroomStats = () => {
               <ClassroomDetailsCard selectedClassroom={selectedClassroom} selectedCountry={selectedCountry} selectedVillage={selectedVillage} />
             )
           )}
-          {isLoadingSessionsStatistics || isLoadingSelectedClassroomsStatistics || isLoadingClassroomsStatistics || isLoadingCompareData ? (
+          {isLoadingSessionsStatistics || isLoadingSelectedClassroomsStatistics || isLoadingCompareData ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
           ) : (
             <>
@@ -136,19 +134,7 @@ const ClassroomStats = () => {
                 <div className="statistic__average--container">
                   <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
                 </div>
-                {classroomsStatistics?.phases && (
-                  <div className="statistic__phase--container">
-                    <div>
-                      <PhaseDetails phase={1} data={classroomsStatistics.phases[0].data} />
-                    </div>
-                    <div className="statistic__phase">
-                      <PhaseDetails phase={2} data={classroomsStatistics.phases[1].data} />
-                    </div>
-                    <div className="statistic__phase">
-                      <PhaseDetails phase={3} data={classroomsStatistics.phases[1].data} />
-                    </div>
-                  </div>
-                )}
+
                 {selectedClassroom &&
                   selectedVillage &&
                   compareData &&

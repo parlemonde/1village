@@ -11,7 +11,6 @@ import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchanges
 import StatsCard from '../cards/StatsCard/StatsCard';
 import BarCharts from '../charts/BarCharts';
 import PieCharts from '../charts/PieCharts';
-import PhaseDetails from '../menu/PhaseDetails';
 import styles from '../styles/charts.module.css';
 import ClassroomsToMonitorTable from '../tables/ClassroomsToMonitorTable';
 import { AverageStatsProcessingMethod, DashboardType } from 'types/dashboard.type';
@@ -114,21 +113,6 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
           <BarCharts dataByMonth={barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
         </Grid>
 
-        {data?.phases && (
-          <Grid item xs={12} lg={12}>
-            <div className="statistic__phase--container">
-              <div>
-                <PhaseDetails phase={1} data={data.phases[0].data} />
-              </div>
-              <div className="statistic__phase">
-                <PhaseDetails phase={2} data={data.phases[1].data} />
-              </div>
-              <div className="statistic__phase">
-                <PhaseDetails phase={3} data={data.phases[1].data} />
-              </div>
-            </div>
-          </Grid>
-        )}
         {/* Accordéons par phase */}
         {selectedCountry &&
           (selectedPhase === 0 ? (

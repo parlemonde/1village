@@ -19,14 +19,13 @@ import type { CountryChartData } from './charts/DualBarChart/DualBarChart';
 import DualBarChart from './charts/DualBarChart/DualBarChart';
 import PieCharts from './charts/PieCharts';
 import StatisticFilters from './filters/StatisticFilters';
-import PhaseDetails from './menu/PhaseDetails';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import ClassroomsToMonitorTable from './tables/ClassroomsToMonitorTable';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
 import { useGetVillagesStats, useGetCompareStats } from 'src/api/statistics/statistics.get';
-import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
+import { useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
@@ -50,7 +49,6 @@ const VillageStats = () => {
   const [loadingSecondChartData, setLoadingSecondChartData] = useState<boolean>(true);
 
   const { data: villageStatistics, isLoading: isLoadingVillageStatistics } = useGetVillagesStats(selectedVillage, selectedPhase);
-  const { data: classroomsStatistics, isLoading: isLoadingClassroomsStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
   const { data: sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(selectedVillage, null, null, selectedPhase);
   const { data: compareData, isLoading: isLoadingCompareData } = useGetCompareStats();
 
@@ -124,7 +122,7 @@ const VillageStats = () => {
           ) : (
             firstChartData && secondChartData && <DualBarChart firstTable={firstChartData} secondTable={secondChartData} />
           )}
-          {isLoadingClassroomsStatistics || isLoadingSessionsStatistics || isLoadingVillageStatistics || isLoadingCompareData ? (
+          {isLoadingSessionsStatistics || isLoadingVillageStatistics || isLoadingCompareData ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
           ) : (
             <>
@@ -173,19 +171,7 @@ const VillageStats = () => {
                   <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
                   <ClassesContributionCard />
                 </div>
-                {classroomsStatistics?.phases && (
-                  <div className="statistic__phase--container">
-                    <div>
-                      <PhaseDetails phase={1} data={classroomsStatistics.phases[0].data} />
-                    </div>
-                    <div className="statistic__phase">
-                      <PhaseDetails phase={2} data={classroomsStatistics.phases[1].data} />
-                    </div>
-                    <div className="statistic__phase">
-                      <PhaseDetails phase={3} data={classroomsStatistics.phases[2].data} />
-                    </div>
-                  </div>
-                )}
+
                 {!!selectedVillage &&
                   selectedPhase !== undefined &&
                   compareData &&
