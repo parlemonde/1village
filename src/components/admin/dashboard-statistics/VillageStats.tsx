@@ -167,7 +167,7 @@ const VillageStats = () => {
                   <PieCharts pieChartData={data} />
                   <BarCharts dataByMonth={barChartData} title="Évolution des connexions" />
                 </div>
-                <div className="statistic__average--container">
+                <div className="statistic__average--container" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gridGap: '2rem' }}>
                   <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
                   <ClassesContributionCard />
                 </div>

@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid';
 import { getCommentCount, getPublicationCount, getVideoCount } from '../../StatisticsUtils';
 import CountryActivityPhaseAccordion from '../CountryActivityPhaseAccordion';
 import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
+import ClassesContributionCard from '../cards/ClassesContributionCard/ClassesContributionCard';
 import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from '../cards/StatsCard/StatsCard';
 import BarCharts from '../charts/BarCharts';
@@ -106,8 +107,17 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
             </Grid>
           </>
         )}
-        <Grid item xs={12} lg={12}>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: '2fr 1fr',
+            gap: '2rem',
+          }}
+        >
           <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
+          <ClassesContributionCard />
         </Grid>
         <Grid item xs={12} lg={12}>
           <BarCharts dataByMonth={barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />

@@ -4,34 +4,47 @@
   --secondary-color: #dad7fe;
 }
 
-.cardContainer {
-  flex: 3;
-  background-color: var(--card-bg-color);
-  padding: 0.5rem 1rem;
-  border-radius: 1rem;
+.title {
   font-weight: 600;
+  font-size: 0.8rem;
+  color: rgb(83, 83, 83);
 }
 
-.cardContainer > div {
+.cardContainer {
+  background-color: var(--card-bg-color);
+  padding: 0.75rem 1rem;
+  border-radius: 0.9rem;
+  height: 13rem;
+}
+
+.cardContainerExchange {
   display: flex;
+  margin: 3rem auto;
   justify-content: space-around;
-  flex-wrap: wrap;
 }
 
 .cardContainerExchange > div {
   font-size: 3rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-  padding: 0;
   color: var(--secondary-color);
 }
 
-.cardContainerExchange > div > p {
+.cardCountContainer {
+  display: flex;
+  height: 3.5rem;
+}
+
+.cardCount {
   align-items: center;
   color: var(--primary-color);
+  font-weight: 700;
+  font-size: 2.6rem;
   margin: 0;
-  padding: 0;
-  display: flex;
+}
+
+.cardLabel {
+  align-items: center;
+  color: rgb(83, 83, 83);
+  font-weight: 600;
+  font-size: 0.7rem;
+  text-align: center;
 }
