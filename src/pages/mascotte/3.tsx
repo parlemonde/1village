@@ -79,7 +79,7 @@ const MascotteStep3 = () => {
                   onChange={dataChange('minorLanguages')}
                 />
                 <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-                  Quelles sont les langues étrangères que l&apos;on apprend dans votre classe ?
+                  Quelles sont les langues étrangères apprises par les enfants de votre classe ?
                 </p>
                 <MultipleLanguageSelector
                   label="Langues"

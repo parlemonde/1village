@@ -58,12 +58,9 @@ const SongStep5 = () => {
           urls={['/chanter-un-couplet/1?edit', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
         />
         <div className="width-900">
-          <h1>Pré-visualisez votre paramétrage et activez l&apos;hymne</h1>
+          <h1>Prévisualisez votre couplet et publiez-le</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Voici la pré-visualisation de votre couplet.
-            {isEdit
-              ? " Vous pouvez le modifier à l'étape précédente, et enregistrer vos changements ici."
-              : ' Vous pouvez le modifier et quand vous êtes prêts : publiez-le dans votre village-monde !'}
+            Réécouter votre couplet une dernière fois avant de le publier !
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
@@ -105,7 +102,7 @@ const SongStep5 = () => {
               status={errorSteps.includes(1) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <p>Voilà la structure du couplet, découpé en syllabes :</p>
+            <p>Lisez les paroles de votre couplet</p>
             <p>
               {data.verseLyrics.map((syllable, index) =>
                 syllable.back ? (
@@ -127,7 +124,7 @@ const SongStep5 = () => {
               status={errorSteps.includes(3) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <p style={{ margin: '0.5rem 0' }}>Écoutez votre couplet (seulement votre voix)</p>
+            <p style={{ margin: '0.5rem 0' }}>Écoutez-vous chanter votre couplet</p>
             <AudioPlayer src={data.classRecordTrack?.sampleUrl} isBuildingAudio style={{ width: '350px', height: '60px' }} />
           </div>
 
@@ -140,7 +137,7 @@ const SongStep5 = () => {
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
 
-            <p style={{ margin: '0.5rem 0' }}>Écoutez votre couplet superposé aux instruments</p>
+            <p style={{ margin: '0.5rem 0' }}>Écoutez votre couplet final (voix + instruments)</p>
             <AudioPlayer src={data.verseFinalMixUrl} isBuildingAudio style={{ width: '350px', height: '60px' }} />
           </div>
 

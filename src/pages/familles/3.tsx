@@ -44,7 +44,7 @@ const ClassroomParamStep3 = () => {
     `,
   );
   const [keywordPresence, setKeywordPresence] = useState(true);
-  const textDefaultValue = `\nBonjour,\n\nNotre classe participe au projet 1Village, de l’association Par Le Monde, agréée par le ministère de l’éducation nationale français. 1Village est un projet de correspondances avec d’autres classes du monde, accessible de façon sécurisée sur un site internet.\n\nSi vous souhaitez accéder à ce site et observer les échanges en famille, il vous faut suivre cette démarche :\n\n\t1. Créer un compte sur https://1v.parlemonde.org/inscription, en renseignant une adresse email et un mot de passe.\n\t2. Confirmez votre adresse mail en cliquant sur le lien envoyé.\n\t3. Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte à l’identifiant unique <strong>%identifiant</strong>\n\nJusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher à l’identifiant unique de votre enfant.\n\nBonne journée\n\n`;
+  const textDefaultValue = `\nBonjour,\n\nNotre classe participe au projet 1Village de l’association Par Le Monde. C’est un  projet d’échanges interculturels avec d’autres classes du monde agréé par le ministère de l’éducation nationale français. Il se déroule sur un site internet appelée 1Village : .\n\nPour accéder au site et observer les échanges, suivez cette démarche :\n\n\t1. Créer un compte sur https://1v.parlemonde.org/inscription, en renseignant une adresse email et un mot de passe.\n\t2. Confirmez votre adresse mail en cliquant sur le lien envoyé.\n\t3. Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte au “code enfant” <strong>%identifiant</strong>\n\nJusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher au “code enfant” de votre enfant.\n\nBonne journée\n\n`;
 
   useEffect(() => {
     const keywordRegex = /(^|\s|<[^>]*>)%identifiant(\s|$|<[^>]*>)/gm;
@@ -118,24 +118,18 @@ const ClassroomParamStep3 = () => {
       <AccessControl featureName="id-family" redirectToWIP>
         <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
           <Steps
-            steps={['Visibilité', 'Identifiants', 'Communication', 'Gestion']}
+            steps={['Visibilité', 'Ajout enfants', 'Communication', 'Gestion']}
             urls={['/familles/1', '/familles/2', '/familles/3', '/familles/4']}
             activeStep={2}
           />
           <div className="width-900">
-            <h1> Communiquer les identifiants aux familles</h1>
+            <h1> Communiquez les identifiants aux familles</h1>
             <p className="text">
-              Pour inviter les familles à se connecter, nous avons préparé un texte de présentation, que vous pouvez modifier, ou traduire dans une
-              autre langue.
+              Voici un modèle de texte de présentation à partager aux familles. Vous pouvez le modifier et le traduire librement !
             </p>
             <p>
-              Comme vous pourrez le constater, ce texte contient le mot-variable <span style={{ fontWeight: 'bold' }}>%identifiant</span> : vous devez
-              le laisser sous ce format.{' '}
-            </p>
-            <p>
-              Ainsi, vous pourrez générer autant de textes de présentation que d’enfants dans votre classe : à vous ensuite de les imprimer et les
-              transmettre aux familles. Dans chaque texte, le mot-variable <span style={{ fontWeight: 'bold' }}>%identifiant</span> aura été remplacé
-              automatiquement par l’identifiant unique généré à l’étape précédente.
+              Attention à ne pas changer ou supprimer le “code enfant” <span style={{ fontWeight: 'bold' }}>%identifiant</span> qui se crée
+              automatiquement pour chaque enfant.{' '}
             </p>
             <TextEditor
               inlineToolbar

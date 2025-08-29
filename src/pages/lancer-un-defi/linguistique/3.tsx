@@ -95,7 +95,7 @@ const DefiStep3 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>{'Explication'}</h1>
+          <h1>{'Expliquez votre choix'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
             {data.hasSelectedThemeNameOther
               ? 'Expliquez pourquoi votre choix, ce qu’il signifie et quand vous l’utilisez.'

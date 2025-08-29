@@ -44,16 +44,8 @@ const SongStep3 = () => {
           urls={['/chanter-un-couplet/1?edit', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
         />
         <div className={styles.contentContainer}>
-          <h1>Enregistrez votre voix</h1>
-          <p>
-            À présent, il est temps d’enregistrer votre classe entrain de chanter votre couplet ! Pour vous aider, vous pouvez écouter l’audio
-            ci-dessous..
-          </p>
-          <p>
-            Essayez de diffuser la musique d’un côté de la salle de classe, et de placer votre micro de l’autre côté, afin d’enregistrer surtout vos
-            voix.
-          </p>
-          <p>Vous pouvez également chanter a cappella, ou en enregistrant un enfant portant un casque.</p>
+          <h1>Enregistrez vos voix</h1>
+          <p>Entraînez-vous à chanter votre couplet avec l’audio et les paroles ci-dessous puis enregistrez-vous avec un téléphone ou un micro.</p>
 
           {data.verseMixUrl ? (
             <AudioPlayer src={data.verseMixWithIntroUrl} isBuildingAudio />

@@ -51,10 +51,7 @@ const Enigme = () => {
     <Base>
       <PageLayout>
         <div className="width-900">
-          <h1>Qu&apos;allez vous faire deviner à vos pélicopains ?</h1>
-          <div className="width-900" style={{ margin: '2rem 0' }}>
-            <span>Dans cette activité, vous allez créer une énigme pour faire deviner ...</span>
-          </div>
+          <h1>Sur quelle thématique sera votre énigme ?</h1>
 
           <ActivityChoice activities={activities} />
         </div>

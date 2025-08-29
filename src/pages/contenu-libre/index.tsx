@@ -35,10 +35,7 @@ const ContenuLibre = () => {
       <PageLayout>
         <div className="width-900">
           <h1 style={{ marginTop: '0.5rem' }}>Publication de contenu libre</h1>
-          <p className="text">
-            Dans cette activité, nous vous proposons de créer une publication libre. Vous pourrez ensuite partager cette publication et décider de
-            l&apos;épingler dans le fil d&apos;actualité.
-          </p>
+          <p className="text">Partagez un contenu texte, son, image ou vidéo de votre choix.</p>
           <StepsButton next={onNext} />
         </div>
       </PageLayout>

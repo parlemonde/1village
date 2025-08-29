@@ -88,10 +88,10 @@ const StoryStep3 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Inventez et dessinez un lieu extraordinaire</h1>
+          <h1>Imaginez et dessinez votre lieu extraordinaire</h1>
           <p className="text">
-            Ce lieu, tout comme l’objet que vous avez choisi à l’étape précédente, est extraodinaire ! Grâce à ses pouvoirs, votre village-monde idéal
-            va atteindre l’objectif de développement durable que vous avez choisi.
+            Tout comme l’objet magique, ce lieu extraordinaire doit permettre d’atteindre l’objectif du développement durable que vous avez choisi à
+            l’étape précédente.
           </p>
           <Grid container>
             <Grid item xs={12} md={6}>

@@ -14,11 +14,11 @@ import { capitalize, replaceTokens } from 'src/utils';
 export const COOKING_DEFIS = [
   {
     title: 'Réalisez notre recette à votre tour',
-    description: 'Les pélicopains devront créer une présentation sous forme de texte, son, image ou une vidéo',
+    description: 'Les pélicopains devront créer une présentation sous forme de texte, son, image ou une vidéo.',
   },
   {
     title: 'Présentez-nous une de vos recettes traditionnelles',
-    description: 'Les pélicopains devront créer une présentation sous forme de texte, son, image ou une vidéo',
+    description: 'Les pélicopains devront créer une présentation sous forme de texte, son, image ou une vidéo.',
   },
 ];
 export const ECO_ACTIONS = [
@@ -31,11 +31,11 @@ export const ECO_ACTIONS = [
 export const ECO_DEFIS = [
   {
     title: 'Réaliser cette action pour la planète à votre tour',
-    description: 'Les Pelicopains devront refaire votre action chez eux',
+    description: 'Les pelicopains devront refaire votre action chez eux',
   },
   {
     title: 'Imaginer et réaliser  une nouvelle action pour la planète',
-    description: 'Les Pelicopains devront réaliser une autre action',
+    description: 'Les pelicopains devront réaliser une autre action',
   },
 ];
 export const LANGUAGE_SCHOOL = [
@@ -46,10 +46,10 @@ export const LANGUAGE_SCHOOL = [
 ];
 export const LANGUAGE_THEMES = [
   {
-    title: 'Un mot précieux',
+    title: 'Un mot',
     title2: 'le mot précieux',
-    desc1: "Choisissez un mot 'précieux' qui a quelque chose d'original (prononciation,origine...) dans la langue {{language}}.",
-    desc2: 'Ecrivez votre mot précieux puis expliquez pourquoi avoir choisi celui-ci, ce qu’il signifie et quand vous l’utilisez.',
+    desc1: "Choisissez un mot qui a quelque chose d'original (prononciation,origine...) dans la langue {{language}}.",
+    desc2: 'Ecrivez votre mot puis expliquez pourquoi vous avez choisi celui-ci, ce qu’il signifie et dans quelle situation vous l’utilisez.',
   },
   {
     title: 'Une expression',
@@ -88,11 +88,11 @@ export const LANGUAGE_DEFIS = [
 export const FREE_DEFIS = [
   {
     title: 'Réalisez notre action à votre tour',
-    description: 'Les pélicopains devront réaliser la même action que vous',
+    description: 'Les pélicopains devront réaliser la même action que vous.',
   },
   {
     title: 'Réalisez une autre action sur le même thème',
-    description: 'Les pélicopains devront réaliser une action sur le thème {{theme}}',
+    description: 'Les pélicopains devront réaliser une action sur le thème {{theme}}.',
   },
 ];
 export const DEFI = {

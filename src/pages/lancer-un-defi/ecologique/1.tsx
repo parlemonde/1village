@@ -58,7 +58,7 @@ const DefiEcoStep1 = () => {
           activeStep={0}
         />
         <div className="width-900">
-          <h1>Quel geste pour la planète souhaitez-vous presenter ?</h1>
+          <h1>Quel geste pour la planète souhaitez-vous présenter ?</h1>
           <div style={{ marginTop: '1rem' }}>
             {ECO_ACTIONS.map((t, index) => (
               <ThemeChoiceButton key={index} label={t} description="" onClick={onNext(index)} />

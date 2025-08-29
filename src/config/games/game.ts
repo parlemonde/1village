@@ -19,8 +19,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       [
         {
           title: 'Présentez en vidéo une 1ère mimique à vos pélicopains',
-          description:
-            'Votre vidéo est un plan unique tourné à l’horizontal, qui montre un enfant faisant la mimique et la situation dans laquelle on l’utilise. Gardez le mystère, et ne révélez pas à l’oral sa signification !',
+          description: 'Importez une vidéo d’un enfant qui fait la mimique. Mais attention, ne révélez pas à l’oral sa signification !',
           inputs: [
             {
               id: 0,
@@ -78,8 +77,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       [
         {
           title: 'Présentez en vidéo une 2ème mimique à vos pélicopains',
-          description:
-            'Votre vidéo est un plan unique tourné à l’horizontal, qui montre un enfant faisant la mimique et la situation dans laquelle on l’utilise. Gardez le mystère, et ne révélez pas à l’oral sa signification !',
+          description: 'Importez une vidéo d’un enfant qui fait la mimique. Mais attention, ne révélez pas à l’oral sa signification !',
           inputs: [
             {
               id: 5,
@@ -137,8 +135,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       [
         {
           title: 'Présentez en vidéo une 3ème mimique à vos pélicopains',
-          description:
-            'Votre vidéo est un plan unique tourné à l’horizontal, qui montre un enfant faisant la mimique et la situation dans laquelle on l’utilise. Gardez le mystère, et ne révélez pas à l’oral sa signification !',
+          description: 'Importez une vidéo d’un enfant qui fait la mimique. Mais attention, ne révélez pas à l’oral sa signification !',
           inputs: [
             {
               id: 10,
@@ -195,9 +192,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       ],
       [
         {
-          title: 'Pré-visualisez votre activité et publiez-la.',
-          description:
-            'Voici la pré-visualisation de votre activité. Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !',
+          title: 'Pré-visualisez votre jeu et publiez-le',
+          description: 'Relisez votre publication une dernière fois avant de la publier !',
         },
       ],
     ],
@@ -208,7 +204,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       [
         {
           title: 'Choisissez votre monnaie',
-          description: 'Choisissez avec quelle monnaie vous allez donner le prix de vos objets : ',
+          description: 'C’est la monnaie avec laquelle vous allez donner le prix de vos objets : ',
           inputs: [
             {
               id: 0,
@@ -224,8 +220,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       ],
       [
         {
-          title: 'Choisissez un objet',
-          description: 'Choissisez un objet dont le prix moyen est faible',
+          title: 'Choisissez un objet dont le prix moyen est faible',
+          description: '',
           inputs: [
             {
               id: 1,
@@ -268,7 +264,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             {
               id: 5,
               type: InputTypeEnum.INPUT,
-              placeHolder: 'Prix inventé',
+              placeHolder: 'Prix inventé 1',
               selectedValue: '',
               response: false,
               isDisplayedInRecap: true,
@@ -277,7 +273,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             {
               id: 6,
               type: InputTypeEnum.INPUT,
-              placeHolder: 'Prix inventé',
+              placeHolder: 'Prix inventé 2',
               selectedValue: '',
               response: false,
               isDisplayedInRecap: true,
@@ -288,8 +284,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       ],
       [
         {
-          title: 'Choisissez un objet',
-          description: 'Choissisez un objet dont le prix moyen est modéré',
+          title: 'Choisissez un objet dont le prix moyen est modéré',
+          description: '',
           inputs: [
             {
               id: 7,
@@ -352,8 +348,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       ],
       [
         {
-          title: 'Choisissez un objet',
-          description: 'Choissisez un objet dont le prix moyen est élevé',
+          title: 'Choisissez un objet dont le prix moyen est élevé',
+          description: '',
           inputs: [
             {
               id: 13,
@@ -416,8 +412,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       ],
       [
         {
-          title: 'Pré-visualisez vos objets et publiez les !',
-          description: 'Vous pouvez modifier chaque objet si vous le souhaitez. Quand vous êtes prêts : publiez-les dans votre village-monde ! ',
+          title: 'Pré-visualisez votre jeu et publiez-le',
+          description: 'Relisez votre publication une dernière fois avant de la publier !',
         },
       ],
     ],
@@ -427,8 +423,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
     steps: [
       [
         {
-          title: 'Choisissez dans quelle langue vous souhaitez lancer le défi',
-          description: 'Vous pourrez ensuite commencer votre défi',
+          title: 'Choisissez la langue de vos expressions',
+          description: '',
           inputs: [
             {
               id: 0,
@@ -463,7 +459,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       [
         {
           title: 'Dessinez votre expression',
-          description: 'Réalisez votre dessin sur une feuille au format paysage',
+          description: '',
           inputs: [
             {
               id: 2,
@@ -532,7 +528,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       [
         {
           title: 'Dessinez votre expression',
-          description: 'Réalisez votre dessin sur une feuille au format paysage',
+          description: '',
           inputs: [
             {
               id: 8,
@@ -601,7 +597,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       [
         {
           title: 'Dessinez votre expression',
-          description: 'Réalisez votre dessin sur une feuille au format paysage',
+          description: '',
           inputs: [
             {
               id: 14,
@@ -669,9 +665,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
 
       [
         {
-          title: 'Pré-visualisez votre activité et publiez-la.',
-          description:
-            'Voici la pré-visualisation de votre activité. Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !',
+          title: 'Pré-visualisez votre jeu et publiez-le',
+          description: 'Relisez votre publication une dernière fois avant de la publier !',
         },
       ],
     ],

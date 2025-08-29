@@ -153,14 +153,7 @@ const SongStep1 = () => {
         />
         <div className={styles.contentContainer}>
           <h1>Mixez votre couplet</h1>
-          <p>
-            Avant de composer votre couplet et de l&apos;enregistrer, je vous propose de modifier le volume de certains instruments en jouant avec
-            cette table de mixage simplifiée.
-          </p>
-          <p>
-            Placez les curseurs là où vous le souhaitez, puis écoutez votre mix avant de passer à la prochaine étape d&apos;écriture de votre couplet.
-            Libre à vous de recommencer votre mix avant de passer à cette étape suivante !
-          </p>
+          <p>Déplacez les curseurs de haut en bas pour modifier le volume des instruments.</p>
           {audioMixerTracks.length > 0 && (
             <AudioMixer
               ref={mixerRef}

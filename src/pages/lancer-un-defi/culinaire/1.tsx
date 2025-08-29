@@ -167,7 +167,7 @@ const DefiStep1 = () => {
                   label="Histoire"
                   multiline
                   variant="outlined"
-                  placeholder="Histoire de votre plat..."
+                  placeholder="Histoire de votre plat"
                   InputLabelProps={{
                     shrink: true,
                   }}

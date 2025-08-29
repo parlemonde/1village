@@ -80,7 +80,7 @@ const ReactionStep3 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Pré-visualisez votre réaction{!isEdit && ', et publiez-la'}</h1>
+          <h1>Pré-visualisez votre réaction{!isEdit && ' et publiez-la'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
             Voici la pré-visualisation de votre réaction.
             {isEdit

@@ -131,7 +131,7 @@ export const Navigation = (): JSX.Element => {
         disabled: !isTeacher,
       },
       {
-        label: 'Présenter un indice',
+        label: 'Publier un indice',
         path: '/indice-culturel',
         icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 1,
@@ -155,7 +155,7 @@ export const Navigation = (): JSX.Element => {
       */
       // ---- PHASE 2 ----
       {
-        label: 'Réaliser un reportage',
+        label: 'Publier un reportage',
         path: '/realiser-un-reportage',
         icon: <ReportageIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 2,
@@ -176,7 +176,7 @@ export const Navigation = (): JSX.Element => {
         disabled: isParent,
       },
       {
-        label: 'Jouer ensemble',
+        label: 'Créer un jeu',
         path: '/creer-un-jeu',
         icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 2,
@@ -205,7 +205,7 @@ export const Navigation = (): JSX.Element => {
         disabled: isParent,
       },
       {
-        label: 'Chanter un couplet',
+        label: 'Créer son couplet',
         path: '/chanter-un-couplet',
         icon: <MusicIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 3,
@@ -237,7 +237,7 @@ export const Navigation = (): JSX.Element => {
     () => [
       ACCUEIL,
       {
-        label: 'Notre classe et nos activités',
+        label: 'Nos activités',
         path: '/ma-classe',
         icon: user && <AvatarImg user={user} size="extra-small" noLink noToolTip />,
         disabled: isParent,
