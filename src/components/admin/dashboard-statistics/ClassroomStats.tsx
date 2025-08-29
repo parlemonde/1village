@@ -21,7 +21,7 @@ import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
-import { useGetClassroomsStats, useGetCompareStats } from 'src/api/statistics/statistics.get';
+import { useGetClassroomDetails, useGetClassroomsStats, useGetCompareStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
@@ -41,14 +41,13 @@ const ClassroomStats = () => {
     3: false,
   });
 
-  const [classroomDetails, setClassroomDetails] = useState<string>();
-  const [loadingClassroomDetails, setLoadingClassroomDetails] = useState<boolean>(true);
-
   const { data: sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, null, 1);
   const { data: selectedClassroomStatistics, isLoading: isLoadingSelectedClassroomsStatistics } = useGetClassroomsStats(
     selectedClassroom,
     selectedPhase,
   );
+
+  const { data: classroomDetails, isLoading: isLoadingClassroomDetail } = useGetClassroomDetails(selectedClassroom);
   const { data: compareData, isLoading: isLoadingCompareData } = useGetCompareStats();
 
   const videoCount = getVideoCount(selectedClassroomStatistics);
@@ -65,17 +64,6 @@ const ClassroomStats = () => {
     setSelectedTab(selectedTab);
   };
 
-  // On mocke l'asynchronisme en attendant d'avoir l'appel serveur censé retourner les interactions des villages-mondes
-  // A refacto lors de l'implémentation du ticket VIL-65 et des autres tickets associées au dashboard classe
-  useEffect(() => {
-    setTimeout(() => {
-      const fakeClassroomDetails = 'France';
-
-      setClassroomDetails(fakeClassroomDetails);
-      setLoadingClassroomDetails(false);
-    }, 8000);
-  }, []);
-
   return (
     <>
       <TeamCommentCard type={TeamCommentType.CLASSROOM} />
@@ -87,12 +75,10 @@ const ClassroomStats = () => {
       />
       {selectedCountry && selectedVillage && selectedClassroom ? (
         <Box mt={2}>
-          {loadingClassroomDetails ? (
+          {isLoadingClassroomDetail ? (
             <Loader analyticsDataType={AnalyticsDataType.GRAPHS} />
           ) : (
-            classroomDetails && (
-              <ClassroomDetailsCard selectedClassroom={selectedClassroom} selectedCountry={selectedCountry} selectedVillage={selectedVillage} />
-            )
+            classroomDetails && <ClassroomDetailsCard classroomDetails={classroomDetails} />
           )}
           {isLoadingSessionsStatistics || isLoadingSelectedClassroomsStatistics || isLoadingCompareData ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />

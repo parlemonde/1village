@@ -2,19 +2,14 @@ import React from 'react';
 
 import CountryMap from '../../map/CountryMap/CountryMap';
 import styles from './ClassroomDetailsCard.module.css';
-import { useStatisticsClassrooms } from 'src/services/useStatistics';
+import type { ClassroomDetails } from 'types/statistics.type';
 
 interface ClassroomDetailsCardProps {
-  selectedClassroom?: number;
-  selectedCountry?: string;
-  selectedVillage?: number;
+  classroomDetails?: ClassroomDetails;
 }
 
-const ClassroomDetailsCard = ({ selectedClassroom, selectedCountry, selectedVillage }: ClassroomDetailsCardProps) => {
-  const { data: classroomStatistics } = useStatisticsClassrooms(selectedVillage, selectedCountry, selectedClassroom);
-
-  // If no classroom is selected, show a placeholder
-  if (!selectedClassroom || !classroomStatistics) {
+const ClassroomDetailsCard = ({ classroomDetails }: ClassroomDetailsCardProps) => {
+  if (!classroomDetails) {
     return (
       <div className={`${styles.root} ${styles.mainContainer}`}>
         <CountryMap countryIso2="VN" />
@@ -26,29 +21,26 @@ const ClassroomDetailsCard = ({ selectedClassroom, selectedCountry, selectedVill
     );
   }
 
-  // Extract classroom data from statistics
-  // const classroom = statisticsClassrooms as any; // Type assertion for now
-
   return (
     <div className={`${styles.root} ${styles.mainContainer}`}>
-      <CountryMap countryIso2={selectedCountry || 'VN'} />
+      <CountryMap countryIso2={classroomDetails.countryCode || 'VN'} />
       <div className={styles.infoContainer}>
         <h3>Détails de la classe</h3>
         <ul>
           <li>
-            <strong>Nom de la classe :</strong> {classroomStatistics?.classroomName || 'N/A'}
+            <strong>Nom de la classe :</strong> {classroomDetails.classroomName}
           </li>
           <li>
-            <strong>Pays :</strong> {classroomStatistics?.classroomCountryCode || 'N/A'}
+            <strong>Pays :</strong> {classroomDetails.countryCode}
           </li>
           <li>
-            <strong>Village :</strong> {classroomStatistics?.villageName || 'N/A'}
+            <strong>Village :</strong> {classroomDetails.villageName}
           </li>
           <li>
-            <strong>Nombre de commentaires :</strong> {classroomStatistics?.commentsCount || 0}
+            <strong>Nombre de commentaires :</strong> {classroomDetails.commentsCount}
           </li>
           <li>
-            <strong>Nombre de vidéos :</strong> {classroomStatistics?.videosCount || 0}
+            <strong>Nombre de vidéos :</strong> {classroomDetails.videosCount}
           </li>
         </ul>
       </div>

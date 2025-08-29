@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 
 import type { ComparisonStatistic } from './compare.api';
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { SessionsStats, VillageStats, ClassroomToMonitor } from 'types/statistics.type';
+import type { SessionsStats, VillageStats, ClassroomToMonitor, ClassroomDetails } from 'types/statistics.type';
 
 async function getSessionsStats(phase?: number): Promise<SessionsStats> {
   return (
@@ -93,6 +93,22 @@ async function getClassroomsStats(classroomId?: number, phase?: number): Promise
       method: 'GET',
       baseURL: '/api',
       url: phase ? `/statistics/classrooms/${classroomId}?phase=${phase}` : `/statistics/classrooms/${classroomId}`,
+    })
+  ).data;
+}
+
+export function useGetClassroomDetails(classroomId?: number) {
+  return useQuery(['classrooms-stats', classroomId], () => getClassroomDetails(classroomId), {
+    enabled: !!classroomId,
+  });
+}
+
+async function getClassroomDetails(classroomId?: number): Promise<ClassroomDetails> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: `/statistics/classrooms/details/${classroomId}`,
     })
   ).data;
 }

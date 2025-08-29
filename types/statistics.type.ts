@@ -3,16 +3,19 @@ import type { BarChartDataByMonth } from './dashboard.type';
 import type { User } from './user.type';
 import type { VillagePhase } from './village.type';
 
-export interface ClassroomStat {
-  classroomId: number;
+export interface ClassroomDetails {
+  id: number;
   classroomName: string;
-  classroomCountryCode: string;
-  villageId: number;
+  countryCode: string;
   villageName: string;
-  userFirstName: number;
-  userLastName: number;
   commentsCount: number;
   videosCount: number;
+}
+
+export interface ClassroomStat extends ClassroomDetails {
+  villageId: number;
+  userFirstName: number;
+  userLastName: number;
   activities: { count: number; type: number; phase: number }[];
   phases?: Phases[];
 }

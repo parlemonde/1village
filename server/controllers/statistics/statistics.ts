@@ -1,6 +1,6 @@
 import type { Request } from 'express';
 
-import type { StatsFilterParams } from '../../../types/statistics.type';
+import type { ClassroomDetails, StatsFilterParams } from '../../../types/statistics.type';
 import { GroupType } from '../../../types/statistics.type';
 import { Classroom } from '../../entities/classroom';
 import { Village } from '../../entities/village';
@@ -276,30 +276,41 @@ statisticsController.get({ path: '/classrooms' }, async (req, res) => {
 
   const classroomsData = await queryBuilder.getRawMany();
 
-  // const transformedData = classroomsData.map((classroom) => ({
-  //   classroomId: classroom.classroomId,
-  //   classroomName: classroom.classroomName,
-  //   classroomCountryCode: classroom.classroomCountryCode,
-  //   villageId: classroom.villageId,
-  //   villageName: classroom.villageName,
-  //   commentsCount: parseInt(classroom.commentsCount, 10),
-  //   videosCount: parseInt(classroom.videosCount, 10),
-  //   userFirstName: classroom.userFirstname,
-  //   userLastName: classroom.userLastname,
-  //   activities: classroom.activitiesCount
-  //     ? classroom.activitiesCount.flatMap((phaseObj: { activities: any[]; phase: string }) =>
-  //         phaseObj.activities.map((activity) => ({
-  //           count: activity.count,
-  //           type: activity.type,
-  //           phase: phaseObj.phase,
-  //         })),
-  //       )
-  //     : [],
-  // }));
-
-  // const result = { data: [...transformedData], phases: normalizeForCountry(transformedData) };
-
   res.sendJSON(classroomsData);
+});
+
+statisticsController.get({ path: '/classrooms/details/:classroomId' }, async (req, res) => {
+  const id = parseInt(req.params.classroomId);
+
+  const ClassroomDetails = await AppDataSource.getRepository(Classroom)
+    .createQueryBuilder('class')
+    .select([
+      'class.id AS id',
+      'class.countryCode AS countryCode',
+      'v.name AS villageName',
+      'COUNT(comment.id) AS commentsCount',
+      'COUNT(video.id) AS videosCount',
+    ])
+    .addSelect(
+      `CASE
+        WHEN class.name IS NOT NULL THEN class.name
+        WHEN u.displayName IS NOT NULL THEN u.displayName
+        WHEN u.level IS NOT NULL AND u.city IS NOT NULL THEN CONCAT('La classe de ', u.level, ' à ', u.city)
+        WHEN u.city IS NOT NULL THEN CONCAT('La classe de ', u.city)
+        ELSE NULL
+      END`,
+      'classroomName',
+    )
+    .innerJoin('village', 'v', 'v.id = class.villageId')
+    .innerJoin('user', 'u', 'u.id = class.userId')
+    .leftJoin('comment', 'comment', 'comment.userId = u.id')
+    .leftJoin('video', 'video', 'video.userId = u.id')
+    .where('class.id = :id', { id })
+    .groupBy('class.id')
+    .addGroupBy('u.id')
+    .getRawOne<ClassroomDetails>();
+
+  res.sendJSON(ClassroomDetails);
 });
 
 statisticsController.get({ path: '/one-village' }, async (req, res) => {
@@ -325,7 +336,6 @@ statisticsController.get({ path: '/one-village' }, async (req, res) => {
 
 statisticsController.get({ path: '/villages/:villageId' }, async (req, res) => {
   const villageId = parseInt(req.params.villageId);
-  const { countryCode } = req.params;
   const phase = req.query.phase as unknown as number;
   const filters: StatsFilterParams = { villageId, phase };
 
