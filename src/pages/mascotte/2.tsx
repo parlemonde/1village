@@ -91,7 +91,7 @@ const MascotteStep2 = () => {
           errorSteps={errorSteps}
         />
         <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
-          <h1>Qui êtes-vous ? Choisissez une mascotte pour vous représenter collectivement !</h1>
+          <h1>Qui êtes-vous ? Choisissez une mascotte qui vous représente collectivement !</h1>
           <div>
             <Grid container spacing={3}>
               <Grid item xs={12} md={3}>
@@ -141,7 +141,7 @@ const MascotteStep2 = () => {
                     <span className="text text--small">{data.mascotteDescription.length}/400</span>
                   </div>
                 )}
-                <p>3 traits de personnalité de votre mascotte (et donc des enfants !)</p>
+                <p>3 traits de personnalité de votre mascotte</p>
                 <Grid container spacing={3}>
                   <Grid item xs={12} md={4}>
                     <TextField
@@ -178,7 +178,7 @@ const MascotteStep2 = () => {
                   </Grid>
                 </Grid>
               </Grid>
-              <p>Tout comme vous, votre mascotte rêve. Dans quels pays rêve-t-elle de voyager ?</p>
+              <p>Dans quels pays rêve-t-elle de voyager ?</p>
               <MultipleCountrySelector
                 label="Pays"
                 style={{ width: '100%', marginBottom: '1rem' }}
@@ -187,7 +187,7 @@ const MascotteStep2 = () => {
                 helperText={showError && data.countries.length === 0 ? 'Ce champs est obligatoire' : ''}
                 error={showError && data.countries.length === 0}
               />
-              Tout comme vous, votre mascotte joue à l&apos;école. À quel jeu de récréation votre mascotte joue-t-elle le plus souvent ?
+              À quel jeu de récréation votre mascotte joue-t-elle le plus souvent ?
               <div className="se-presenter-step-two__line" style={{ display: 'flex', alignItems: 'flex-start', margin: '1.4rem 0', width: '100%' }}>
                 <span style={{ flexShrink: 0, marginRight: '0.5rem', display: 'inline-flex', alignItems: 'center' }}>Notre mascotte joue </span>
                 <TextField
@@ -201,7 +201,7 @@ const MascotteStep2 = () => {
                   helperText={showError && !data.game ? 'Ce champ est obligatoire' : ''}
                 />
               </div>
-              Tout comme vous, votre mascotte fait du sport à l&apos;école. Quels sports pratique-t-elle le plus souvent ?
+              Quels sports pratique-t-elle le plus souvent ?
               <div className="se-presenter-step-two__line" style={{ display: 'flex', alignItems: 'flex-start', margin: '1.4rem 0', width: '100%' }}>
                 <span style={{ flexShrink: 0, marginRight: '0.5rem', display: 'inline-flex', alignItems: 'center' }}>Notre mascotte pratique </span>
                 <TextField

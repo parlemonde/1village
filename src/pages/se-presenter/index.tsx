@@ -14,7 +14,7 @@ const suggestions = [
     title: 'Créer sa mascotte',
     button: 'Mascotte',
     href: '/mascotte/1',
-    text: 'Créez votre mascotte pour présenter votre classe à vos pélicopains. Créez-la à votre image, elle vous représentera dans votre village-monde !',
+    text: 'Créez une mascotte qui vous représentera toute l’année dans votre village-monde !',
     icon: MascotteIcon,
     disabled: true,
   },

@@ -53,10 +53,6 @@ const ContenuLibre = () => {
         />
         <div className="width-900">
           <h1>Ecrivez le contenu de votre publication</h1>
-          <p className="text">
-            Utilisez l&apos;éditeur de bloc pour définir le contenu de votre publication. Dans l&apos;étape 2 vous pourrez définir l&apos;aspect de la
-            carte résumée de votre publication.
-          </p>
           <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton next={onNext} />
         </div>

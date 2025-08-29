@@ -14,7 +14,7 @@ export const ThirdPhase = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const urlForm = 'https://docs.google.com/forms/d/e/1FAIpQLSfkTrGw6_BYr4cd3bM0yevjU_gOODZQLL91Tg5td9QR8tkyAA/viewform';
-  const textToDisplay = 'Avant de passer à la phase suivante, prenez 5 minutes pour nous faire vos retours sur la phase 2 : ';
+  const textToDisplay = 'Avant de passer à la phase 3, prenez 5 minutes pour nous faire vos retours sur la phase 2 : ';
 
   if (!user) {
     return null;
@@ -39,7 +39,7 @@ export const ThirdPhase = () => {
     <div style={{ width: '100%' }}>
       <Modal
         open={isModalOpen}
-        title="La phase 3 est active !"
+        title="La phase 3 a commencé !"
         maxWidth="md"
         fullWidth
         onClose={() => {}}
@@ -56,7 +56,7 @@ export const ThirdPhase = () => {
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginTop: '2rem' }}>
               <div>
-                <p>Si vous voulez poursuivre les échanges avec vos pélicopains, retournez sur la phase 2</p>
+                <p>Si vous n’avez pas encore fini d&apos;échanger avec vos pélicopains, restez en phase 2</p>
                 <Button
                   component="a"
                   onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -73,11 +73,11 @@ export const ThirdPhase = () => {
                     width: 'auto',
                   }}
                 >
-                  Retourner sur la phase 2
+                  Rester en phase 2
                 </Button>
               </div>
               <div>
-                <p>Si vous souhaitez débuter l&apos;imagination du village idéal, poursuivez sur la phase 3.</p>
+                <p>Pour imaginer le village-monde idéal, passez en phase 3.</p>
                 <Button
                   component="a"
                   onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -95,7 +95,7 @@ export const ThirdPhase = () => {
                     width: 'auto',
                   }}
                 >
-                  Poursuivre sur la phase 3
+                  Passez en phase 3
                 </Button>
               </div>
             </div>

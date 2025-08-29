@@ -219,7 +219,7 @@ export const FirstPhase = () => {
       <div id="new-user-desc" style={{ height: isMdScreen ? '75vh' : '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         {currentStep === 0 && (
           <div className="text-center">
-            <span style={{ fontSize: '1.1rem' }}>Votre classe appartient au village</span>
+            <span style={{ fontSize: '1.1rem' }}>Votre classe appartient au village-monde</span>
             <br />
             <Button variant="contained" color="primary" size="medium" onClick={() => setIsVisible(!isVisible)}>
               {isVisible ? 'Cacher' : 'Montrer'}
@@ -235,7 +235,7 @@ export const FirstPhase = () => {
               style={{ marginTop: '2rem' }}
               onClick={sendError('village')}
             >
-              {"Ce n'est pas mon village !"}
+              {"Ce n'est pas mon village-monde !"}
             </Button>
           </div>
         )}
@@ -281,10 +281,6 @@ export const FirstPhase = () => {
           <>
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
               <PelicoSearch style={{ width: '4rem', height: 'auto', marginRight: '1rem' }} />
-              <span className="text text--bold">
-                Comme c’est votre première connexion, Pélico a besoin de récupérer certaines informations sur votre classe. Pouvez-vous les compléter
-                ?
-              </span>
             </div>
             <Grid container spacing={2}>
               <Grid item sm={12} md={6}>
@@ -400,7 +396,7 @@ export const FirstPhase = () => {
                 py={2}
                 style={{ borderRadius: '0.25rem', ...(isMdScreen ? { height: '100%', width: '100%' } : {}) }}
               >
-                <span className="text text--bold">Les activités de votre classe apparaîtront comme ci-dessous :</span>
+                <span className="text text--bold">Prévisualisation de vos publications :</span>
                 <ActivityCard
                   activity={{
                     id: 0,
@@ -434,9 +430,7 @@ export const FirstPhase = () => {
           <>
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
               <PelicoSearch style={{ width: '4rem', height: 'auto', marginRight: '1rem' }} />
-              <span className="text text--bold">
-                Votre position sur la carte est-elle correcte ? Si non, vous pouvez déplacer le curseur pour la modifier.
-              </span>
+              <span className="text text--bold">Votre position sur la carte est-elle correcte ? Si non, déplacez le curseur pour la modifier.</span>
             </div>
             <div style={{ flex: 1, minHeight: 0, width: '100%' }}>
               {position !== null && (

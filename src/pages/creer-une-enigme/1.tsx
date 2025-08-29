@@ -145,12 +145,9 @@ const EnigmeStep1 = () => {
           ) : (
             <>
               <h1>{enigmeType.titleStep1}</h1>
-              <p className="text" style={{ fontSize: '1.1rem' }}>
-                {enigmeType.description}
-              </p>
               <div>
                 {subCategories.map((subCat, index) => (
-                  <ThemeChoiceButton key={index} label={subCat.label} description={subCat.description} onClick={onClick(index)} />
+                  <ThemeChoiceButton key={index} label={subCat.label} description="" onClick={onClick(index)} />
                 ))}
                 <ThemeChoiceButton
                   isOpen={otherOpen}
@@ -194,7 +191,7 @@ const EnigmeStep1 = () => {
                     </div>
                   }
                   label="Autre"
-                  description={`Présentez ${enigmeType.title3} d’une autre catégorie.`}
+                  description=""
                 />
               </div>
             </>

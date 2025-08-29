@@ -59,14 +59,7 @@ const ReportageStep2 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Créez maintenant votre reportage multimédia.</h1>
-          <p className="text">
-            Si vous souhaitez réaliser un film, n&apos;hésitez pas à utiliser{' '}
-            <a className="text" target="_blank" rel="noopener noreferrer" href="https://clap.parlemonde.org">
-              Clap!
-            </a>
-            , un outil d&apos;aide à l&apos;écriture audiovisuel !
-          </p>
+          <h1>Importez votre reportage.</h1>
           <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton prev="/realiser-un-reportage/1?edit" next={onNext} />
         </div>

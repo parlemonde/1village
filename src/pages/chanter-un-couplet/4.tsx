@@ -225,11 +225,10 @@ const SongStep4 = () => {
           onBeforeLeavePage={buildFinalMix}
         />
         <div className={styles.contentContainer}>
-          <h1>Synchronisez votre voix sur l&apos;hymne</h1>
-          <p>Avez-vous bien chanté en rythme ? 😀</p>
+          <h1>Synchronisez votre voix sur les instruments</h1>
           <p>
-            Pour le savoir, importez le fichier son contenant vos voix, et déplacez-le avec votre souris pour le caler sur l&apos;hymne ! Vous pouvez
-            réduire ou augmenter le volume du son pour que vos voix s’entendent suffisamment.
+            Importez l’enregistrement de vos voix puis déplacez la zone grise claire de gauche à droite pour caler en rythme vos voix et les
+            instruments. Vous pouvez modifier le volume du son pour que vos voix s’entendent suffisamment.
           </p>
           {!verseRecordAudio ? (
             <AddAudioButton

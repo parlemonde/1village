@@ -121,20 +121,6 @@ const MaClasse = () => {
     <Base>
       <PageLayout>
         <div className="width-900">
-          <h1 style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>Notre mascotte</h1>
-          {mascotteActivity && user ? (
-            <ActivityCard
-              activity={mascotteActivity}
-              user={user}
-              showEditButtons
-              isSelf
-              onDelete={() => {
-                setDeleteIndex({ index: 'mascotte', isDraft: false });
-              }}
-            />
-          ) : user ? (
-            <MascotteTemplate user={user} />
-          ) : null}
           <h1 style={{ margin: '2rem 0 1rem 0' }}>Mes Brouillons</h1>
           {drafts.length === 0 ? (
             <p>Vous n&apos;avez pas de brouillons d&apos;activités en cours.</p>
@@ -155,6 +141,39 @@ const MaClasse = () => {
               ) : null,
             )
           )}
+          <h1 style={{ margin: '2rem 0 1rem 0' }}>Mes activités publiées</h1>
+          {hasNoPublishedActivities ? (
+            <p>Vous navez pas d&apos;activités publiées.</p>
+          ) : (
+            activities.map((activity, index) =>
+              user && activity.userId === user.id && !isMascotte(activity) && activity.type !== 4 ? (
+                <ActivityCard
+                  activity={activity}
+                  isSelf={true}
+                  user={user}
+                  key={index}
+                  showEditButtons={true}
+                  onDelete={() => {
+                    setDeleteIndex({ index, isDraft: false });
+                  }}
+                />
+              ) : null,
+            )
+          )}
+          <h1 style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>Notre mascotte</h1>
+          {mascotteActivity && user ? (
+            <ActivityCard
+              activity={mascotteActivity}
+              user={user}
+              showEditButtons
+              isSelf
+              onDelete={() => {
+                setDeleteIndex({ index: 'mascotte', isDraft: false });
+              }}
+            />
+          ) : user ? (
+            <MascotteTemplate user={user} />
+          ) : null}
           <h1 style={{ margin: '2rem 0 1rem 0' }}>Mes jeux</h1>
           {hasGamesInActivities ? (
             activities.map((activity, index) =>
@@ -187,25 +206,6 @@ const MaClasse = () => {
             />
           ) : (
             <p>Vous n&apos;avez pas encore mis en ligne de vidéos.</p>
-          )}
-          <h1 style={{ margin: '2rem 0 1rem 0' }}>Mes activités publiées</h1>
-          {hasNoPublishedActivities ? (
-            <p>Vous navez pas d&apos;activités publiées.</p>
-          ) : (
-            activities.map((activity, index) =>
-              user && activity.userId === user.id && !isMascotte(activity) && activity.type !== 4 ? (
-                <ActivityCard
-                  activity={activity}
-                  isSelf={true}
-                  user={user}
-                  key={index}
-                  showEditButtons={true}
-                  onDelete={() => {
-                    setDeleteIndex({ index, isDraft: false });
-                  }}
-                />
-              ) : null,
-            )
           )}
         </div>
       </PageLayout>

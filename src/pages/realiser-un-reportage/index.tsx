@@ -84,11 +84,6 @@ const Reportage = () => {
       <PageLayout>
         <div className="width-900">
           <h1 style={{ marginTop: '0.5rem' }}>Sur quel thème souhaitez-vous réaliser votre reportage ?</h1>
-          <p className="text">
-            Dans cette activité, nous vous proposons de créer un reportage pour vos pélicopains, afin qu&apos;ils découverent un aspect de votre
-            quotidien et de votre culture.
-          </p>
-          <p className="text">Commencez par choisir le thème de votre reportage.</p>
           <ActivityChoice activities={reportages} />
         </div>
       </PageLayout>
