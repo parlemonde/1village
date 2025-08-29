@@ -77,9 +77,9 @@ export function useStatisticsClassrooms(villageId?: number | null, countryCode?:
   );
 
   const emptyStats: ClassroomStat = {
-    classroomId: 0,
+    id: 0,
     classroomName: '',
-    classroomCountryCode: '',
+    countryCode: '',
     villageId: 0,
     villageName: '',
     userFirstName: 0,
