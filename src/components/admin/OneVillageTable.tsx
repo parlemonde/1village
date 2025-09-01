@@ -55,6 +55,8 @@ export const OneVillageTable = ({
   rowStyle,
   tableLayout = 'fixed',
 }: OneVillageTableProps) => {
+  const nbElementsWithoutTotal = data.length - 1;
+
   const theme = useTheme();
   const backgroundColor = admin ? theme.palette.secondary.main : primaryColorLight;
   const [options, setTableOptions] = useState<TableOptions>({
@@ -142,7 +144,7 @@ export const OneVillageTable = ({
             </Box>
           )}
           <Table size="small" aria-label={ariaLabel} sx={{ tableLayout }}>
-            {data.length === 0 ? (
+            {nbElementsWithoutTotal === 0 ? (
               <TableBody>
                 <TableRow sx={{ height: '242px' }}>
                   <TableCell colSpan={columns.length + (actions ? 1 : 0)} align="center">
@@ -251,20 +253,20 @@ export const OneVillageTable = ({
             justifyContent: 'flex-end',
           }}
         >
-          {usePagination && data.length > 5 ? (
+          {usePagination && nbElementsWithoutTotal > 5 ? (
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, 50, 100]}
-              count={data.length}
+              count={nbElementsWithoutTotal}
               rowsPerPage={options.limit || 10}
               page={(options.page || 1) - 1}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
               labelDisplayedRows={({ from, to, count }) => (
-                <span>{`${from} - ${to} sur ${count} ${footerElementsLabel}${data.length > 0 ? 's' : ''}`}</span>
+                <span>{`${from} - ${to} sur ${count} ${footerElementsLabel}${nbElementsWithoutTotal > 0 ? 's' : ''}`}</span>
               )}
             />
           ) : (
-            <p style={{ margin: 0, padding: '0', textAlign: 'right', fontSize: '14px' }}>{`${data.length} ${footerElementsLabel}${
+            <p style={{ margin: 0, padding: '0', textAlign: 'right', fontSize: '14px' }}>{`${nbElementsWithoutTotal} ${footerElementsLabel}${
               displayedData.length > 1 ? 's' : ''
             }`}</p>
           )}
