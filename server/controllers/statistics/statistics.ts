@@ -626,6 +626,7 @@ statisticsController.get({ path: '/compare/villages/:villageId' }, async (req, r
               reportingCount: 0,
               storyCount: 0,
               anthemCount: 0,
+              contentLibreCount: 0,
               reinventStoryCount: 0,
             },
           ],

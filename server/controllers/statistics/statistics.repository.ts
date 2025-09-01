@@ -214,7 +214,6 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
     const challengeCount = activityByType.get(2)?.length || 0; // Type 2 = DEFI
     const questionCount = activityByType.get(3)?.length || 0; // Type 3 = QUESTION
     const gameCount = activityByType.get(4)?.length || 0; // Type 4 = GAME
-    const contentLibreCount = activityByType.get(5)?.length || 0; // Type 5 = CONTENU_LIBRE
 
     return {
       ...baseActivityCount,
@@ -224,7 +223,6 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
       challengeCount,
       questionCount,
       gameCount,
-      contentLibreCount,
     };
   } else if (phaseId === 2) {
     // Phase 2
@@ -247,12 +245,14 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
   } else if (phaseId === 3) {
     const reinventStoryCount = activityByType.get(14)?.length || 0;
     const anthemCount = (activityByType.get(11)?.length || 0) + (activityByType.get(12)?.length || 0);
+    const contentLibreCount = activityByType.get(5)?.length || 0; // Type 5 = CONTENU_LIBRE
     const storyCount = activityByType.get(13)?.length || 0; // Type 13 = STORY
 
     return {
       ...baseActivityCount,
       reinventStoryCount,
       anthemCount,
+      contentLibreCount,
       storyCount,
     };
   } else {

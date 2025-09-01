@@ -72,8 +72,8 @@ type PhaseDetails = {
   reportingCount?: number;
   storyCount?: number;
   anthemCount?: number;
-  reinventStoryCount?: number;
   contentLibreCount?: number;
+  reinventStoryCount?: number;
 };
 
 interface FamillyStats
