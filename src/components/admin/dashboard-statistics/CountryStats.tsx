@@ -41,17 +41,18 @@ const CountryStats = () => {
   // A refacto lors de l'implémentation des tickets VIL-407 et VIL-63
   useEffect(() => {
     setTimeout(() => {
-      const fakeHighlightedCountry: string = 'FR';
-      const fakeBarsChartData = [
-        { country: 'FR', total: 80 },
-        { country: 'CA', total: 70 },
-        { country: 'PT', total: 60 },
+      const fakeHighlightedCountry: string = 'France';
+      const fakeContributionsByCountry = [
+        { country: 'France', total: 80 },
+        { country: 'Canada', total: 70 },
+        { country: 'Portugal', total: 60 },
         { country: 'Grèce', total: 50 },
         { country: 'Maroc', total: 40 },
         { country: 'Tunisie', total: 30 },
         { country: 'Belgique', total: 20 },
         { country: 'Roumanie', total: 10 },
       ];
+
       const fakeVillageListData = [
         { name: 'Village France - Canada', color: 'green' },
         { name: 'Village France - Liban', color: 'orange' },
@@ -66,7 +67,7 @@ const CountryStats = () => {
 
       setHighlightedCountry(fakeHighlightedCountry);
       setLoadingHighlightedCountry(false);
-      setBarsChartData(fakeBarsChartData);
+      setBarsChartData(fakeContributionsByCountry);
       setLoadingBarsChartData(false);
       setVillageList(fakeVillageListData);
       setLoadingVillageList(false);
@@ -74,6 +75,10 @@ const CountryStats = () => {
   }, []);
 
   const isLoadingCountryStatistics = isLoadingCountryEngagementStatus || loadingHighlightedCountry || loadingBarsChartData || loadingVillageList;
+
+  const onCountrySelect = (_country: string) => {
+    // TODO VIL-815 changer la valeur de selectedCountry quand on clique sur une barre du graphique
+  };
 
   return (
     <>
@@ -90,7 +95,7 @@ const CountryStats = () => {
               {countryEngagementStatus && <EntityEngagementStatus entityType={EntityType.COUNTRY} entityEngagementStatus={countryEngagementStatus} />}
               {highlightedCountry && barsChartData && (
                 <div className={styles.simpleContainer}>
-                  <HorizontalBarsChart highlightedCountry={highlightedCountry} barsChartData={barsChartData} />
+                  <HorizontalBarsChart highlightedCountry={highlightedCountry} barsChartData={barsChartData} onCountrySelect={onCountrySelect} />
                 </div>
               )}
               {villageList && <VillageListCard villageList={villageList} />}
