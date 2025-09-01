@@ -201,6 +201,6 @@ export function useCountryActivityTable(countryCode: string, phaseId: number) {
       isSelected: false,
     };
 
-    return [...rows, totalRow];
+    return [totalRow, ...rows];
   }, [countryCode, phaseId, compareData, isLoading, error, countries]);
 }

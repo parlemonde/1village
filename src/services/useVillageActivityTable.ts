@@ -236,6 +236,6 @@ export function useVillageActivityTable(villageId: number, phaseId: number) {
       isSelected: false,
     };
 
-    return [...rows, totalRow];
+    return [totalRow, ...rows];
   }, [phaseId, compareData, isLoading, error, countries]);
 }
