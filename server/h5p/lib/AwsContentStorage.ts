@@ -9,7 +9,7 @@ import { logger } from '../../utils/logger';
 import { validateFilename } from './S3Util';
 import { dynamoDb } from './dynamoDB';
 
-const CONTENT_TABLE_NAME = 'H5P_Content';
+const CONTENT_TABLE_NAME = `${process.env.ENV || 'dev'}_H5P_Content`;
 
 export class AwsContentStorage implements IContentStorage {
   constructor() {}

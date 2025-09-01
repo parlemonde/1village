@@ -3,8 +3,8 @@ import { H5pError } from '@lumieducation/h5p-server';
 
 import { dynamoDb } from './dynamoDB';
 
-const USER_DATA_TABLE = 'H5P_user-data-content';
-const FINISHED_DATA_TABLE = 'H5P_finished-data';
+const USER_DATA_TABLE = `${process.env.ENV || 'dev'}_H5P_user-data-content`;
+const FINISHED_DATA_TABLE = `${process.env.ENV || 'dev'}_H5P_finished-data`;
 
 export class AwsContentUserDataStorage implements IContentUserDataStorage {
   constructor() {}
