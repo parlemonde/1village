@@ -189,6 +189,6 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number):
       isSelected: false,
     };
 
-    return [...rows, totalRow];
+    return [totalRow, ...rows];
   }, [classroomId, phaseId, compareData, isLoading, error]);
 }
