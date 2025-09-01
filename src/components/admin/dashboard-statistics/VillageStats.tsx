@@ -42,9 +42,9 @@ const VillageStats = () => {
   const [selectedVillage, setSelectedVillage] = useState<number>();
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = useState<Array<OneVillageTableRow>>([]);
   const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
-    1: false,
-    2: false,
-    3: false,
+    1: true,
+    2: true,
+    3: true,
   });
 
   const [firstChartData, setFirstChartData] = useState<CountryChartData>();
