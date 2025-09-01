@@ -58,6 +58,7 @@ export function getCountryActivityTableHeaders(phaseId: number) {
       return [
         { key: 'name', label: 'Nom du pays', sortable: true },
         { key: 'anthemCount', label: 'Hymnes', sortable: true },
+        { key: 'contentLibreCount', label: 'Contenus libres', sortable: true },
         { key: 'storyCount', label: 'Histoires', sortable: true },
         { key: 'videoCount', label: 'Vidéos', sortable: true },
         { key: 'commentCount', label: 'Commentaires', sortable: true },
@@ -92,6 +93,7 @@ export function getClassroomActivityTableHeaders(phaseId: number) {
     ],
     3: [
       { key: 'anthemCount', label: 'Hymnes', sortable: true },
+      { key: 'contentLibreCount', label: 'Contenus libres', sortable: true },
       { key: 'storyCount', label: 'Histoires', sortable: true },
       { key: 'videoCount', label: 'Vidéos', sortable: true },
       { key: 'commentCount', label: 'Commentaires', sortable: true },

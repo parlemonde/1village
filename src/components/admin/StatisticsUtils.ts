@@ -53,8 +53,8 @@ export const getPublicationCount = (data?: VillageStats, countryCode?: string) =
         'reportingCount',
         'storyCount',
         'anthemCount',
-        'reinventStoryCount',
         'contentLibreCount',
+        'reinventStoryCount',
       ];
 
       return total + countKeys.reduce((sum, key) => sum + ((phase[key as keyof typeof phase] as number) || 0), 0);

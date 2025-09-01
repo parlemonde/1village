@@ -28,8 +28,8 @@ interface ClassroomRow {
   reportingCount: number;
   storyCount: number;
   anthemCount: number;
-  reinventStoryCount: number;
   contentLibreCount: number;
+  reinventStoryCount: number;
   isSelected: boolean;
   [key: string]: string | number | boolean | ReactNode;
 }
@@ -66,8 +66,8 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number):
           reportingCount: 0,
           storyCount: 0,
           anthemCount: 0,
-          reinventStoryCount: 0,
           contentLibreCount: 0,
+          reinventStoryCount: 0,
         };
 
         if (phaseId === 0) {
@@ -86,8 +86,8 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number):
               aggregatedPhase.reportingCount += phase.reportingCount || 0;
               aggregatedPhase.storyCount += phase.storyCount || 0;
               aggregatedPhase.anthemCount += phase.anthemCount || 0;
-              aggregatedPhase.reinventStoryCount += phase.reinventStoryCount || 0;
               aggregatedPhase.contentLibreCount += phase.contentLibreCount || 0;
+              aggregatedPhase.reinventStoryCount += phase.reinventStoryCount || 0;
             }
           });
         } else {
@@ -107,8 +107,8 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number):
               reportingCount: phase.reportingCount || 0,
               storyCount: phase.storyCount || 0,
               anthemCount: phase.anthemCount || 0,
-              reinventStoryCount: phase.reinventStoryCount || 0,
               contentLibreCount: phase.contentLibreCount || 0,
+              reinventStoryCount: phase.reinventStoryCount || 0,
             };
           }
         }
@@ -130,8 +130,8 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number):
             reportingCount: 0,
             storyCount: 0,
             anthemCount: 0,
-            reinventStoryCount: 0,
             contentLibreCount: 0,
+            reinventStoryCount: 0,
             isSelected: classroomKey === classroomId.toString(), // Mark selected classroom
           });
         }
@@ -158,8 +158,8 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number):
           classroomRow.reportingCount += aggregatedPhase.reportingCount;
           classroomRow.storyCount += aggregatedPhase.storyCount;
           classroomRow.anthemCount += aggregatedPhase.anthemCount;
-          classroomRow.reinventStoryCount += aggregatedPhase.reinventStoryCount;
           classroomRow.contentLibreCount += aggregatedPhase.contentLibreCount;
+          classroomRow.reinventStoryCount += aggregatedPhase.reinventStoryCount;
         }
       });
     });
@@ -184,8 +184,8 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number):
       reportingCount: rows.reduce((acc, row) => acc + row.reportingCount, 0),
       storyCount: rows.reduce((acc, row) => acc + row.storyCount, 0),
       anthemCount: rows.reduce((acc, row) => acc + row.anthemCount, 0),
-      reinventStoryCount: rows.reduce((acc, row) => acc + row.reinventStoryCount, 0),
       contentLibreCount: rows.reduce((acc, row) => acc + row.contentLibreCount, 0),
+      reinventStoryCount: rows.reduce((acc, row) => acc + row.reinventStoryCount, 0),
       isSelected: false,
     };
 

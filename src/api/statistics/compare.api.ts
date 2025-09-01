@@ -26,6 +26,6 @@ export type PhaseDetail = {
   reportingCount?: number;
   storyCount?: number;
   anthemCount?: number;
-  reinventStoryCount?: number;
   contentLibreCount?: number;
+  reinventStoryCount?: number;
 };

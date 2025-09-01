@@ -38,8 +38,8 @@ interface VillageRow {
   reportingCount: number;
   storyCount: number;
   anthemCount: number;
-  reinventStoryCount: number;
   contentLibreCount: number;
+  reinventStoryCount: number;
   isSelected: boolean;
   [key: string]: string | number | boolean | ReactNode;
 }
@@ -87,8 +87,8 @@ export function useVillageActivityTable(villageId: number, phaseId: number) {
           reportingCount: 0,
           storyCount: 0,
           anthemCount: 0,
-          reinventStoryCount: 0,
           contentLibreCount: 0,
+          reinventStoryCount: 0,
         };
 
         if (phaseId === 0) {
@@ -107,8 +107,8 @@ export function useVillageActivityTable(villageId: number, phaseId: number) {
               aggregatedPhase.reportingCount += phase.reportingCount || 0;
               aggregatedPhase.storyCount += phase.storyCount || 0;
               aggregatedPhase.anthemCount += phase.anthemCount || 0;
-              aggregatedPhase.reinventStoryCount += phase.reinventStoryCount || 0;
               aggregatedPhase.contentLibreCount += phase.contentLibreCount || 0;
+              aggregatedPhase.reinventStoryCount += phase.reinventStoryCount || 0;
             }
           });
         } else {
@@ -128,8 +128,8 @@ export function useVillageActivityTable(villageId: number, phaseId: number) {
               reportingCount: phase.reportingCount || 0,
               storyCount: phase.storyCount || 0,
               anthemCount: phase.anthemCount || 0,
-              reinventStoryCount: phase.reinventStoryCount || 0,
               contentLibreCount: phase.contentLibreCount || 0,
+              reinventStoryCount: phase.reinventStoryCount || 0,
             };
           }
         }
@@ -151,8 +151,8 @@ export function useVillageActivityTable(villageId: number, phaseId: number) {
             reportingCount: 0,
             storyCount: 0,
             anthemCount: 0,
-            reinventStoryCount: 0,
             contentLibreCount: 0,
+            reinventStoryCount: 0,
             isSelected: false,
           });
         }
@@ -179,8 +179,8 @@ export function useVillageActivityTable(villageId: number, phaseId: number) {
           countryRow.reportingCount += aggregatedPhase.reportingCount;
           countryRow.storyCount += aggregatedPhase.storyCount;
           countryRow.anthemCount += aggregatedPhase.anthemCount;
-          countryRow.reinventStoryCount += aggregatedPhase.reinventStoryCount;
           countryRow.contentLibreCount += aggregatedPhase.contentLibreCount;
+          countryRow.reinventStoryCount += aggregatedPhase.reinventStoryCount;
         }
       });
     });
@@ -204,8 +204,8 @@ export function useVillageActivityTable(villageId: number, phaseId: number) {
           reportingCount: 0,
           storyCount: 0,
           anthemCount: 0,
-          reinventStoryCount: 0,
           contentLibreCount: 0,
+          reinventStoryCount: 0,
           isSelected: false,
         });
       }
@@ -231,8 +231,8 @@ export function useVillageActivityTable(villageId: number, phaseId: number) {
       reportingCount: rows.reduce((acc, row) => acc + row.reportingCount, 0),
       storyCount: rows.reduce((acc, row) => acc + row.storyCount, 0),
       anthemCount: rows.reduce((acc, row) => acc + row.anthemCount, 0),
-      reinventStoryCount: rows.reduce((acc, row) => acc + row.reinventStoryCount, 0),
       contentLibreCount: rows.reduce((acc, row) => acc + row.contentLibreCount, 0),
+      reinventStoryCount: rows.reduce((acc, row) => acc + row.reinventStoryCount, 0),
       isSelected: false,
     };
 

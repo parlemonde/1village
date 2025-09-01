@@ -22,6 +22,7 @@ type TableRow = {
   reportingCount?: number;
   storyCount?: number;
   anthemCount?: number;
+  contentLibreCount?: number;
   reinventStoryCount?: number;
   isSelected?: boolean;
 };

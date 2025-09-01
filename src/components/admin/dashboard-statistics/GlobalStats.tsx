@@ -139,6 +139,7 @@ const GlobalStats = () => {
         return [
           ...baseColumns,
           { key: 'anthemCount', label: 'Hymnes', sortable: true },
+          { key: 'contentLibreCount', label: 'Contenus libres', sortable: true },
           { key: 'storyCount', label: 'Histoires', sortable: true },
           { key: 'videoCount', label: 'Vidéos', sortable: true },
           { key: 'commentCount', label: 'Commentaires', sortable: true },
@@ -176,8 +177,8 @@ const GlobalStats = () => {
             reportingCount?: number;
             storyCount?: number;
             anthemCount?: number;
-            reinventStoryCount?: number;
             contentLibreCount?: number;
+            reinventStoryCount?: number;
           }>;
         }>;
       }) => {

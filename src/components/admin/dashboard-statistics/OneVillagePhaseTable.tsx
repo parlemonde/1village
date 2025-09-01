@@ -23,8 +23,8 @@ interface PhaseData {
   reportingCount: number;
   storyCount: number;
   anthemCount: number;
-  reinventStoryCount: number;
   contentLibreCount: number;
+  reinventStoryCount: number;
 }
 
 interface VillageRowData {
@@ -48,8 +48,8 @@ const createEmptyPhaseData = (phaseId: number): PhaseData => ({
   reportingCount: 0,
   storyCount: 0,
   anthemCount: 0,
-  reinventStoryCount: 0,
   contentLibreCount: 0,
+  reinventStoryCount: 0,
 });
 
 const aggregatePhaseData = (targetPhase: PhaseData, phase: any) => {
@@ -65,8 +65,8 @@ const aggregatePhaseData = (targetPhase: PhaseData, phase: any) => {
   targetPhase.reportingCount += phase.reportingCount || 0;
   targetPhase.storyCount += phase.storyCount || 0;
   targetPhase.anthemCount += phase.anthemCount || 0;
-  targetPhase.reinventStoryCount += phase.reinventStoryCount || 0;
   targetPhase.contentLibreCount += phase.contentLibreCount || 0;
+  targetPhase.reinventStoryCount += phase.reinventStoryCount || 0;
 };
 
 const getTargetPhase = (villageRow: VillageRowData, phaseId: number): PhaseData | null => {
@@ -166,6 +166,7 @@ const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }: { d
       case 3:
         return [
           { key: 'anthemCount', label: 'Hymnes' },
+          { key: 'contentLibreCount', label: 'Contenus libres' },
           { key: 'storyCount', label: 'Histoires' },
           { key: 'videoCount', label: 'Vidéos' },
           { key: 'commentCount', label: 'Commentaires' },
