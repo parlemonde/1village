@@ -34,9 +34,9 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
     3: true,
   });
 
-  const videoCount = getVideoCount(dashboardSummaryData, selectedCountry);
-  const commentCount = getCommentCount(dashboardSummaryData, selectedCountry);
-  const publicationCount = getPublicationCount(dashboardSummaryData, selectedCountry);
+  const videoCount = getVideoCount(dashboardSummaryData);
+  const commentCount = getCommentCount(dashboardSummaryData);
+  const publicationCount = getPublicationCount(dashboardSummaryData);
 
   // Extract barChartData for better readability
   const barChartData = dashboardSummaryData.barChartData || [];

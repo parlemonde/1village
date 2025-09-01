@@ -516,7 +516,9 @@ statisticsController.get({ path: '/countries/:countryCode' }, async (req, res) =
     familiesWithoutAccount: await getFamiliesWithoutAccountForCountry(countryCode),
   };
 
-  res.sendJSON({ family });
+  const activityCountDetails = await getActivityTypeCountByVillages({ phase, format: 'dashboard' });
+
+  res.sendJSON({ family, activityCountDetails });
 });
 
 statisticsController.get({ path: '/countries/:countryCode/engagement-status' }, async (req, res) => {
