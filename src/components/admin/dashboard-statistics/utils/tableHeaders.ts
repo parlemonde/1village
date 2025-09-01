@@ -57,9 +57,8 @@ export function getCountryActivityTableHeaders(phaseId: number) {
     case 3:
       return [
         { key: 'name', label: 'Nom du pays', sortable: true },
-        { key: 'anthemCount', label: 'Hymne', sortable: true },
-        { key: 'storyCount', label: 'Histoire', sortable: true },
-        { key: 'reinventStoryCount', label: 'Réécriture', sortable: true },
+        { key: 'anthemCount', label: 'Hymnes', sortable: true },
+        { key: 'storyCount', label: 'Histoires', sortable: true },
         { key: 'videoCount', label: 'Vidéos', sortable: true },
         { key: 'commentCount', label: 'Commentaires', sortable: true },
         { key: 'draftCount', label: 'Brouillons', sortable: true },
@@ -70,10 +69,7 @@ export function getCountryActivityTableHeaders(phaseId: number) {
 }
 
 export function getClassroomActivityTableHeaders(phaseId: number) {
-  const baseHeaders = [
-    { key: 'name', label: 'Classe', sortable: true },
-    { key: 'country', label: 'Pays', sortable: true },
-  ];
+  const baseHeaders = [{ key: 'name', label: 'Classe', sortable: true }];
 
   const phaseHeaders: { [key: number]: { key: string; label: string; sortable: boolean }[] } = {
     1: [
@@ -95,9 +91,8 @@ export function getClassroomActivityTableHeaders(phaseId: number) {
       { key: 'draftCount', label: 'Brouillons', sortable: true },
     ],
     3: [
-      { key: 'anthemCount', label: 'Hymne', sortable: true },
-      { key: 'storyCount', label: 'Histoire', sortable: true },
-      { key: 'reinventStoryCount', label: 'Réécriture', sortable: true },
+      { key: 'anthemCount', label: 'Hymnes', sortable: true },
+      { key: 'storyCount', label: 'Histoires', sortable: true },
       { key: 'videoCount', label: 'Vidéos', sortable: true },
       { key: 'commentCount', label: 'Commentaires', sortable: true },
       { key: 'draftCount', label: 'Brouillons', sortable: true },

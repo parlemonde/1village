@@ -132,15 +132,14 @@ const GlobalStats = () => {
           { key: 'gameCount', label: 'Jeux', sortable: true },
           { key: 'questionCount', label: 'Questions', sortable: true },
           { key: 'reactionCount', label: 'Réactions', sortable: true },
-          { key: 'storyCount', label: 'Histoire', sortable: true },
           { key: 'videoCount', label: 'Vidéos', sortable: true },
           { key: 'commentCount', label: 'Commentaires', sortable: true },
         ];
       case 3:
         return [
           ...baseColumns,
-          { key: 'anthemCount', label: 'Hymne', sortable: true },
-          { key: 'reinventStoryCount', label: 'Réécriture', sortable: true },
+          { key: 'anthemCount', label: 'Hymnes', sortable: true },
+          { key: 'storyCount', label: 'Histoires', sortable: true },
           { key: 'videoCount', label: 'Vidéos', sortable: true },
           { key: 'commentCount', label: 'Commentaires', sortable: true },
           { key: 'draftCount', label: 'Brouillons', sortable: true },

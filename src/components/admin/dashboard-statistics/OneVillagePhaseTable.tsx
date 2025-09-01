@@ -160,14 +160,13 @@ const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }: { d
           { key: 'gameCount', label: 'Jeux' },
           { key: 'questionCount', label: 'Questions' },
           { key: 'reactionCount', label: 'Réactions' },
-          { key: 'storyCount', label: 'Histoire' },
           { key: 'videoCount', label: 'Vidéos' },
           { key: 'commentCount', label: 'Commentaires' },
         ];
       case 3:
         return [
-          { key: 'anthemCount', label: 'Hymne' },
-          { key: 'reinventStoryCount', label: 'Réécriture' },
+          { key: 'anthemCount', label: 'Hymnes' },
+          { key: 'storyCount', label: 'Histoires' },
           { key: 'videoCount', label: 'Vidéos' },
           { key: 'commentCount', label: 'Commentaires' },
           { key: 'draftCount', label: 'Brouillons' },
