@@ -63,7 +63,7 @@ const calculateTotalPublications = (phaseDetails: unknown[]): number => {
 };
 
 const createClassroomEntry = (classroom: Classroom, countryCode: string, phaseDetails: unknown[], format: 'dashboard' | 'compare'): ClassroomData => {
-  const classroomName = classroom.user?.displayName || classroom.name || `Classe ${classroom.id}`;
+  const classroomName = getClassroomDisplayName(classroom);
 
   if (format === 'dashboard') {
     const totalPublications = calculateTotalPublications(phaseDetails);
@@ -85,6 +85,13 @@ const createClassroomEntry = (classroom: Classroom, countryCode: string, phaseDe
     countryCode,
   };
 };
+
+function getClassroomDisplayName(classroom: Classroom): string {
+  const classroomUser = classroom.user;
+  const nameWithUserLevelAndCity = classroomUser.level && classroomUser.city ? `La classe de ${classroomUser.level} à ${classroomUser.city}` : '';
+  const nameWithUserCity = classroomUser.city ? `La classe de ${classroomUser.city}` : '';
+  return classroom.name ?? classroomUser.displayName ?? nameWithUserLevelAndCity ?? nameWithUserCity ?? `Classe n°${classroom.id}`;
+}
 
 const createCountryEntry = (countryCode: string, phaseDetails: unknown[], format: 'dashboard' | 'compare'): ClassroomData => {
   if (format === 'dashboard') {
