@@ -119,6 +119,7 @@ const GlobalStats = () => {
       case 1:
         return [
           ...baseColumns,
+          { key: 'indiceCount', label: 'Indices', sortable: true },
           { key: 'mascotCount', label: 'Mascottes', sortable: true },
           { key: 'videoCount', label: 'Vidéos', sortable: true },
           { key: 'draftCount', label: 'Brouillons', sortable: true },
@@ -166,6 +167,7 @@ const GlobalStats = () => {
         classrooms: Array<{
           phaseDetails: Array<{
             phaseId: number;
+            indiceCount?: number;
             mascotCount?: number;
             videoCount?: number;
             draftCount?: number;

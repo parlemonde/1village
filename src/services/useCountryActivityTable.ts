@@ -8,6 +8,7 @@ const calculateTotalPublications = (phaseDetails: PhaseDetail[], phaseId: number
   const phase = phaseDetails.find((p) => p.phaseId === phaseId);
   if (!phase) return 0;
   return (
+    (phase.indiceCount || 0) +
     (phase.mascotCount || 0) +
     (phase.videoCount || 0) +
     (phase.challengeCount || 0) +
@@ -28,6 +29,7 @@ export interface CountryRow {
   totalPublications: number;
   commentCount: number;
   draftCount: number;
+  indiceCount: number;
   mascotCount: number;
   videoCount: number;
   challengeCount: number;
@@ -70,6 +72,7 @@ export function useCountryActivityTable(countryCode: string, phaseId: number) {
         let aggregatedPhase = {
           commentCount: 0,
           draftCount: 0,
+          indiceCount: 0,
           mascotCount: 0,
           videoCount: 0,
           challengeCount: 0,
@@ -89,6 +92,7 @@ export function useCountryActivityTable(countryCode: string, phaseId: number) {
             if (phase.phaseId && phase.phaseId >= 1 && phase.phaseId <= 3) {
               aggregatedPhase.commentCount += phase.commentCount || 0;
               aggregatedPhase.draftCount += phase.draftCount || 0;
+              aggregatedPhase.indiceCount += phase.indiceCount || 0;
               aggregatedPhase.mascotCount += phase.mascotCount || 0;
               aggregatedPhase.videoCount += phase.videoCount || 0;
               aggregatedPhase.challengeCount += phase.challengeCount || 0;
@@ -109,6 +113,7 @@ export function useCountryActivityTable(countryCode: string, phaseId: number) {
             aggregatedPhase = {
               commentCount: phase.commentCount || 0,
               draftCount: phase.draftCount || 0,
+              indiceCount: phase.indiceCount || 0,
               mascotCount: phase.mascotCount || 0,
               videoCount: phase.videoCount || 0,
               challengeCount: phase.challengeCount || 0,
@@ -132,6 +137,7 @@ export function useCountryActivityTable(countryCode: string, phaseId: number) {
             totalPublications: 0,
             commentCount: 0,
             draftCount: 0,
+            indiceCount: 0,
             mascotCount: 0,
             videoCount: 0,
             challengeCount: 0,
@@ -160,6 +166,7 @@ export function useCountryActivityTable(countryCode: string, phaseId: number) {
           countryRow.totalPublications += classroomTotal;
           countryRow.commentCount += aggregatedPhase.commentCount;
           countryRow.draftCount += aggregatedPhase.draftCount;
+          countryRow.indiceCount += aggregatedPhase.indiceCount;
           countryRow.mascotCount += aggregatedPhase.mascotCount;
           countryRow.videoCount += aggregatedPhase.videoCount;
           countryRow.challengeCount += aggregatedPhase.challengeCount;
@@ -186,6 +193,7 @@ export function useCountryActivityTable(countryCode: string, phaseId: number) {
       totalPublications: rows.reduce((acc, row) => acc + row.totalPublications, 0),
       commentCount: rows.reduce((acc, row) => acc + row.commentCount, 0),
       draftCount: rows.reduce((acc, row) => acc + row.draftCount, 0),
+      indiceCount: rows.reduce((acc, row) => acc + row.indiceCount, 0),
       mascotCount: rows.reduce((acc, row) => acc + row.mascotCount, 0),
       videoCount: rows.reduce((acc, row) => acc + row.videoCount, 0),
       challengeCount: rows.reduce((acc, row) => acc + row.challengeCount, 0),

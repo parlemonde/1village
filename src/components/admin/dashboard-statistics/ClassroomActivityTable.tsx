@@ -15,6 +15,7 @@ type TableRow = {
   totalPublications?: number;
   commentCount?: number;
   draftCount?: number;
+  indiceCount?: number;
   mascotCount?: number;
   videoCount?: number;
   challengeCount?: number;

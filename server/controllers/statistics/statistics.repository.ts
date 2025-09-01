@@ -206,8 +206,8 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
 
   if (phaseId === 1) {
     // Phase 1 - Utiliser les types qui existent réellement dans la base
-    const mascotCount = activityByType.get(8)?.length || 0; // Type 8 = MASCOTTE
     const indiceCount = activityByType.get(6)?.length || 0; // Type 6 = INDICE (n'existe pas dans la base récente)
+    const mascotCount = activityByType.get(8)?.length || 0; // Type 8 = MASCOTTE
 
     // Utiliser les types qui existent réellement
     const enigmaCount = activityByType.get(1)?.length || 0; // Type 1 = ENIGME

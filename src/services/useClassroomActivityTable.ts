@@ -18,6 +18,7 @@ interface ClassroomRow {
   totalPublications: number;
   commentCount: number;
   draftCount: number;
+  indiceCount: number;
   mascotCount: number;
   videoCount: number;
   challengeCount: number;
@@ -56,6 +57,7 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number):
         let aggregatedPhase = {
           commentCount: 0,
           draftCount: 0,
+          indiceCount: 0,
           mascotCount: 0,
           videoCount: 0,
           challengeCount: 0,
@@ -76,6 +78,7 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number):
             if (phase.phaseId && phase.phaseId >= 1 && phase.phaseId <= 3) {
               aggregatedPhase.commentCount += phase.commentCount || 0;
               aggregatedPhase.draftCount += phase.draftCount || 0;
+              aggregatedPhase.indiceCount += phase.indiceCount || 0;
               aggregatedPhase.mascotCount += phase.mascotCount || 0;
               aggregatedPhase.videoCount += phase.videoCount || 0;
               aggregatedPhase.challengeCount += phase.challengeCount || 0;
@@ -97,6 +100,7 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number):
             aggregatedPhase = {
               commentCount: phase.commentCount || 0,
               draftCount: phase.draftCount || 0,
+              indiceCount: phase.indiceCount || 0,
               mascotCount: phase.mascotCount || 0,
               videoCount: phase.videoCount || 0,
               challengeCount: phase.challengeCount || 0,
@@ -120,6 +124,7 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number):
             totalPublications: 0,
             commentCount: 0,
             draftCount: 0,
+            indiceCount: 0,
             mascotCount: 0,
             videoCount: 0,
             challengeCount: 0,
@@ -148,6 +153,7 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number):
           classroomRow.totalPublications += classroomTotal;
           classroomRow.commentCount += aggregatedPhase.commentCount;
           classroomRow.draftCount += aggregatedPhase.draftCount;
+          classroomRow.indiceCount += aggregatedPhase.indiceCount;
           classroomRow.mascotCount += aggregatedPhase.mascotCount;
           classroomRow.videoCount += aggregatedPhase.videoCount;
           classroomRow.challengeCount += aggregatedPhase.challengeCount;
@@ -174,6 +180,7 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number):
       totalPublications: rows.reduce((acc, row) => acc + row.totalPublications, 0),
       commentCount: rows.reduce((acc, row) => acc + row.commentCount, 0),
       draftCount: rows.reduce((acc, row) => acc + row.draftCount, 0),
+      indiceCount: rows.reduce((acc, row) => acc + row.indiceCount, 0),
       mascotCount: rows.reduce((acc, row) => acc + row.mascotCount, 0),
       videoCount: rows.reduce((acc, row) => acc + row.videoCount, 0),
       challengeCount: rows.reduce((acc, row) => acc + row.challengeCount, 0),

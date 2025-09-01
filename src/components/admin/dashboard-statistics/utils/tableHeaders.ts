@@ -18,12 +18,14 @@ export const CountryActivityTableHeaders = [
   { key: 'totalPublications', label: 'Publications', sortable: true },
   { key: 'commentCount', label: 'Commentaires', sortable: true },
   { key: 'draftCount', label: 'Brouillons', sortable: true },
+  { key: 'indiceCount', label: 'Indices', sortable: true },
   { key: 'mascotCount', label: 'Mascottes', sortable: true },
   { key: 'videoCount', label: 'Vidéos', sortable: true },
 ];
 
 export const CountryActivityTableCountryHeaders = [
   { key: 'name', label: 'Nom du pays', sortable: true },
+  { key: 'indiceCount', label: 'Indices', sortable: true },
   { key: 'mascotCount', label: 'Mascottes', sortable: true },
   { key: 'videoCount', label: 'Vidéos', sortable: true },
   { key: 'draftCount', label: 'Brouillons non publiés', sortable: true },
@@ -35,7 +37,7 @@ export function getCountryActivityTableHeaders(phaseId: number) {
     case 1:
       return [
         { key: 'name', label: 'Nom du pays', sortable: true },
-        { key: 'enigmaCount', label: 'Indices', sortable: true },
+        { key: 'indiceCount', label: 'Indices', sortable: true },
         { key: 'mascotCount', label: 'Mascottes', sortable: true },
         { key: 'videoCount', label: 'Vidéos', sortable: true },
         { key: 'commentCount', label: 'Commentaires', sortable: true },
@@ -74,7 +76,7 @@ export function getClassroomActivityTableHeaders(phaseId: number) {
 
   const phaseHeaders: { [key: number]: { key: string; label: string; sortable: boolean }[] } = {
     1: [
-      { key: 'enigmaCount', label: 'Indices', sortable: true },
+      { key: 'indiceCount', label: 'Indices', sortable: true },
       { key: 'mascotCount', label: 'Mascottes', sortable: true },
       { key: 'videoCount', label: 'Vidéos', sortable: true },
       { key: 'commentCount', label: 'Commentaires', sortable: true },
