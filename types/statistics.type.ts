@@ -62,6 +62,7 @@ type PhaseDetails = {
   phaseId: number;
   commentCount: number;
   draftCount: number;
+  indiceCount?: number;
   mascotCount?: number;
   videoCount?: number;
   challengeCount?: number;

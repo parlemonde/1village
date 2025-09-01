@@ -11,6 +11,7 @@ interface OneVillagePhaseTableProps {
 
 interface PhaseData {
   phaseId: number;
+  indiceCount: number;
   mascotCount: number;
   videoCount: number;
   draftCount: number;
@@ -36,6 +37,7 @@ interface VillageRowData {
 
 const createEmptyPhaseData = (phaseId: number): PhaseData => ({
   phaseId,
+  indiceCount: 0,
   mascotCount: 0,
   videoCount: 0,
   draftCount: 0,
@@ -53,6 +55,7 @@ const createEmptyPhaseData = (phaseId: number): PhaseData => ({
 });
 
 const aggregatePhaseData = (targetPhase: PhaseData, phase: any) => {
+  targetPhase.indiceCount += phase.indiceCount || 0;
   targetPhase.mascotCount += phase.mascotCount || 0;
   targetPhase.videoCount += phase.videoCount || 0;
   targetPhase.draftCount += phase.draftCount || 0;
@@ -147,6 +150,7 @@ const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }: { d
     switch (phaseId) {
       case 1:
         return [
+          { key: 'indiceCount', label: 'Indices' },
           { key: 'mascotCount', label: 'Mascottes' },
           { key: 'videoCount', label: 'Vidéos' },
           { key: 'draftCount', label: 'Brouillons' },
