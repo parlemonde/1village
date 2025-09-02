@@ -41,6 +41,7 @@ const Jeu = () => {
       <PageLayout>
         <div className="width-900">
           <h1>Choisissez le jeu que vous souhaitez créer</h1>
+          <br />
           <ActivityChoice activities={activities} />
         </div>
       </PageLayout>

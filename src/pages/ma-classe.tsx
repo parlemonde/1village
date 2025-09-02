@@ -121,7 +121,7 @@ const MaClasse = () => {
     <Base>
       <PageLayout>
         <div className="width-900">
-          <h1 style={{ margin: '2rem 0 1rem 0' }}>Mes Brouillons</h1>
+          <h1 style={{ margin: '2rem 0 1rem 0' }}>Mes brouillons</h1>
           {drafts.length === 0 ? (
             <p>Vous n&apos;avez pas de brouillons d&apos;activités en cours.</p>
           ) : (

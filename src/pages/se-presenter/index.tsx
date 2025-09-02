@@ -79,6 +79,7 @@ const Presentation = () => {
             <SuggestionCarousel suggestions={currentSuggestions} />
           </div>
           <h1>Choisissez votre présentation</h1>
+          <br />
           <ActivityChoice activities={currentActivities} />
         </div>
       </div>

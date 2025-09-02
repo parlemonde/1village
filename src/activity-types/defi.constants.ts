@@ -31,11 +31,11 @@ export const ECO_ACTIONS = [
 export const ECO_DEFIS = [
   {
     title: 'Réaliser cette action pour la planète à votre tour',
-    description: 'Les pelicopains devront refaire votre action chez eux',
+    description: 'Les pelicopains devront refaire votre action chez eux.',
   },
   {
-    title: 'Imaginer et réaliser  une nouvelle action pour la planète',
-    description: 'Les pelicopains devront réaliser une autre action',
+    title: 'Imaginer et réaliser une nouvelle action pour la planète',
+    description: 'Les pelicopains devront réaliser une autre action.',
   },
 ];
 export const LANGUAGE_SCHOOL = [

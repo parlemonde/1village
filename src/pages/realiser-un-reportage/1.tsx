@@ -103,7 +103,7 @@ const ReportageStep1 = () => {
             </>
           ) : (
             <p className="text">
-              Vous trouverez ici les reportages qui ont déjà été déjà réalisés par les pélicopains sur le thème &quot;
+              Vous trouverez ici les reportages qui ont déjà été réalisés par les pélicopains sur le thème &quot;
               {getReportage(activity.subType, data).step1}&quot;.
             </p>
           )}

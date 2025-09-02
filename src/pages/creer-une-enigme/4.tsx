@@ -85,7 +85,7 @@ const EnigmeStep4 = () => {
         <div className="width-900">
           <h1>Pré-visualisez votre énigme{!isEdit && ' et publiez-la'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Relisez votre énigme une dernière fois avant de la publier !
+            Relisez votre publication une dernière fois avant de la publier !
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>

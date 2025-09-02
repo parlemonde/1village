@@ -124,7 +124,7 @@
   }
 
   li:before {
-    content: attr(data-emoji);
+    content: attr(data-emoji) " ";
     margin-left: -1.5rem;
   }
 }

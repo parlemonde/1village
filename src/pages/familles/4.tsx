@@ -24,10 +24,10 @@ const ClassroomParamStep4 = () => {
           </div> */}
           <div className="width-900">
             <h1> Gérez les accès familles </h1>
-            <span>
+            <p>
               Pour chaque enfant de votre classe, vous pouvez voir le nombre de compte famille créé ainsi que télécharger individuellement le texte de
               présentation (si une famille a perdu le sien par exemple).
-            </span>
+            </p>
 
             <CollapsibleTable />
           </div>

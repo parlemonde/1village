@@ -216,7 +216,7 @@ const ClassroomParamStep2 = () => {
               Chaque enfant possède un “code enfant” qui permet à 5 membres de sa famille de se créer un compte.
               <br></br>
               <br></br>Vous devez ajouter autant d&apos;enfants qu&apos;il y a dans votre classe (vous pouvez ajouter des enfants en cours
-              d&apos;années!):
+              d&apos;années ! ) :
             </p>
 
             <form onSubmit={handleSubmit}>
