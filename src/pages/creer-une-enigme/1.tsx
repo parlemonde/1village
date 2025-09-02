@@ -145,6 +145,7 @@ const EnigmeStep1 = () => {
           ) : (
             <>
               <h1>{enigmeType.titleStep1}</h1>
+              <br />
               <div>
                 {subCategories.map((subCat, index) => (
                   <ThemeChoiceButton key={index} label={subCat.label} description="" onClick={onClick(index)} />

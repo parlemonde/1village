@@ -52,7 +52,7 @@ const Enigme = () => {
       <PageLayout>
         <div className="width-900">
           <h1>Sur quelle thématique sera votre énigme ?</h1>
-
+          <br />
           <ActivityChoice activities={activities} />
         </div>
       </PageLayout>

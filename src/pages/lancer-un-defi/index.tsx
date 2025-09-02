@@ -43,6 +43,7 @@ const Defi = () => {
       <PageLayout>
         <div className="width-900">
           <h1>Choisissez le défi que vous souhaitez réaliser</h1>
+          <br />
           <ActivityChoice activities={activities} />
         </div>
       </PageLayout>

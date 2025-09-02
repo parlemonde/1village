@@ -99,7 +99,7 @@ const IndiceStep1 = () => {
             </>
           ) : (
             <p className="text">
-              Vous trouverez ici les indices qui ont déjà été réalisés par les pélicopains sur le thème;
+              Vous trouverez ici les indices qui ont déjà été réalisés par les pélicopains sur le thème &quot;
               {getIndice(activity.subType, data).step1}&quot;.
             </p>
           )}

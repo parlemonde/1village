@@ -81,6 +81,7 @@ const ContenuLibre = () => {
         />
         <div className="width-900">
           <h1>Choisissez l&apos;apparence de votre publication</h1>
+          <br />
           <TextField
             value={data.title}
             onChange={dataChange('title')}

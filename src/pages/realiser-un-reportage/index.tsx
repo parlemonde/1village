@@ -84,6 +84,7 @@ const Reportage = () => {
       <PageLayout>
         <div className="width-900">
           <h1 style={{ marginTop: '0.5rem' }}>Sur quel thème souhaitez-vous réaliser votre reportage ?</h1>
+          <br />
           <ActivityChoice activities={reportages} />
         </div>
       </PageLayout>
