@@ -3,7 +3,11 @@ import { H5pError } from '@lumieducation/h5p-server';
 
 import { dynamoDb } from './dynamoDB';
 
-const DATA_TABLE_NAME = 'H5P_Data';
+if (!process.env.ENV) {
+  console.warn('ENV is not set, using "dev" as default environment name');
+}
+
+const DATA_TABLE_NAME = `${process.env.ENV || 'dev'}_H5P_Data`;
 
 export class AwsKeyValueStorage implements IKeyValueStorage {
   constructor() {}

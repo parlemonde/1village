@@ -17,7 +17,7 @@ import { logger } from '../../utils/logger';
 import { validateFilename } from './S3Util';
 import { dynamoDb } from './dynamoDB';
 
-const LIBRARY_TABLE_NAME = 'H5P_libraries';
+const LIBRARY_TABLE_NAME = `${process.env.ENV || 'dev'}_H5P_libraries`;
 
 type LibraryDep = {
   dynamicDependencies: ILibraryName[];
