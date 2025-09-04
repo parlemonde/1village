@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import type { Classroom } from 'server/entities/classroom';
 
+import { resetSessionId, saveNewSessionAnalytic } from 'src/hooks/useAnalytics';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Student } from 'types/student.type';
 import type { User, UserForm } from 'types/user.type';
@@ -118,7 +119,10 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
       setUser(response.data.user || null);
       if (response.data.user) {
         getClassroom(response.data.user.id);
+
+        await saveNewSessionAnalytic(response.data.user.id);
       }
+
       return {
         success: true,
         errorCode: 0,
@@ -163,6 +167,7 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
       baseURL: '',
     });
     setUser(null);
+    resetSessionId();
     router.push('/');
   }, [router, setUser]);
 
