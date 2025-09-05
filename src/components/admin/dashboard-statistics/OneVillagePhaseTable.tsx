@@ -153,8 +153,8 @@ const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }: { d
           { key: 'indiceCount', label: 'Indices' },
           { key: 'mascotCount', label: 'Mascottes' },
           { key: 'videoCount', label: 'Vidéos' },
-          { key: 'draftCount', label: 'Brouillons' },
           { key: 'commentCount', label: 'Commentaires' },
+          { key: 'draftCount', label: 'Brouillons' },
         ];
       case 2:
         return [
@@ -166,6 +166,7 @@ const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }: { d
           { key: 'reactionCount', label: 'Réactions' },
           { key: 'videoCount', label: 'Vidéos' },
           { key: 'commentCount', label: 'Commentaires' },
+          { key: 'draftCount', label: 'Brouillons' },
         ];
       case 3:
         return [
