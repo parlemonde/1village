@@ -9,7 +9,6 @@ import { AppError, ErrorCode, handleErrors } from '../middlewares/handleErrors';
 import { generateTemporaryToken, getQueryString } from '../utils';
 import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
-import { logger } from '../utils/logger';
 import { Controller } from './controller';
 
 const analyticController = new Controller('/analytics');
@@ -262,69 +261,10 @@ analyticController.router.post(
     }
 
     try {
-      // Track unique visitors.
-      let uniqueSessionId = req.cookies['session-id'];
-      if (!uniqueSessionId) {
-        uniqueSessionId = generateTemporaryToken(20);
-        res.cookie('session-id', uniqueSessionId, {
-          maxAge: 10 * 365 * 24 * 60 * 60000,
-          expires: new Date(Date.now() + 10 * 365 * 24 * 60 * 60000),
-          httpOnly: true,
-          secure: true,
-          sameSite: 'strict',
-        });
-      }
-
-      // Retrieve current user session or save the new one.
-      // Retrieve current user session or save the new one.
-      // eslint-disable-next-line prefer-const
-      let [sessionCount, userPhase] = await Promise.all([
-        AppDataSource.getRepository(AnalyticSession).count({ where: { id: data.sessionId } }),
-        AppDataSource.getRepository(User).createQueryBuilder('user').select('user.firstlogin').where({ id: data.userId }).getRawOne(),
-      ]);
-
-      if (sessionCount === 0 && data.event === 'pageview' && data.params?.isInitial) {
-        const session = new AnalyticSession();
-        session.id = data.sessionId;
-        // TODO à améliorer
-        // session.uniqueId = data.userId ? `${uniqueSessionId}-${data.userId}` : uniqueSessionId;
-        session.uniqueId = uniqueSessionId;
-        session.date = new Date();
-        session.browserName = req.useragent?.browser ?? '';
-        session.browserVersion = req.useragent?.version ?? '';
-        session.os = req.useragent?.os ?? '';
-        session.type = req.useragent?.isDesktop ? 'desktop' : req.useragent?.isTablet ? 'tablet' : req.useragent?.isMobile ? 'mobile' : 'other';
-        session.width = data.width || 0;
-        session.duration = null;
-        session.initialPage = data.location;
-        session.userId = data.userId ?? 1;
-        session.phase = userPhase ? userPhase.firstlogin : 0;
-
-        await AppDataSource.getRepository(AnalyticSession).save(session);
-        sessionCount = 1;
-      }
-
-      if (sessionCount === 0 && data.event === 'pageview' && data.params?.isInitial) {
-        const session = new AnalyticSession();
-        session.id = data.sessionId;
-        session.uniqueId = uniqueSessionId;
-        session.date = new Date();
-        session.browserName = req.useragent?.browser ?? '';
-        session.browserVersion = req.useragent?.version ?? '';
-        session.os = req.useragent?.os ?? '';
-        session.type = req.useragent?.isDesktop ? 'desktop' : req.useragent?.isTablet ? 'tablet' : req.useragent?.isMobile ? 'mobile' : 'other';
-        session.width = data.width || 0;
-        session.duration = null;
-        session.initialPage = data.location;
-        session.userId = data.userId ?? 1;
-        session.phase = userPhase ? userPhase.firstlogin : 0;
-
-        await AppDataSource.getRepository(AnalyticSession).save(session);
-        sessionCount = 1;
-      }
+      const currentSession = await AppDataSource.getRepository(AnalyticSession).findOneBy({ id: data.sessionId });
 
       // If no session, exit.
-      if (sessionCount === 0) {
+      if (!currentSession) {
         res.status(204).send();
         return;
       }
@@ -336,28 +276,94 @@ analyticController.router.post(
         pageView.date = new Date();
         pageView.page = data.location;
         pageView.referrer = data.referrer || null;
-        AppDataSource.getRepository(AnalyticPageView).save(pageView).catch(); // no need to wait
-      } else if (data.event === 'navigation-stats' && data.params && data.params.perf) {
+        AppDataSource.getRepository(AnalyticPageView).save(pageView);
+      }
+      if (data.event === 'navigation-stats' && data.params?.perf) {
         const pagePerf = new AnalyticPerformance();
         pagePerf.sessionId = data.sessionId;
         pagePerf.date = new Date();
         pagePerf.data = data.params.perf as unknown as NavigationPerf;
-        AppDataSource.getRepository(AnalyticPerformance).save(pagePerf).catch(); // no need to wait
-      } else if (data.event === 'perf-stats' && data.params && data.params.perf) {
+        AppDataSource.getRepository(AnalyticPerformance).save(pagePerf);
+      }
+      if (data.event === 'perf-stats' && data.params?.perf) {
         const pagePerf = new AnalyticPerformance();
         pagePerf.sessionId = data.sessionId;
         pagePerf.date = new Date();
         pagePerf.data = data.params.perf as BrowserPerf;
-        AppDataSource.getRepository(AnalyticPerformance).save(pagePerf).catch(); // no need to wait
-      } else if (data.event === 'session' && data.params?.duration) {
-        AppDataSource.getRepository(AnalyticSession).update({ id: data.sessionId }, { duration: data.params?.duration }).catch(); // no need to wait
+        AppDataSource.getRepository(AnalyticPerformance).save(pagePerf);
+      }
+
+      // TODO: Nécessaire ?
+      if (data.event === 'session' && data.params?.duration) {
+        AppDataSource.getRepository(AnalyticSession).update({ id: data.sessionId }, { duration: data.params?.duration });
       }
     } catch (e) {
-      logger.error(e);
+      console.error(e);
     }
 
     res.status(204).send();
   }),
 );
+
+analyticController.router.post('/sessions', useragent.express(), async (req, res) => {
+  const data = req.body;
+
+  // Track unique visitors.
+  let uniqueSessionId = req.cookies['session-id'];
+  if (!uniqueSessionId) {
+    uniqueSessionId = generateTemporaryToken(20);
+    res.cookie('session-id', uniqueSessionId, {
+      maxAge: 10 * 365 * 24 * 60 * 60000,
+      expires: new Date(Date.now() + 10 * 365 * 24 * 60 * 60000),
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+    });
+  }
+
+  const userPhase = await AppDataSource.getRepository(User)
+    .createQueryBuilder('user')
+    .select('user.firstlogin')
+    .where({ id: data.userId })
+    .getRawOne();
+
+  const sessionType: string = req.useragent?.isDesktop
+    ? 'desktop'
+    : req.useragent?.isTablet
+    ? 'tablet'
+    : req.useragent?.isMobile
+    ? 'mobile'
+    : 'other';
+
+  const session = new AnalyticSession();
+  session.id = data.sessionId;
+  session.uniqueId = uniqueSessionId;
+  session.date = new Date();
+  session.browserName = req.useragent?.browser ?? '';
+  session.browserVersion = req.useragent?.version ?? '';
+  session.os = req.useragent?.os ?? '';
+  session.type = sessionType;
+  session.width = data.width || 0;
+  session.duration = 0;
+  session.initialPage = data.location;
+  session.userId = data.userId ?? 0;
+  session.phase = userPhase ? userPhase.firstlogin : 0;
+
+  await AppDataSource.getRepository(AnalyticSession).save(session);
+
+  res.status(201).send();
+});
+
+analyticController.router.post('/sessions/last/:userId', useragent.express(), async (req, res) => {
+  const userId = parseInt(req.params.userId);
+
+  const lastSession = await AppDataSource.getRepository(AnalyticSession).findOne({
+    select: ['id'],
+    where: { userId },
+    order: { date: 'DESC' },
+  });
+
+  res.json({ lastSessionId: lastSession?.id });
+});
 
 export { analyticController };

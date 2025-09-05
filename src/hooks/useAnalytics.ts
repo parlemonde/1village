@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidV4 } from 'uuid';
 import { getLCP, getFID, getCLS } from 'web-vitals';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
@@ -12,7 +12,31 @@ interface EventOptions {
   perf?: NavigationPerf | BrowserPerf;
 }
 
-const sessionId = uuidv4();
+let sessionId: string;
+
+async function getSessionId(userId: number | null): Promise<string> {
+  if (!sessionId) {
+    if (!userId && !sessionStorage.getItem('access_token')) {
+      sessionId = uuidV4();
+    } else {
+      const previousSessionId = (
+        await axiosRequest({
+          method: 'POST',
+          url: `/analytics/sessions/last/${userId}`,
+        })
+      ).data.lastSessionId;
+
+      sessionId = previousSessionId;
+    }
+  }
+
+  return sessionId;
+}
+
+export function resetSessionId(): void {
+  sessionId = '';
+}
+
 const startTime = new Date().getTime();
 
 export const useAnalytics = (userId: number | null): void => {
@@ -29,13 +53,11 @@ export const useAnalytics = (userId: number | null): void => {
   }, []);
 
   const trigger = React.useCallback(
-    (eventName: EventName, options?: EventOptions): void => {
+    async (eventName: EventName, options?: EventOptions): Promise<void> => {
       if (location === null || document === null) {
         return;
       }
-      // if (/^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*:)*?:?0*1$/.test(location.hostname) || location.protocol === 'file:') {
-      //   return;
-      // }
+
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (window.phantom || window._phantom || window.__nightmare || window.navigator.webdriver || window.Cypress) {
@@ -44,19 +66,15 @@ export const useAnalytics = (userId: number | null): void => {
 
       let referrer = null;
       if (document.referrer) {
-        try {
-          const refUrl = new URL(document.referrer);
-          if (refUrl.hostname !== location.hostname) {
-            referrer = document.referrer;
-          }
-        } catch (e) {
-          // nothing
+        const refUrl = new URL(document.referrer);
+        if (refUrl.hostname !== location.hostname) {
+          referrer = document.referrer;
         }
       }
 
       const data = {
         event: eventName,
-        sessionId,
+        sessionId: await getSessionId(userId),
         userId,
         location: location.pathname,
         referrer,
@@ -194,3 +212,30 @@ export const useAnalytics = (userId: number | null): void => {
     }
   }, [document, location, page, handlePerformance]);
 };
+
+export async function saveNewSessionAnalytic(userId: number): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const inappropriateWindow = window.phantom || window._phantom || window.__nightmare || window.navigator.webdriver || window.Cypress;
+  if (!location || inappropriateWindow) return;
+
+  const data = {
+    sessionId: await getSessionId(userId),
+    userId,
+    location: location.pathname,
+    width: window.innerWidth,
+  };
+
+  const blob = new Blob([JSON.stringify(data)], { type: 'application/json; charset=UTF-8' }); // the blob
+
+  try {
+    navigator.sendBeacon(`${process.env.NEXT_PUBLIC_BASE_APP}/analytics/sessions`, blob);
+  } catch (err) {
+    console.error(err);
+    axiosRequest({
+      method: 'POST',
+      url: '/analytics/sessions',
+      data,
+    }).catch(console.error);
+  }
+}
