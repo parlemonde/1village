@@ -7,6 +7,7 @@ import { Box, Tab, Tabs } from '@mui/material';
 import { OneVillageTable } from '../OneVillageTable';
 import { getCommentCount, getPublicationCount, getVideoCount } from '../StatisticsUtils';
 import CountryActivityPhaseAccordion from './CountryActivityPhaseAccordion';
+import EntityEngagementStatus, { EntityType } from './EntityEngagementStatus';
 import Loader, { AnalyticsDataType } from './Loader';
 import TabPanel from './TabPanel';
 import TeamCommentCard from './TeamCommentCard';
@@ -22,7 +23,7 @@ import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
-import { useGetClassroomsStats } from 'src/api/statistics/statistics.get';
+import { useGetClassroomEngagementStatus, useGetClassroomsStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
@@ -45,6 +46,7 @@ const ClassroomStats = () => {
   const [classroomDetails, setClassroomDetails] = useState<string>();
   const [loadingClassroomDetails, setLoadingClassroomDetails] = useState<boolean>(true);
 
+  const { data: classroomEngagementStatus, isLoading: isLoadingClassroomEngagementStatus } = useGetClassroomEngagementStatus(selectedClassroom);
   const { data: classroomsStatistics, isLoading: isLoadingClassroomsStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
   const { data: sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, null, 1);
   const { data: selectedClassroomStatistics, isLoading: isLoadingSelectedClassroomsStatistics } = useGetClassroomsStats(
@@ -74,7 +76,7 @@ const ClassroomStats = () => {
 
       setClassroomDetails(fakeClassroomDetails);
       setLoadingClassroomDetails(false);
-    }, 8000);
+    }, 3000);
   }, []);
 
   return (
@@ -88,10 +90,15 @@ const ClassroomStats = () => {
       />
       {selectedCountry && selectedVillage && selectedClassroom ? (
         <Box mt={2}>
-          {loadingClassroomDetails ? (
+          {isLoadingClassroomEngagementStatus || loadingClassroomDetails ? (
             <Loader analyticsDataType={AnalyticsDataType.GRAPHS} />
           ) : (
-            classroomDetails && <ClassroomDetailsCard classroomDetails={classroomDetails} />
+            <>
+              {classroomEngagementStatus && (
+                <EntityEngagementStatus entityType={EntityType.CLASSROOM} entityEngagementStatus={classroomEngagementStatus} />
+              )}
+              {classroomDetails && <ClassroomDetailsCard classroomDetails={classroomDetails} />}
+            </>
           )}
           {isLoadingSessionsStatistics || isLoadingSelectedClassroomsStatistics || isLoadingClassroomsStatistics ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
