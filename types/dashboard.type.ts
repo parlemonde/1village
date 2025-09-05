@@ -1,4 +1,4 @@
-import type { ClassroomsStats, SessionsStats, VillageStats } from './statistics.type';
+import type { ClassroomsStats, EngagementStatusData, SessionsStats, VillageStats } from './statistics.type';
 
 export enum DashboardSummaryTab {
   CLASSROOM = 1,
@@ -15,6 +15,16 @@ export interface BarChartDataByMonth {
   barChartData: BarChartData[];
 }
 
+export interface PieChartDataItem {
+  value: number;
+  label: string;
+  color: string;
+}
+
+export interface PieChartData {
+  engagementStatusData?: EngagementStatusData[];
+}
+
 export interface AverageStatsData {
   min?: number;
   max?: number;
@@ -27,7 +37,7 @@ export enum AverageStatsProcessingMethod {
   BY_MIN = 1,
 }
 
-export interface DashboardSummaryData extends SessionsStats, ClassroomsStats, VillageStats {}
+export interface DashboardSummaryData extends SessionsStats, ClassroomsStats, VillageStats, PieChartData {}
 
 export enum DashboardType {
   ONE_VILLAGE_PANEL,
