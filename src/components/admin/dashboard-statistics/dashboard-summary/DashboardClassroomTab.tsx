@@ -10,6 +10,7 @@ import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from '../cards/StatsCard/StatsCard';
 import BarCharts from '../charts/BarCharts';
+import ContributionBarChart from '../charts/ContributionBarChart';
 import PieCharts from '../charts/PieCharts';
 import PhaseDetails from '../menu/PhaseDetails';
 import styles from '../styles/charts.module.css';
@@ -107,7 +108,7 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
           <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
         </Grid>
         <Grid item xs={12} lg={12}>
-          <BarCharts dataByMonth={data.barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
+          <ContributionBarChart dataByStep={data.contributionsBarChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
         </Grid>
 
         {data && data.phases && (
