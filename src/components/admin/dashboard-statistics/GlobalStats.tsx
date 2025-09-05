@@ -122,8 +122,8 @@ const GlobalStats = () => {
           { key: 'indiceCount', label: 'Indices', sortable: true },
           { key: 'mascotCount', label: 'Mascottes', sortable: true },
           { key: 'videoCount', label: 'Vidéos', sortable: true },
-          { key: 'draftCount', label: 'Brouillons', sortable: true },
           { key: 'commentCount', label: 'Commentaires', sortable: true },
+          { key: 'draftCount', label: 'Brouillons', sortable: true },
         ];
       case 2:
         return [
@@ -136,6 +136,7 @@ const GlobalStats = () => {
           { key: 'reactionCount', label: 'Réactions', sortable: true },
           { key: 'videoCount', label: 'Vidéos', sortable: true },
           { key: 'commentCount', label: 'Commentaires', sortable: true },
+          { key: 'draftCount', label: 'Brouillons', sortable: true },
         ];
       case 3:
         return [
@@ -257,37 +258,29 @@ const GlobalStats = () => {
                   dashboardSummaryData={{ ...classroomsStatistics, ...sessionStatistics, ...oneVillageStatistics, barChartData: mockDataByMonth }}
                 />
               )}
-
               <Box mt={4}>
-                {/* Phase 1 */}
-                <OneVillagePhaseAccordion
-                  phaseId={1}
-                  open={openPhases[1]}
-                  onClick={() => handlePhaseToggle(1)}
-                  data={createPhaseTableData(1)}
-                  columns={getPhaseColumns(1)}
-                  rowStyle={rowStyle}
-                />
-
-                {/* Phase 2 */}
-                <OneVillagePhaseAccordion
-                  phaseId={2}
-                  open={openPhases[2]}
-                  onClick={() => handlePhaseToggle(2)}
-                  data={createPhaseTableData(2)}
-                  columns={getPhaseColumns(2)}
-                  rowStyle={rowStyle}
-                />
-
-                {/* Phase 3 */}
-                <OneVillagePhaseAccordion
-                  phaseId={3}
-                  open={openPhases[3]}
-                  onClick={() => handlePhaseToggle(3)}
-                  data={createPhaseTableData(3)}
-                  columns={getPhaseColumns(3)}
-                  rowStyle={rowStyle}
-                />
+                {selectedPhase ? (
+                  <OneVillagePhaseAccordion
+                    phaseId={+selectedPhase}
+                    open={openPhases[selectedPhase]}
+                    onClick={() => handlePhaseToggle(selectedPhase)}
+                    data={createPhaseTableData(selectedPhase)}
+                    columns={getPhaseColumns(selectedPhase)}
+                    rowStyle={rowStyle}
+                  />
+                ) : (
+                  [1, 2, 3].map((phase) => (
+                    <OneVillagePhaseAccordion
+                      key={phase}
+                      phaseId={phase}
+                      open={openPhases[phase]}
+                      onClick={() => handlePhaseToggle(phase)}
+                      data={createPhaseTableData(phase)}
+                      columns={getPhaseColumns(phase)}
+                      rowStyle={rowStyle}
+                    />
+                  ))
+                )}
               </Box>
             </TabPanel>
 
