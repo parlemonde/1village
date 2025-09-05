@@ -15,7 +15,6 @@ export const ActivityType = {
   GAME: 4, // mimic 0, monnaie 1 expression 2
   CONTENU_LIBRE: 5,
   INDICE: 6,
-  SYMBOL: 7,
   MASCOTTE: 8,
   REPORTAGE: 9,
   REACTION: 10,

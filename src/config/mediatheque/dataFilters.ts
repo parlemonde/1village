@@ -34,18 +34,6 @@ export const themeOfIndice = [
   'Autre',
 ];
 
-export const themeOfIndiceSymbolique = [
-  'Drapeau',
-  'Emblème',
-  'Fleur nationale',
-  'Devise',
-  'Hymne',
-  'Animal national',
-  'Figure symbolique',
-  'Monnaie',
-  'Autre',
-];
-
 export const themeOfDefi = ['Culinaire', 'Linguistique', 'Ecologique', 'Libre'];
 
 export const themeOfJeux = ['Jeu des mimiques', 'Jeu de la monnaie', 'Jeu des expressions'];
@@ -56,7 +44,6 @@ export const themeOfReportage = ['Paysages', 'Arts', 'Ecoles', 'Langues', 'Flore
 
 export const subThemesMap: { [key: string]: string[] } = {
   Indice: themeOfIndice,
-  'Indice symbolique': themeOfIndiceSymbolique,
   Défis: themeOfDefi,
   Jeux: themeOfJeux,
   Enigme: themeOfEnigme,
