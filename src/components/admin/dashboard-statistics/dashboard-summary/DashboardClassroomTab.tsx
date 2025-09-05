@@ -7,11 +7,11 @@ import Grid from '@mui/material/Grid';
 import { getCommentCount, getPublicationCount, getVideoCount } from '../../StatisticsUtils';
 import CountryActivityPhaseAccordion from '../CountryActivityPhaseAccordion';
 import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
+import ClassesContributionCard from '../cards/ClassesContributionCard/ClassesContributionCard';
 import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from '../cards/StatsCard/StatsCard';
 import BarCharts from '../charts/BarCharts';
 import PieCharts from '../charts/PieCharts';
-import PhaseDetails from '../menu/PhaseDetails';
 import styles from '../styles/charts.module.css';
 import ClassroomsToMonitorTable from '../tables/ClassroomsToMonitorTable';
 import { AverageStatsProcessingMethod, DashboardType } from 'types/dashboard.type';
@@ -38,14 +38,18 @@ export interface DashboardClassroomTabProps {
 
 const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedPhase = 0 }: DashboardClassroomTabProps) => {
   const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
-    1: false,
-    2: false,
-    3: false,
+    1: true,
+    2: true,
+    3: true,
   });
 
   const videoCount = getVideoCount(data);
   const commentCount = getCommentCount(data);
   const publicationCount = getPublicationCount(data);
+
+  // Extract barChartData for better readability
+  const barChartData = data.barChartData || [];
+
   return (
     <>
       <ClassroomsToMonitorTable countryId={selectedCountry} />
@@ -91,7 +95,7 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
         </Grid>
         {dashboardType === DashboardType.ONE_VILLAGE_PANEL ? (
           <Grid item xs={12} lg={12}>
-            <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+            <BarCharts className={styles.midContainer} dataByMonth={barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
           </Grid>
         ) : (
           <>
@@ -99,32 +103,26 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
               <PieCharts className={styles.minContainer} pieChartData={mockPieChartData} />
             </Grid>
             <Grid item xs={12} lg={6}>
-              <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+              <BarCharts className={styles.midContainer} dataByMonth={barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
             </Grid>
           </>
         )}
-        <Grid item xs={12} lg={12}>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: '2fr 1fr',
+            gap: '2rem',
+          }}
+        >
           <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
+          <ClassesContributionCard />
         </Grid>
         <Grid item xs={12} lg={12}>
-          <BarCharts dataByMonth={data.barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
+          <BarCharts dataByMonth={barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
         </Grid>
 
-        {data && data.phases && (
-          <Grid item xs={12} lg={12}>
-            <div className="statistic__phase--container">
-              <div>
-                <PhaseDetails phase={1} data={data.phases[0].data} />
-              </div>
-              <div className="statistic__phase">
-                <PhaseDetails phase={2} data={data.phases[1].data} />
-              </div>
-              <div className="statistic__phase">
-                <PhaseDetails phase={3} data={data.phases[1].data} />
-              </div>
-            </div>
-          </Grid>
-        )}
         {/* Accordéons par phase */}
         {selectedCountry &&
           (selectedPhase === 0 ? (

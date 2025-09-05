@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import Box from '@mui/material/Box';
+import { Box } from '@mui/material';
 
 import Loader, { AnalyticsDataType } from './Loader';
 import TeamCommentCard from './TeamCommentCard';
 import VillageListCard from './cards/VillageListCard/VillageListCard';
-import HorizontalBarsChart from './charts/HorizontalChart';
+import HorizontalChart from './charts/HorizontalChart';
 import DashboardSummary from './dashboard-summary/DashboardSummary';
 import StatisticFilters from './filters/StatisticFilters';
-import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { useGetCountriesStats } from 'src/api/statistics/statistics.get';
@@ -84,7 +83,7 @@ const CountryStats = () => {
             villageList && (
               <>
                 <div className={styles.simpleContainer}>
-                  <HorizontalBarsChart highlightedCountry={highlightedCountry} barsChartData={barsChartData} />
+                  <HorizontalChart highlightedCountry={highlightedCountry} barsChartData={barsChartData} />
                 </div>
                 <VillageListCard villageList={villageList} />
               </>
@@ -97,7 +96,7 @@ const CountryStats = () => {
             sessionsStatistics &&
             familyStatistics && (
               <DashboardSummary
-                data={{ ...classroomsStatistics, ...sessionsStatistics, ...familyStatistics, barChartData: mockDataByMonth }}
+                data={{ ...classroomsStatistics, ...sessionsStatistics, ...familyStatistics, barChartData: sessionsStatistics?.barChartData || [] }}
                 selectedCountry={selectedCountry}
                 selectedPhase={selectedPhase}
               />

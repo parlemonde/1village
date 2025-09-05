@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 
+import { Box, Tab, Tabs } from '@mui/material';
+
 import ActivityTable from './ActivityTable';
 import Loader, { AnalyticsDataType } from './Loader';
+import OneVillagePhaseAccordion from './OneVillagePhaseAccordion';
+import TabPanel from './TabPanel';
 import TeamCommentCard from './TeamCommentCard';
 import DashboardSummary from './dashboard-summary/DashboardSummary';
 import StatisticFilters from './filters/StatisticFilters';
@@ -11,11 +15,23 @@ import { useGetOneVillageStats, useGetSessionsStats } from 'src/api/statistics/s
 import { useStatisticsClassrooms } from 'src/services/useStatistics';
 import type { VillageInteractionsActivity } from 'types/analytics/village-interactions-activity';
 import { VillageInteractionsStatus } from 'types/analytics/village-interactions-activity';
-import { DashboardType } from 'types/dashboard.type';
+import { DashboardType, DashboardSummaryTab } from 'types/dashboard.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
+interface PhaseTableRow {
+  id: string | number;
+  villageName: string;
+  [key: string]: string | number;
+}
+
 const GlobalStats = () => {
+  const [selectedTab, setSelectedTab] = useState(0);
   const [selectedPhase, setSelectedPhase] = useState<number>();
+  const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
+    1: true,
+    2: true,
+    3: true,
+  });
 
   const [mapData, setMapData] = useState<VillageInteractionsActivity[]>([]);
   const [loadingMapData, setLoadingMapData] = useState<boolean>(true);
@@ -84,6 +100,132 @@ const GlobalStats = () => {
     }, 2000);
   }, []);
 
+  const handleTabChange = (_event: React.SyntheticEvent, selectedTab: number) => {
+    setSelectedTab(selectedTab);
+  };
+
+  const handlePhaseToggle = (phaseId: number) => {
+    setOpenPhases((prev) => ({
+      ...prev,
+      [phaseId]: !prev[phaseId],
+    }));
+  };
+
+  const getPhaseColumns = (phaseId: number) => {
+    const baseColumns = [{ key: 'villageName', label: 'Nom du village', sortable: true }];
+
+    switch (phaseId) {
+      case 1:
+        return [
+          ...baseColumns,
+          { key: 'indiceCount', label: 'Indices', sortable: true },
+          { key: 'mascotCount', label: 'Mascottes', sortable: true },
+          { key: 'videoCount', label: 'Vidéos', sortable: true },
+          { key: 'commentCount', label: 'Commentaires', sortable: true },
+          { key: 'draftCount', label: 'Brouillons', sortable: true },
+        ];
+      case 2:
+        return [
+          ...baseColumns,
+          { key: 'reportingCount', label: 'Reportages', sortable: true },
+          { key: 'challengeCount', label: 'Défis', sortable: true },
+          { key: 'enigmaCount', label: 'Énigmes', sortable: true },
+          { key: 'gameCount', label: 'Jeux', sortable: true },
+          { key: 'questionCount', label: 'Questions', sortable: true },
+          { key: 'reactionCount', label: 'Réactions', sortable: true },
+          { key: 'videoCount', label: 'Vidéos', sortable: true },
+          { key: 'commentCount', label: 'Commentaires', sortable: true },
+          { key: 'draftCount', label: 'Brouillons', sortable: true },
+        ];
+      case 3:
+        return [
+          ...baseColumns,
+          { key: 'anthemCount', label: 'Hymnes', sortable: true },
+          { key: 'contentLibreCount', label: 'Contenus libres', sortable: true },
+          { key: 'storyCount', label: 'Histoires', sortable: true },
+          { key: 'videoCount', label: 'Vidéos', sortable: true },
+          { key: 'commentCount', label: 'Commentaires', sortable: true },
+          { key: 'draftCount', label: 'Brouillons', sortable: true },
+        ];
+      default:
+        return baseColumns;
+    }
+  };
+
+  const createPhaseTableData = (phaseId: number): PhaseTableRow[] => {
+    if (!oneVillageStatistics?.activityCountDetails) return [];
+
+    const villages: PhaseTableRow[] = [];
+
+    const totals: Record<string, string | number> = {
+      villageName: 'Total',
+    };
+
+    oneVillageStatistics.activityCountDetails.forEach(
+      (villageDetail: {
+        villageName: string;
+        classrooms: Array<{
+          phaseDetails: Array<{
+            phaseId: number;
+            indiceCount?: number;
+            mascotCount?: number;
+            videoCount?: number;
+            draftCount?: number;
+            commentCount?: number;
+            challengeCount?: number;
+            enigmaCount?: number;
+            gameCount?: number;
+            questionCount?: number;
+            reactionCount?: number;
+            reportingCount?: number;
+            storyCount?: number;
+            anthemCount?: number;
+            contentLibreCount?: number;
+            reinventStoryCount?: number;
+          }>;
+        }>;
+      }) => {
+        const villageRow: PhaseTableRow = {
+          id: villageDetail.villageName,
+          villageName: villageDetail.villageName,
+        };
+
+        villageDetail.classrooms.forEach((classroom) => {
+          classroom.phaseDetails.forEach((phase) => {
+            if (phase.phaseId === phaseId) {
+              const columns = getPhaseColumns(phaseId);
+              // slice(1) skips the first column ('villageName') since it's not a numeric value to sum
+              columns.slice(1).forEach((column) => {
+                const key = column.key as keyof typeof phase;
+                const value = phase[key] || 0;
+                villageRow[column.key] = ((villageRow[column.key] as number) || 0) + value;
+
+                totals[column.key] = ((totals[column.key] as number) || 0) + value;
+              });
+            }
+          });
+        });
+
+        villages.push(villageRow);
+      },
+    );
+
+    const totalRow: PhaseTableRow = {
+      id: 'total',
+      villageName: 'Total',
+      ...totals,
+    };
+
+    return [totalRow, ...villages];
+  };
+
+  const rowStyle = (row: PhaseTableRow) => {
+    if (row.villageName === 'Total') {
+      return { color: 'black', fontWeight: 'bold', borderBottom: '2px solid black' };
+    }
+    return {};
+  };
+
   return (
     <>
       <TeamCommentCard type={TeamCommentType.GLOBAL} />
@@ -100,13 +242,59 @@ const GlobalStats = () => {
       {isLoadingClassroomStatistics || isLoadingSessionStats || isLoadingWebsiteStats ? (
         <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
       ) : (
-        classroomsStatistics &&
-        sessionStatistics &&
         oneVillageStatistics && (
-          <DashboardSummary
-            dashboardType={DashboardType.ONE_VILLAGE_PANEL}
-            data={{ ...classroomsStatistics, ...sessionStatistics, ...oneVillageStatistics, barChartData: mockDataByMonth }}
-          />
+          <Box mt={2}>
+            <Tabs value={selectedTab} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
+              <Tab label="En classe" />
+              <Tab label="En famille" />
+            </Tabs>
+
+            <TabPanel value={selectedTab} index={0}>
+              {/* Original DashboardSummary with charts and data */}
+              {sessionStatistics && oneVillageStatistics && (
+                <DashboardSummary
+                  dashboardType={DashboardType.ONE_VILLAGE_PANEL}
+                  data={{ ...classroomsStatistics, ...sessionStatistics, ...oneVillageStatistics, barChartData: mockDataByMonth }}
+                  activeTab={DashboardSummaryTab.CLASSROOM}
+                />
+              )}
+              <Box mt={4}>
+                {selectedPhase ? (
+                  <OneVillagePhaseAccordion
+                    phaseId={+selectedPhase}
+                    open={openPhases[selectedPhase]}
+                    onClick={() => handlePhaseToggle(selectedPhase)}
+                    data={createPhaseTableData(selectedPhase)}
+                    columns={getPhaseColumns(selectedPhase)}
+                    rowStyle={rowStyle}
+                  />
+                ) : (
+                  [1, 2, 3].map((phase) => (
+                    <OneVillagePhaseAccordion
+                      key={phase}
+                      phaseId={phase}
+                      open={openPhases[phase]}
+                      onClick={() => handlePhaseToggle(phase)}
+                      data={createPhaseTableData(phase)}
+                      columns={getPhaseColumns(phase)}
+                      rowStyle={rowStyle}
+                    />
+                  ))
+                )}
+              </Box>
+            </TabPanel>
+
+            <TabPanel value={selectedTab} index={1}>
+              {/* EN FAMILLE tab - keep original content */}
+              {sessionStatistics && oneVillageStatistics && (
+                <DashboardSummary
+                  dashboardType={DashboardType.ONE_VILLAGE_PANEL}
+                  data={{ ...classroomsStatistics, ...sessionStatistics, ...oneVillageStatistics, barChartData: mockDataByMonth }}
+                  activeTab={DashboardSummaryTab.FAMILY}
+                />
+              )}
+            </TabPanel>
+          </Box>
         )
       )}
     </>

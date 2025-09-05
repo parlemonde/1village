@@ -1,4 +1,4 @@
-import type { ClassroomsStats, SessionsStats, VillageStats } from './statistics.type';
+import type { ClassroomStat, SessionsStats, VillageStats } from './statistics.type';
 
 export enum DashboardSummaryTab {
   CLASSROOM = 1,
@@ -27,7 +27,7 @@ export enum AverageStatsProcessingMethod {
   BY_MIN = 1,
 }
 
-export interface DashboardSummaryData extends SessionsStats, ClassroomsStats, VillageStats {}
+export interface DashboardSummaryData extends SessionsStats, ClassroomStat, VillageStats {}
 
 export enum DashboardType {
   ONE_VILLAGE_PANEL,
