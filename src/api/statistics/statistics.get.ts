@@ -10,6 +10,7 @@ import type {
   ClassroomToMonitor,
   EngagementStatus,
 } from 'types/statistics.type';
+import type { Village } from 'types/village.type';
 
 async function getSessionsStats(phase?: number): Promise<SessionsStats> {
   return (
@@ -67,6 +68,24 @@ export const useGetVillagesStats = (villageId?: number, phase?: number) => {
     enabled: villageId !== null,
   });
 };
+
+async function getVillageEngagementStatus(villageId?: Village['id']): Promise<EngagementStatus> {
+  const url = `/statistics/villages/engagement-status/${villageId}`;
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url,
+    })
+  ).data.status;
+}
+
+export function useGetVillageEngagementStatus(villageId?: Village['id']) {
+  return useQuery(['village-engagement-status', villageId], () => getVillageEngagementStatus(villageId), {
+    enabled: !!villageId,
+  });
+}
+
 export const useGetCountriesStats = (countryId?: string, phase?: number) => {
   return useQuery(['countries-stats', countryId, phase], () => getCountriesStats(countryId, phase), {
     enabled: countryId !== null,
