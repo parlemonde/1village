@@ -34,11 +34,10 @@ export const MascotteTemplate = ({ user }: { user: User }) => (
         }}
       >
         <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
-          <h3 style={{ margin: '0 0.5rem 0.5rem' }}>Présentez vous à vos pélicopains !</h3>
+          <h3 style={{ margin: '0 0.5rem 0.5rem' }}>Présentez-vous à vos pélicopains !</h3>
           <div style={{ margin: '0 0.5rem 3rem', height: `2rem`, textAlign: 'justify' }}>
             <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `2rem` }}>
-              Créez votre mascotte pour présenter votre classe à vos pélicopains. Créez-la à votre image, elle vous représentera dans votre
-              village-monde !
+              Créez une mascotte qui vous représentera toute l’année dans votre village-monde !
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>

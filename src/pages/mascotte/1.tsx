@@ -268,9 +268,8 @@ const MascotteStep1 = () => {
           </div>
           <h1 style={{ marginTop: '5rem' }}>À quoi ressemble votre classe ?</h1>
           <p>
-            Pour donner à vos pélicopains un aperçu de votre classe, nous vous invitons à mettre en ligne{' '}
-            <b>une photo d&apos;une affiche ou d&apos;une décoration accrochée</b> sur un des murs de votre classe ! Par exemple, une carte du monde
-            ou une liste de règles.
+            Pour donner un aperçu de votre classe aux pélicopains, choisissez la photo d&apos;une affiche ou d&apos;une décoration accrochée aux murs
+            !
           </p>
 
           <div style={{ display: 'flex' }}>
@@ -291,7 +290,7 @@ const MascotteStep1 = () => {
               <p>Que représente cette photo et pourquoi l&apos;avoir choisie ?</p>
               <TextField
                 value={data.classImgDesc}
-                label={'Description de l’objet'}
+                label={'Description de votre image'}
                 placeholder={"Il s'agit d'une carte du monde !"}
                 variant="outlined"
                 style={{ width: '100%' }}

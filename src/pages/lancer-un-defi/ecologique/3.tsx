@@ -110,7 +110,7 @@ const DefiEcoStep3 = () => {
                 </div>
               }
               label="Un autre défi"
-              description={`Rédigez vous même le défi pour vos pélicopains !`}
+              description={`Rédigez vous-même le défi pour vos pélicopains !`}
             />
           </div>
           <StepsButton prev="/lancer-un-defi/ecologique/2" />

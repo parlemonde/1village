@@ -72,9 +72,8 @@ const EnigmeStep3 = () => {
         <div className="width-900">
           <h1>Créez la réponse à votre énigme</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            À présent, écrivez la réponse à votre énigme, en donnant des explications à vos pélicopains. Votre réponse ne sera visible que{' '}
-            <strong>7 jours</strong> après la publication de votre énigme, pour laisser le temps à vos pélicopains de faire des recherches, et de vous
-            poser des questions !
+            La réponse à votre énigme ne sera visible que <strong>7 jours</strong> après la publication de votre énigme pour laisser le temps à vos
+            pélicopains de faire des recherches et de vous poser des questions !
           </p>
           <ContentEditor
             content={activity.content.slice(indiceContentIndex, activity.content.length)}

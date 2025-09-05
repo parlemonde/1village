@@ -62,14 +62,7 @@ const IndiceStep2 = () => {
           activeStep={isEdit ? 0 : 1}
         />
         <div className="width-900">
-          <h1>Faites une présentation libre de votre indice</h1>
-          <p className="text">
-            Si vous souhaitez réaliser un film, n&apos;hésitez pas à utiliser{' '}
-            <a className="text" target="_blank" rel="noopener noreferrer" href="https://clap.parlemonde.org">
-              Clap!
-            </a>
-            , un outil d&apos;aide à l&apos;écriture audiovisuel !
-          </p>
+          <h1>Créez votre indice</h1>
           <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton prev="/indice-culturel/1?edit" next={onNext} />
         </div>

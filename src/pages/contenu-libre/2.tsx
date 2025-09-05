@@ -80,11 +80,8 @@ const ContenuLibre = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Ajustez l&apos;apparence de votre publication</h1>
-          <p className="text">
-            Vous pouvez ajuster le titre, l&apos;extrait et l&apos;image à la une de votre publication qui sera intégrée sur le fil d&apos;actualité.
-            Vous pouvez également décider de mettre votre publication à l&apos;avant, tout en haut du fil d&apos;actualité.
-          </p>
+          <h1>Choisissez l&apos;apparence de votre publication</h1>
+          <br />
           <TextField
             value={data.title}
             onChange={dataChange('title')}
@@ -117,7 +114,7 @@ const ContenuLibre = () => {
               </div>
             </>
           )}
-          <p className="text">Image à la une :</p>
+          <p className="text">Image principale de votre publication</p>
           <div className="editor" style={{ marginTop: 0 }}>
             <div className="image-editor editor__container">
               <>

@@ -44,10 +44,10 @@ const SongStep2 = () => {
           urls={['/chanter-un-couplet/1?edit', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
         />
         <div className={styles.contentContainer}>
-          <h1>À vous d&apos;écrire le couplet !</h1>
+          <h1>Ecrivez votre couplet</h1>
           <p>
-            Pour vous aider, je vous propose de remplir cette grille, puis de remplacer chaque &quot;La&quot; par une syllabe de votre couplet.
-            N&apos;hésitez pas à ré-écouter le couplet.
+            Réfléchissez à ce que vous voulez dire dans votre couplet, écrivez-le dans votre cahier puis remplacez chaque “La” par les syllabes de
+            votre couplet.
           </p>
           <AudioPlayer src={data.verseMixWithVocalsUrl} isBuildingAudio />
           <div className={styles.contentContainer}>

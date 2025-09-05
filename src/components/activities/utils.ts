@@ -18,7 +18,7 @@ export const titles = {
   [ActivityType.MASCOTTE]: 'créé une mascotte',
   [ActivityType.PRESENTATION]: 'créé une présentation',
   [ActivityType.DEFI]: 'créé un défi',
-  [ActivityType.GAME]: 'lancé un jeu',
+  [ActivityType.GAME]: 'créé un jeu',
   [ActivityType.ENIGME]: 'créé une énigme',
   [ActivityType.QUESTION]: 'posé une question',
   [ActivityType.CONTENU_LIBRE]: 'envoyé un message à ses Pélicopains',

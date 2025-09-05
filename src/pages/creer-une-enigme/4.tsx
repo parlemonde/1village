@@ -83,12 +83,9 @@ const EnigmeStep4 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Pré-visualisez votre énigme{!isEdit && ', et publiez-la'}</h1>
+          <h1>Pré-visualisez votre énigme{!isEdit && ' et publiez-la'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Voici la pré-visualisation de votre énigme.
-            {isEdit
-              ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
-              : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
+            Relisez votre publication une dernière fois avant de la publier !
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>

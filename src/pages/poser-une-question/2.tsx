@@ -70,8 +70,8 @@ const Question2 = () => {
           activeStep={1}
         />
         <div className="width-900">
-          <h1>Vos questions</h1>
-          <p className="text">Ici vous pouvez écrire un maximum de trois questions que vous vous posez sur le mode de vie des autres enfants.</p>
+          <h1>Écrivez vos questions</h1>
+          <p className="text">Vous pouvez écrire un maximum de 3 questions !</p>
 
           {activity !== null &&
             activity.content.map((c, index) => (

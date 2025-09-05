@@ -57,7 +57,7 @@ export const NotifCheckbox = () => {
   // };
 
   const mappingCheckbox = [
-    { label: 'Commentaire d’une classe sur une de vos publications', checked: commentChecked, handle: handleCommentChecked },
+    { label: 'Commentaire d’une classe sur une de mes publications', checked: commentChecked, handle: handleCommentChecked },
     // ---------- Uncomment the following lines to add more checkboxes ----------
     // { label: 'Réaction à une de vos publications', checked: reactionChecked, handle: handleReactionChecked },
     // { label: 'Publication d’une classe', checked: publicationFromAClassChecked, handle: handlePublicationFromAClassChecked },

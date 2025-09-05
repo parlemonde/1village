@@ -52,7 +52,7 @@ interface SimpleTextEditorProps {
 
 export const SimpleTextEditor = ({
   value = '',
-  placeholder = 'Commencez à écrire ici, ou ajoutez une vidéo, un son ou une image.',
+  placeholder = 'Ecrivez ici ou ajoutez une vidéo, un son, une image.',
   onChange = () => {},
   onFocus = () => {},
   onBlur = () => {},

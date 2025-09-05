@@ -127,12 +127,7 @@ export const Accueil = () => {
         </>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', padding: '0 1rem', alignItems: 'center' }}>
-          <h1 style={{ margin: '1rem' }}>
-            Un peu de patience, la phase {selectedPhase} n&apos;a pas encore débuté !
-            {selectedPhase === 2
-              ? ' Rendez-vous ici une fois que vous aurez créé votre mascotte et découvert le pays mystère, c’est-à-dire le pays où habitent vos pélicopains !'
-              : ' Rendez-vous ici une fois que vous aurez échangé avec vos pélicopains. Vous pourrez ensuite chanter tous ensemble l’hymne de votre village-monde mais aussi réinventer une histoire à partir de celles de vos pélicopains !'}
-          </h1>
+          <h1 style={{ margin: '1rem' }}> Un peu de patience, la phase {selectedPhase} n&apos;a pas encore débuté !</h1>
           <PelicoReflechit style={{ width: '50%', height: 'auto', maxWidth: '360px' }} />
           <Button
             onClick={() => village && setSelectedPhase(village.activePhase)}

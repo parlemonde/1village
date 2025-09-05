@@ -58,9 +58,6 @@ const DefiEcoStep2 = () => {
         />
         <div className="width-900">
           <h1>Expliquez aux pélicopains votre action et pourquoi vous l’avez choisie.</h1>
-          <p className="text" style={{ fontSize: '1.1rem' }}>
-            {"Pour l'illustrer, vous pouvez ajouter des photos ou tout expliquer en vidéo !"}
-          </p>
           <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton prev={`/lancer-un-defi/ecologique/1?edit=${activity.id}`} next={onNext} />
         </div>

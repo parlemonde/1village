@@ -13,7 +13,7 @@ const ClassroomParamStep4 = () => {
       <AccessControl featureName="id-family" redirectToWIP>
         <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
           <Steps
-            steps={['Visibilité', 'Identifiants', 'Communication', 'Gestion']}
+            steps={['Visibilité', 'Ajout enfants', 'Communication', 'Gestion']}
             urls={['/familles/1?edit', '/familles/2', '/familles/3', '/familles/4']}
             activeStep={3}
           />
@@ -23,21 +23,11 @@ const ClassroomParamStep4 = () => {
             <p className="text"></p>
           </div> */}
           <div className="width-900">
-            <h1> Gérer les identifiants des familles </h1>
-            <span>
-              Chaque ligne de ce tableau correspond à un enfant de votre classe.
-              <br />
-              <br />
-              Pour chacun d&apos;eux, vous pouvez télécharger à nouveau le texte de présentation contenant son identifiant unique. Cela peut-être
-              utile si un enfant l’a égaré par exemple !
-              <br />
-              <br />
-              Et si un enfant a quitté votre classe, vous pouvez supprimer la ligne correspondante.
-              <br />
-              <br />
-              Vous pouvez visualiser combien d’accès ont été créés pour chaque enfant, et révoquer certains accès s’ils vous semblent suspicieux. Pour
-              rajouter un enfant en cours d’année, rendez-vous à l’étape “Identifiants”.
-            </span>
+            <h1> Gérez les accès familles </h1>
+            <p>
+              Pour chaque enfant de votre classe, vous pouvez voir le nombre de compte famille créé ainsi que télécharger individuellement le texte de
+              présentation (si une famille a perdu le sien par exemple).
+            </p>
 
             <CollapsibleTable />
           </div>

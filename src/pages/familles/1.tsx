@@ -299,7 +299,7 @@ const ClassroomParamStep1 = () => {
         <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
           <BackButton href="/" />
           <Steps
-            steps={['Visibilité', 'Identifiants', 'Communication', 'Gestion']}
+            steps={['Visibilité', 'Ajout enfants', 'Communication', 'Gestion']}
             urls={['/familles/1?edit', '/familles/2', '/familles/3', '/familles/4']}
             activeStep={0}
           />
@@ -307,10 +307,7 @@ const ClassroomParamStep1 = () => {
           {/* Main  */}
           <div className="width-900">
             <h1>Choisissez ce que voient les familles</h1>
-            <p className="text">
-              Vous allez inviter les familles des enfants à se connecter à 1Village. Ainsi, elles pourront observer les échanges qui ont lieu en
-              ligne. Vous avez la possibilité de définir ce que les familles voient sur la plateforme. Choisissez parmi ces 2 options :
-            </p>
+            <p className="text">Choisissez parmi ces 2 options :</p>
             <FormControl>
               <RadioGroup
                 aria-label="visibility"
@@ -321,7 +318,7 @@ const ClassroomParamStep1 = () => {
                   value="default"
                   name="default"
                   control={<Radio />}
-                  label="les familles peuvent voir toutes les activités publiées sur 1Village, dès leur publication"
+                  label="les familles peuvent voir toutes les activités publiées sur 1Village"
                   // onFocus={() => handleSelectionVisibility('default')}
                   style={radioValue !== 'default' ? { color: '#CCC' } : {}}
                 />
@@ -357,7 +354,7 @@ const ClassroomParamStep1 = () => {
                   value="ownClass"
                   name="ownClass"
                   control={<Radio />}
-                  label="les familles peuvent voir toutes les activités publiées sur 1Village, dès leur publication, mais seulement celles publiées par notre classe"
+                  label="les familles ne peuvent voir que les activités publiées par notre classe"
                   // onFocus={() => handleSelectionVisibility('ownClass')}
                   style={radioValue !== 'ownClass' ? { color: '#CCC' } : {}}
                 />
@@ -385,9 +382,7 @@ const ClassroomParamStep1 = () => {
             </div>
 
             {/* Activity Container */}
-            <p className="text">
-              Indépendamment de ce réglage, vous pouvez réglez individuellement la visibilité des activités déjà publiées en ligne.
-            </p>
+            <p className="text">Vous pouvez également choisir individuellement la visibilité des activités déjà publiées :</p>
             {/* phase is set to 4 to match the array with ALL activities */}
             <Filters countries={filterCountries} filters={filters} onChange={setFilters} phase={selectedPhase} isMesFamilles />
             <OverflowContainer
