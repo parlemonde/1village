@@ -140,8 +140,8 @@ const ClassroomStats = () => {
                       <CountryActivityPhaseAccordion
                         key={phase}
                         phaseId={phase}
-                        classroomId={selectedClassroom.toString()}
-                        villageId={+selectedVillage}
+                        classroomId={selectedClassroom}
+                        villageId={selectedVillage}
                         open={openPhases[phase]}
                         onClick={() =>
                           setOpenPhases((prev) => ({
@@ -154,8 +154,8 @@ const ClassroomStats = () => {
                   ) : (
                     <CountryActivityPhaseAccordion
                       phaseId={selectedPhase}
-                      classroomId={selectedClassroom.toString()}
-                      villageId={+selectedVillage}
+                      classroomId={selectedClassroom}
+                      villageId={selectedVillage}
                       open={openPhases[selectedPhase]}
                       onClick={() =>
                         setOpenPhases((prev) => ({

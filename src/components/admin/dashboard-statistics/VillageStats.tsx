@@ -193,7 +193,7 @@ const VillageStats = () => {
                       <CountryActivityPhaseAccordion
                         key={phase}
                         phaseId={phase}
-                        villageId={+selectedVillage}
+                        villageId={selectedVillage}
                         open={openPhases[phase]}
                         onClick={() =>
                           setOpenPhases((prev) => ({
@@ -205,8 +205,8 @@ const VillageStats = () => {
                     ))
                   ) : (
                     <CountryActivityPhaseAccordion
-                      phaseId={+selectedPhase}
-                      villageId={+selectedVillage}
+                      phaseId={selectedPhase}
+                      villageId={selectedVillage}
                       open={openPhases[selectedPhase]}
                       onClick={() =>
                         setOpenPhases((prev) => ({
@@ -249,7 +249,7 @@ const VillageStats = () => {
                       <CountryActivityPhaseAccordion
                         key={phase}
                         phaseId={phase}
-                        villageId={+selectedVillage}
+                        villageId={selectedVillage}
                         open={openPhases[phase]}
                         onClick={() =>
                           setOpenPhases((prev) => ({
@@ -261,8 +261,8 @@ const VillageStats = () => {
                     ))
                   ) : (
                     <CountryActivityPhaseAccordion
-                      phaseId={+selectedPhase}
-                      villageId={+selectedVillage}
+                      phaseId={selectedPhase}
+                      villageId={selectedVillage}
                       open={openPhases[selectedPhase]}
                       onClick={() =>
                         setOpenPhases((prev) => ({

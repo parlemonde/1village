@@ -205,7 +205,7 @@ const GlobalStats = () => {
               <Box mt={4}>
                 {selectedPhase ? (
                   <OneVillagePhaseAccordion
-                    phaseId={+selectedPhase}
+                    phaseId={selectedPhase}
                     open={openPhases[selectedPhase]}
                     onClick={() => handlePhaseToggle(selectedPhase)}
                     data={createPhaseTableData(selectedPhase)}
