@@ -57,7 +57,7 @@ const FreeDefiStep2 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Choisissez une action et d&eacute;crivez-la</h1>
+          <h1>Choisissez une action et décrivez-la</h1>
           <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton prev={`/lancer-un-defi/1?edit=${activity.id}`} next={onNext} />
         </div>

@@ -128,8 +128,7 @@ const ClassroomParamStep3 = () => {
               Voici un modèle de texte de présentation à partager aux familles. Vous pouvez le modifier et le traduire librement !
             </p>
             <p>
-              Attention à ne pas changer ou supprimer le “code enfant” <span style={{ fontWeight: 'bold' }}>%identifiant</span> qui se crée
-              automatiquement pour chaque enfant.{' '}
+              Attention à ne pas changer ou supprimer le “code enfant” <strong>%identifiant</strong> qui se crée automatiquement pour chaque enfant.
             </p>
             <TextEditor
               inlineToolbar

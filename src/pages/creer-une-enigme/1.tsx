@@ -148,7 +148,7 @@ const EnigmeStep1 = () => {
               <br />
               <div>
                 {subCategories.map((subCat, index) => (
-                  <ThemeChoiceButton key={index} label={subCat.label} description="" onClick={onClick(index)} />
+                  <ThemeChoiceButton key={index} label={subCat.label} onClick={onClick(index)} />
                 ))}
                 <ThemeChoiceButton
                   isOpen={otherOpen}
@@ -192,7 +192,6 @@ const EnigmeStep1 = () => {
                     </div>
                   }
                   label="Autre"
-                  description=""
                 />
               </div>
             </>

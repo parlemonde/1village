@@ -46,7 +46,7 @@ const PresentationStep1 = () => {
         <div className="width-900">
           <h1>Commencer un nouvel échange avec vos pélicopains :</h1>
           <div style={{ margin: '1rem 0 3rem 0' }}>
-            <ThemeChoiceButton label="Créer une nouvelle présentation" description="" onClick={onNext()} />
+            <ThemeChoiceButton label="Créer une nouvelle présentation" onClick={onNext()} />
           </div>
         </div>
       </div>
