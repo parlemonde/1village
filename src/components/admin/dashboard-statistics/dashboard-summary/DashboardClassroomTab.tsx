@@ -104,11 +104,13 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
             </Grid>
           </>
         )}
-        <Grid item xs={12} lg={12}>
-          <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
-        </Grid>
-        <Grid item xs={12} lg={12}>
-          <ContributionBarChart dataByStep={data.contributionsBarChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
+        <Grid container spacing={2} alignItems="stretch" style={{ paddingLeft: '32px', paddingTop: '32px', display: 'flex' }}>
+          <Grid item xs={12} md={6} style={{ display: 'flex' }}>
+            <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
+          </Grid>
+          <Grid item xs={12} md={6} style={{ paddingLeft: '32px', display: 'flex' }}>
+            <ContributionBarChart dataByStep={data.contributionsBarChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
+          </Grid>
         </Grid>
 
         {data && data.phases && (

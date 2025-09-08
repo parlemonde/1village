@@ -81,6 +81,7 @@ export const getContributedClassroomsCount = async (
     .createQueryBuilder('classroom')
     .select('COUNT(DISTINCT classroom.id)', 'classroomsCount')
     .innerJoin('activity', 'activity', 'activity.classroomId = classroom.id')
+    .andWhere('activity.status != :status', { status: 1 })
     .groupBy('classroom.id');
 
   if (classroomId) {
@@ -216,7 +217,7 @@ export const getContributionsBarChartData = async (villageId?: number | null, co
   const phaseCountsPromise = phases.map((p) => getContributedClassroomsCount(villageId, countryCode, classroomId, p.value));
 
   // Appel pour le total (toutes phases)
-  const totalPromise = getContributedClassroomsCount(villageId, countryCode, classroomId, undefined);
+  const totalPromise = getConnectedClassroomsCount(villageId, countryCode, classroomId);
 
   const [total, ...phaseCounts] = await Promise.all([totalPromise, ...phaseCountsPromise]);
 

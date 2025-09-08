@@ -41,6 +41,17 @@ const ContributionBarChart: React.FC<Props> = ({ dataByStep, title, className })
                 <Cell key={`cell-${index}`} fill="#69b3f0ff" />
               ))}
             </Bar>
+            <text
+              x="50%"
+              y="98%"
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fontSize="13"
+              fontWeight="initial"
+              style={{ pointerEvents: 'none' }} // pour éviter de bloquer l'interaction du graphique
+            >
+              *une classe contributrice a publié au moins une fois dans la phase
+            </text>
           </BarChart>
         </ResponsiveContainer>
       </div>
