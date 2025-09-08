@@ -11,7 +11,7 @@ interface Props {
   phaseId: number;
   countryCode?: string;
   villageId?: number;
-  classroomId?: string;
+  classroomId?: number;
   open: boolean;
   onClick: () => void;
 }
@@ -45,7 +45,7 @@ const CountryActivityPhaseAccordion: FC<Props> = ({ phaseId, countryCode, villag
         <div style={{ padding: '1rem' }}>
           {countryCode && <CountryActivityTable countryCode={countryCode} phaseId={phaseId} mode="country" />}
           {villageId && !classroomId && <VillageActivityTable villageId={villageId} phaseId={phaseId} />}
-          {villageId && classroomId && <ClassroomActivityTable classroomId={parseInt(classroomId)} phaseId={phaseId} />}
+          {villageId && classroomId && <ClassroomActivityTable villageId={villageId} classroomId={classroomId} phaseId={phaseId} />}
         </div>
       )}
     </div>

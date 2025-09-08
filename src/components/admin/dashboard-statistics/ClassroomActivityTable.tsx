@@ -6,13 +6,14 @@ import type { PhaseTableRow } from 'src/api/statistics/compare.api';
 import { useClassroomActivityTable } from 'src/services/useClassroomActivityTable';
 
 interface ClassroomActivityTableProps {
+  villageId: number;
   classroomId: number;
   phaseId: number;
 }
 
 const ClassroomActivityTable: React.FC<ClassroomActivityTableProps> = (props: ClassroomActivityTableProps) => {
-  const { classroomId, phaseId } = props;
-  const data = useClassroomActivityTable(classroomId, phaseId);
+  const { villageId, classroomId, phaseId } = props;
+  const data = useClassroomActivityTable(villageId, classroomId, phaseId);
 
   if (!data || data.length === 0) {
     return <div>Aucune donnée disponible pour cette phase.</div>;

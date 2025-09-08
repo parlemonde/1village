@@ -36,7 +36,7 @@ import { getFamiliesWithoutAccountForVillage } from '../../stats/villageStats';
 import { AppDataSource } from '../../utils/data-source';
 import { Controller } from '../controller';
 import type { StatisticsDto } from './statistics.dto';
-import { getActivityTypeCountByVillages } from './statistics.repository';
+import { getActivityTypeCountByVillages, getDetailedActivitiesCountsByClassrooms } from './statistics.repository';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
 export const statisticsController = new Controller('/statistics');
@@ -648,12 +648,16 @@ statisticsController.get({ path: '/compare/villages/:villageId' }, async (req, r
   res.sendJSON(result);
 });
 
-statisticsController.get({ path: '/compare/classes/:classroomId' }, async (req, res) => {
-  const classroomId = parseInt(req.params.classroomId);
-  const phase = req.query.phase as unknown as number;
+statisticsController.get({ path: '/compare/classrooms' }, async (req, res) => {
+  const villageId = typeof req.query.villageId === 'string' ? parseInt(req.query.villageId) : undefined;
+  const phase = typeof req.query.phase === 'string' ? parseInt(req.query.phase) : undefined;
 
-  const activityCountDetails = await getActivityTypeCountByVillages({ phase, classroomId });
+  if (!villageId || !phase) {
+    res.status(403).send(`L'identifiant du village associé à la classe et/ou la phase à observer sont manquants`);
+    return;
+  }
 
+  const activityCountDetails = await getDetailedActivitiesCountsByClassrooms(villageId, phase);
   res.sendJSON(activityCountDetails);
 });
 

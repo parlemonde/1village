@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import type { EntityActivityCounts, ComparisonStatistic, ComparePhaseDetail } from 'src/api/statistics/compare.api';
-import { useGetCompareClassesStats } from 'src/api/statistics/statistics.get';
+import { useGetCompareClassroomsStats } from 'src/api/statistics/statistics.get';
 
 const calculateTotalPublications = (phaseDetails: ComparePhaseDetail[], phaseId: number): number => {
   const phase = phaseDetails.find((phase) => phase.phaseId === phaseId);
@@ -12,8 +12,8 @@ const calculateTotalPublications = (phaseDetails: ComparePhaseDetail[], phaseId:
     .reduce((sum, [, value]) => sum + (value || 0), 0);
 };
 
-export function useClassroomActivityTable(classroomId: number, phaseId: number): EntityActivityCounts[] {
-  const { data: compareData, isLoading, error } = useGetCompareClassesStats(classroomId, phaseId);
+export function useClassroomActivityTable(villageId: number, classroomId: number, phaseId: number): ClassroomRow[] {
+  const { data: compareData, isLoading, error } = useGetCompareClassroomsStats(villageId, phaseId);
 
   return useMemo(() => {
     const missingPhaseId = phaseId === undefined || phaseId === null;

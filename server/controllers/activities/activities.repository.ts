@@ -21,3 +21,7 @@ export const getActivities = async ({ phase, villageIds = [] }: GetActivitiesPar
 
   return await activityQB.getMany();
 };
+
+export async function getActivitiesByClassroomUserAndPhase(userId: number, phase?: number): Promise<Activity[]> {
+  return activitiesRepository.find({ where: { userId, phase } });
+}

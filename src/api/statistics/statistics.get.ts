@@ -285,12 +285,12 @@ async function getCompareVillagesStats(villageId: number, phase?: number): Promi
   ).data;
 }
 
-async function getCompareClassesStats(classroomId: number, phase?: number): Promise<ComparisonStatistic[]> {
+async function getCompareClassroomsStats(villageId: number, phase?: number): Promise<ComparisonStatistic[]> {
   return (
     await axiosRequest({
       method: 'GET',
       baseURL: '/api',
-      url: phase ? `/statistics/compare/classes/${classroomId}?phase=${phase}` : `/statistics/compare/classes/${classroomId}`,
+      url: `/statistics/compare/classrooms?villageId=${villageId}&phase=${phase}`,
     })
   ).data;
 }
@@ -311,8 +311,8 @@ export function useGetCompareVillagesStats(villageId: number, phase?: number) {
   });
 }
 
-export function useGetCompareClassesStats(classroomId: number, phase?: number) {
-  return useQuery<ComparisonStatistic[]>(['compare-classes-stats', classroomId, phase], () => getCompareClassesStats(classroomId, phase), {
-    enabled: classroomId !== null,
+export function useGetCompareClassroomsStats(villageId: number, phase: number) {
+  return useQuery<ComparisonStatistic[]>(['compare-classes-stats', villageId, phase], () => getCompareClassroomsStats(villageId, phase), {
+    enabled: !!villageId && !!phase,
   });
 }

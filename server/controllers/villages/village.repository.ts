@@ -16,3 +16,7 @@ export const getVillages = async ({ villageIds = [] }: GetVillagesParams) => {
 
   return await villageQB.getMany();
 };
+
+export async function getVillageById(id: number) {
+  return villageRepository.findOneBy({ id });
+}

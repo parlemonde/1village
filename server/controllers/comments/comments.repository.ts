@@ -12,3 +12,11 @@ export const getCommentCountForActivities = async (activityIds: number[]) => {
 
   return await commentQB.getCount();
 };
+
+export async function getUserCommentsCountByPhase(userId: number, phase: number): Promise<number> {
+  return await commentsRepository
+    .createQueryBuilder('c')
+    .innerJoin('activity', 'a', `a.id = c.activityId AND a.phase = ${phase}`)
+    .where('c.userId = :userId', { userId })
+    .getCount();
+}
