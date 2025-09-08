@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isEnigme } from 'src/activity-types/anyActivity';
-import { ENIGME_TYPES, getSubcategoryName } from 'src/activity-types/enigme.constants';
+import { getSubcategoryName } from 'src/activity-types/enigme.constants';
 import type { EnigmeData } from 'src/activity-types/enigme.types';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
@@ -58,8 +58,6 @@ const EnigmeStep2 = () => {
     router.push('/creer-une-enigme/3');
   };
 
-  const enigmeType = ENIGME_TYPES[activity.subType ?? 0] ?? ENIGME_TYPES[0];
-
   return (
     <Base>
       <PageLayout>
@@ -70,10 +68,9 @@ const EnigmeStep2 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Créez l’énigme, pour faire deviner votre objet</h1>
+          <h1>Créez votre énigme</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Faites deviner votre {enigmeType.titleStep2Short} à vos pélicopains en donnant des indices en vidéos, images, sons et texte !<br></br> À
-            l’étape suivante, vous écrirez la réponse à l’énigme.
+            Attention, il ne faut écrire que l’énigme ici, pas la réponse !
           </p>
           <ContentEditor
             content={activity.content.slice(0, indiceContentIndex)}

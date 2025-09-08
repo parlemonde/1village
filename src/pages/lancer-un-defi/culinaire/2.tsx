@@ -59,8 +59,7 @@ const DefiStep2 = () => {
         <div className="width-900">
           <h1>Écrivez la recette</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            À vous de montrer aux pélicopains comment cuisiner ce plat ! Pensez à présenter les ingrédients, les étapes, et donnez vos astuces de
-            chef.
+            Pensez à présenter les ingrédients, les étapes et à donner vos astuces de chef.
           </p>
           <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton prev={`/lancer-un-defi/culinaire/1?edit=${activity.id}`} next={onNext} />

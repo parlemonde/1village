@@ -80,12 +80,9 @@ const IndiceStep3 = () => {
           errorSteps={isValid ? [] : [1]}
         />
         <div className="width-900">
-          <h1>Pré-visualisez votre publication{!isEdit && ' et publiez-la.'}</h1>
+          <h1>Pré-visualisez votre indice {!isEdit && ' et publiez-le'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Voici la pré-visualisation de votre publication.
-            {isEdit
-              ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
-              : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
+            Relisez votre publication une dernière fois avant de la publier !
           </p>
           {!isValid && (
             <p>

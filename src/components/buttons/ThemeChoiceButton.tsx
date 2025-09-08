@@ -6,7 +6,7 @@ import ArrowRight from 'src/svg/arrow-right.svg';
 
 interface ThemeChoiceButtonProps {
   label: string;
-  description: string;
+  description?: string;
   isOpen?: boolean;
   onClick?(): void;
   additionalContent?: React.ReactNode | React.ReactNodeArray;

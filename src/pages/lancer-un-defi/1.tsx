@@ -77,10 +77,6 @@ const FreeDefiStep1 = () => {
         />
         <div className="width-900">
           <h1>Choisissez le thème de votre défi</h1>
-          <p className="text" style={{ fontSize: '1.1rem' }}>
-            Indiquez le th&egrave;me du d&eacute;fi que vous souhaitez lancer &agrave; vos P&eacute;licopains; par exemple &quot;danse&quot; ou
-            &quot;sport&quot;.
-          </p>
           <TextField
             value={data.themeName}
             onChange={(event) => {

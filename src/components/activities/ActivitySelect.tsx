@@ -70,7 +70,6 @@ export const ActivitySelect = ({ value, onChange, onSelect, style, label = 'Sél
     <div style={style} ref={selectRef}>
       <ThemeChoiceButton
         label={label}
-        description=""
         isOpen={value ? true : undefined}
         onClick={() => {
           if (selectRef.current) {

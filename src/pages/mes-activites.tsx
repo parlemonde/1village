@@ -69,7 +69,7 @@ const MesActivites = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <div className="width-900">
-          {drafts.length > 0 && <h2>Mes Brouillons</h2>}
+          {drafts.length > 0 && <h2>Mes brouillons</h2>}
           {drafts.map((activity, index) =>
             user && activity.userId === user.id ? (
               <ActivityCard

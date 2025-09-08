@@ -135,7 +135,7 @@ const indices = [
     disabledText: '',
   },
   {
-    label: 'Présenter un autre indice',
+    label: 'Créer un indice sur un autre thème',
     href: '/indice-culturel/1?category=-1',
     icon: null,
     disabled: false,
@@ -156,14 +156,8 @@ const Indice = () => {
         }}
       >
         <div className="width-900">
-          <h1 style={{ marginTop: '0.5rem' }}>Quel aspect de culture allez-vous présenter ?</h1>
-          <p className="text">
-            Dans cette activité, nous vous proposons de présenter à vos pélicopains un paysage, un hymne, une danse, un emblème, un vêtement... un
-            indice qui représente le pays ou la région dans lequel vous habitez.
-          </p>
-          <p className="text">
-            Commencez par choisir quel type d&apos;indice vous souhaitez présenter, ou choisissez de présenter un autre type d&apos;indice.
-          </p>
+          <h1 style={{ marginTop: '0.5rem' }}>Sur quel thème souhaitez-vous réaliser votre indice ?</h1>
+          <br />
           <ActivityChoice activities={indices} />
         </div>
       </Box>

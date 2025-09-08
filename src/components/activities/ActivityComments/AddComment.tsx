@@ -77,7 +77,7 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
                   fontWeight: 600,
                 }}
               >
-                Publiez directement un commentaire
+                Réagissez à l&apos;écrit avec un commentaire :
               </Box>
               <TextEditor
                 maxLen={400}
@@ -142,7 +142,7 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
             {activityPhase >= 3 && (activityType === ActivityType.STORY || activityType === ActivityType.RE_INVENT_STORY) ? (
               <p style={{ fontWeight: 600 }}>Ou bien ré-écrivez l&apos;histoire !</p>
             ) : (
-              <p style={{ fontWeight: 600 }}>Ou bien réagissez en détail</p>
+              <p style={{ fontWeight: 600 }}>Réagissez en image, son ou vidéo :</p>
             )}
             {activityPhase >= 3 && (activityType === ActivityType.STORY || activityType === ActivityType.RE_INVENT_STORY) ? (
               <Link href={`/re-inventer-une-histoire?activityId=${activityId}`} passHref>

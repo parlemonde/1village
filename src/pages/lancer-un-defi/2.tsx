@@ -57,11 +57,7 @@ const FreeDefiStep2 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Choisissez une action, et d&eacute;crivez-la</h1>
-          <p className="text" style={{ fontSize: '1.1rem' }}>
-            &Agrave; vous de passer &agrave; l&apos;action en premier, avant de lancer un d&eacute;fi &agrave; vos P&eacute;licopains ! Si vous avez
-            choisi la danse comme th&egrave;me, vous pouvez vous fimer entrain de danser par exemple
-          </p>
+          <h1>Choisissez une action et décrivez-la</h1>
           <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton prev={`/lancer-un-defi/1?edit=${activity.id}`} next={onNext} />
         </div>

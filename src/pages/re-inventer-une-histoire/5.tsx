@@ -118,7 +118,7 @@ const ReInventStoryStep5 = () => {
         />
 
         <div className="width-900">
-          <h1>Pré-visualisez votre histoire{!isEdit && ', et publiez-la'}</h1>
+          <h1>Pré-visualisez votre histoire{!isEdit && ' et publiez-la'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
             {isEdit
               ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."

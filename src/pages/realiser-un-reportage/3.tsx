@@ -81,12 +81,9 @@ const ReportageStep3 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Pré-visualisez votre reportage{!isEdit && ' et publiez-la.'}</h1>
+          <h1>Pré-visualisez votre reportage{!isEdit && ' et publiez-le'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Voici la pré-visualisation de votre reportage.
-            {isEdit
-              ? " Vous pouvez le modifier à l'étape précédente, et enregistrer vos changements ici."
-              : ' Vous pouvez le modifier, et quand vous êtes prêts : publiez-le dans votre village-monde !'}
+            Relisez votre publication une dernière fois avant de la publier !
           </p>
           {!isValid && (
             <p>

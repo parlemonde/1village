@@ -73,10 +73,10 @@ const StoryStep2 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Inventez et dessinez un objet magique</h1>
+          <h1>Imaginez et dessinez votre objet magique</h1>
           <p className="text">
-            Cet objet, tout comme le lieu que vous choisirez à l’étape suivante, est magique ! Grâce à ses pouvoirs, votre village-monde idéal va
-            atteindre l’objectif du développement durable que vous avez choisi à l’étape précédente.
+            Grâce à ses pouvoirs, votre objet magique doit permettre d’atteindre l’objectif du développement durable que vous avez choisi à l’étape
+            précédente.
           </p>
           <Grid container>
             <Grid item xs={12} md={6}>
