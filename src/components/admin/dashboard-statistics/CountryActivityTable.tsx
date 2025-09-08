@@ -7,7 +7,13 @@ import { useCountryActivityTable } from 'src/services/useCountryActivityTable';
 
 export type CountryActivityMode = 'country' | 'class';
 
-const CountryActivityTable: React.FC<{ countryCode: string; phaseId: number; mode?: CountryActivityMode }> = (props) => {
+interface ClassroomActivityTableProps {
+  countryCode: string;
+  phaseId: number;
+  mode?: CountryActivityMode;
+}
+
+const CountryActivityTable: FC<ClassroomActivityTableProps> = (props: ClassroomActivityTableProps) => {
   const { countryCode, phaseId, mode = 'class' } = props;
   const data = useCountryActivityTable(countryCode, phaseId);
 

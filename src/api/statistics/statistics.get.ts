@@ -275,12 +275,12 @@ export function useGetClassroomEngagementStatus(classroomId?: Classroom['id']) {
   });
 }
 
-async function getCompareVillagesStats(villageId: number, phase?: number): Promise<ComparisonStatistic[]> {
+async function getCompareVillagesStats(villageId: number, phase: number): Promise<ComparisonStatistic[]> {
   return (
     await axiosRequest({
       method: 'GET',
       baseURL: '/api',
-      url: phase ? `/statistics/compare/villages/${villageId}?phase=${phase}` : `/statistics/compare/villages/${villageId}`,
+      url: `/statistics/compare/villages/${villageId}?phase=${phase}`,
     })
   ).data;
 }
@@ -305,9 +305,9 @@ export function useGetCompareCountriesStats(countryCode: string, phase?: number)
   });
 }
 
-export function useGetCompareVillagesStats(villageId: number, phase?: number) {
+export function useGetCompareVillagesStats(villageId: number, phase: number) {
   return useQuery(['compare-villages-stats', villageId, phase], () => getCompareVillagesStats(villageId, phase), {
-    enabled: villageId !== null,
+    enabled: !!villageId && !!phase,
   });
 }
 

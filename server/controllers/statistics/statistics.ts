@@ -36,7 +36,11 @@ import { getFamiliesWithoutAccountForVillage } from '../../stats/villageStats';
 import { AppDataSource } from '../../utils/data-source';
 import { Controller } from '../controller';
 import type { StatisticsDto } from './statistics.dto';
-import { getActivityTypeCountByVillages, getDetailedActivitiesCountsByClassrooms } from './statistics.repository';
+import {
+  getActivityTypeCountByVillages,
+  getDetailedActivitiesCountsByClassrooms,
+  getDetailedActivitiesCountsByVillage,
+} from './statistics.repository';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
 export const statisticsController = new Controller('/statistics');
@@ -586,66 +590,15 @@ statisticsController.get({ path: '/compare/countries/:countryCode' }, async (req
 
 statisticsController.get({ path: '/compare/villages/:villageId' }, async (req, res) => {
   const villageId = parseInt(req.params.villageId);
-  const phase = req.query.phase as unknown as number;
+  const phase = typeof req.query.phase === 'string' ? parseInt(req.query.phase) : undefined;
 
-  const villageRepo = AppDataSource.getRepository(Village);
-  const village = await villageRepo.findOne({ where: { id: villageId } });
-  const countryCodes = village?.countryCodes || [];
-
-  const activityCountDetails = await getActivityTypeCountByVillages({ phase, villageId });
-
-  const countryMap = new Map();
-  if (Array.isArray(activityCountDetails)) {
-    activityCountDetails.forEach((village: any) => {
-      village.classrooms.forEach((classroom: any) => {
-        const code = classroom.countryCode;
-        if (!countryMap.has(code)) countryMap.set(code, []);
-        countryMap.get(code).push(classroom);
-      });
-    });
+  if (!phase) {
+    res.status(403).send(`La phase à observer est manquante`);
+    return;
   }
 
-  // On génère une ligne vide pour chaque pays manquant
-  countryCodes.forEach((code: string) => {
-    if (!countryMap.has(code)) {
-      countryMap.set(code, [
-        {
-          classroomId: null,
-          classroomName: null,
-          countryCode: code,
-          phaseDetails: [
-            {
-              phaseId: phase,
-              commentCount: 0,
-              draftCount: 0,
-              mascotCount: 0,
-              videoCount: 0,
-              challengeCount: 0,
-              enigmaCount: 0,
-              gameCount: 0,
-              questionCount: 0,
-              reactionCount: 0,
-              reportingCount: 0,
-              storyCount: 0,
-              anthemCount: 0,
-              contentLibreCount: 0,
-              reinventStoryCount: 0,
-            },
-          ],
-        },
-      ]);
-    }
-  });
-
-  // On reconstitue le format attendu (un village, toutes les classes groupées par pays)
-  const result = [
-    {
-      villageName: village?.name || '',
-      classrooms: Array.from(countryMap.values()).flat(),
-    },
-  ];
-
-  res.sendJSON(result);
+  const activityCountDetails = await getDetailedActivitiesCountsByVillage(villageId, phase);
+  res.sendJSON(activityCountDetails);
 });
 
 statisticsController.get({ path: '/compare/classrooms' }, async (req, res) => {

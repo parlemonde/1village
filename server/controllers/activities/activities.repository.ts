@@ -25,3 +25,12 @@ export const getActivities = async ({ phase, villageIds = [] }: GetActivitiesPar
 export async function getActivitiesByClassroomUserAndPhase(userId: number, phase?: number): Promise<Activity[]> {
   return activitiesRepository.find({ where: { userId, phase } });
 }
+
+export async function getActivitiesByVillageCountryAndPhase(villageId: number, countryCode: string, phase: number): Promise<Activity[]> {
+  return await activitiesRepository
+    .createQueryBuilder('a')
+    .innerJoin('user', 'u', `u.id = a.userId AND u.countryCode = '${countryCode}'`)
+    .where('a.villageId = :villageId', { villageId })
+    .andWhere('a.phase = :phase', { phase })
+    .getMany();
+}

@@ -185,8 +185,7 @@ const VillageStats = () => {
                   <ClassesContributionCard />
                 </div>
 
-                {!!selectedVillage &&
-                  selectedPhase !== undefined &&
+                {selectedVillage &&
                   compareData &&
                   (selectedPhase === 0 ? (
                     [1, 2, 3].map((phase) => (
