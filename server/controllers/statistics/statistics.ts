@@ -39,6 +39,7 @@ import type { StatisticsDto } from './statistics.dto';
 import {
   getActivityTypeCountByVillages,
   getDetailedActivitiesCountsByClassrooms,
+  getDetailedActivitiesCountsByCountries,
   getDetailedActivitiesCountsByVillage,
 } from './statistics.repository';
 
@@ -580,10 +581,15 @@ statisticsController.get({ path: '/compare/one-village' }, async (req, res) => {
   res.sendJSON(activityCountDetails);
 });
 
-statisticsController.get({ path: '/compare/countries/:countryCode' }, async (req, res) => {
-  const phase = req.query.phase as unknown as number;
+statisticsController.get({ path: '/compare/countries' }, async (req, res) => {
+  const phase = typeof req.query.phase === 'string' ? parseInt(req.query.phase) : undefined;
 
-  const activityCountDetails = await getActivityTypeCountByVillages({ phase });
+  if (!phase) {
+    res.status(403).send(`La phase à observer est manquante`);
+    return;
+  }
+
+  const activityCountDetails = await getDetailedActivitiesCountsByCountries(phase);
 
   res.sendJSON(activityCountDetails);
 });

@@ -238,12 +238,12 @@ async function getClassroomsEngagementStatus(engagementStatusParams: EngagementS
   ).data;
 }
 
-async function getCompareCountriesStats(countryCode: string, phase?: number): Promise<ComparisonStatistic[]> {
+async function getCompareCountriesStats(phase: number): Promise<ComparisonStatistic[]> {
   return (
     await axiosRequest({
       method: 'GET',
       baseURL: '/api',
-      url: phase ? `/statistics/compare/countries/${countryCode}?phase=${phase}` : `/statistics/compare/countries/${countryCode}`,
+      url: `/statistics/compare/countries?phase=${phase}`,
     })
   ).data;
 }
@@ -299,8 +299,8 @@ export function useGetCompareStats() {
   return useQuery(['compare-stats'], () => getCompareStats());
 }
 
-export function useGetCompareCountriesStats(countryCode: string, phase?: number) {
-  return useQuery(['compare-countries-stats', countryCode, phase], () => getCompareCountriesStats(countryCode, phase), {
+export function useGetCompareCountriesStats(countryCode: string, phase: number) {
+  return useQuery(['compare-countries-stats', countryCode, phase], () => getCompareCountriesStats(phase), {
     enabled: !!countryCode,
   });
 }

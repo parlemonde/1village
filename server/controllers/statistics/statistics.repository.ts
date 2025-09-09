@@ -3,9 +3,20 @@ import type { PhaseDetails } from '../../../types/statistics.type';
 import type { Activity } from '../../entities/activity';
 import type { Classroom } from '../../entities/classroom';
 import type { Village } from '../../entities/village';
-import { getActivities, getActivitiesByClassroomUserAndPhase, getActivitiesByVillageCountryAndPhase } from '../activities/activities.repository';
+import { getCountryCodes } from '../../repositories/country.repository';
+import {
+  getActivities,
+  getActivitiesByClassroomUserAndPhase,
+  getActivitiesByCountryAndPhase,
+  getActivitiesByVillageCountryAndPhase,
+} from '../activities/activities.repository';
 import { getClassrooms } from '../classrooms/classroom.repository';
-import { getCommentCountForActivities, getCommentsCountByVillageCountryAndPhase, getUserCommentsCountByPhase } from '../comments/comments.repository';
+import {
+  getCommentCountForActivities,
+  getCommentsCountByCountryAndPhase,
+  getCommentsCountByVillageCountryAndPhase,
+  getUserCommentsCountByPhase,
+} from '../comments/comments.repository';
 import { getVillageById, getVillages } from '../villages/village.repository';
 
 const groupBy = <T>(list: T[], keyGetter: (item: T) => string | number) => {
@@ -252,6 +263,31 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
     return { ...baseActivityCount };
   }
 };
+
+export async function getDetailedActivitiesCountsByCountries(phase: number) {
+  const format = 'compare';
+
+  const allVillagesCountryCodes = (await getCountryCodes()).map((countryObject) => countryObject.countryCode);
+  const villageCountriesDetails = await formatCountriesActivitiesByPhase(phase, allVillagesCountryCodes, format);
+
+  return [{ villageName: '1Village', classrooms: villageCountriesDetails }];
+}
+
+async function formatCountriesActivitiesByPhase(phase: number, countryCodes: string[], format: 'dashboard' | 'compare'): Promise<ClassroomData[]> {
+  const countriesDetails: ClassroomData[] = [];
+
+  for (const countryCode of countryCodes) {
+    const activities = await getActivitiesByCountryAndPhase(countryCode, phase);
+    const activityCounts = await getActivityCounts(activities, phase);
+
+    activityCounts.commentCount = await getCommentsCountByCountryAndPhase(countryCode, phase);
+
+    const countryEntry = createCountryEntry(countryCode, [activityCounts], format);
+    countriesDetails.push(countryEntry);
+  }
+
+  return countriesDetails;
+}
 
 export async function getDetailedActivitiesCountsByVillage(villageId: number, phase: number) {
   const format = 'compare';
