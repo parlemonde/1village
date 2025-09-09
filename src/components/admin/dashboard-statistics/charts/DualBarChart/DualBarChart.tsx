@@ -4,6 +4,8 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LabelList } 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
+import { bgPage } from 'src/styles/variables.const';
+
 interface ClassroomChartData {
   name: string;
   value: number;
@@ -27,22 +29,22 @@ export default function DualBarChart({ data }: DualBarChartProps) {
 
     if (!label) return null;
 
-    const cx = x + width / 2;
-    const cy = y + height / 2;
+    const labelX = x + width / 2;
+    const labelY = y + height / 2;
 
     const baseSize = Math.floor(width * 0.8);
     const fontSize = Math.max(8, Math.min(14, baseSize));
 
     return (
       <text
-        x={cx}
-        y={cy}
+        x={labelX}
+        y={labelY}
         fill="#fff"
         textAnchor="middle"
         dominantBaseline="central"
         fontSize={fontSize}
         fontWeight="bold"
-        transform={`rotate(-90, ${cx}, ${cy})`}
+        transform={`rotate(-90, ${labelX}, ${labelY})`}
       >
         {label}
       </text>
@@ -62,21 +64,13 @@ export default function DualBarChart({ data }: DualBarChartProps) {
             </Bar>
           </BarChart>
         </ResponsiveContainer>
-        <div>{countryChartData.country}</div>
+        <Typography>{countryChartData.country}</Typography>
       </Box>
     );
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="row"
-      alignItems="center"
-      justifyContent="center"
-      padding={4}
-      borderRadius={6}
-      sx={{ backgroundColor: '#f5f5f5' }}
-    >
+    <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" padding={4} borderRadius={6} sx={{ backgroundColor: bgPage }}>
       <Typography
         variant="caption"
         sx={{

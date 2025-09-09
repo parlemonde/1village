@@ -18,11 +18,13 @@ h6 {
   margin: 0;
   padding: 0;
 }
+
 h1 {
   font-size: 1.4rem;
   font-family: 'Roboto', 'Times New Roman', Times, serif;
   font-weight: 600;
 }
+
 h1.title {
   font-family: 'Alegreya Sans', 'Times New Roman', Times, serif;
   font-weight: 500;
@@ -48,44 +50,54 @@ label:hover {
 // NProgress bar
 body {
   height: 100%;
+
   #__next {
     height: 100%;
   }
+
   #nprogress .bar {
     z-index: 2000 !important;
     background-color: $primary-color !important;
     height: 1px;
   }
+
   &.admin {
     background-color: #d9dbfe91;
+
     #nprogress .bar {
       background-color: white !important;
     }
+
     .container-navbar {
       display: flex;
       height: 50px;
       padding: 0 50px;
     }
+
     .container-admin-nav ul {
       & div.like-button:not(first-child),
       a.like-button:not(first-child) {
         margin-top: 18px;
       }
+
       & div.like-button:not(last-child),
       a.like-button:not(last-child) {
         margin-bottom: 18px;
       }
     }
+
     .container-admin-portal {
       padding: 0 20px !important;
       min-height: 100vh;
       @media screen and (min-width: 1600px) {
         padding: 0 10% !important;
       }
+
       .container-admin-nav {
         .MuiListItemText-root span {
           font-weight: bold;
         }
+
         @media screen and (max-width: 792px) {
           width: 100%;
           height: auto;
@@ -116,9 +128,11 @@ body {
         }
       }
     }
+
     div.like-button,
     a.like-button {
       border-radius: 10px;
+
       &.blue {
         width: 266px;
         height: 45px;
@@ -130,18 +144,22 @@ body {
           color: white;
           background: $primary-color;
           width: 300px;
+
           svg,
           path {
             fill: white;
           }
         }
       }
+
       &.grey {
         background: #f5f5f5;
+
         span {
           font-weight: bold;
         }
       }
+
       @media screen and (max-width: 460px) {
         width: 100% !important;
       }
@@ -155,39 +173,50 @@ body {
   font-family: 'Roboto', 'Times New Roman', Times, serif;
   font-weight: 400;
 }
+
 .text--bold {
   font-size: 1rem;
   font-weight: 500;
 }
+
 .text--small {
   font-size: 0.875rem;
   line-height: 0.875rem;
 }
+
 .text--primary {
   color: $primary-color;
 }
+
 .text--secondary {
   color: $secondary-color;
 }
+
 .text--alert,
 .text--error {
   color: $error-color;
 }
+
 .text--help {
   color: $help-color;
 }
+
 .text--success {
   color: $success-color;
 }
+
 .text--warning {
   color: $warning-color;
 }
+
 .text--bold {
   font-weight: 600;
 }
+
 .text--detail {
   color: $font-detail;
 }
+
 .text--orange-background {
   background-color: rgb(243, 121, 52);
   color: white;
@@ -201,11 +230,13 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
 .leaflet {
   a {
     font-size: 11px;
   }
 }
+
 a.text {
   font-size: 1rem;
   font-family: 'Roboto', 'Times New Roman', Times, serif;
@@ -213,26 +244,33 @@ a.text {
   color: $font-color;
   cursor: pointer;
 }
+
 a.text:hover,
 a.text:focus-visible {
   border-bottom: 1px solid $font-color;
 }
+
 a.text-primary:hover {
   border-bottom: 1px solid $primary-color;
 }
+
 a.text--primary:hover {
   border-bottom: 1px solid $primary-color;
 }
+
 a.text--secondary:hover {
   border-bottom: 1px solid $secondary-color;
 }
+
 a.text--alert,
 a.text--error:hover {
   border-bottom: 1px solid $error-color;
 }
+
 a.text--help:hover {
   border-bottom: 1px solid $help-color;
 }
+
 a.text--success:hover {
   border-bottom: 1px solid $success-color;
 }
@@ -250,37 +288,47 @@ a.text--success:hover {
   justify-content: center;
   align-items: center;
 }
+
 .bg-gradiant-only {
   background: rgb(224, 195, 252);
   background: -o-linear-gradient(315deg, rgba(224, 195, 252, 1) 0%, rgba(142, 197, 252, 1) 100%);
   background: linear-gradient(135deg, rgba(224, 195, 252, 1) 0%, rgba(142, 197, 252, 1) 100%);
   background-attachment: fixed;
 }
+
 .bg-grey {
   background-color: $bg-page;
 }
+
 .bg-primary {
   background-color: $primary-color;
 }
+
 .bg-primary-light {
   background-color: $primary-color-light;
 }
+
 .bg-secondary {
   background-color: $secondary-color;
 }
+
 .bg-help {
   background-color: $help-color;
 }
+
 .bg-error,
 .bg-alert {
   background-color: $error-color;
 }
+
 .button-error {
   border-color: $error-color;
 }
+
 .bg-success {
   background-color: $success-color;
 }
+
 .hover-bg-primary:hover {
   background-color: $primary-color;
   color: white;
@@ -289,10 +337,12 @@ a.text--success:hover {
 .full-width {
   width: 100%;
 }
+
 .text-center {
   width: 100%;
   text-align: center;
 }
+
 .absolute-center {
   position: absolute;
   top: 0px;
@@ -303,19 +353,23 @@ a.text--success:hover {
   align-items: center;
   justify-content: center;
 }
+
 .flex-center {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
+
 .shadow-svg {
   filter: drop-shadow(0.5px 2px 0 rgba(187, 187, 187, 0.8));
 }
+
 .with-shadow {
   -webkit-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
   -moz-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
   box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
 }
+
 .with-light-shadow {
   -webkit-box-shadow: 2px 2px 2px 0px rgba(218, 216, 216, 0.6);
   -moz-box-shadow: 2px 2px 2px 0px rgba(218, 216, 216, 0.6);
@@ -325,6 +379,7 @@ a.text--success:hover {
 #village-demande-modal {
   .MuiDialog-paper {
     overflow: visible;
+
     .MuiDialogContent-root {
       overflow: visible;
     }
@@ -341,18 +396,22 @@ a.text--success:hover {
     margin-top: 0.25rem !important;
     color: $primary-color;
   }
+
   .MuiStepLabel-label.Mui-active {
     color: $primary-color !important;
     font-weight: 500;
   }
+
   .MuiStepLabel-label.Mui-completed {
     color: $success-color !important;
     font-weight: 500;
   }
+
   .MuiStepLabel-label.Mui-completed.Mui-error {
     color: $warning-color !important;
     font-weight: 500;
   }
+
   & div:first-child {
     left: 0 !important;
     right: 0 !important;
@@ -390,6 +449,7 @@ a.text--success:hover {
 
 .background-hover {
   cursor: pointer;
+
   &:hover {
     background-color: black;
   }
@@ -399,12 +459,15 @@ a.text--success:hover {
 .mapboxgl-map {
   height: 100%;
 }
+
 .leaflet-container {
   height: 100%;
 }
+
 .fullscreen-icon {
   background-image: url('/icon-fullscreen.png');
 }
+
 .leaflet-retina .fullscreen-icon {
   background-image: url('/icon-fullscreen-2x.png');
   background-size: 26px 26px;
@@ -435,6 +498,7 @@ h1.title-for-mediatheque {
 .download-button {
   margin-left: auto;
 }
+
 .container-filtre-download {
   display: flex;
   justify-content: flex-end;
@@ -472,17 +536,21 @@ h1.title-for-mediatheque {
   display: flex;
   justify-content: center;
   margin-top: 1rem;
+
   .MuiPagination-ul {
     display: flex;
     justify-content: center;
+
     .MuiPaginationItem-root {
       color: $font-color;
       font-size: 1rem;
       font-weight: 500;
       margin: 0 0.2rem;
+
       &:hover {
         color: $primary-color;
       }
+
       &.Mui-selected {
         color: $primary-color;
       }
