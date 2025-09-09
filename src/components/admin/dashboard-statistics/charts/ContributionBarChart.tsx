@@ -46,7 +46,7 @@ const ContributionBarChart: React.FC<Props> = ({ dataByStep, title, className })
               y="98%"
               textAnchor="middle"
               dominantBaseline="middle"
-              fontSize="13"
+              fontSize="11"
               fontWeight="initial"
               style={{ pointerEvents: 'none' }} // pour éviter de bloquer l'interaction du graphique
             >
