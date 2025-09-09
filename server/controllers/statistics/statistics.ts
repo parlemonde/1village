@@ -391,8 +391,7 @@ statisticsController.get({ path: '/villages/:villageId/engagement-status' }, asy
         .addSelect(
           `
         CASE
-          WHEN MAX(sess.date) IS NULL THEN 'absent'
-          WHEN MAX(sess.date) < (NOW() - INTERVAL 21 DAY) THEN 'ghost'
+          WHEN MAX(sess.date) IS NULL OR MAX(sess.date) < (NOW() - INTERVAL 21 DAY) THEN 'ghost'
           WHEN MAX(act.publishDate) >= (NOW() - INTERVAL 21 DAY)
             OR MAX(com.createDate) >= (NOW() - INTERVAL 21 DAY) THEN 'active'
           ELSE 'observer'
