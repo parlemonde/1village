@@ -45,7 +45,7 @@ const VillageStats = () => {
   });
 
   const [classroomContributionsByCountry, setClassroomContributionsByCountry] = useState<CountryChartData[]>([]);
-  const [isLoadingBarChartData, setIsLoadingBarChartData] = useState<boolean>(true);
+  const [isLoadingClassroomContributionsByCountryData, setIsLoadingClassroomContributionsByCountryData] = useState<boolean>(true);
 
   const { data: villageStatistics, isLoading: isLoadingVillageStatistics } = useGetVillagesStats(selectedVillage, selectedPhase);
   const { data: villageEngagementStatus, isLoading: isLoadingVillageEngagementStatus } = useGetVillageEngagementStatus(selectedVillage);
@@ -102,11 +102,11 @@ const VillageStats = () => {
       ];
 
       setClassroomContributionsByCountry(classroomContributionsByCountry);
-      setIsLoadingBarChartData(false);
+      setIsLoadingClassroomContributionsByCountryData(false);
     }, 5000);
   }, []);
 
-  const isLoadingGraphsData = isLoadingVillageEngagementStatus || isLoadingClassroomsStatistics;
+  const isLoadingGraphsData = isLoadingVillageEngagementStatus || isLoadingClassroomContributionsByCountryData;
 
   return (
     <>
