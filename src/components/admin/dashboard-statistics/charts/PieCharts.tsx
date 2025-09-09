@@ -10,7 +10,6 @@ import type { EngagementStatusData } from 'types/statistics.type';
 import { EngagementStatusColor, EngagementStatus } from 'types/statistics.type';
 
 const engagementStatusToPieChartItem: Record<EngagementStatus, (engagementStatus: EngagementStatusData) => PieChartDataItem> = {
-  [EngagementStatus.ABSENT]: (engagementStatus) => ({ value: engagementStatus.statusCount, label: 'Absentes', color: EngagementStatusColor.ABSENT }),
   [EngagementStatus.GHOST]: (engagementStatus) => ({ value: engagementStatus.statusCount, label: 'Fantômes', color: EngagementStatusColor.GHOST }),
   [EngagementStatus.OBSERVER]: (engagementStatus) => ({
     value: engagementStatus.statusCount,
@@ -32,7 +31,7 @@ const PieCharts: React.FC<Props> = ({ engagementStatusData, className }) => {
     <div className={classNames(styles.pieContainer, className)}>
       <div className={styles.title}>{"Niveau d'engagement"}</div>
       <PieChart
-        colors={[EngagementStatusColor.ABSENT, EngagementStatusColor.GHOST, EngagementStatusColor.OBSERVER, EngagementStatusColor.ACTIVE]}
+        colors={[EngagementStatusColor.GHOST, EngagementStatusColor.OBSERVER, EngagementStatusColor.ACTIVE]}
         series={[{ data: pieChartData }]}
         width={300}
         height={200}

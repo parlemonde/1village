@@ -184,14 +184,12 @@ export interface EngagementStatusData {
 }
 
 export enum EngagementStatus {
-  ABSENT = 'absent',
   GHOST = 'ghost',
   OBSERVER = 'observer',
   ACTIVE = 'active',
 }
 
 export enum EngagementStatusColor {
-  ABSENT = '#D11818',
   GHOST = '#FFD678',
   OBSERVER = '#6082FC',
   ACTIVE = '#4CC64A',
