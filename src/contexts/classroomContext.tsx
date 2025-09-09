@@ -1,4 +1,5 @@
-import React from 'react';
+import type { ReactNode, SetStateAction } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Card, CircularProgress } from '@mui/material';
 
@@ -15,18 +16,17 @@ import { UserType } from 'types/user.type';
 
 interface ClassroomContextValue {
   classroom: Classroom | null;
-  setClassroom: (value: React.SetStateAction<Classroom | null>) => void;
+  setClassroom: (value: SetStateAction<Classroom | null>) => void;
   parentClassroom: ClassroomAsFamilly | null;
-  setParentClassroom: (value: React.SetStateAction<ClassroomAsFamilly | null>) => void;
+  setParentClassroom: (value: SetStateAction<ClassroomAsFamilly | null>) => void;
   getClassroom(): Promise<void>;
   updateClassroomParameters(data: ClassroomUpdateData): Promise<void>;
   createStudent({ firstname, lastname }: StudentForm): Promise<void>;
   deleteStudent(id: number): Promise<void>;
   students: Student[];
-  setStudents: (value: React.SetStateAction<Student[]>) => void;
-  /*   getOneStudent(): Promise<void>; */
+  setStudents: (value: SetStateAction<Student[]>) => void;
 }
-export const ClassroomContext = React.createContext<ClassroomContextValue>({
+export const ClassroomContext = createContext<ClassroomContextValue>({
   classroom: null,
   setClassroom: () => {},
   parentClassroom: null,
@@ -36,24 +36,23 @@ export const ClassroomContext = React.createContext<ClassroomContextValue>({
   createStudent: async () => {},
   deleteStudent: async () => {},
   students: [],
-  // /*   getOneStudent: async () => {}, */
   setStudents: async () => {},
 });
 
 interface ClassroomContextProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export const ClassroomContextProvider = ({ children }: ClassroomContextProviderProps) => {
-  const { user } = React.useContext(UserContext);
-  const { village } = React.useContext(VillageContext);
-  const [students, setStudents] = React.useState<Student[]>([]);
-  const [modalStep, setModalStep] = React.useState(0);
-  const modalStepTimeout = React.useRef<number | undefined>(undefined);
-  const [classroom, setClassroom] = React.useState<Classroom | null>(null);
-  const [parentClassroom, setParentClassroom] = React.useState<ClassroomAsFamilly | null>(null);
+  const { user } = useContext(UserContext);
+  const { village } = useContext(VillageContext);
+  const [students, setStudents] = useState<Student[]>([]);
+  const [modalStep, setModalStep] = useState(0);
+  const modalStepTimeout = useRef<number | undefined>(undefined);
+  const [classroom, setClassroom] = useState<Classroom | null>(null);
+  const [parentClassroom, setParentClassroom] = useState<ClassroomAsFamilly | null>(null);
 
-  const fetchClassroom = React.useCallback(async (user: User) => {
+  const fetchClassroom = useCallback(async (user: User) => {
     if (user.type === UserType.TEACHER) {
       const response = await axiosRequest({
         method: 'GET',
@@ -75,10 +74,8 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
     }
   }, []);
 
-  /**
-   * Creation of the classroom
-   */
-  const createClassroom = React.useCallback(async () => {
+  // Creation of the classroom
+  const createClassroom = useCallback(async () => {
     if (!user) return;
     if (user.type !== UserType.TEACHER) return;
     if (!village) return;
@@ -104,7 +101,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
    * Get the list of students in the classroom
    * @param {number} classroomId classroom id
    */
-  const getStudents = React.useCallback(async (classroomId: number) => {
+  const getStudents = useCallback(async (classroomId: number) => {
     await axiosRequest({
       method: 'GET',
       url: `/students${serializeToQueryUrl({
@@ -119,10 +116,8 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
       });
   }, []);
 
-  /**
-   * Get teacher's classroom
-   */
-  const getClassroom = React.useCallback(async () => {
+  // Get a teacher's classroom
+  const getClassroom = useCallback(async () => {
     if (!user) return;
     if (user.type !== UserType.TEACHER) return;
     await axiosRequest({
@@ -137,10 +132,8 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
       });
   }, [user]);
 
-  /**
-   * Update teacher's classroom Parameters
-   */
-  const updateClassroomParameters = React.useCallback(
+  // Update teacher's classroom Parameters
+  const updateClassroomParameters = useCallback(
     async (data: ClassroomUpdateData) => {
       if (!user) return;
       if (user.type !== UserType.TEACHER) return;
@@ -168,10 +161,9 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
     },
     [user],
   );
-  /**
-   * Add new students in the classrom
-   */
-  const createStudent = React.useCallback(
+
+  // Add new students in the classroom
+  const createStudent = useCallback(
     async ({ firstname, lastname }: StudentForm) => {
       if (!user) return;
       if (user.type !== UserType.TEACHER) return;
@@ -207,41 +199,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
     [classroom, students, user],
   );
 
-  /**
-   * Update one student
-   */
-  // const setStudent = React.useCallback(async (data: ClassroomUpdateData) => {
-  //   if (user?.type !== UserType.TEACHER) return;
-  //   await axiosRequest({
-  //     method: 'PUT',
-  //     url: `/students/${student.id}`,
-  //     data: { ...data },
-  //   })
-  //     .then((response) => {
-  //       return response.data.classroom;
-  //     })
-  //     .catch((err) => {
-  //       return err.message;
-  //     });
-  // }, []);
-
-  // const getOneStudent = React.useCallback(
-  //   async (id: number) => {
-  //     await axiosRequest({
-  //       method: 'GET',
-  //       url: `/students/${id}`,
-  //     })
-  //       .then((response) => {
-  //         return response.data as Student;
-  //       })
-  //       .catch((err) => {
-  //         return err.message;
-  //       });
-  //   },
-  //   [],
-  // );
-
-  const deleteStudent = React.useCallback(
+  const deleteStudent = useCallback(
     async (studentId: number) => {
       if (!user) return;
       if (user.type !== UserType.TEACHER) return;
@@ -260,31 +218,9 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
     },
     [classroom, students, user],
   );
-  /**
-   * Get the user's linked student
-   */
-  // const getUserToStudent = React.useCallback(async () => {
-  //   if (!user) return;
-  //   if (user.type !== UserType.TEACHER) return;
-  //   await axiosRequest({
-  //     method: 'GET',
-  //     url: `/users/${user.id}`,
-  //   })
-  //     .then((response) => {
-  //       return response.data.classroom;
-  //     })
-  //     .catch((err) => {
-  //       return err.message;
-  //     });
-  // }, [user]);
 
-  /**
-   * Delete an access for a relative's student
-   */
-  // const deleteAccessTorRelatives = React.useCallback(() => {}, []);
-
-  // * Classroom is create automatically for all teacher if it does not exit already
-  React.useEffect(() => {
+  // Classroom is created automatically for all teachers if it does not exit already
+  useEffect(() => {
     if (user && user.type !== UserType.FAMILY) {
       fetchClassroom(user)
         .then((classroom) => {
@@ -309,7 +245,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createClassroom, fetchClassroom, getStudents, user]);
 
-  const value = React.useMemo(
+  const value = useMemo(
     () => ({
       classroom,
       setClassroom,
@@ -319,11 +255,9 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
       updateClassroomParameters,
       students,
       setStudents,
-      //getOneStudent,
       createStudent,
       deleteStudent,
       getStudents,
-      // deleteAccessTorRelatives,
     }),
     [
       classroom,
