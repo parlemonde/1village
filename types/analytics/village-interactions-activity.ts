@@ -12,5 +12,4 @@ export enum VillageInteractionsStatus {
   ACTIVE = 'active',
   OBSERVER = 'observer',
   GHOST = 'ghost',
-  ABSENT = 'absent',
 }

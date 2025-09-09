@@ -75,12 +75,6 @@ const DashboardWorldMap = () => {
               sont pas connectées depuis 3 semaines
             </p>
           </li>
-          <li>
-            <p>
-              <CircleIcon fontSize="small" sx={{ color: '#D11818', verticalAlign: 'middle' }} /> <span>Absent</span>: la majorité des classes ne se
-              sont jamais connectées
-            </p>
-          </li>
         </ul>
       </div>
     </div>
