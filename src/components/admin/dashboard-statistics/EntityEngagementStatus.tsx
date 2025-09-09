@@ -4,7 +4,6 @@ import { Box } from '@mui/material';
 import { EngagementStatusColor, EngagementStatus } from '../../../../types/statistics.type';
 
 const entityStatusLabel: Record<EngagementStatus, (entityType: EntityType) => EngagementStatusLabel> = {
-  [EngagementStatus.ABSENT]: (entityType) => (entityType === EntityType.CLASSROOM ? EngagementStatusLabel.ABSENTE : EngagementStatusLabel.ABSENT),
   [EngagementStatus.ACTIVE]: (entityType) => (entityType === EntityType.CLASSROOM ? EngagementStatusLabel.ACTIVE : EngagementStatusLabel.ACTIF),
   [EngagementStatus.GHOST]: () => EngagementStatusLabel.FANTOME,
   [EngagementStatus.OBSERVER]: (entityType) =>
@@ -12,7 +11,6 @@ const entityStatusLabel: Record<EngagementStatus, (entityType: EntityType) => En
 };
 
 const entityStatusColor: Record<EngagementStatus, EngagementStatusColor> = {
-  [EngagementStatus.ABSENT]: EngagementStatusColor.ABSENT,
   [EngagementStatus.ACTIVE]: EngagementStatusColor.ACTIVE,
   [EngagementStatus.GHOST]: EngagementStatusColor.GHOST,
   [EngagementStatus.OBSERVER]: EngagementStatusColor.OBSERVER,
@@ -25,8 +23,6 @@ export enum EntityType {
 }
 
 enum EngagementStatusLabel {
-  ABSENT = 'Absent',
-  ABSENTE = 'Absente',
   ACTIF = 'Actif',
   ACTIVE = 'Active',
   FANTOME = 'Fantôme',
