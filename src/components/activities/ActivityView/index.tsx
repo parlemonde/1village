@@ -20,7 +20,6 @@ import {
   isReaction,
   isReportage,
   isStory,
-  isSymbol,
   isClassAnthem,
 } from 'src/activity-types/anyActivity';
 import { AvatarImg } from 'src/components/Avatar';
@@ -76,7 +75,6 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
         {isDefi(activity) && <DefiActivityView activity={activity} user={user} />}
         {isFreeContent(activity) && <FreeContentView activity={activity} user={user} />}
         {isIndice(activity) && <ContentView content={activity.content} activityId={activity.id} />}
-        {isSymbol(activity) && <ContentView content={activity.content} activityId={activity.id} />}
         {isReportage(activity) && <ContentView content={activity.content} activityId={activity.id} />}
         {isReaction(activity) && <ContentView content={activity.content} activityId={activity.id} />}
         {isStory(activity) && <StoryActivityView activity={activity} user={user} />}

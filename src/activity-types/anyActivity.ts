@@ -9,7 +9,6 @@ import type { PresentationActivity } from './presentation.types';
 import type { QuestionActivity } from './question.types';
 import type { ReactionActivity } from './reaction.types';
 import type { ReportageActivity } from './reportage.types';
-import type { SymbolActivity } from './symbol.types';
 import { ActivityType } from 'types/activity.type';
 import type { Activity } from 'types/activity.type';
 import type { ClassAnthemActivity } from 'types/classAnthem.types';
@@ -33,9 +32,7 @@ export const isFreeContent = (activity: Activity): activity is FreeContentActivi
 export const isIndice = (activity: Activity): activity is IndiceActivity => {
   return activity.type === ActivityType.INDICE;
 };
-export const isSymbol = (activity: Activity): activity is SymbolActivity => {
-  return activity.type === ActivityType.SYMBOL;
-};
+
 export const isMascotte = (activity: Activity): activity is MascotteActivity => {
   return activity.type === ActivityType.MASCOTTE;
 };

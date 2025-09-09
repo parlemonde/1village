@@ -14,12 +14,11 @@ describe('Test function getActivityPhase', () => {
         expect(getActivityPhase(ActivityType.ANTHEM, activePhase, selectedPhase)).toEqual(activePhase);
       });
 
-      it.each(activities)('should return phase 1 for Mascotte, Presentation, Contenu Libre, Indice, Symbol', (type) => {
+      it.each(activities)('should return phase 1 for Mascotte, Presentation, Contenu Libre, Indice', (type) => {
         switch (Number(type)) {
           case ActivityType.PRESENTATION:
           case ActivityType.CONTENU_LIBRE:
           case ActivityType.INDICE:
-          case ActivityType.SYMBOL:
           case ActivityType.MASCOTTE:
             expect(getActivityPhase(Number(type), activePhase, selectedPhase)).toEqual(selectedPhase);
             break;
@@ -27,14 +26,13 @@ describe('Test function getActivityPhase', () => {
       });
 
       it.each(activities)(
-        'Mascotte, Presentation, Contenu Libre, Indice, Symbol should have selectedPhase in specificActivityPhase',
+        'Mascotte, Presentation, Contenu Libre, Indice should have selectedPhase in specificActivityPhase',
         (type, ...phaseArray) => {
           const [phases] = phaseArray;
           switch (Number(type)) {
             case ActivityType.PRESENTATION:
             case ActivityType.CONTENU_LIBRE:
             case ActivityType.INDICE:
-            case ActivityType.SYMBOL:
             case ActivityType.MASCOTTE:
               expect(phases).toEqual(expect.arrayContaining([selectedPhase]));
               break;
@@ -92,7 +90,6 @@ describe('Test function getActivityPhase', () => {
           case ActivityType.GAME:
           case ActivityType.CONTENU_LIBRE:
           case ActivityType.INDICE:
-          case ActivityType.SYMBOL:
           case ActivityType.MASCOTTE:
           case ActivityType.REPORTAGE:
           case ActivityType.REACTION:
@@ -122,7 +119,6 @@ describe('Test function getActivityPhase', () => {
           case ActivityType.GAME:
           case ActivityType.CONTENU_LIBRE:
           case ActivityType.INDICE:
-          case ActivityType.SYMBOL:
           case ActivityType.MASCOTTE:
           case ActivityType.REPORTAGE:
           case ActivityType.REACTION:
@@ -148,12 +144,11 @@ describe('Test function getActivityPhase', () => {
         expect(getActivityPhase(ActivityType.ANTHEM, activePhase, selectedPhase)).toEqual(activePhase);
       });
 
-      it.each(activities)('should return phase 1 for Mascotte, Presentation, Contenu Libre, Indice, Symbol', (type) => {
+      it.each(activities)('should return phase 1 for Mascotte, Presentation, Contenu Libre, Indice', (type) => {
         switch (Number(type)) {
           case ActivityType.PRESENTATION:
           case ActivityType.CONTENU_LIBRE:
           case ActivityType.INDICE:
-          case ActivityType.SYMBOL:
           case ActivityType.MASCOTTE:
             expect(getActivityPhase(Number(type), activePhase, selectedPhase)).toEqual(selectedPhase);
             break;
@@ -161,14 +156,13 @@ describe('Test function getActivityPhase', () => {
       });
 
       it.each(activities)(
-        'Mascotte, Presentation, Contenu Libre, Indice, Symbol should have selectedPhase in specificActivityPhase',
+        'Mascotte, Presentation, Contenu Libre, Indice should have selectedPhase in specificActivityPhase',
         (type, ...phaseArray) => {
           const [phases] = phaseArray;
           switch (Number(type)) {
             case ActivityType.PRESENTATION:
             case ActivityType.CONTENU_LIBRE:
             case ActivityType.INDICE:
-            case ActivityType.SYMBOL:
             case ActivityType.MASCOTTE:
               expect(phases).toEqual(expect.arrayContaining([selectedPhase]));
               break;
@@ -244,7 +238,6 @@ describe('Test function getActivityPhase', () => {
           const [phases] = phaseArray;
           switch (Number(type)) {
             case ActivityType.INDICE:
-            case ActivityType.SYMBOL:
             case ActivityType.CLASS_ANTHEM:
             case ActivityType.RE_INVENT_STORY:
             case ActivityType.STORY:
@@ -257,7 +250,6 @@ describe('Test function getActivityPhase', () => {
       it.each(activities)('should throw error for the other activities', (type) => {
         switch (Number(type)) {
           case ActivityType.INDICE:
-          case ActivityType.SYMBOL:
           case ActivityType.CLASS_ANTHEM:
           case ActivityType.RE_INVENT_STORY:
           case ActivityType.STORY:
@@ -285,7 +277,6 @@ describe('Test function getActivityPhase', () => {
           case ActivityType.GAME:
           case ActivityType.CONTENU_LIBRE:
           case ActivityType.INDICE:
-          case ActivityType.SYMBOL:
           case ActivityType.MASCOTTE:
           case ActivityType.REPORTAGE:
           case ActivityType.REACTION:
@@ -311,12 +302,11 @@ describe('Test function getActivityPhase', () => {
         expect(getActivityPhase(ActivityType.ANTHEM, activePhase, selectedPhase)).toEqual(activePhase);
       });
 
-      it.each(activities)('should return phase 1 for Mascotte, Presentation, Contenu Libre, Indice, Symbol', (type) => {
+      it.each(activities)('should return phase 1 for Mascotte, Presentation, Contenu Libre, Indice', (type) => {
         switch (Number(type)) {
           case ActivityType.PRESENTATION:
           case ActivityType.CONTENU_LIBRE:
           case ActivityType.INDICE:
-          case ActivityType.SYMBOL:
           case ActivityType.MASCOTTE:
             expect(getActivityPhase(Number(type), activePhase, selectedPhase)).toEqual(selectedPhase);
             break;
@@ -324,14 +314,13 @@ describe('Test function getActivityPhase', () => {
       });
 
       it.each(activities)(
-        'Mascotte, Presentation, Contenu Libre, Indice, Symbol should have selectedPhase in specificActivityPhase',
+        'Mascotte, Presentation, Contenu Libre, Indice should have selectedPhase in specificActivityPhase',
         (type, ...phaseArray) => {
           const [phases] = phaseArray;
           switch (Number(type)) {
             case ActivityType.PRESENTATION:
             case ActivityType.CONTENU_LIBRE:
             case ActivityType.INDICE:
-            case ActivityType.SYMBOL:
             case ActivityType.MASCOTTE:
               expect(phases).toEqual(expect.arrayContaining([selectedPhase]));
               break;
@@ -407,7 +396,6 @@ describe('Test function getActivityPhase', () => {
           const [phases] = phaseArray;
           switch (Number(type)) {
             case ActivityType.INDICE:
-            case ActivityType.SYMBOL:
             case ActivityType.CLASS_ANTHEM:
             case ActivityType.RE_INVENT_STORY:
             case ActivityType.STORY:
@@ -420,7 +408,6 @@ describe('Test function getActivityPhase', () => {
       it.each(activities)('should throw error for the other activities', (type) => {
         switch (Number(type)) {
           case ActivityType.INDICE:
-          case ActivityType.SYMBOL:
           case ActivityType.CLASS_ANTHEM:
           case ActivityType.RE_INVENT_STORY:
           case ActivityType.STORY:
@@ -462,7 +449,6 @@ describe('Test function getActivityPhase', () => {
             case ActivityType.DEFI:
             case ActivityType.GAME:
             case ActivityType.INDICE:
-            case ActivityType.SYMBOL:
             case ActivityType.REPORTAGE:
             case ActivityType.REACTION:
               expect(phases).not.toEqual(expect.arrayContaining([selectedPhase]));
@@ -477,7 +463,6 @@ describe('Test function getActivityPhase', () => {
           case ActivityType.DEFI:
           case ActivityType.GAME:
           case ActivityType.INDICE:
-          case ActivityType.SYMBOL:
           case ActivityType.REPORTAGE:
           case ActivityType.REACTION:
             expect(() => {

@@ -2,14 +2,14 @@ import React from 'react';
 
 import { Box } from '@mui/material';
 
-import AnimalNationalIcon from '../../svg/symbole/animal-national.svg';
-import DeviseIcon from '../../svg/symbole/devise.svg';
-import DrapeauIcon from '../../svg/symbole/drapeau.svg';
-import EmblemeIcon from '../../svg/symbole/embleme.svg';
-import FigureSymboliqueIcon from '../../svg/symbole/figure-symbolique.svg';
-import FleurNationaleIcon from '../../svg/symbole/fleur-nationale.svg';
-import HymneIcon from '../../svg/symbole/hymne.svg';
-import MonnaieIcon from '../../svg/symbole/monnaie.svg';
+import AnimalNationalIcon from '../../svg/indice-culturel/animal-national.svg';
+import DeviseIcon from '../../svg/indice-culturel/devise.svg';
+import DrapeauIcon from '../../svg/indice-culturel/drapeau.svg';
+import EmblemeIcon from '../../svg/indice-culturel/embleme.svg';
+import FigureSymboliqueIcon from '../../svg/indice-culturel/figure-symbolique.svg';
+import FleurNationaleIcon from '../../svg/indice-culturel/fleur-nationale.svg';
+import HymneIcon from '../../svg/indice-culturel/hymne.svg';
+import MonnaieIcon from '../../svg/indice-culturel/monnaie.svg';
 import { Base } from 'src/components/Base';
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import ArtIcon from 'src/svg/indice-culturel/art.svg';
