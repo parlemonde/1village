@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Tabs, Tab, Box } from '@mui/material';
 
@@ -27,11 +27,17 @@ import { useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
-const VillageStats = () => {
+interface VillageStatsProps {
+  selectedCountry?: string;
+  selectedVillage?: number;
+  onResetFilters?: () => void;
+}
+
+const VillageStats: React.FC<VillageStatsProps> = ({ selectedCountry: initialCountry, selectedVillage: initialVillage, onResetFilters }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedPhase, setSelectedPhase] = useState<number>(0);
-  const [selectedCountry, setSelectedCountry] = useState<string>();
-  const [selectedVillage, setSelectedVillage] = useState<number>();
+  const [selectedCountry, setSelectedCountry] = useState<string | undefined>(initialCountry);
+  const [selectedVillage, setSelectedVillage] = useState<number | undefined>(initialVillage);
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = useState<Array<OneVillageTableRow>>([]);
   const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
     1: true,
@@ -51,6 +57,19 @@ const VillageStats = () => {
   });
 
   const totalActivitiesCounts = villageStatistics?.totalActivityCounts;
+
+  // Pour éviter de ré-appliquer les props à chaque changement, on ne synchronise qu'au premier render :
+  useEffect(() => {
+    if (initialCountry !== undefined) setSelectedCountry(initialCountry);
+    if (initialVillage !== undefined) setSelectedVillage(initialVillage);
+  }, [initialCountry, initialVillage]);
+
+  useEffect(() => {
+    // Cleanup au démontage
+    return () => {
+      if (onResetFilters) onResetFilters();
+    };
+  }, [onResetFilters]);
 
   useEffect(() => {
     if (villageStatistics?.family?.familiesWithoutAccount) {
@@ -108,6 +127,8 @@ const VillageStats = () => {
         onCountryChange={setSelectedCountry}
         onVillageChange={setSelectedVillage}
         selectedPhase={selectedPhase}
+        selectedCountry={selectedCountry}
+        selectedVillage={selectedVillage}
       />
       {selectedCountry && selectedVillage ? (
         <>

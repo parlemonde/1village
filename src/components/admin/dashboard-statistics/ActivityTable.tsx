@@ -3,10 +3,10 @@ import type { JSX } from 'react';
 import { Box } from '@mui/material';
 
 import { OneVillageTable } from '../OneVillageTable';
+import { getCountryColor } from './utils/colorMapper';
 import { countryToFlag } from 'src/utils';
 import type { VillageInteractionsActivity } from 'types/analytics/village-interactions-activity';
 import type { Country } from 'types/country.type';
-import { EngagementStatus, EngagementStatusColor } from 'types/statistics.type';
 
 type FormatedVillageActivity = {
   countries: string;
@@ -18,19 +18,6 @@ type FormatedVillageActivity = {
 
 const countriesToText = (countries: Country[]) => {
   return countries.map((c) => `${countryToFlag(c.isoCode)} ${c.name}`).join(' - ');
-};
-
-const getCountryColor = (status: EngagementStatus): EngagementStatusColor | string => {
-  switch (status) {
-    case EngagementStatus.ACTIVE:
-      return EngagementStatusColor.ACTIVE;
-    case EngagementStatus.OBSERVER:
-      return EngagementStatusColor.OBSERVER;
-    case EngagementStatus.GHOST:
-      return EngagementStatusColor.GHOST;
-    default:
-      return '#FFF';
-  }
 };
 
 const ActivityTable = ({ activityTableData }: { activityTableData: VillageInteractionsActivity[] }) => {
