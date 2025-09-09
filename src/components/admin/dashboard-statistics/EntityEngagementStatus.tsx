@@ -1,19 +1,15 @@
 import CircleIcon from '@mui/icons-material/Circle';
 import { Box } from '@mui/material';
 
-import { EngagementStatusColor, EngagementStatus } from '../../../../types/statistics.type';
+import type { EngagementStatusColor } from '../../../../types/statistics.type';
+import { EngagementStatus } from '../../../../types/statistics.type';
+import { getCountryColor } from './utils/colorMapper';
 
 const entityStatusLabel: Record<EngagementStatus, (entityType: EntityType) => EngagementStatusLabel> = {
   [EngagementStatus.ACTIVE]: (entityType) => (entityType === EntityType.CLASSROOM ? EngagementStatusLabel.ACTIVE : EngagementStatusLabel.ACTIF),
   [EngagementStatus.GHOST]: () => EngagementStatusLabel.FANTOME,
   [EngagementStatus.OBSERVER]: (entityType) =>
     entityType === EntityType.CLASSROOM ? EngagementStatusLabel.OBSERVATRICE : EngagementStatusLabel.OBSERVATEUR,
-};
-
-const entityStatusColor: Record<EngagementStatus, EngagementStatusColor> = {
-  [EngagementStatus.ACTIVE]: EngagementStatusColor.ACTIVE,
-  [EngagementStatus.GHOST]: EngagementStatusColor.GHOST,
-  [EngagementStatus.OBSERVER]: EngagementStatusColor.OBSERVER,
 };
 
 export enum EntityType {
@@ -55,7 +51,7 @@ export default EntityEngagementStatus;
 
 function getEngagementStatusData(engagementStatus: EngagementStatus, entityType: EntityType): EntityEngagementStatusData {
   return {
-    color: entityStatusColor[engagementStatus],
+    color: getCountryColor(engagementStatus),
     label: entityStatusLabel[engagementStatus](entityType),
   };
 }

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 
@@ -15,6 +15,8 @@ type StatisticFiltersProps = {
   onVillageChange?: (villageId: number) => void;
   onClassroomChange?: (classroomId: number) => void;
   selectedPhase?: number;
+  selectedCountry?: string;
+  selectedVillage?: number;
 };
 
 export default function StatisticFilters({
@@ -22,11 +24,22 @@ export default function StatisticFilters({
   onCountryChange,
   onVillageChange,
   onClassroomChange,
+  selectedCountry: initialCountry,
+  selectedVillage: initialVillage,
   selectedPhase,
-}: Readonly<StatisticFiltersProps>) {
-  const [selectedCountry, setSelectedCountry] = useState<string>();
-  const [selectedVillage, setSelectedVillage] = useState<number>();
+}: StatisticFiltersProps) {
+  const [selectedCountry, setSelectedCountry] = useState<string | undefined>(initialCountry);
+  const [selectedVillage, setSelectedVillage] = useState<number | undefined>(initialVillage);
   const [selectedClassroom, setSelectedClassroom] = useState<number>();
+
+  useEffect(() => {
+    if (initialCountry !== undefined) {
+      setSelectedCountry(initialCountry);
+    }
+    if (initialVillage !== undefined) {
+      setSelectedVillage(initialVillage);
+    }
+  }, [initialCountry, initialVillage]);
 
   // PHASE
   const phaseDropdownOptions = [
