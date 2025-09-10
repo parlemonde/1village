@@ -12,7 +12,7 @@ export interface ContributionBarChartData {
 
 export interface ContributionBySteps {
   step: string;
-  contributions: number;
+  contributionCount: number;
 }
 
 export interface BarChartData {

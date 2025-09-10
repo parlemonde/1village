@@ -5,16 +5,16 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 
 import styles from '../styles/charts.module.css';
 import type { ContributionBarChartData, ContributionBySteps } from 'types/dashboard.type';
 
-interface Props {
+interface ContributionBarChartProps {
   dataByStep: ContributionBarChartData;
   title?: string;
   className?: string;
 }
 
-const ContributionBarChart: React.FC<Props> = ({ dataByStep, title, className }) => {
+const ContributionBarChart: React.FC<ContributionBarChartProps> = ({ dataByStep, title, className }) => {
   const dataWithPercent = dataByStep.dataBySteps.map((d: ContributionBySteps) => ({
     ...d,
-    percent: Math.round((d.contributions / dataByStep.total) * 100),
+    percent: Math.round((d.contributionCount / dataByStep.total) * 100),
   }));
 
   return (
