@@ -28,8 +28,6 @@ const getCountryColor = (status: VillageInteractionsStatus) => {
       return '#6082FC';
     case VillageInteractionsStatus.GHOST:
       return '#FFD678';
-    case VillageInteractionsStatus.ABSENT:
-      return '#D11818';
     default:
       return '#FFF';
   }
