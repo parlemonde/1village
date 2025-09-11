@@ -14,13 +14,13 @@ import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesContributionCard from './cards/ClassesContributionCard/ClassesContributionCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
-import BarCharts from './charts/BarCharts';
+import BarChartWithMonthSelector from './charts/BarChartWithMonthSelector';
 import type { CountryChartData } from './charts/DualBarChart/DualBarChart';
 import DualBarChart from './charts/DualBarChart/DualBarChart';
 import PieCharts from './charts/PieCharts';
 import StatisticFilters from './filters/StatisticFilters';
 import PhaseDetails from './menu/PhaseDetails';
-import { mockDataByMonth } from './mocks/mocks';
+import { mockDailyCountByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import ClassroomsToMonitorTable from './tables/ClassroomsToMonitorTable';
@@ -159,7 +159,7 @@ const VillageStats = () => {
                 </div>
                 <div className="statistic__average--container">
                   <PieCharts pieChartData={data} />
-                  <BarCharts dataByMonth={mockDataByMonth} title="Évolution des connexions" />
+                  <BarChartWithMonthSelector data={mockDailyCountByMonth} title="Évolution des connexions" />
                 </div>
                 <div className="statistic__average--container">
                   <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />

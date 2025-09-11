@@ -84,12 +84,9 @@
   display: flex;
   flex: 3;
   flex-direction: column;
-  /* flex-wrap: wrap; */
   padding: 20px;
   background-color: #f3f3f3;
-  /* margin-left: 20px; */
-  /* max-width: 648px; */
-  max-height: 318px;
+  max-height: 380px;
   border-radius: 20px;
 }
 

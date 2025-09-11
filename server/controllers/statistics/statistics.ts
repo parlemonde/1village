@@ -11,7 +11,6 @@ import {
   getFamiliesWithoutAccountForClassroom,
   getContributedClassroomsCount,
 } from '../../stats/classroomStats';
-import { getBarChartData } from '../../stats/connectionStats';
 import { getFamiliesWithoutAccountForCountry } from '../../stats/countryStats';
 import { getFamiliesWithoutAccountForGlobal } from '../../stats/globalStats';
 import { getChildrenCodesCount, getConnectedFamiliesCount, getFamilyAccountsCount, getFloatingAccounts } from '../../stats/queryStatsByFilter';
@@ -31,7 +30,7 @@ import { getFamiliesWithoutAccountForVillage } from '../../stats/villageStats';
 import { AppDataSource } from '../../utils/data-source';
 import { Controller } from '../controller';
 import type { StatisticsDto } from './statistics.dto';
-import { getActivityTypeCountByVillages } from './statistics.repository';
+import { getActivityTypeCountByVillages, getDailyConnectionCountByMonth } from './statistics.repository';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
 export const statisticsController = new Controller('/statistics');
@@ -54,6 +53,8 @@ const constructFamilyResponseFromFilters = async (filters: StatsFilterParams) =>
   const connectedFamiliesCount = await getConnectedFamiliesCount(filtersFamily);
   const floatingAccounts = await getFloatingAccounts(filtersFamily);
 
+  const dailyConnectionCountByMonth = await getDailyConnectionCountByMonth(filtersFamily);
+
   return {
     minDuration,
     maxDuration,
@@ -69,6 +70,8 @@ const constructFamilyResponseFromFilters = async (filters: StatsFilterParams) =>
     childrenCodesCount,
     connectedFamiliesCount,
     floatingAccounts,
+
+    dailyConnectionCountByMonth,
   };
 };
 
@@ -97,7 +100,7 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
     const connectedFamiliesCount = await getConnectedFamiliesCount(filters);
     const familyAccountCount = await getFamilyAccountsCount(filters);
     const childrenCodesCount = await getChildrenCodesCount(filters);
-    const barChartData = await getBarChartData();
+    const dailyConnectionCountByMonth = await getDailyConnectionCountByMonth();
 
     return res.sendJSON({
       minDuration,
@@ -115,7 +118,7 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
       connectedFamiliesCount,
       familyAccountCount,
       childrenCodesCount,
-      barChartData,
+      dailyConnectionCountByMonth,
     });
   } catch (error) {
     console.error('Error fetching statistics:', error);

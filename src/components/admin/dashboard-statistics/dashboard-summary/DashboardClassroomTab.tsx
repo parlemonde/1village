@@ -9,9 +9,10 @@ import CountryActivityPhaseAccordion from '../CountryActivityPhaseAccordion';
 import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from '../cards/StatsCard/StatsCard';
-import BarCharts from '../charts/BarCharts';
+import BarChartWithMonthSelector from '../charts/BarChartWithMonthSelector';
 import PieCharts from '../charts/PieCharts';
 import PhaseDetails from '../menu/PhaseDetails';
+import { mockDailyCountByMonth } from '../mocks/mocks';
 import styles from '../styles/charts.module.css';
 import ClassroomsToMonitorTable from '../tables/ClassroomsToMonitorTable';
 import { AverageStatsProcessingMethod, DashboardType } from 'types/dashboard.type';
@@ -25,9 +26,6 @@ const mockPieChartData = {
     { id: 2, value: 20, label: 'series C' },
   ],
 };
-
-const ENGAGEMENT_BAR_CHAR_TITLE = 'Évolution des connexions';
-const CONTRIBUTION_BAR_CHAR_TITLE = 'Contribution des classes';
 
 export interface DashboardClassroomTabProps {
   data: DashboardSummaryData;
@@ -46,6 +44,7 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
   const videoCount = getVideoCount(data);
   const commentCount = getCommentCount(data);
   const publicationCount = getPublicationCount(data);
+
   return (
     <>
       <ClassroomsToMonitorTable countryId={selectedCountry} />
@@ -89,25 +88,19 @@ const DashboardClassroomTab = ({ data, dashboardType, selectedCountry, selectedP
             Nombre de connexions moyen par classe
           </AverageStatsCard>
         </Grid>
-        {dashboardType === DashboardType.ONE_VILLAGE_PANEL ? (
-          <Grid item xs={12} lg={12}>
-            <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+        <Grid item xs={12} lg={dashboardType === DashboardType.ONE_VILLAGE_PANEL ? 12 : 6}>
+          <BarChartWithMonthSelector data={data.dailyConnectionCountByMonth} title="Évolution des connexions" legend="Nombre de connexions" />
+        </Grid>
+        {dashboardType !== DashboardType.ONE_VILLAGE_PANEL && (
+          <Grid item xs={12} lg={6}>
+            <PieCharts className={styles.minContainer} pieChartData={mockPieChartData} />
           </Grid>
-        ) : (
-          <>
-            <Grid item xs={12} lg={6}>
-              <PieCharts className={styles.minContainer} pieChartData={mockPieChartData} />
-            </Grid>
-            <Grid item xs={12} lg={6}>
-              <BarCharts className={styles.midContainer} dataByMonth={data.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
-            </Grid>
-          </>
         )}
         <Grid item xs={12} lg={12}>
           <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
         </Grid>
         <Grid item xs={12} lg={12}>
-          <BarCharts dataByMonth={data.barChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
+          <BarChartWithMonthSelector data={mockDailyCountByMonth} title="Contribution des classes" />
         </Grid>
 
         {data && data.phases && (

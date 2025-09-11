@@ -6,7 +6,6 @@ import TeamCommentCard from './TeamCommentCard';
 import DashboardSummary from './dashboard-summary/DashboardSummary';
 import StatisticFilters from './filters/StatisticFilters';
 import DashboardWorldMap from './map/DashboardWorldMap/DashboardWorldMap';
-import { mockDataByMonth } from './mocks/mocks';
 import { useGetOneVillageStats, useGetSessionsStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms } from 'src/services/useStatistics';
 import type { VillageInteractionsActivity } from 'types/analytics/village-interactions-activity';
@@ -105,7 +104,7 @@ const GlobalStats = () => {
         oneVillageStatistics && (
           <DashboardSummary
             dashboardType={DashboardType.ONE_VILLAGE_PANEL}
-            data={{ ...classroomsStatistics, ...sessionStatistics, ...oneVillageStatistics, barChartData: mockDataByMonth }}
+            data={{ ...classroomsStatistics, ...sessionStatistics, ...oneVillageStatistics }}
           />
         )
       )}
