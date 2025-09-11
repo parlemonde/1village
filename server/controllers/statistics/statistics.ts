@@ -10,6 +10,7 @@ import {
   getConnectedFamiliesCountForClassroom,
   getFamiliesWithoutAccountForClassroom,
   getContributedClassroomsCount,
+  getContributionsBarChartData,
 } from '../../stats/classroomStats';
 import { getBarChartData } from '../../stats/connectionStats';
 import { getFamiliesWithoutAccountForCountry } from '../../stats/countryStats';
@@ -98,6 +99,7 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
     const familyAccountCount = await getFamilyAccountsCount(filters);
     const childrenCodesCount = await getChildrenCodesCount(filters);
     const barChartData = await getBarChartData();
+    const contributionsBarChartData = await getContributionsBarChartData(villageId, countryCode, classroomId);
 
     return res.sendJSON({
       minDuration,
@@ -116,6 +118,7 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
       familyAccountCount,
       childrenCodesCount,
       barChartData,
+      contributionsBarChartData,
     });
   } catch (error) {
     console.error('Error fetching statistics:', error);
