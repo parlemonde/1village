@@ -104,6 +104,7 @@ export const getChildrenCodesCount = async (filterParams: StatsFilterParams, whe
 
   if (villageId) {
     const village = await villageRepository.findOne({ where: { id: villageId } });
+    if (!whereClause) whereClause = { clause: 'village.id = :villageId', value: { villageId } };
     if (village) childrenCodesCount = await countChildrenCodes(village, phase, whereClause);
     return childrenCodesCount;
   }
