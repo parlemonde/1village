@@ -311,7 +311,7 @@ statisticsController.get({ path: '/classrooms-engagement-status' }, async (req, 
         )
         .from(User, 'u')
         .leftJoin(AnalyticSession, 'sess', 'u.id = sess.userId')
-        .leftJoin(Activity, 'act', 'u.id = act.userId AND act.status = 0')
+        .leftJoin(Activity, 'act', 'u.id = act.userId AND act.status = 0 AND act.deleteDate IS NULL')
         .leftJoin(Comment, 'com', 'u.id = com.userId')
         .innerJoin(Classroom, 'cla', `u.id = cla.userId${additionalCondition}`)
         .groupBy('u.id')
@@ -372,7 +372,7 @@ statisticsController.get({ path: '/one-village/countries-engagement-statuses' },
         END AS status
         FROM user u
         LEFT JOIN analytic_session sess ON u.id = sess.userId
-        LEFT JOIN activity act ON u.id = act.userId AND act.status = 0
+        LEFT JOIN activity act ON u.id = act.userId AND act.status = 0 AND act.deleteDate IS NULL
         LEFT JOIN comment com ON u.id = com.userId
         INNER JOIN classroom cla ON u.id = cla.userId
         GROUP BY u.id, u.villageId
@@ -451,7 +451,7 @@ statisticsController.get({ path: '/villages/:villageId/engagement-status' }, asy
         .from(Village, 'vil')
         .innerJoin(User, 'u', `u.villageId = vil.id`)
         .leftJoin(AnalyticSession, 'sess', 'sess.userId = u.id')
-        .leftJoin(Activity, 'act', 'act.userId = u.id AND act.status = 0')
+        .leftJoin(Activity, 'act', 'act.userId = u.id AND act.status = 0 AND act.deleteDate IS NULL')
         .leftJoin(Comment, 'com', 'com.userId = u.id')
         .where('vil.id = :villageId', { villageId })
         .groupBy('userId')
@@ -519,7 +519,7 @@ statisticsController.get({ path: '/countries/:countryCode/engagement-status' }, 
       INNER JOIN classroom cla ON cla.countryCode = c.countryCode
       INNER JOIN user u ON u.id = cla.userId
       LEFT JOIN analytic_session sess ON sess.userId = u.id
-      LEFT JOIN activity act ON act.userId = u.id AND act.status = 0
+      LEFT JOIN activity act ON act.userId = u.id AND act.status = 0 AND act.deleteDate IS NULL
       LEFT JOIN comment com ON com.userId = u.id
       WHERE c.countryCode = '${countryCode}'
       GROUP BY u.id, u.villageId
@@ -605,7 +605,7 @@ statisticsController.get({ path: '/classrooms/:classroomId/engagement-status' },
     )
     .from(Classroom, 'c')
     .leftJoin(AnalyticSession, 'sess', 'sess.userId = c.userId')
-    .leftJoin(Activity, 'act', 'act.userId = c.userId AND act.status = 0')
+    .leftJoin(Activity, 'act', 'act.userId = c.userId AND act.status = 0 AND act.deleteDate IS NULL')
     .leftJoin(Comment, 'com', 'com.userId = c.userId')
     .innerJoin(User, 'u', `u.id = c.userId`)
     .where('c.id = :classroomId', { classroomId });
