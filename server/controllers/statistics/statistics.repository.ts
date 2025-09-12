@@ -1,5 +1,5 @@
-import type { PhaseDetail } from '../../../src/api/statistics/compare.api';
 import { ActivityStatus } from '../../../types/activity.type';
+import type { PhaseDetails } from '../../../types/statistics.type';
 import type { Activity } from '../../entities/activity';
 import type { Classroom } from '../../entities/classroom';
 import { getActivities } from '../activities/activities.repository';
@@ -31,7 +31,7 @@ type GetActivityTypeCountByVillagesParams = {
   format?: 'dashboard' | 'compare';
 };
 
-type PhaseCounts = Omit<PhaseDetail, 'id' | 'commentCount' | 'draftCount'>;
+type PhaseActivityCounts = Omit<PhaseDetails, 'phaseId' | 'commentCount' | 'draftCount'>;
 
 type ClassroomData = {
   name: string;
@@ -44,7 +44,7 @@ type ClassroomData = {
 
 const calculateTotalPublications = (phaseDetails: unknown[]): number => {
   return phaseDetails.reduce((total: number, phase: unknown) => {
-    const phaseCounts = phase as PhaseCounts;
+    const phaseCounts = phase as PhaseActivityCounts;
 
     const countKeys = [
       'mascotCount',

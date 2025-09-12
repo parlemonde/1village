@@ -4,29 +4,11 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box, Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 
 import { getPhaseTableHeaders } from './utils/tableHeaders';
+import type { PhaseData } from 'src/api/statistics/compare.api';
 import type { VillageStats } from 'types/statistics.type';
 
 interface OneVillagePhaseTableProps {
   data?: VillageStats;
-}
-
-interface PhaseData {
-  phaseId: number;
-  indiceCount: number;
-  mascotCount: number;
-  videoCount: number;
-  draftCount: number;
-  commentCount: number;
-  challengeCount: number;
-  enigmaCount: number;
-  gameCount: number;
-  questionCount: number;
-  reactionCount: number;
-  reportingCount: number;
-  storyCount: number;
-  anthemCount: number;
-  contentLibreCount: number;
-  reinventStoryCount: number;
 }
 
 interface VillageRowData {
