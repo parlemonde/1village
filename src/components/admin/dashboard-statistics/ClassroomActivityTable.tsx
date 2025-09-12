@@ -2,30 +2,35 @@ import React from 'react';
 
 import { OneVillageTable } from '../OneVillageTable';
 import { getClassroomActivityTableHeaders } from './utils/tableHeaders';
+import type { PhaseTableRow } from 'src/api/statistics/compare.api';
 import { useClassroomActivityTable } from 'src/services/useClassroomActivityTable';
 
 interface ClassroomActivityTableProps {
-  villageId: number;
-  classroomId: string;
+  classroomId: number;
   phaseId: number;
 }
 
-type TableRow = {
-  id: string | number;
-  isSelected?: boolean;
-};
-
 const ClassroomActivityTable: React.FC<ClassroomActivityTableProps> = (props: ClassroomActivityTableProps) => {
-  const { villageId, classroomId, phaseId } = props;
-  const data = useClassroomActivityTable(villageId, classroomId, phaseId);
+  const { classroomId, phaseId } = props;
+  const data = useClassroomActivityTable(classroomId, phaseId);
 
   if (!data || data.length === 0) {
     return <div>Aucune donnée disponible pour cette phase.</div>;
   }
 
+  // On adapte les données pour le tableau
+  const tableData: PhaseTableRow[] = data.map(
+    (row: { id?: string | number; name?: string; isSelected?: boolean; [key: string]: unknown }, idx: number) => ({
+      ...row,
+      id: row.id || idx,
+      name: row.name || `Row ${idx}`,
+    }),
+  );
+
   const columns = getClassroomActivityTableHeaders(phaseId);
 
-  const rowStyle = (row: TableRow) => {
+  // Custom row style: bleu si isSelected
+  const rowStyle = (row: PhaseTableRow) => {
     if (row.id === 'total') {
       return { color: 'black', fontWeight: 'bold', borderBottom: '2px solid black' };
     }
@@ -40,7 +45,7 @@ const ClassroomActivityTable: React.FC<ClassroomActivityTableProps> = (props: Cl
       <OneVillageTable
         admin={false}
         emptyPlaceholder={<p>Aucune donnée pour cette classe</p>}
-        data={data}
+        data={tableData}
         columns={columns}
         rowStyle={rowStyle}
         tableLayout="auto"

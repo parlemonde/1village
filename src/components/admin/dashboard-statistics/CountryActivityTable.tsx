@@ -2,64 +2,36 @@ import React from 'react';
 
 import { OneVillageTable } from '../OneVillageTable';
 import { CountryActivityTableHeaders, getCountryActivityTableHeaders } from './utils/tableHeaders';
+import type { EntityActivityCounts, PhaseTableRow } from 'src/api/statistics/compare.api';
 import { useCountryActivityTable } from 'src/services/useCountryActivityTable';
-import type { ClassroomActivity, PhaseDetail, CountryActivityMode } from 'src/services/useCountryActivityTable';
 
-interface CountryActivityTableProps {
-  countryCode: string;
-  phaseId: number;
-  mode?: CountryActivityMode;
-}
+export type CountryActivityMode = 'country' | 'class';
 
-type TableRow = {
-  id: string | number;
-  name: string;
-  totalPublications?: number;
-  commentCount?: number;
-  draftCount?: number;
-  mascotCount?: number;
-  videoCount?: number;
-  challengeCount?: number;
-  enigmaCount?: number;
-  gameCount?: number;
-  questionCount?: number;
-  reactionCount?: number;
-  reportingCount?: number;
-  storyCount?: number;
-  anthemCount?: number;
-  reinventStoryCount?: number;
-  isSelected?: boolean;
-  _highlight?: boolean;
-};
-
-const CountryActivityTable: React.FC<CountryActivityTableProps> = (props: CountryActivityTableProps) => {
+const CountryActivityTable: React.FC<{ countryCode: string; phaseId: number; mode?: CountryActivityMode }> = (props) => {
   const { countryCode, phaseId, mode = 'class' } = props;
-  const data = useCountryActivityTable(countryCode, phaseId, mode);
+  const data = useCountryActivityTable(countryCode, phaseId);
 
   if (!data || data.length === 0) {
     return <div>Aucune donnée disponible pour cette phase.</div>;
   }
 
   // On adapte les données pour le tableau (plat, phaseDetail à la racine)
-  const tableData: TableRow[] =
+  const tableData: PhaseTableRow[] =
     mode === 'country'
-      ? data.map((row: any, idx: number) => ({
+      ? data.map((row: EntityActivityCounts, idx: number) => ({
           ...row,
           id: row.id || idx,
-          _highlight: row.isSelected,
         }))
-      : (data as (ClassroomActivity & { phaseDetail?: PhaseDetail })[]).map((row, idx: number) => ({
-          id: row.classroomId || idx,
-          name: row.name,
-          totalPublications: row.totalPublications,
-          ...row.phaseDetail,
-          _highlight: true,
+      : data.map((row: EntityActivityCounts, idx: number) => ({
+          ...row,
+          id: row.id || idx,
+          contentLibreCount: undefined,
         }));
 
   const columns = mode === 'country' ? getCountryActivityTableHeaders(phaseId) : CountryActivityTableHeaders;
 
-  // Custom row style: bleu si _highlight
-  const rowStyle = (row: TableRow) => {
+  // Custom row style: bleu si isSelected
+  const rowStyle = (row: PhaseTableRow) => {
     if (row.id === 'total') {
       return { color: 'black', fontWeight: 'bold', borderBottom: '2px solid black' };
     }

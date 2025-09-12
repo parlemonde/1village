@@ -1,16 +1,16 @@
 .mapContainer {
-    display: flex;
-    gap: 2rem;
+  display: flex;
+  gap: 2rem;
 }
 
 .legendContainer {
-    flex: 1;
+  flex: 1;
 }
 
-.legendContainer>ul {
-    list-style-type: none;
+.legendContainer > ul {
+  list-style-type: none;
 }
 
 .legendContainer span {
-    text-decoration: underline;
+  text-decoration: underline;
 }
