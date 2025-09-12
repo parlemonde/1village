@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { SessionsStats, VillageStats, ClassroomToMonitor } from 'types/statistics.type';
+import type { SessionsStats, VillageStats, ClassroomToMonitor, EngagementStatusParams, EngagementStatusData } from 'types/statistics.type';
 
 async function getSessionsStats(phase?: number): Promise<SessionsStats> {
   return (
@@ -109,3 +109,35 @@ async function getClassroomsToMonitor(countryId?: string, villageId?: number): P
 export const useGetClassroomsToMonitorStats = (countryId?: string, villageId?: number) => {
   return useQuery(['classrooms-to_monitor-stats', countryId, villageId], () => getClassroomsToMonitor(countryId, villageId));
 };
+
+function getClassroomsEngagementStatusUrl(engagementStatusParams: EngagementStatusParams): string {
+  let baseClassroomsURL = `/statistics/classrooms-engagement-status`;
+  if (engagementStatusParams.countryCode) {
+    baseClassroomsURL = `${baseClassroomsURL}?&countryCode=${engagementStatusParams.countryCode}`;
+  }
+  if (engagementStatusParams.villageId) {
+    baseClassroomsURL = `${baseClassroomsURL}?&villageId=${engagementStatusParams.villageId}`;
+  }
+
+  return baseClassroomsURL;
+}
+
+async function getClassroomsEngagementStatus(engagementStatusParams: EngagementStatusParams): Promise<EngagementStatusData[]> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: getClassroomsEngagementStatusUrl(engagementStatusParams),
+    })
+  ).data;
+}
+
+export function useGetClassroomsEngagementStatus(engagementStatusParams: EngagementStatusParams) {
+  return useQuery(
+    ['classrooms-engagement-level-stats', engagementStatusParams.countryCode, engagementStatusParams.villageId],
+    () => getClassroomsEngagementStatus(engagementStatusParams),
+    {
+      enabled: !!engagementStatusParams.countryCode || !!engagementStatusParams.villageId,
+    },
+  );
+}

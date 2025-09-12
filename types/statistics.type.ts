@@ -1,7 +1,7 @@
 import type { PhaseDetail } from '../src/api/statistics/compare.api';
 import type { BarChartDataByMonth } from './dashboard.type';
 import type { User } from './user.type';
-import type { VillagePhase } from './village.type';
+import type { Village, VillagePhase } from './village.type';
 
 export interface ClassroomsStats {
   classroomId: number;
@@ -171,4 +171,26 @@ export interface ClassroomToMonitor {
   teacher: string;
   status: ClassroomMonitoringStatus;
   user: User;
+}
+
+export interface EngagementStatusParams {
+  countryCode?: string;
+  villageId?: Village['id'];
+}
+
+export interface EngagementStatusData {
+  status: EngagementStatus;
+  statusCount: number;
+}
+
+export enum EngagementStatus {
+  GHOST = 'ghost',
+  OBSERVER = 'observer',
+  ACTIVE = 'active',
+}
+
+export enum EngagementStatusColor {
+  GHOST = '#FFD678',
+  OBSERVER = '#6082FC',
+  ACTIVE = '#4CC64A',
 }
