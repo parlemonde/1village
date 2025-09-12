@@ -183,6 +183,11 @@ export interface EngagementStatusData {
   statusCount: number;
 }
 
+export interface CountryEngagementStatus {
+  countryCode: string;
+  status: EngagementStatus;
+}
+
 export enum EngagementStatus {
   GHOST = 'ghost',
   OBSERVER = 'observer',

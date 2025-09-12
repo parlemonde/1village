@@ -1,19 +1,19 @@
-import React from 'react';
+import type { ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 
 interface MouseTrackerProps {
-  children: React.ReactNode;
-  offset?: { x: number; y: number };
+  children: ReactNode;
   isVisible: boolean;
 }
 
-const MouseTracker = ({ children, offset = { x: 0, y: 0 }, isVisible }: MouseTrackerProps) => {
-  const [position, setPosition] = React.useState({ x: 0, y: 0 });
+const MouseTracker = ({ children, isVisible }: MouseTrackerProps) => {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setPosition({
-        x: e.clientX + offset.x,
-        y: e.clientY + offset.y,
+        x: e.clientX,
+        y: e.clientY,
       });
     };
 
@@ -21,7 +21,7 @@ const MouseTracker = ({ children, offset = { x: 0, y: 0 }, isVisible }: MouseTra
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [offset.x, offset.y]);
+  });
 
   return (
     <div
@@ -32,9 +32,10 @@ const MouseTracker = ({ children, offset = { x: 0, y: 0 }, isVisible }: MouseTra
         padding: '1rem 2rem',
         display: isVisible ? 'block' : 'none',
         background: 'white',
-        boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
-        transform: `translate(${position.x}px, ${position.y}px)`,
+        boxShadow: 'rgba(101, 106, 110, 0.2) 0px 8px 24px',
+        transform: `translate(${position.x}px, ${position.y + 150}px)`,
         pointerEvents: 'none',
+        borderRadius: '.25rem',
       }}
     >
       {children}
