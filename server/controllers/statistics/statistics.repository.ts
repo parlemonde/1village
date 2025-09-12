@@ -45,45 +45,40 @@ type ClassroomData = {
 const calculateTotalPublications = (phaseDetails: unknown[]): number => {
   return phaseDetails.reduce((total: number, phase: unknown) => {
     const phaseCounts = phase as PhaseCounts;
-    return (
-      total +
-      (phaseCounts.mascotCount || 0) +
-      (phaseCounts.videoCount || 0) +
-      (phaseCounts.challengeCount || 0) +
-      (phaseCounts.enigmaCount || 0) +
-      (phaseCounts.gameCount || 0) +
-      (phaseCounts.questionCount || 0) +
-      (phaseCounts.reportingCount || 0) +
-      (phaseCounts.storyCount || 0) +
-      (phaseCounts.anthemCount || 0) +
-      (phaseCounts.reinventStoryCount || 0) +
-      (phaseCounts.contentLibreCount || 0)
-    );
+
+    const countKeys = [
+      'mascotCount',
+      'videoCount',
+      'challengeCount',
+      'enigmaCount',
+      'gameCount',
+      'questionCount',
+      'reportingCount',
+      'storyCount',
+      'anthemCount',
+      'reinventStoryCount',
+      'contentLibreCount',
+    ];
+    return total + countKeys.reduce((sum, key) => sum + ((phaseCounts[key as keyof typeof phase] as number) || 0), 0);
   }, 0);
 };
 
 const createClassroomEntry = (classroom: Classroom, countryCode: string, phaseDetails: unknown[], format: 'dashboard' | 'compare'): ClassroomData => {
   const classroomName = getClassroomDisplayName(classroom);
 
-  if (format === 'dashboard') {
-    const totalPublications = calculateTotalPublications(phaseDetails);
-    return {
-      name: classroomName,
-      classroomId: classroom.id.toString(),
-      totalPublications,
-      classroomName,
-      countryCode,
-      phaseDetails,
-    };
-  }
-
-  return {
+  const classroomEntryToCreate = {
     name: classroomName,
     phaseDetails,
     classroomName,
     classroomId: classroom.id,
     countryCode,
   };
+  if (format === 'dashboard') {
+    const totalPublications = calculateTotalPublications(phaseDetails);
+    return { ...classroomEntryToCreate, totalPublications };
+  }
+
+  return classroomEntryToCreate;
 };
 
 function getClassroomDisplayName(classroom: Classroom): string {
@@ -94,25 +89,19 @@ function getClassroomDisplayName(classroom: Classroom): string {
 }
 
 const createCountryEntry = (countryCode: string, phaseDetails: unknown[], format: 'dashboard' | 'compare'): ClassroomData => {
-  if (format === 'dashboard') {
-    const totalPublications = calculateTotalPublications(phaseDetails);
-    return {
-      name: `${countryCode} Classes`,
-      classroomId: null,
-      totalPublications,
-      classroomName: `${countryCode} Classes`,
-      countryCode,
-      phaseDetails,
-    };
-  }
-
-  return {
+  const countryEntryToCreate = {
     name: `${countryCode} Classes`,
     phaseDetails,
     classroomName: `${countryCode} Classes`,
     classroomId: null,
     countryCode,
   };
+  if (format === 'dashboard') {
+    const totalPublications = calculateTotalPublications(phaseDetails);
+    return { ...countryEntryToCreate, totalPublications };
+  }
+
+  return countryEntryToCreate;
 };
 
 const processClassroomsForVillage = async (

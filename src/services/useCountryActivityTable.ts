@@ -4,25 +4,6 @@ import { type ComparisonStatistic, type PhaseDetail } from 'src/api/statistics/c
 import { useGetCompareCountriesStats } from 'src/api/statistics/statistics.get';
 import { useCountries } from 'src/services/useCountries';
 
-const calculateTotalPublications = (phaseDetails: PhaseDetail[], phaseId: number) => {
-  const phase = phaseDetails.find((p) => p.phaseId === phaseId);
-  if (!phase) return 0;
-  return (
-    (phase.indiceCount || 0) +
-    (phase.mascotCount || 0) +
-    (phase.videoCount || 0) +
-    (phase.challengeCount || 0) +
-    (phase.enigmaCount || 0) +
-    (phase.gameCount || 0) +
-    (phase.questionCount || 0) +
-    (phase.reportingCount || 0) +
-    (phase.storyCount || 0) +
-    (phase.anthemCount || 0) +
-    (phase.reinventStoryCount || 0) +
-    (phase.contentLibreCount || 0)
-  );
-};
-
 export interface CountryRow {
   id: string;
   name: string;
@@ -45,6 +26,25 @@ export interface CountryRow {
   isSelected: boolean;
   [key: string]: string | number | boolean | ReactNode;
 }
+
+const calculateTotalPublications = (phaseDetails: PhaseDetail[], phaseId: number) => {
+  const phase = phaseDetails.find((p) => p.phaseId === phaseId);
+  if (!phase) return 0;
+  return (
+    (phase.indiceCount || 0) +
+    (phase.mascotCount || 0) +
+    (phase.videoCount || 0) +
+    (phase.challengeCount || 0) +
+    (phase.enigmaCount || 0) +
+    (phase.gameCount || 0) +
+    (phase.questionCount || 0) +
+    (phase.reportingCount || 0) +
+    (phase.storyCount || 0) +
+    (phase.anthemCount || 0) +
+    (phase.reinventStoryCount || 0) +
+    (phase.contentLibreCount || 0)
+  );
+};
 
 export function useCountryActivityTable(countryCode: string, phaseId: number) {
   const { data: compareData, isLoading, error } = useGetCompareCountriesStats(countryCode, phaseId);
@@ -190,25 +190,29 @@ export function useCountryActivityTable(countryCode: string, phaseId: number) {
     const totalRow: CountryRow = {
       id: 'total',
       name: 'Total',
-      totalPublications: rows.reduce((acc, row) => acc + row.totalPublications, 0),
-      commentCount: rows.reduce((acc, row) => acc + row.commentCount, 0),
-      draftCount: rows.reduce((acc, row) => acc + row.draftCount, 0),
-      indiceCount: rows.reduce((acc, row) => acc + row.indiceCount, 0),
-      mascotCount: rows.reduce((acc, row) => acc + row.mascotCount, 0),
-      videoCount: rows.reduce((acc, row) => acc + row.videoCount, 0),
-      challengeCount: rows.reduce((acc, row) => acc + row.challengeCount, 0),
-      enigmaCount: rows.reduce((acc, row) => acc + row.enigmaCount, 0),
-      gameCount: rows.reduce((acc, row) => acc + row.gameCount, 0),
-      questionCount: rows.reduce((acc, row) => acc + row.questionCount, 0),
-      reactionCount: rows.reduce((acc, row) => acc + row.reactionCount, 0),
-      reportingCount: rows.reduce((acc, row) => acc + row.reportingCount, 0),
-      storyCount: rows.reduce((acc, row) => acc + row.storyCount, 0),
-      anthemCount: rows.reduce((acc, row) => acc + row.anthemCount, 0),
-      contentLibreCount: rows.reduce((acc, row) => acc + row.contentLibreCount, 0),
-      reinventStoryCount: rows.reduce((acc, row) => acc + row.reinventStoryCount, 0),
+      totalPublications: sumActivityCounts(rows, 'totalPublications'),
+      commentCount: sumActivityCounts(rows, 'commentCount'),
+      draftCount: sumActivityCounts(rows, 'draftCount'),
+      indiceCount: sumActivityCounts(rows, 'indiceCount'),
+      mascotCount: sumActivityCounts(rows, 'mascotCount'),
+      videoCount: sumActivityCounts(rows, 'videoCount'),
+      challengeCount: sumActivityCounts(rows, 'challengeCount'),
+      enigmaCount: sumActivityCounts(rows, 'enigmaCount'),
+      gameCount: sumActivityCounts(rows, 'gameCount'),
+      questionCount: sumActivityCounts(rows, 'questionCount'),
+      reactionCount: sumActivityCounts(rows, 'reactionCount'),
+      reportingCount: sumActivityCounts(rows, 'reportingCount'),
+      storyCount: sumActivityCounts(rows, 'storyCount'),
+      anthemCount: sumActivityCounts(rows, 'anthemCount'),
+      contentLibreCount: sumActivityCounts(rows, 'contentLibreCount'),
+      reinventStoryCount: sumActivityCounts(rows, 'reinventStoryCount'),
       isSelected: false,
     };
 
     return [totalRow, ...rows];
   }, [countryCode, phaseId, compareData, isLoading, error, countries]);
+}
+
+function sumActivityCounts(rows: CountryRow[], activityCountProperty: keyof CountryRow): number {
+  return rows.reduce((acc, row) => acc + (row[activityCountProperty] as number), 0);
 }

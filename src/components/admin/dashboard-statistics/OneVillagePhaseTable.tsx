@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box, Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 
+import { getPhaseTableHeaders } from './utils/tableHeaders';
 import type { VillageStats } from 'types/statistics.type';
 
 interface OneVillagePhaseTableProps {
@@ -146,45 +147,9 @@ const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }: { d
     }));
   };
 
-  const getPhaseColumns = (phaseId: number): { key: string; label: string }[] => {
-    switch (phaseId) {
-      case 1:
-        return [
-          { key: 'indiceCount', label: 'Indices' },
-          { key: 'mascotCount', label: 'Mascottes' },
-          { key: 'videoCount', label: 'Vidéos' },
-          { key: 'commentCount', label: 'Commentaires' },
-          { key: 'draftCount', label: 'Brouillons' },
-        ];
-      case 2:
-        return [
-          { key: 'reportingCount', label: 'Reportages' },
-          { key: 'challengeCount', label: 'Défis' },
-          { key: 'enigmaCount', label: 'Énigmes' },
-          { key: 'gameCount', label: 'Jeux' },
-          { key: 'questionCount', label: 'Questions' },
-          { key: 'reactionCount', label: 'Réactions' },
-          { key: 'videoCount', label: 'Vidéos' },
-          { key: 'commentCount', label: 'Commentaires' },
-          { key: 'draftCount', label: 'Brouillons' },
-        ];
-      case 3:
-        return [
-          { key: 'anthemCount', label: 'Hymnes' },
-          { key: 'contentLibreCount', label: 'Contenus libres' },
-          { key: 'storyCount', label: 'Histoires' },
-          { key: 'videoCount', label: 'Vidéos' },
-          { key: 'commentCount', label: 'Commentaires' },
-          { key: 'draftCount', label: 'Brouillons' },
-        ];
-      default:
-        return [];
-    }
-  };
-
   const renderPhaseTable = (phaseId: number, phaseData: PhaseData, isTotal: boolean = false) => {
     const isExpanded = expandedPhases[phaseId];
-    const columns = getPhaseColumns(phaseId);
+    const columns = getPhaseTableHeaders(phaseId, []);
     const rowData = phaseData as unknown as Record<string, number>;
 
     return (
@@ -258,7 +223,7 @@ const OneVillagePhaseTable: React.FC<OneVillagePhaseTableProps> = ({ data }: { d
     );
   };
 
-  if (!data?.activityCountDetails || data.activityCountDetails.length === 0) {
+  if (data?.activityCountDetails?.length === 0) {
     return (
       <Box sx={{ p: 3, textAlign: 'center' }}>
         <Typography variant="h6" color="text.secondary">

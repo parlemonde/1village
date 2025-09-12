@@ -226,25 +226,29 @@ export function useVillageActivityTable(villageId: number, phaseId: number) {
     const totalRow: VillageRow = {
       id: 'total',
       name: 'Total',
-      totalPublications: rows.reduce((acc, row) => acc + row.totalPublications, 0),
-      commentCount: rows.reduce((acc, row) => acc + row.commentCount, 0),
-      draftCount: rows.reduce((acc, row) => acc + row.draftCount, 0),
-      indiceCount: rows.reduce((acc, row) => acc + row.indiceCount, 0),
-      mascotCount: rows.reduce((acc, row) => acc + row.mascotCount, 0),
-      videoCount: rows.reduce((acc, row) => acc + row.videoCount, 0),
-      challengeCount: rows.reduce((acc, row) => acc + row.challengeCount, 0),
-      enigmaCount: rows.reduce((acc, row) => acc + row.enigmaCount, 0),
-      gameCount: rows.reduce((acc, row) => acc + row.gameCount, 0),
-      questionCount: rows.reduce((acc, row) => acc + row.questionCount, 0),
-      reactionCount: rows.reduce((acc, row) => acc + row.reactionCount, 0),
-      reportingCount: rows.reduce((acc, row) => acc + row.reportingCount, 0),
-      storyCount: rows.reduce((acc, row) => acc + row.storyCount, 0),
-      anthemCount: rows.reduce((acc, row) => acc + row.anthemCount, 0),
-      contentLibreCount: rows.reduce((acc, row) => acc + row.contentLibreCount, 0),
-      reinventStoryCount: rows.reduce((acc, row) => acc + row.reinventStoryCount, 0),
+      totalPublications: sumActivityCounts(rows, 'totalPublications'),
+      commentCount: sumActivityCounts(rows, 'commentCount'),
+      draftCount: sumActivityCounts(rows, 'draftCount'),
+      indiceCount: sumActivityCounts(rows, 'indiceCount'),
+      mascotCount: sumActivityCounts(rows, 'mascotCount'),
+      videoCount: sumActivityCounts(rows, 'videoCount'),
+      challengeCount: sumActivityCounts(rows, 'challengeCount'),
+      enigmaCount: sumActivityCounts(rows, 'enigmaCount'),
+      gameCount: sumActivityCounts(rows, 'gameCount'),
+      questionCount: sumActivityCounts(rows, 'questionCount'),
+      reactionCount: sumActivityCounts(rows, 'reactionCount'),
+      reportingCount: sumActivityCounts(rows, 'reportingCount'),
+      storyCount: sumActivityCounts(rows, 'storyCount'),
+      anthemCount: sumActivityCounts(rows, 'anthemCount'),
+      contentLibreCount: sumActivityCounts(rows, 'contentLibreCount'),
+      reinventStoryCount: sumActivityCounts(rows, 'reinventStoryCount'),
       isSelected: false,
     };
 
     return [totalRow, ...rows];
   }, [phaseId, compareData, isLoading, error, countries]);
+}
+
+function sumActivityCounts(rows: VillageRow[], activityCountProperty: keyof VillageRow): number {
+  return rows.reduce((acc, row) => acc + (row[activityCountProperty] as number), 0);
 }
