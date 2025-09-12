@@ -16,7 +16,6 @@ import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import MusicIcon from 'src/svg/navigation/music-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
-import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import ReportageIcon from 'src/svg/navigation/reportage-icon.svg';
 import StoryIcon from 'src/svg/navigation/story-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
@@ -173,6 +172,7 @@ export const Navigation = (): JSX.Element => {
         phase: 2,
         disabled: isParent,
       },
+      /* VIL-727: invisibiliser sans supprimer la fonctionalité
       {
         label: 'Réagir à une activité',
         path: '/reagir-a-une-activite/1',
@@ -180,6 +180,7 @@ export const Navigation = (): JSX.Element => {
         phase: 2,
         disabled: isParent,
       },
+      */
       // ---- PHASE 3 ----
       {
         label: 'Inventer une histoire',
