@@ -1,10 +1,9 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-import { bgPage } from 'src/styles/variables.const';
+import DashboardCard from '../DashboardCard';
 import type { CountryStat } from 'types/analytics/country-stat';
 
 interface CustomBarChartProps {
@@ -19,15 +18,7 @@ export default function CustomBarChart({ highlightedCountry, barsChartData, onCo
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      padding={2}
-      borderRadius={6}
-      sx={{ backgroundColor: bgPage }}
-    >
+    <DashboardCard>
       <ResponsiveContainer width="100%" height={400}>
         <BarChart data={barsChartData} layout="vertical" barSize={15} barCategoryGap="15%" margin={{ top: 20, right: 30, left: 20, bottom: 0 }}>
           <XAxis type="number" axisLine={false} tickLine={false} tick={{ fill: '#666' }} />
@@ -45,6 +36,6 @@ export default function CustomBarChart({ highlightedCountry, barsChartData, onCo
       <Typography variant="caption" sx={{ fontStyle: 'italic', mt: 1, mb: 1, mr: 1, ml: 'auto', textAlign: 'right' }}>
         Publications & commentaires
       </Typography>
-    </Box>
+    </DashboardCard>
   );
 }
