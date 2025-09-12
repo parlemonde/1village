@@ -1,10 +1,10 @@
-import { useMemo, type ReactNode } from 'react';
+import { useMemo } from 'react';
 
-import { type PhaseDetail } from 'src/api/statistics/compare.api';
+import type { ComparePhaseDetail, EntityActivityCounts } from 'src/api/statistics/compare.api';
 import { useGetCompareVillagesStats } from 'src/api/statistics/statistics.get';
 import { useCountries } from 'src/services/useCountries';
 
-const calculateTotalPublications = (phaseDetails: PhaseDetail[], phaseId: number) => {
+const calculateTotalPublications = (phaseDetails: ComparePhaseDetail[], phaseId: number) => {
   const phase = phaseDetails.find((p) => p.phaseId === phaseId);
   if (!phase) return 0;
   return (
@@ -22,29 +22,6 @@ const calculateTotalPublications = (phaseDetails: PhaseDetail[], phaseId: number
     (phase.contentLibreCount || 0)
   );
 };
-
-interface VillageRow {
-  id: string;
-  name: string;
-  totalPublications: number;
-  commentCount: number;
-  draftCount: number;
-  indiceCount: number;
-  mascotCount: number;
-  videoCount: number;
-  challengeCount: number;
-  enigmaCount: number;
-  gameCount: number;
-  questionCount: number;
-  reactionCount: number;
-  reportingCount: number;
-  storyCount: number;
-  anthemCount: number;
-  contentLibreCount: number;
-  reinventStoryCount: number;
-  isSelected: boolean;
-  [key: string]: string | number | boolean | ReactNode;
-}
 
 export function useVillageActivityTable(villageId: number, phaseId: number) {
   const { data: compareData, isLoading, error } = useGetCompareVillagesStats(villageId, phaseId);
@@ -68,7 +45,7 @@ export function useVillageActivityTable(villageId: number, phaseId: number) {
     );
 
     // Aggregate data by countries instead of villages
-    const countryMap = new Map<string, VillageRow>();
+    const countryMap = new Map<string, EntityActivityCounts>();
 
     // Process data
     compareData.forEach((village) => {
@@ -117,7 +94,7 @@ export function useVillageActivityTable(villageId: number, phaseId: number) {
           });
         } else {
           // Use specific phase
-          const phase = classroom.phaseDetails.find((p: PhaseDetail) => p.phaseId === phaseId);
+          const phase = classroom.phaseDetails.find((p: ComparePhaseDetail) => p.phaseId === phaseId);
           if (phase) {
             aggregatedPhase = {
               commentCount: phase.commentCount || 0,
@@ -223,7 +200,7 @@ export function useVillageActivityTable(villageId: number, phaseId: number) {
 
     if (rows.length === 0) return [];
 
-    const totalRow: VillageRow = {
+    const totalRow: EntityActivityCounts = {
       id: 'total',
       name: 'Total',
       totalPublications: sumActivityCounts(rows, 'totalPublications'),
@@ -249,6 +226,6 @@ export function useVillageActivityTable(villageId: number, phaseId: number) {
   }, [phaseId, compareData, isLoading, error, countries]);
 }
 
-function sumActivityCounts(rows: VillageRow[], activityCountProperty: keyof VillageRow): number {
+function sumActivityCounts(rows: EntityActivityCounts[], activityCountProperty: keyof EntityActivityCounts): number {
   return rows.reduce((acc, row) => acc + (row[activityCountProperty] as number), 0);
 }

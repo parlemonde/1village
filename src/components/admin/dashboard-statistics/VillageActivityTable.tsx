@@ -2,33 +2,13 @@ import React from 'react';
 
 import { OneVillageTable } from '../OneVillageTable';
 import { getCountryActivityTableHeaders } from './utils/tableHeaders';
+import type { PhaseTableRow } from 'src/api/statistics/compare.api';
 import { useVillageActivityTable } from 'src/services/useVillageActivityTable';
 
 interface VillageActivityTableProps {
   villageId: number;
   phaseId: number;
 }
-
-type TableRow = {
-  id: string | number;
-  name: string;
-  totalPublications?: number;
-  commentCount?: number;
-  draftCount?: number;
-  mascotCount?: number;
-  videoCount?: number;
-  challengeCount?: number;
-  enigmaCount?: number;
-  gameCount?: number;
-  questionCount?: number;
-  reactionCount?: number;
-  reportingCount?: number;
-  storyCount?: number;
-  anthemCount?: number;
-  contentLibreCount?: number;
-  reinventStoryCount?: number;
-  isSelected?: boolean;
-};
 
 const VillageActivityTable: React.FC<VillageActivityTableProps> = (props: VillageActivityTableProps) => {
   const { villageId, phaseId } = props;
@@ -39,7 +19,7 @@ const VillageActivityTable: React.FC<VillageActivityTableProps> = (props: Villag
   }
 
   // On adapte les données pour le tableau
-  const tableData: TableRow[] = data.map(
+  const tableData: PhaseTableRow[] = data.map(
     (row: { id?: string | number; name?: string; isSelected?: boolean; [key: string]: unknown }, idx: number) => ({
       ...row,
       id: row.id || idx,
@@ -50,7 +30,7 @@ const VillageActivityTable: React.FC<VillageActivityTableProps> = (props: Villag
   const columns = getCountryActivityTableHeaders(phaseId);
 
   // Custom row style: bleu si isSelected
-  const rowStyle = (row: TableRow) => {
+  const rowStyle = (row: PhaseTableRow) => {
     if (row.id === 'total') {
       return { color: 'black', fontWeight: 'bold', borderBottom: '2px solid black' };
     }

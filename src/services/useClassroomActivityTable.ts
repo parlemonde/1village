@@ -1,9 +1,9 @@
-import { useMemo, type ReactNode } from 'react';
+import { useMemo } from 'react';
 
-import { type ComparisonStatistic, type PhaseDetail } from 'src/api/statistics/compare.api';
+import type { EntityActivityCounts, ComparisonStatistic, ComparePhaseDetail } from 'src/api/statistics/compare.api';
 import { useGetCompareClassesStats } from 'src/api/statistics/statistics.get';
 
-const calculateTotalPublications = (phaseDetails: PhaseDetail[], phaseId: number): number => {
+const calculateTotalPublications = (phaseDetails: ComparePhaseDetail[], phaseId: number): number => {
   const phase = phaseDetails.find((phase) => phase.phaseId === phaseId);
   if (!phase) return 0;
 
@@ -12,30 +12,7 @@ const calculateTotalPublications = (phaseDetails: PhaseDetail[], phaseId: number
     .reduce((sum, [, value]) => sum + (value || 0), 0);
 };
 
-interface ClassroomRow {
-  id: string;
-  name: string;
-  totalPublications: number;
-  commentCount: number;
-  draftCount: number;
-  indiceCount: number;
-  mascotCount: number;
-  videoCount: number;
-  challengeCount: number;
-  enigmaCount: number;
-  gameCount: number;
-  questionCount: number;
-  reactionCount: number;
-  reportingCount: number;
-  storyCount: number;
-  anthemCount: number;
-  contentLibreCount: number;
-  reinventStoryCount: number;
-  isSelected: boolean;
-  [key: string]: string | number | boolean | ReactNode;
-}
-
-export function useClassroomActivityTable(classroomId: number, phaseId: number): ClassroomRow[] {
+export function useClassroomActivityTable(classroomId: number, phaseId: number): EntityActivityCounts[] {
   const { data: compareData, isLoading, error } = useGetCompareClassesStats(classroomId, phaseId);
 
   return useMemo(() => {
@@ -47,7 +24,7 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number):
     }
 
     // Aggregate data by classrooms
-    const classroomMap = new Map<string, ClassroomRow>();
+    const classroomMap = new Map<string, EntityActivityCounts>();
 
     compareData.forEach((village: ComparisonStatistic) => {
       village.classrooms.forEach((classroom) => {
@@ -95,7 +72,7 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number):
           });
         } else {
           // Use specific phase
-          const phase = classroom.phaseDetails.find((p: PhaseDetail) => p.phaseId === phaseId);
+          const phase = classroom.phaseDetails.find((p: ComparePhaseDetail) => p.phaseId === phaseId);
           if (phase) {
             aggregatedPhase = {
               commentCount: phase.commentCount || 0,
@@ -174,7 +151,7 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number):
 
     if (rows.length === 0) return [];
 
-    const totalRow: ClassroomRow = {
+    const totalRow: EntityActivityCounts = {
       id: 'total',
       name: 'Total',
       totalPublications: sumActivityCounts(rows, 'totalPublications'),
@@ -200,6 +177,6 @@ export function useClassroomActivityTable(classroomId: number, phaseId: number):
   }, [classroomId, phaseId, compareData, isLoading, error]);
 }
 
-function sumActivityCounts(rows: ClassroomRow[], activityCountProperty: keyof ClassroomRow): number {
+function sumActivityCounts(rows: EntityActivityCounts[], activityCountProperty: keyof EntityActivityCounts): number {
   return rows.reduce((acc, row) => acc + (row[activityCountProperty] as number), 0);
 }

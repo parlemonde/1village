@@ -12,7 +12,7 @@ import StatisticFilters from './filters/StatisticFilters';
 import DashboardWorldMap from './map/DashboardWorldMap/DashboardWorldMap';
 import { mockDataByMonth } from './mocks/mocks';
 import { getVillageActivityTableHeaders } from './utils/tableHeaders';
-import type { PhaseDetail } from 'src/api/statistics/compare.api';
+import type { ComparePhaseDetail } from 'src/api/statistics/compare.api';
 import { useGetSessionsStats, useGetOneVillageStats, useGetCountriesEngagementStatuses } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms } from 'src/services/useStatistics';
 import type { VillageInteractionsActivity } from 'types/analytics/village-interactions-activity';
@@ -23,7 +23,7 @@ import { TeamCommentType } from 'types/teamComment.type';
 interface VillageDetail {
   villageName: string;
   classrooms: {
-    phaseDetails: PhaseDetail[];
+    phaseDetails: ComparePhaseDetail[];
   }[];
 }
 

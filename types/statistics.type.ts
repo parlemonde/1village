@@ -1,4 +1,4 @@
-import type { PhaseDetail } from '../src/api/statistics/compare.api';
+import type { ComparePhaseDetail } from '../src/api/statistics/compare.api';
 import type { BarChartDataByMonth } from './dashboard.type';
 import type { User } from './user.type';
 import type { Village, VillagePhase } from './village.type';
@@ -58,7 +58,7 @@ type ClassroomCountDetails = {
   phaseDetails: PhaseDetails[];
 };
 
-type PhaseDetails = {
+export type PhaseDetails = {
   phaseId: number;
   commentCount: number;
   draftCount: number;
@@ -139,7 +139,7 @@ export type ClassroomActivity = {
   countryCode: string;
   classroomId: string;
   totalPublications: number;
-  phaseDetails: PhaseDetail[];
+  phaseDetails: ComparePhaseDetail[];
 };
 
 export type VillageActivity = {
