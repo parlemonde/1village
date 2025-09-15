@@ -1,5 +1,5 @@
 import type { PhaseDetail } from '../src/api/statistics/compare.api';
-import type { BarChartDataByMonth } from './dashboard.type';
+import type { BarChartDataByMonth, ContributionBarChartData } from './dashboard.type';
 import type { User } from './user.type';
 import type { Village, VillagePhase } from './village.type';
 
@@ -43,6 +43,7 @@ export interface SessionsStats {
   connectedClassroomsCount: number;
   contributedClassroomsCount: number;
   barChartData: BarChartDataByMonth[];
+  contributionsBarChartData: ContributionBarChartData;
 }
 
 export interface VillageStats {

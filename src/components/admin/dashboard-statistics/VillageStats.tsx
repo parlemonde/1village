@@ -172,7 +172,7 @@ const VillageStats = () => {
                 </div>
                 <div className="statistic__average--container">
                   <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
-                  <ClassesContributionCard />
+                  <ClassesContributionCard data={sessionsStatistics.contributionsBarChartData} />
                 </div>
                 {classroomsStatistics?.phases && (
                   <div className="statistic__phase--container">

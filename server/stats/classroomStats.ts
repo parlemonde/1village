@@ -81,6 +81,7 @@ export const getContributedClassroomsCount = async (
     .createQueryBuilder('classroom')
     .select('COUNT(DISTINCT classroom.id)', 'classroomsCount')
     .innerJoin('activity', 'activity', 'activity.classroomId = classroom.id')
+    .andWhere('activity.status != :status', { status: 1 })
     .groupBy('classroom.id');
 
   if (classroomId) {
@@ -200,4 +201,31 @@ export const getConnectedFamiliesCountForClassroom = async (classroomId: number,
 
 export const getFamiliesWithoutAccountForClassroom = async (classroomId: number) => {
   return getFamiliesWithoutAccount('classroom.id = :classroomId', { classroomId });
+};
+
+/**
+ * Retourne le nombre total de classes contributrices et le détail par phase.
+ */
+export const getContributionsBarChartData = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+  const phases = [
+    { step: 'Phase 1', value: 1 },
+    { step: 'Phase 2', value: 2 },
+    { step: 'Phase 3', value: 3 },
+  ];
+
+  // Appels parallèles pour chaque phase
+  const phaseCountsPromise = phases.map((p) => getContributedClassroomsCount(villageId, countryCode, classroomId, p.value));
+
+  // Appel pour le total (toutes phases)
+  const totalPromise = getConnectedClassroomsCount(villageId, countryCode, classroomId);
+
+  const [total, ...phaseCounts] = await Promise.all([totalPromise, ...phaseCountsPromise]);
+
+  return {
+    total,
+    dataBySteps: phases.map((p, idx) => ({
+      step: p.step,
+      contributionCount: phaseCounts[idx],
+    })),
+  };
 };
