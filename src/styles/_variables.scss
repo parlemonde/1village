@@ -69,3 +69,14 @@ $big-screen: 2000px;
     background: $bgColor;
   }
 }
+
+// Dashboard Statistics Card Colors
+:root {
+  --card-bg-color: #f5f5f5;
+  --primary-color: #4c3ed9;
+  --secondary-color: #dad7fe;
+  --gradient-start: #9198e5;
+  --gradient-end: #6065fc;
+  --text-color: #fff;
+  --border-color: #dad7fe;
+}

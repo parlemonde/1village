@@ -14,9 +14,16 @@ type StatisticFiltersProps = {
   onCountryChange?: (countryCode: string) => void;
   onVillageChange?: (villageId: number) => void;
   onClassroomChange?: (classroomId: number) => void;
+  selectedPhase?: number;
 };
 
-export default function StatisticFilters({ onPhaseChange, onCountryChange, onVillageChange, onClassroomChange }: StatisticFiltersProps) {
+export default function StatisticFilters({
+  onPhaseChange,
+  onCountryChange,
+  onVillageChange,
+  onClassroomChange,
+  selectedPhase,
+}: Readonly<StatisticFiltersProps>) {
   const [selectedCountry, setSelectedCountry] = useState<string>();
   const [selectedVillage, setSelectedVillage] = useState<number>();
   const [selectedClassroom, setSelectedClassroom] = useState<number>();
@@ -29,7 +36,7 @@ export default function StatisticFilters({ onPhaseChange, onCountryChange, onVil
     { key: '3', value: 'Phase 3' },
   ];
   const handlePhaseChange = (phaseId: string) => {
-    onPhaseChange(+phaseId);
+    onPhaseChange(+phaseId || 0);
   };
 
   // COUNTRY
@@ -103,7 +110,7 @@ export default function StatisticFilters({ onPhaseChange, onCountryChange, onVil
 
   return (
     <Grid container spacing={2} mb={2}>
-      {renderDropdown(phaseDropdownOptions, handlePhaseChange, 'Phase', false)}
+      {renderDropdown(phaseDropdownOptions, handlePhaseChange, 'Phase', false, String(selectedPhase || ''))}
       {onCountryChange && renderDropdown(countryDropdownOptions, handleCountryChange, 'Pays', true, selectedCountry)}
       {onVillageChange && renderDropdown(villageDropdownOptions, handleVillageChange, 'Village', true, selectedVillage?.toString())}
       {onClassroomChange && renderDropdown(classroomDropdownOptions, handleClassroomChange, 'Classe', true, selectedClassroom?.toString())}

@@ -1,15 +1,17 @@
 import { useQuery } from 'react-query';
 
+import type { ComparisonStatistic } from './compare.api';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Classroom } from 'types/classroom.type';
 import type {
-  EngagementStatusParams,
-  EngagementStatusData,
   SessionsStats,
   VillageStats,
-  ClassroomToMonitor,
   EngagementStatus,
   CountryEngagementStatus,
+  ClassroomDetails,
+  ClassroomToMonitor,
+  EngagementStatusParams,
+  EngagementStatusData,
 } from 'types/statistics.type';
 
 async function getSessionsStats(phase?: number): Promise<SessionsStats> {
@@ -42,27 +44,46 @@ async function getVillagesStats(villageId?: number, phase?: number): Promise<Vil
   ).data;
 }
 
-async function getCountriesStats(countryId?: string, phase?: number): Promise<VillageStats> {
+async function getCountriesStats(countryCode?: string, phase?: number): Promise<VillageStats> {
   return (
     await axiosRequest({
       method: 'GET',
       baseURL: '/api',
-      url: phase ? `/statistics/countries/${countryId}?phase=${phase}` : `/statistics/countries/${countryId}`,
+      url: phase ? `/statistics/countries/${countryCode}?phase=${phase}` : `/statistics/countries/${countryCode}`,
     })
   ).data;
 }
 
-export const useGetSessionsStats = (phase?: number) => {
+async function getCompareGlobalStats(phase?: number) {
+  const response = await axiosRequest({
+    method: 'GET',
+    baseURL: '/api',
+    url: `/statistics/compare/one-village`,
+    params: phase ? { phase } : undefined,
+  });
+
+  if (response.error) {
+    return;
+  }
+
+  return response.data;
+}
+
+export function useGetCompareGlobalStats(phase?: number) {
+  return useQuery(['compare-countries-stats', phase], () => getCompareGlobalStats(phase));
+}
+
+export function useGetSessionsStats(phase?: number) {
   return useQuery(['sessions-stats', phase], () => getSessionsStats(phase), {
     staleTime: 0,
     cacheTime: 0,
     refetchOnMount: true,
   });
-};
+}
 
-export const useGetOneVillageStats = () => {
+export function useGetOneVillageStats() {
   return useQuery(['1v-stats'], () => getOneVillageStats());
-};
+}
 
 async function getCountriesEngagementStatuses(): Promise<CountryEngagementStatus[]> {
   return (
@@ -78,11 +99,11 @@ export function useGetCountriesEngagementStatuses() {
   return useQuery(['countries-engagement-statuses-stats'], () => getCountriesEngagementStatuses());
 }
 
-export const useGetVillagesStats = (villageId?: number, phase?: number) => {
+export function useGetVillagesStats(villageId?: number, phase?: number) {
   return useQuery(['villages-stats', villageId, phase], () => getVillagesStats(villageId, phase), {
     enabled: villageId !== null,
   });
-};
+}
 
 async function getVillageEngagementStatus(villageId?: number): Promise<EngagementStatus> {
   const url = `/statistics/villages/${villageId}/engagement-status`;
@@ -101,11 +122,11 @@ export function useGetVillageEngagementStatus(villageId?: number) {
   });
 }
 
-export const useGetCountriesStats = (countryId?: string, phase?: number) => {
-  return useQuery(['countries-stats', countryId, phase], () => getCountriesStats(countryId, phase), {
-    enabled: countryId !== null,
+export function useGetCountriesStats(countryCode?: string, phase?: number) {
+  return useQuery<VillageStats>(['countries-stats', countryCode, phase], () => getCountriesStats(countryCode, phase), {
+    enabled: !!countryCode,
   });
-};
+}
 
 async function getCountryEngagementStatus(countryCode?: string): Promise<EngagementStatus> {
   const url = `/statistics/countries/${countryCode}/engagement-status`;
@@ -134,11 +155,27 @@ async function getClassroomsStats(classroomId?: number, phase?: number): Promise
   ).data;
 }
 
-export const useGetClassroomsStats = (classroomId?: number, phase?: number) => {
+export function useGetClassroomDetails(classroomId?: number) {
+  return useQuery(['classrooms-stats', classroomId], () => getClassroomDetails(classroomId), {
+    enabled: !!classroomId,
+  });
+}
+
+async function getClassroomDetails(classroomId?: number): Promise<ClassroomDetails> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: `/statistics/classrooms/details/${classroomId}`,
+    })
+  ).data;
+}
+
+export function useGetClassroomsStats(classroomId?: number, phase?: number) {
   return useQuery(['classrooms-stats', classroomId, phase], () => getClassroomsStats(classroomId, phase), {
     enabled: classroomId !== null,
   });
-};
+}
 
 function getClassroomsUrl(countryId?: string, villageId?: number): string {
   let baseClassroomsURL = `/statistics/classrooms-to-monitor`;
@@ -169,6 +206,16 @@ export const useGetClassroomsToMonitorStats = (countryId?: string, villageId?: n
   return useQuery(['classrooms-to_monitor-stats', countryId, villageId], () => getClassroomsToMonitor(countryId, villageId));
 };
 
+async function getCompareStats(): Promise<ComparisonStatistic[]> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: `/statistics/compare`,
+    })
+  ).data;
+}
+
 function getClassroomsEngagementStatusUrl(engagementStatusParams: EngagementStatusParams): string {
   let baseClassroomsURL = `/statistics/classrooms-engagement-status`;
   if (engagementStatusParams.countryCode) {
@@ -187,6 +234,16 @@ async function getClassroomsEngagementStatus(engagementStatusParams: EngagementS
       method: 'GET',
       baseURL: '/api',
       url: getClassroomsEngagementStatusUrl(engagementStatusParams),
+    })
+  ).data;
+}
+
+async function getCompareCountriesStats(countryCode: string, phase?: number): Promise<ComparisonStatistic[]> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: phase ? `/statistics/compare/countries/${countryCode}?phase=${phase}` : `/statistics/compare/countries/${countryCode}`,
     })
   ).data;
 }
@@ -215,5 +272,48 @@ async function getClassroomEngagementStatus(classroomId?: Classroom['id']): Prom
 export function useGetClassroomEngagementStatus(classroomId?: Classroom['id']) {
   return useQuery(['classroom-engagement-status', classroomId], () => getClassroomEngagementStatus(classroomId), {
     enabled: !!classroomId,
+  });
+}
+
+async function getCompareVillagesStats(villageId: number, phase?: number): Promise<ComparisonStatistic[]> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+
+      url: phase ? `/statistics/compare/villages/${villageId}?phase=${phase}` : `/statistics/compare/villages/${villageId}`,
+    })
+  ).data;
+}
+
+async function getCompareClassesStats(classroomId: number, phase?: number): Promise<ComparisonStatistic[]> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: phase ? `/statistics/compare/classes/${classroomId}?phase=${phase}` : `/statistics/compare/classes/${classroomId}`,
+    })
+  ).data;
+}
+
+export function useGetCompareStats() {
+  return useQuery(['compare-stats'], () => getCompareStats());
+}
+
+export function useGetCompareCountriesStats(countryCode: string, phase?: number) {
+  return useQuery(['compare-countries-stats', countryCode, phase], () => getCompareCountriesStats(countryCode, phase), {
+    enabled: !!countryCode,
+  });
+}
+
+export function useGetCompareVillagesStats(villageId: number, phase?: number) {
+  return useQuery(['compare-villages-stats', villageId, phase], () => getCompareVillagesStats(villageId, phase), {
+    enabled: villageId !== null,
+  });
+}
+
+export function useGetCompareClassesStats(classroomId: number, phase?: number) {
+  return useQuery<ComparisonStatistic[]>(['compare-classes-stats', classroomId, phase], () => getCompareClassesStats(classroomId, phase), {
+    enabled: classroomId !== null,
   });
 }
