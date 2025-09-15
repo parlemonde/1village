@@ -9,11 +9,11 @@ export interface DashboardCardProps extends BoxProps {
   children?: ReactNode;
 }
 
-export default function DashboardCard({ children, sx, ...rest }: Readonly<DashboardCardProps>) {
+export default function DashboardCard({ children, flexDirection = 'column', sx, ...rest }: Readonly<DashboardCardProps>) {
   return (
     <Box
       display="flex"
-      flexDirection="column"
+      flexDirection={flexDirection}
       alignItems="center"
       justifyContent="center"
       padding={2}

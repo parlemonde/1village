@@ -4,7 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LabelList } 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-import { bgPage } from 'src/styles/variables.const';
+import DashboardCard from '../../DashboardCard';
 
 interface ClassroomChartData {
   name: string;
@@ -70,7 +70,7 @@ export default function DualBarChart({ data }: DualBarChartProps) {
   };
 
   return (
-    <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" padding={4} borderRadius={6} sx={{ backgroundColor: bgPage }}>
+    <DashboardCard flexDirection="row">
       <Typography
         variant="caption"
         sx={{
@@ -83,6 +83,6 @@ export default function DualBarChart({ data }: DualBarChartProps) {
       </Typography>
       {renderBarChart(data[0], '#78BEFF', true)}
       {renderBarChart(data[1], '#FF57F8')}
-    </Box>
+    </DashboardCard>
   );
 }
