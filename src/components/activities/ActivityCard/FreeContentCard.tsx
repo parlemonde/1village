@@ -12,10 +12,19 @@ import type { FreeContentActivity } from 'src/activity-types/freeContent.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { LinkNotAllowedInPath } from 'types/activity.type';
+import { UserType } from 'types/user.type';
 
-export const FreeContentCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<FreeContentActivity>) => {
+export const FreeContentCard = ({
+  activity,
+  isSelf,
+  noButtons,
+  isDraft,
+  showEditButtons,
+  onDelete,
+  user,
+}: ActivityCardProps<FreeContentActivity>) => {
   const firstImage = React.useMemo(() => getImage(activity.content, activity.data), [activity]);
-
+  const userIsPelico = user && user?.type <= UserType.MEDIATOR;
   return (
     <div
       style={{
@@ -62,7 +71,7 @@ export const FreeContentCard = ({ activity, isSelf, noButtons, isDraft, showEdit
               <>
                 <Link href={`/activite/${activity.id}`} passHref>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
-                    {activity.displayAsUser ? 'Voir le message' : 'Voir le message de Pélico'}
+                    {userIsPelico ? 'Voir le message de Pélico' : 'Voir le message'}
                   </Button>
                 </Link>
               </>
