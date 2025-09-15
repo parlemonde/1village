@@ -32,7 +32,7 @@ const H5pEditContentPage = () => {
   return (
     <div>
       <Breadcrumbs separator={<NavigateNextIcon fontSize="large" color="primary" />} aria-label="breadcrumb" style={{ marginBottom: '1rem' }}>
-        <Link href="/admin/h5p" passHref>
+        <Link href="/admin/newportal/h5p" passHref>
           <MaterialLink>
             <h1>Contenu H5P</h1>
           </MaterialLink>
@@ -48,7 +48,7 @@ const H5pEditContentPage = () => {
                 variant: 'success',
               });
               queryClient.invalidateQueries('h5p');
-              router.push(`/admin/h5p`);
+              router.push(`/admin/newportal/h5p`);
             }}
             onError={(message) => {
               enqueueSnackbar(message, {
@@ -58,7 +58,7 @@ const H5pEditContentPage = () => {
           ></H5pEditor>
         </div>
       </AdminTile>
-      <Link href="/admin/h5p" passHref>
+      <Link href="/admin/newportal/h5p" passHref>
         <Button variant="outlined" style={{ margin: '1rem 0' }} component="a">
           Retour
         </Button>
