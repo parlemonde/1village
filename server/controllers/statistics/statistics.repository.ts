@@ -4,7 +4,12 @@ import type { Activity } from '../../entities/activity';
 import type { Classroom } from '../../entities/classroom';
 import type { Village } from '../../entities/village';
 import { getCountryCodes } from '../../repositories/country.repository';
-import { getVideosCountByClassroomUser, getVideosCountByVillageId } from '../../repositories/video.repository';
+import {
+  getVideosCountByClassroomUser,
+  getVideosCountByCountryCode,
+  getVideosCountByVillageId,
+  getVideosTotalCount,
+} from '../../repositories/video.repository';
 import {
   getActivities,
   getActivitiesByClassroomUserAndPhase,
@@ -12,20 +17,25 @@ import {
   getActivitiesByVillageCountryAndPhase,
   getActivitiesByVillageIdAndPhase,
   getActivitiesCountByClassroomUser,
+  getActivitiesCountByCountry,
   getActivitiesCountByVillageId,
+  getActivitiesTotalCount,
 } from '../activities/activities.repository';
 import { getClassroomById, getClassrooms } from '../classrooms/classroom.repository';
 import {
   getCommentCountForActivities,
+  getCommentsCountByCountry,
   getCommentsCountByCountryAndPhase,
   getCommentsCountByVillageAndPhase,
   getCommentsCountByVillageCountryAndPhase,
   getCommentsCountByVillageId,
+  getCommentsTotalCount,
   getUserCommentsCount,
   getUserCommentsCountByPhase,
 } from '../comments/comments.repository';
 import type { VillageWithNameAndId } from '../villages/village.repository';
 import { getAllVillagesNames, getVillageById, getVillages } from '../villages/village.repository';
+import type { TotalActivitiesCounts } from './statistics.dto';
 
 const groupBy = <T>(list: T[], keyGetter: (item: T) => string | number) => {
   const map = new Map();
@@ -42,13 +52,6 @@ const groupBy = <T>(list: T[], keyGetter: (item: T) => string | number) => {
   });
 
   return map;
-};
-
-type GetActivityTypeCountByVillagesParams = {
-  phase?: number;
-  villageId?: number;
-  classroomId?: number;
-  format?: 'dashboard' | 'compare';
 };
 
 type PhaseActivityCounts = Omit<PhaseDetails, 'phaseId' | 'commentCount' | 'draftCount'>;
@@ -150,83 +153,6 @@ function createVillageEntry(village: VillageWithNameAndId, phaseDetails: unknown
   return villageEntry;
 }
 
-const processClassroomsForVillage = async (
-  village: { id: number; name: string },
-  classrooms: Classroom[],
-  activitiesByPhase: Map<string | number, Activity[]>,
-  phase: number | undefined,
-  classroomId: number | undefined,
-  format: 'dashboard' | 'compare',
-) => {
-  const villageClassrooms = classrooms.filter((classroom: Classroom) => classroom.villageId === village.id);
-  const classroomsByCountry = groupBy(villageClassrooms, (classroom: Classroom) => classroom.countryCode);
-
-  const classroomDetails: ClassroomData[] = [];
-
-  for (const [countryCode, countryClassrooms] of classroomsByCountry) {
-    const phaseDetails: PhaseDetails[] = [];
-
-    for (const [phaseId, phaseActivities] of activitiesByPhase) {
-      if (Number(phaseId) === Number(phase) || phase === undefined) {
-        const filteredActivities = phaseActivities.filter((activity: Activity) => {
-          const userCountryCode = (activity as unknown as { user?: { countryCode: string } }).user?.countryCode;
-          return userCountryCode === countryCode && activity.phase === Number(phaseId);
-        });
-
-        const activityCounts = await getActivityCounts(filteredActivities, Number(phaseId));
-        phaseDetails.push(activityCounts);
-      }
-    }
-
-    if (classroomId) {
-      // On veut une liste de classes
-      for (const classroom of countryClassrooms as Classroom[]) {
-        const classroomEntry = createClassroomEntry(classroom, countryCode, phaseDetails, format);
-        classroomDetails.push(classroomEntry);
-      }
-    } else {
-      // On veut une liste de pays
-      const countryEntry = createCountryEntry(countryCode, phaseDetails, format);
-      classroomDetails.push(countryEntry);
-    }
-  }
-
-  return {
-    villageName: village.name,
-    classrooms: classroomDetails,
-  };
-};
-
-export const getActivityTypeCountByVillages = async (params?: GetActivityTypeCountByVillagesParams) => {
-  const { phase, villageId, classroomId, format = 'compare' } = params || {};
-
-  let classrooms: Classroom[];
-  if (classroomId) {
-    const classroomWithSpecificId = await getClassrooms({ classroomId });
-    if (classroomWithSpecificId.length > 0) {
-      const classroomVillageId = classroomWithSpecificId[0].villageId;
-      classrooms = await getClassrooms({ countryCode: undefined, villageId: classroomVillageId });
-    } else {
-      classrooms = [];
-    }
-  } else {
-    classrooms = await getClassrooms({ countryCode: undefined, villageId, classroomId });
-  }
-
-  const villageIds = [...new Set(classrooms.map((classroom: Classroom) => classroom.villageId))] as number[];
-  const villages = await getVillages({ villageIds });
-  const activities = await getActivities({ phase, villageIds });
-  const activitiesByPhase = groupBy(activities, (activity: Activity) => activity.phase);
-
-  const result = [];
-  for (const village of villages) {
-    const villageData = await processClassroomsForVillage(village, classrooms, activitiesByPhase, phase, classroomId, format);
-    result.push(villageData);
-  }
-
-  return result;
-};
-
 const getActivityCounts = async (activities: Activity[], phaseId: number) => {
   const draftCount = activities.filter((activity: Activity) => activity.status === ActivityStatus.DRAFT).length;
 
@@ -293,7 +219,7 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
   }
 };
 
-export async function getTotalActivitiesCountsByClassroomId(classroomId: number) {
+export async function getTotalActivitiesCountsByClassroomId(classroomId: number): Promise<TotalActivitiesCounts> {
   const classroom: Classroom | null = await getClassroomById(classroomId);
 
   if (!classroom) {
@@ -307,7 +233,7 @@ export async function getTotalActivitiesCountsByClassroomId(classroomId: number)
   return { totalPublications, totalComments, totalVideos };
 }
 
-export async function getTotalActivitiesCountsByVillageId(villageId: number) {
+export async function getTotalActivitiesCountsByVillageId(villageId: number): Promise<TotalActivitiesCounts> {
   const village: Village | null = await getVillageById(villageId);
 
   if (!village) {
@@ -317,6 +243,22 @@ export async function getTotalActivitiesCountsByVillageId(villageId: number) {
   const totalPublications = await getActivitiesCountByVillageId(village.id);
   const totalComments = await getCommentsCountByVillageId(village.id);
   const totalVideos = await getVideosCountByVillageId(village.id);
+
+  return { totalPublications, totalComments, totalVideos };
+}
+
+export async function getTotalActivitiesCountsByCountryCode(countryCode: string): Promise<TotalActivitiesCounts> {
+  const totalPublications = await getActivitiesCountByCountry(countryCode);
+  const totalComments = await getCommentsCountByCountry(countryCode);
+  const totalVideos = await getVideosCountByCountryCode(countryCode);
+
+  return { totalPublications, totalComments, totalVideos };
+}
+
+export async function getTotalActivitiesCounts(): Promise<TotalActivitiesCounts> {
+  const totalPublications = await getActivitiesTotalCount();
+  const totalComments = await getCommentsTotalCount();
+  const totalVideos = await getVideosTotalCount();
 
   return { totalPublications, totalComments, totalVideos };
 }

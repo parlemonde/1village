@@ -1,4 +1,5 @@
 import type { Request } from 'express';
+import { get } from 'lodash';
 
 import type { ClassroomDetails, CountryEngagementStatus, EngagementStatus, StatsFilterParams } from '../../../types/statistics.type';
 import { GroupType } from '../../../types/statistics.type';
@@ -37,12 +38,13 @@ import { AppDataSource } from '../../utils/data-source';
 import { Controller } from '../controller';
 import type { StatisticsDto } from './statistics.dto';
 import {
-  getActivityTypeCountByVillages,
   getDetailedActivitiesCountsByClassrooms,
   getDetailedActivitiesCountsByCountries,
   getDetailedActivitiesCountsByVillage,
   getDetailedActivitiesCountsByVillages,
+  getTotalActivitiesCounts,
   getTotalActivitiesCountsByClassroomId,
+  getTotalActivitiesCountsByCountryCode,
   getTotalActivitiesCountsByVillageId,
 } from './statistics.repository';
 
@@ -385,12 +387,11 @@ statisticsController.get({ path: '/one-village' }, async (req, res) => {
     familiesWithoutAccount: await getFamiliesWithoutAccountForGlobal(),
   };
 
-  // TODO : rajouter format dashboard
-  const activityCountDetails = await getActivityTypeCountByVillages({ phase, format: 'dashboard' });
+  const totalActivityCounts = await getTotalActivitiesCounts();
 
   const response: StatisticsDto = {
     family,
-    activityCountDetails,
+    totalActivityCounts,
   };
 
   res.sendJSON(response);
@@ -525,9 +526,9 @@ statisticsController.get({ path: '/countries/:countryCode' }, async (req, res) =
     familiesWithoutAccount: await getFamiliesWithoutAccountForCountry(countryCode),
   };
 
-  const activityCountDetails = await getActivityTypeCountByVillages({ phase, format: 'dashboard' });
+  const totalActivityCounts = await getTotalActivitiesCountsByCountryCode(countryCode);
 
-  res.sendJSON({ family, activityCountDetails });
+  res.sendJSON({ family, totalActivityCounts });
 });
 
 statisticsController.get({ path: '/countries/:countryCode/engagement-status' }, async (req, res) => {
@@ -585,9 +586,9 @@ statisticsController.get({ path: '/compare/one-village' }, async (req, res) => {
     return;
   }
 
-  const activityCountDetails = await getDetailedActivitiesCountsByVillages(phase);
+  const activitiesCountsByVillages = await getDetailedActivitiesCountsByVillages(phase);
 
-  res.sendJSON(activityCountDetails);
+  res.sendJSON(activitiesCountsByVillages);
 });
 
 statisticsController.get({ path: '/compare/countries' }, async (req, res) => {
@@ -598,9 +599,9 @@ statisticsController.get({ path: '/compare/countries' }, async (req, res) => {
     return;
   }
 
-  const activityCountDetails = await getDetailedActivitiesCountsByCountries(phase);
+  const activitiesCountsByCountries = await getDetailedActivitiesCountsByCountries(phase);
 
-  res.sendJSON(activityCountDetails);
+  res.sendJSON(activitiesCountsByCountries);
 });
 
 statisticsController.get({ path: '/compare/villages/:villageId' }, async (req, res) => {
@@ -612,8 +613,8 @@ statisticsController.get({ path: '/compare/villages/:villageId' }, async (req, r
     return;
   }
 
-  const activityCountDetails = await getDetailedActivitiesCountsByVillage(villageId, phase);
-  res.sendJSON(activityCountDetails);
+  const activitiesCountsByVillageCountries = await getDetailedActivitiesCountsByVillage(villageId, phase);
+  res.sendJSON(activitiesCountsByVillageCountries);
 });
 
 statisticsController.get({ path: '/compare/classrooms' }, async (req, res) => {
@@ -625,16 +626,8 @@ statisticsController.get({ path: '/compare/classrooms' }, async (req, res) => {
     return;
   }
 
-  const activityCountDetails = await getDetailedActivitiesCountsByClassrooms(villageId, phase);
-  res.sendJSON(activityCountDetails);
-});
-
-statisticsController.get({ path: '/compare' }, async (req, res) => {
-  const phase = req.query.phase as unknown as number;
-
-  const activityCountDetails = await getActivityTypeCountByVillages({ phase });
-
-  res.sendJSON(activityCountDetails);
+  const activitiesCountsByVillageClassrooms = await getDetailedActivitiesCountsByClassrooms(villageId, phase);
+  res.sendJSON(activitiesCountsByVillageClassrooms);
 });
 
 statisticsController.get({ path: '/classrooms/:classroomId' }, async (req, res) => {

@@ -13,3 +13,11 @@ export async function getVideosCountByVillageId(villageId: number): Promise<numb
     .innerJoin('user', 'u', 'u.id = v.userId AND u.villageId = :villageId', { villageId })
     .getCount();
 }
+
+export async function getVideosCountByCountryCode(countryCode: string): Promise<number> {
+  return await videoRepository.createQueryBuilder('v').innerJoin('user', 'u', `u.id = v.userId AND u.countryCode = '${countryCode}'`).getCount();
+}
+
+export async function getVideosTotalCount(): Promise<number> {
+  return await videoRepository.count();
+}

@@ -236,20 +236,6 @@ export function useGetClassroomEngagementStatus(classroomId?: Classroom['id']) {
   });
 }
 
-async function getCompareStats(): Promise<ComparisonStatistic[]> {
-  return (
-    await axiosRequest({
-      method: 'GET',
-      baseURL: '/api',
-      url: `/statistics/compare`,
-    })
-  ).data;
-}
-
-export function useGetCompareStats() {
-  return useQuery(['compare-stats'], () => getCompareStats());
-}
-
 async function getCompareGlobalStats(phase: number) {
   return (
     await axiosRequest({

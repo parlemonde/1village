@@ -24,12 +24,7 @@ import styles from './styles/charts.module.css';
 import ClassroomsToMonitorTable from './tables/ClassroomsToMonitorTable';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
-import {
-  useGetVillagesStats,
-  useGetVillageEngagementStatus,
-  useGetClassroomsEngagementStatus,
-  useGetCompareStats,
-} from 'src/api/statistics/statistics.get';
+import { useGetVillagesStats, useGetVillageEngagementStatus, useGetClassroomsEngagementStatus } from 'src/api/statistics/statistics.get';
 import { useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
@@ -58,7 +53,6 @@ const VillageStats = () => {
   const { data: engagementStatusStatistics, isLoading: isLoadingEngagementStatusStatistics } = useGetClassroomsEngagementStatus({
     villageId: selectedVillage,
   });
-  const { data: compareData, isLoading: isLoadingCompareData } = useGetCompareStats();
 
   const totalActivitiesCounts = villageStatistics?.totalActivityCounts;
 
@@ -132,7 +126,7 @@ const VillageStats = () => {
               {firstChartData && secondChartData && <DualBarChart firstTable={firstChartData} secondTable={secondChartData} />}
             </>
           )}
-          {isLoadingSessionsStatistics || isLoadingVillageStatistics || isLoadingEngagementStatusStatistics || isLoadingCompareData ? (
+          {isLoadingSessionsStatistics || isLoadingVillageStatistics || isLoadingEngagementStatusStatistics ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
           ) : (
             <>
@@ -187,7 +181,6 @@ const VillageStats = () => {
                 </div>
 
                 {selectedVillage &&
-                  compareData &&
                   (selectedPhase === 0 ? (
                     [1, 2, 3].map((phase) => (
                       <CountryActivityPhaseAccordion
@@ -243,7 +236,6 @@ const VillageStats = () => {
                 {/* Phase tables for Familles tab */}
                 {!!selectedVillage &&
                   selectedPhase !== undefined &&
-                  compareData &&
                   (selectedPhase === 0 ? (
                     [1, 2, 3].map((phase) => (
                       <CountryActivityPhaseAccordion

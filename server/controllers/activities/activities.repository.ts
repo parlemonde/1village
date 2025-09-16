@@ -22,6 +22,10 @@ export const getActivities = async ({ phase, villageIds = [] }: GetActivitiesPar
   return await activityQB.getMany();
 };
 
+export async function getActivitiesTotalCount(): Promise<number> {
+  return activitiesRepository.count({ where: { deleteDate: undefined } });
+}
+
 export async function getActivitiesCountByClassroomUser(userId: number): Promise<number> {
   return activitiesRepository.count({ where: { userId, deleteDate: undefined } });
 }
@@ -38,6 +42,14 @@ export async function getActivitiesByVillageCountryAndPhase(villageId: number, c
     .andWhere('a.phase = :phase', { phase })
     .andWhere('a.deleteDate IS NULL')
     .getMany();
+}
+
+export async function getActivitiesCountByCountry(countryCode: string): Promise<number> {
+  return await activitiesRepository
+    .createQueryBuilder('a')
+    .innerJoin('user', 'u', `u.id = a.userId AND u.countryCode = '${countryCode}'`)
+    .andWhere('a.deleteDate IS NULL')
+    .getCount();
 }
 
 export async function getActivitiesByCountryAndPhase(countryCode: string, phase: number): Promise<Activity[]> {

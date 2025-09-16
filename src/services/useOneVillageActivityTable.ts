@@ -68,7 +68,7 @@ export function useOneVillageActivityTable(phaseId: number): cleanedEntityActivi
       isSelected: false,
     };
 
-    return [...villagesPhaseActivityCounts, totalRow];
+    return [totalRow, ...villagesPhaseActivityCounts];
   }, [phaseId, compareData, isLoading, error]);
 }
 
