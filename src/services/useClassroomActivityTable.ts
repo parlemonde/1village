@@ -12,7 +12,7 @@ const calculateTotalPublications = (phaseDetails: ComparePhaseDetail[], phaseId:
     .reduce((sum, [, value]) => sum + (value || 0), 0);
 };
 
-export function useClassroomActivityTable(villageId: number, classroomId: number, phaseId: number): ClassroomRow[] {
+export function useClassroomActivityTable(villageId: number, classroomId: number, phaseId: number): EntityActivityCounts[] {
   const { data: compareData, isLoading, error } = useGetCompareClassroomsStats(villageId, phaseId);
 
   return useMemo(() => {

@@ -39,6 +39,14 @@ export async function getActivitiesByCountryAndPhase(countryCode: string, phase:
   return await activitiesRepository
     .createQueryBuilder('a')
     .innerJoin('user', 'u', `u.id = a.userId AND u.countryCode = '${countryCode}'`)
+    .where('a.phase = :phase', { phase })
+    .getMany();
+}
+
+export async function getActivitiesByVillageIdAndPhase(villageId: number, phase: number): Promise<Activity[]> {
+  return await activitiesRepository
+    .createQueryBuilder('a')
+    .where('a.villageId = :villageId', { villageId })
     .andWhere('a.phase = :phase', { phase })
     .getMany();
 }

@@ -9,15 +9,18 @@ import {
   getActivitiesByClassroomUserAndPhase,
   getActivitiesByCountryAndPhase,
   getActivitiesByVillageCountryAndPhase,
+  getActivitiesByVillageIdAndPhase,
 } from '../activities/activities.repository';
 import { getClassrooms } from '../classrooms/classroom.repository';
 import {
   getCommentCountForActivities,
   getCommentsCountByCountryAndPhase,
+  getCommentsCountByVillageAndPhase,
   getCommentsCountByVillageCountryAndPhase,
   getUserCommentsCountByPhase,
 } from '../comments/comments.repository';
-import { getVillageById, getVillages } from '../villages/village.repository';
+import type { VillageWithNameAndId } from '../villages/village.repository';
+import { getAllVillagesNames, getVillageById, getVillages } from '../villages/village.repository';
 
 const groupBy = <T>(list: T[], keyGetter: (item: T) => string | number) => {
   const map = new Map();
@@ -54,6 +57,13 @@ type ClassroomData = {
   phaseDetails: unknown[];
 };
 
+export type VillageData = {
+  id: number;
+  name: string;
+  totalPublications?: number;
+  phaseDetails: unknown[];
+};
+
 const calculateTotalPublications = (phaseDetails: unknown[]): number => {
   return phaseDetails.reduce((total: number, phase: unknown) => {
     const phaseCounts = phase as PhaseActivityCounts;
@@ -78,7 +88,7 @@ const calculateTotalPublications = (phaseDetails: unknown[]): number => {
 const createClassroomEntry = (
   classroom: Classroom,
   countryCode: string,
-  phaseDetails: PhaseDetail[],
+  phaseDetails: PhaseDetails[],
   format: 'dashboard' | 'compare',
 ): ClassroomData => {
   const classroomName = getClassroomDisplayName(classroom);
@@ -121,6 +131,20 @@ const createCountryEntry = (countryCode: string, phaseDetails: unknown[], format
   return countryEntry;
 };
 
+function createVillageEntry(village: VillageWithNameAndId, phaseDetails: unknown[], format: 'dashboard' | 'compare'): VillageData {
+  const villageEntry: VillageData = {
+    id: village.id,
+    name: `${village.name}`,
+    phaseDetails,
+  };
+
+  if (format === 'dashboard') {
+    villageEntry.totalPublications = calculateTotalPublications(phaseDetails);
+  }
+
+  return villageEntry;
+}
+
 const processClassroomsForVillage = async (
   village: { id: number; name: string },
   classrooms: Classroom[],
@@ -135,7 +159,7 @@ const processClassroomsForVillage = async (
   const classroomDetails: ClassroomData[] = [];
 
   for (const [countryCode, countryClassrooms] of classroomsByCountry) {
-    const phaseDetails: PhaseDetail[] = [];
+    const phaseDetails: PhaseDetails[] = [];
 
     for (const [phaseId, phaseActivities] of activitiesByPhase) {
       if (Number(phaseId) === Number(phase) || phase === undefined) {
@@ -264,6 +288,34 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
   }
 };
 
+export async function getDetailedActivitiesCountsByVillages(phase: number) {
+  const format = 'compare';
+
+  const allVillages: VillageWithNameAndId[] = await getAllVillagesNames();
+
+  return await formatVillagesActivitiesByPhase(phase, allVillages, format);
+}
+
+async function formatVillagesActivitiesByPhase(
+  phase: number,
+  villages: VillageWithNameAndId[],
+  format: 'dashboard' | 'compare',
+): Promise<VillageData[]> {
+  const villageDetails: VillageData[] = [];
+
+  for (const village of villages) {
+    const activities = await getActivitiesByVillageIdAndPhase(village.id, phase);
+    const activityCounts = await getActivityCounts(activities, phase);
+
+    activityCounts.commentCount = await getCommentsCountByVillageAndPhase(village.id, phase);
+
+    const villageEntry = createVillageEntry(village, [activityCounts], format);
+    villageDetails.push(villageEntry);
+  }
+
+  return villageDetails;
+}
+
 export async function getDetailedActivitiesCountsByCountries(phase: number) {
   const format = 'compare';
 
@@ -345,7 +397,7 @@ async function formatClassroomsActivitiesByPhase(phase: number, classrooms: Clas
     const activities = await getActivitiesByClassroomUserAndPhase(classroom.user.id, phase);
     const activityCounts = await getActivityCounts(activities, phase);
 
-    const phaseDetails: PhaseDetail = activityCounts;
+    const phaseDetails: PhaseDetails = activityCounts;
     phaseDetails.commentCount = await getUserCommentsCountByPhase(classroom.user.id, phase);
 
     const classroomEntry = createClassroomEntry(classroom, classroom.countryCode, [phaseDetails], format);

@@ -41,6 +41,7 @@ import {
   getDetailedActivitiesCountsByClassrooms,
   getDetailedActivitiesCountsByCountries,
   getDetailedActivitiesCountsByVillage,
+  getDetailedActivitiesCountsByVillages,
 } from './statistics.repository';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
@@ -382,6 +383,7 @@ statisticsController.get({ path: '/one-village' }, async (req, res) => {
     familiesWithoutAccount: await getFamiliesWithoutAccountForGlobal(),
   };
 
+  // TODO : rajouter format dashboard
   const activityCountDetails = await getActivityTypeCountByVillages({ phase, format: 'dashboard' });
 
   const response: StatisticsDto = {
@@ -574,9 +576,14 @@ statisticsController.get({ path: '/countries/:countryCode/engagement-status' }, 
 });
 
 statisticsController.get({ path: '/compare/one-village' }, async (req, res) => {
-  const phase = req.query.phase as unknown as number;
+  const phase = typeof req.query.phase === 'string' ? parseInt(req.query.phase) : undefined;
 
-  const activityCountDetails = await getActivityTypeCountByVillages({ phase });
+  if (!phase) {
+    res.status(403).send(`La phase à observer est manquante`);
+    return;
+  }
+
+  const activityCountDetails = await getDetailedActivitiesCountsByVillages(phase);
 
   res.sendJSON(activityCountDetails);
 });

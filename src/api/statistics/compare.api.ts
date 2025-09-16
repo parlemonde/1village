@@ -36,6 +36,12 @@ export type EntityActivityCounts = Omit<PhaseData, 'phaseId'> & {
   [key: string]: string | number | boolean | ReactNode;
 };
 
+export type cleanedEntityActivityCounts = Omit<PhaseData, 'phaseId'> & {
+  id: string;
+  name: string;
+  isSelected: boolean;
+};
+
 export type PhaseData = {
   phaseId: number;
   commentCount: number;

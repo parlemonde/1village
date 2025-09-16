@@ -36,3 +36,11 @@ export async function getCommentsCountByCountryAndPhase(countryCode: string, pha
     .innerJoin('activity', 'a', `a.id = c.activityId AND a.phase = ${phase}`)
     .getCount();
 }
+
+export async function getCommentsCountByVillageAndPhase(villageId: number, phase: number): Promise<number> {
+  return await commentsRepository
+    .createQueryBuilder('c')
+    .innerJoin('user', 'u', `u.id = c.userId AND u.villageId = ${villageId}`)
+    .innerJoin('activity', 'a', `a.id = c.activityId AND a.phase = ${phase}`)
+    .getCount();
+}

@@ -28,8 +28,6 @@ const ClassroomActivityTable: React.FC<ClassroomActivityTableProps> = (props: Cl
     }),
   );
 
-  const columns = getClassroomActivityTableHeaders(phaseId);
-
   // Custom row style: bleu si isSelected
   const rowStyle = (row: PhaseTableRow) => {
     if (row.id === 'total') {
@@ -47,7 +45,7 @@ const ClassroomActivityTable: React.FC<ClassroomActivityTableProps> = (props: Cl
         admin={false}
         emptyPlaceholder={<p>Aucune donnée pour cette classe</p>}
         data={tableData}
-        columns={columns}
+        columns={getClassroomActivityTableHeaders(phaseId)}
         rowStyle={rowStyle}
         tableLayout="auto"
       />

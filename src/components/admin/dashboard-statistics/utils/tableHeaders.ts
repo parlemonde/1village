@@ -78,7 +78,7 @@ export function getPhaseTableHeaders(phaseId: number, baseHeaders: PhaseTableHea
 }
 
 export function getVillageActivityTableHeaders(phaseId: number) {
-  const baseHeaders = [{ key: 'villageName', label: 'Nom du village', sortable: true }];
+  const baseHeaders = [{ key: 'name', label: 'Nom du village', sortable: true }];
 
   return getPhaseTableHeaders(phaseId, baseHeaders);
 }
