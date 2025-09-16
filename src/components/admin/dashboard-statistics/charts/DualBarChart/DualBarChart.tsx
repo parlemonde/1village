@@ -1,5 +1,10 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LabelList } from 'recharts';
+
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+
+import DashboardCard from '../../DashboardCard';
 
 interface ClassroomChartData {
   name: string;
@@ -12,32 +17,72 @@ export interface CountryChartData {
 }
 
 interface DualBarChartProps {
-  firstTable: CountryChartData;
-  secondTable: CountryChartData;
+  data: CountryChartData[];
 }
 
-export default function DualBarChart({ firstTable, secondTable }: Readonly<DualBarChartProps>) {
-  return (
-    <div style={{ display: 'flex', justifyContent: 'space-around', padding: '20px', backgroundColor: '#f7f7f9', borderRadius: '10px' }}>
-      <ResponsiveContainer width="45%" height={300}>
-        <BarChart data={firstTable.data} barSize={15} margin={{ top: 20, right: 20, left: 20, bottom: 20 }}>
-          <YAxis type="number" tickLine={false} axisLine={false} tick={{ fill: '#666' }} />
-          <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fill: '#666' }} />
-          <Tooltip />
-          <Bar dataKey="value" fill="#42a5f5" radius={[10, 10, 0, 0]} />
-        </BarChart>
-      </ResponsiveContainer>
-      <div style={{ textAlign: 'center' }}>{firstTable.country}</div>
+export default function DualBarChart({ data }: DualBarChartProps) {
+  const maxValue = Math.max(...data.flatMap((country) => country.data.map((item) => item.value)));
 
-      <ResponsiveContainer width="45%" height={300}>
-        <BarChart data={secondTable.data} barSize={15} margin={{ top: 20, right: 20, left: 20, bottom: 20 }}>
-          <YAxis type="number" tickLine={false} axisLine={false} tick={{ fill: '#666' }} />
-          <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fill: '#666' }} />
-          <Tooltip />
-          <Bar dataKey="value" fill="#ec407a" radius={[10, 10, 0, 0]} />
-        </BarChart>
-      </ResponsiveContainer>
-      <div style={{ textAlign: 'center' }}>{secondTable.country}</div>
-    </div>
+  const VerticalLabelInsideBar = (props: any) => {
+    const { x, y, width, height, value } = props;
+    const label: string = String(value ?? '');
+
+    if (!label) return null;
+
+    const labelX = x + width / 2;
+    const labelY = y + height / 2;
+
+    const baseSize = Math.floor(width * 0.8);
+    const fontSize = Math.max(8, Math.min(14, baseSize));
+
+    return (
+      <text
+        x={labelX}
+        y={labelY}
+        fill="#fff"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fontSize={fontSize}
+        fontWeight="bold"
+        transform={`rotate(-90, ${labelX}, ${labelY})`}
+      >
+        {label}
+      </text>
+    );
+  };
+
+  const renderBarChart = (countryChartData: CountryChartData, barChartColor: string, showYAxisLabels: boolean = false) => {
+    return (
+      <Box width="45%" display="flex" flexDirection="column" alignItems="center">
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={countryChartData.data} barSize={15} margin={{ top: 0, right: 15, left: 15, bottom: 0 }}>
+            <YAxis type="number" tickLine={false} axisLine={false} tick={showYAxisLabels} domain={[0, maxValue]} />
+            <XAxis dataKey="name" tickLine={false} axisLine={false} tick={false} />
+            <Tooltip />
+            <Bar dataKey="value" fill={barChartColor} radius={[16, 16, 16, 16]}>
+              <LabelList dataKey="name" position="insideTop" content={<VerticalLabelInsideBar />} />
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+        <Typography>{countryChartData.country}</Typography>
+      </Box>
+    );
+  };
+
+  return (
+    <DashboardCard flexDirection="row">
+      <Typography
+        variant="caption"
+        sx={{
+          writingMode: 'vertical-rl',
+          fontStyle: 'italic',
+          transform: 'rotate(180deg)',
+        }}
+      >
+        Publications & commentaires
+      </Typography>
+      {renderBarChart(data[0], '#78BEFF', true)}
+      {renderBarChart(data[1], '#FF57F8')}
+    </DashboardCard>
   );
 }

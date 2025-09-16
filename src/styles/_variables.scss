@@ -28,16 +28,19 @@ $big-screen: 2000px;
     @content;
   }
 }
+
 @mixin for-small-screen {
   @media (max-width: $small-screen) {
     @content;
   }
 }
+
 @mixin for-laptop-screen-up {
   @media (min-width: $medium-screen) {
     @content;
   }
 }
+
 @mixin for-big-screen-up {
   @media (min-width: $big-screen) {
     @content;
@@ -52,6 +55,7 @@ $big-screen: 2000px;
   text-align: justify;
   margin-right: -1rem;
   padding-right: 1rem;
+
   &:before {
     content: '...';
     position: absolute;
@@ -59,6 +63,7 @@ $big-screen: 2000px;
     background: $bgColor;
     bottom: 0;
   }
+
   &:after {
     content: '';
     position: absolute;
