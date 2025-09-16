@@ -82,7 +82,7 @@ export function useGetCountriesEngagementStatuses() {
 
 export function useGetVillagesStats(villageId?: number, phase?: number) {
   return useQuery(['villages-stats', villageId, phase], () => getVillagesStats(villageId, phase), {
-    enabled: villageId !== null,
+    enabled: !!villageId,
   });
 }
 

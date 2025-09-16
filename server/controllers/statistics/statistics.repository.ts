@@ -4,19 +4,24 @@ import type { Activity } from '../../entities/activity';
 import type { Classroom } from '../../entities/classroom';
 import type { Village } from '../../entities/village';
 import { getCountryCodes } from '../../repositories/country.repository';
+import { getVideosCountByClassroomUser, getVideosCountByVillageId } from '../../repositories/video.repository';
 import {
   getActivities,
   getActivitiesByClassroomUserAndPhase,
   getActivitiesByCountryAndPhase,
   getActivitiesByVillageCountryAndPhase,
   getActivitiesByVillageIdAndPhase,
+  getActivitiesCountByClassroomUser,
+  getActivitiesCountByVillageId,
 } from '../activities/activities.repository';
-import { getClassrooms } from '../classrooms/classroom.repository';
+import { getClassroomById, getClassrooms } from '../classrooms/classroom.repository';
 import {
   getCommentCountForActivities,
   getCommentsCountByCountryAndPhase,
   getCommentsCountByVillageAndPhase,
   getCommentsCountByVillageCountryAndPhase,
+  getCommentsCountByVillageId,
+  getUserCommentsCount,
   getUserCommentsCountByPhase,
 } from '../comments/comments.repository';
 import type { VillageWithNameAndId } from '../villages/village.repository';
@@ -287,6 +292,34 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
     return { ...baseActivityCount };
   }
 };
+
+export async function getTotalActivitiesCountsByClassroomId(classroomId: number) {
+  const classroom: Classroom | null = await getClassroomById(classroomId);
+
+  if (!classroom) {
+    throw new Error(`Classroom with id ${classroomId} not found`);
+  }
+
+  const totalPublications = await getActivitiesCountByClassroomUser(classroom.user.id);
+  const totalComments = await getUserCommentsCount(classroom.user.id);
+  const totalVideos = await getVideosCountByClassroomUser(classroom.user.id);
+
+  return { totalPublications, totalComments, totalVideos };
+}
+
+export async function getTotalActivitiesCountsByVillageId(villageId: number) {
+  const village: Village | null = await getVillageById(villageId);
+
+  if (!village) {
+    throw new Error(`Village with id ${villageId} not found`);
+  }
+
+  const totalPublications = await getActivitiesCountByVillageId(village.id);
+  const totalComments = await getCommentsCountByVillageId(village.id);
+  const totalVideos = await getVideosCountByVillageId(village.id);
+
+  return { totalPublications, totalComments, totalVideos };
+}
 
 export async function getDetailedActivitiesCountsByVillages(phase: number) {
   const format = 'compare';

@@ -26,6 +26,6 @@ export async function getAllVillagesNames(): Promise<VillageWithNameAndId[]> {
   return villageRepository.find({ select: { id: true, name: true } });
 }
 
-export async function getVillageById(id: number) {
-  return villageRepository.findOneBy({ id });
+export async function getVillageById(id: number): Promise<Village | null> {
+  return await villageRepository.findOneBy({ id });
 }

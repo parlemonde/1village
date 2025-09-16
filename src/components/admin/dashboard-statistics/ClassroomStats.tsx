@@ -5,7 +5,6 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box, Tab, Tabs } from '@mui/material';
 
 import { OneVillageTable } from '../OneVillageTable';
-import { getCommentCount, getPublicationCount, getVideoCount } from '../StatisticsUtils';
 import CountryActivityPhaseAccordion from './CountryActivityPhaseAccordion';
 import EntityEngagementStatus, { EntityType } from './EntityEngagementStatus';
 import Loader, { AnalyticsDataType } from './Loader';
@@ -56,9 +55,7 @@ const ClassroomStats = () => {
   const { data: classroomDetails, isLoading: isLoadingClassroomDetail } = useGetClassroomDetails(selectedClassroom);
   const { data: compareData, isLoading: isLoadingCompareData } = useGetCompareStats();
 
-  const videoCount = getVideoCount(selectedClassroomStatistics);
-  const commentCount = getCommentCount(selectedClassroomStatistics);
-  const publicationCount = getPublicationCount(selectedClassroomStatistics);
+  const totalActivitiesCounts = selectedClassroomStatistics?.totalActivityCounts;
 
   useEffect(() => {
     if (selectedClassroomStatistics?.family?.familiesWithoutAccount) {
@@ -129,7 +126,11 @@ const ClassroomStats = () => {
                   <BarCharts dataByMonth={mockDataByMonth} title={BarChartTitle} />
                 </div>
                 <div style={{ marginTop: '2.5rem' }}>
-                  <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
+                  <ClassesExchangesCard
+                    totalPublications={totalActivitiesCounts?.totalPublications || 0}
+                    totalComments={totalActivitiesCounts?.totalComments || 0}
+                    totalVideos={totalActivitiesCounts?.totalVideos || 0}
+                  />
                 </div>
 
                 {selectedClassroom &&

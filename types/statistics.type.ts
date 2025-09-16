@@ -89,6 +89,11 @@ interface FamillyStats
 export interface VillageStats {
   family: FamillyStats;
   activityCountDetails: ActivityCountDetails[];
+  totalActivityCounts: {
+    totalPublications: number;
+    totalComments: number;
+    totalVideos: number;
+  };
 }
 
 export interface FamiliesWithoutAccount {

@@ -5,7 +5,6 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Tabs, Tab, Box } from '@mui/material';
 
 import { OneVillageTable } from '../OneVillageTable';
-import { getVideoCount, getCommentCount, getPublicationCount } from '../StatisticsUtils';
 import CountryActivityPhaseAccordion from './CountryActivityPhaseAccordion';
 import EntityEngagementStatus, { EntityType } from './EntityEngagementStatus';
 import Loader, { AnalyticsDataType } from './Loader';
@@ -61,9 +60,7 @@ const VillageStats = () => {
   });
   const { data: compareData, isLoading: isLoadingCompareData } = useGetCompareStats();
 
-  const videoCount = getVideoCount(villageStatistics);
-  const commentCount = getCommentCount(villageStatistics);
-  const publicationCount = getPublicationCount(villageStatistics);
+  const totalActivitiesCounts = villageStatistics?.totalActivityCounts;
 
   const barChartData = sessionsStatistics?.barChartData || [];
 
@@ -181,7 +178,11 @@ const VillageStats = () => {
                   <BarCharts dataByMonth={barChartData} title="Évolution des connexions" />
                 </div>
                 <div className="statistic__average--container" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gridGap: '2rem' }}>
-                  <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
+                  <ClassesExchangesCard
+                    totalPublications={totalActivitiesCounts?.totalPublications || 0}
+                    totalComments={totalActivitiesCounts?.totalComments || 0}
+                    totalVideos={totalActivitiesCounts?.totalVideos || 0}
+                  />
                   <ClassesContributionCard />
                 </div>
 

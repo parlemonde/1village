@@ -42,6 +42,8 @@ import {
   getDetailedActivitiesCountsByCountries,
   getDetailedActivitiesCountsByVillage,
   getDetailedActivitiesCountsByVillages,
+  getTotalActivitiesCountsByClassroomId,
+  getTotalActivitiesCountsByVillageId,
 } from './statistics.repository';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
@@ -454,11 +456,11 @@ statisticsController.get({ path: '/villages/:villageId' }, async (req, res) => {
     familiesWithoutAccount: await getFamiliesWithoutAccountForVillage(villageId),
   };
 
-  const activityCountDetails = await getActivityTypeCountByVillages({ phase, villageId, format: 'dashboard' });
+  const totalActivityCounts = await getTotalActivitiesCountsByVillageId(villageId);
 
   res.sendJSON({
     family,
-    activityCountDetails,
+    totalActivityCounts,
   });
 });
 
@@ -655,7 +657,7 @@ statisticsController.get({ path: '/classrooms/:classroomId' }, async (req, res) 
   const connectedFamiliesCount = await getConnectedFamiliesCountForClassroom(classroomId, phase);
   const familiesWithoutAccount = await getFamiliesWithoutAccountForClassroom(classroomId);
 
-  const activityCountDetails = await getActivityTypeCountByVillages({ phase, classroomId });
+  const totalActivityCounts = await getTotalActivitiesCountsByClassroomId(classroomId);
 
   const response: StatisticsDto = {
     family: {
@@ -673,7 +675,7 @@ statisticsController.get({ path: '/classrooms/:classroomId' }, async (req, res) 
       connectedFamiliesCount,
       familiesWithoutAccount,
     },
-    activityCountDetails,
+    totalActivityCounts,
   };
 
   res.sendJSON(response);

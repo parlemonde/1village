@@ -16,5 +16,13 @@ export interface StatisticsDto {
     familyAccountsCount?: number;
     floatingAccounts?: Array<any>;
   };
-  activityCountDetails: any;
+  // TODO : remove
+  activityCountDetails?: any;
+  totalActivityCounts?: TotalActivitiesCounts;
+}
+
+export interface TotalActivitiesCounts {
+  totalPublications: number;
+  totalComments: number;
+  totalVideos: number;
 }

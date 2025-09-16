@@ -22,8 +22,12 @@ export const getActivities = async ({ phase, villageIds = [] }: GetActivitiesPar
   return await activityQB.getMany();
 };
 
+export async function getActivitiesCountByClassroomUser(userId: number): Promise<number> {
+  return activitiesRepository.count({ where: { userId, deleteDate: undefined } });
+}
+
 export async function getActivitiesByClassroomUserAndPhase(userId: number, phase?: number): Promise<Activity[]> {
-  return activitiesRepository.find({ where: { userId, phase } });
+  return activitiesRepository.find({ where: { userId, phase, deleteDate: undefined } });
 }
 
 export async function getActivitiesByVillageCountryAndPhase(villageId: number, countryCode: string, phase: number): Promise<Activity[]> {
@@ -32,6 +36,7 @@ export async function getActivitiesByVillageCountryAndPhase(villageId: number, c
     .innerJoin('user', 'u', `u.id = a.userId AND u.countryCode = '${countryCode}'`)
     .where('a.villageId = :villageId', { villageId })
     .andWhere('a.phase = :phase', { phase })
+    .andWhere('a.deleteDate IS NULL')
     .getMany();
 }
 
@@ -40,7 +45,16 @@ export async function getActivitiesByCountryAndPhase(countryCode: string, phase:
     .createQueryBuilder('a')
     .innerJoin('user', 'u', `u.id = a.userId AND u.countryCode = '${countryCode}'`)
     .where('a.phase = :phase', { phase })
+    .andWhere('a.deleteDate IS NULL')
     .getMany();
+}
+
+export async function getActivitiesCountByVillageId(villageId: number): Promise<number> {
+  return await activitiesRepository
+    .createQueryBuilder('a')
+    .where('a.villageId = :villageId', { villageId })
+    .andWhere('a.deleteDate IS NULL')
+    .getCount();
 }
 
 export async function getActivitiesByVillageIdAndPhase(villageId: number, phase: number): Promise<Activity[]> {
@@ -48,5 +62,6 @@ export async function getActivitiesByVillageIdAndPhase(villageId: number, phase:
     .createQueryBuilder('a')
     .where('a.villageId = :villageId', { villageId })
     .andWhere('a.phase = :phase', { phase })
+    .andWhere('a.deleteDate IS NULL')
     .getMany();
 }
