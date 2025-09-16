@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
+import type { VillageInteractionsActivity } from 'types/analytics/village-interactions-activity';
 import type { Classroom } from 'types/classroom.type';
 import type {
   EngagementStatusParams,
@@ -76,6 +77,20 @@ async function getCountriesEngagementStatuses(): Promise<CountryEngagementStatus
 
 export function useGetCountriesEngagementStatuses() {
   return useQuery(['countries-engagement-statuses-stats'], () => getCountriesEngagementStatuses());
+}
+
+async function getVillageEngagementStatuses(): Promise<VillageInteractionsActivity[]> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: '/statistics/one-village/village-engagement-statuses',
+    })
+  ).data;
+}
+
+export function useGetVillageEngagementStatuses() {
+  return useQuery(['village-engagement-statuses-stats'], () => getVillageEngagementStatuses());
 }
 
 export const useGetVillagesStats = (villageId?: number, phase?: number) => {
