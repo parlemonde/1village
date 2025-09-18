@@ -6,8 +6,11 @@ import type { Village } from '../../entities/village';
 import { getCountryCodes } from '../../repositories/country.repository';
 import {
   getVideosCountByClassroomUser,
+  getVideosCountByClassroomUserAndPhase,
   getVideosCountByCountryCode,
+  getVideosCountByCountryCodeAndPhase,
   getVideosCountByVillageId,
+  getVideosCountByVillageIdAndPhase,
   getVideosTotalCount,
 } from '../../repositories/video.repository';
 import {
@@ -72,13 +75,7 @@ function getClassroomDisplayName(classroom: Classroom): string {
 const getActivityCounts = async (activities: Activity[], phaseId: number) => {
   const draftCount = activities.filter((activity: Activity) => activity.status === ActivityStatus.DRAFT).length;
 
-  // Control if activity content is an array because of bad data in a staging database...
-  const videoCount = activities.reduce(
-    (count, activity) => count + (Array.isArray(activity.content) ? activity.content.filter((content) => content.type === 'video').length : 0),
-    0,
-  );
-
-  const baseActivityCount = { phaseId, draftCount, videoCount };
+  const baseActivityCount = { phaseId, draftCount };
 
   const activityByType = groupBy(activities, (activity: Activity) => activity.type);
 
@@ -192,6 +189,7 @@ async function formatVillagesActivitiesByPhase(phase: number, villages: VillageW
     const phaseDetails: PhaseDetails = {
       ...(await getActivityCounts(activities, phase)),
       commentCount: await getCommentsCountByVillageAndPhase(village.id, phase),
+      videoCount: await getVideosCountByVillageIdAndPhase(village.id, phase),
     };
 
     const villageEntry = { ...village, phaseDetails };
@@ -215,6 +213,7 @@ async function formatCountriesActivitiesByPhase(phase: number, countryCodes: str
     const phaseDetails: PhaseDetails = {
       ...(await getActivityCounts(activities, phase)),
       commentCount: await getCommentsCountByCountryAndPhase(countryCode, phase),
+      videoCount: await getVideosCountByCountryCodeAndPhase(countryCode, phase),
     };
 
     countriesDetails.push({ countryCode, phaseDetails });
@@ -242,6 +241,7 @@ async function formatVillageActivitiesByPhase(villageId: number, phase: number, 
     const phaseDetails: PhaseDetails = {
       ...(await getActivityCounts(activities, phase)),
       commentCount: await getCommentsCountByVillageCountryAndPhase(villageId, countryCode, phase),
+      videoCount: await getVideosCountByVillageIdAndPhase(villageId, phase),
     };
 
     countriesDetails.push({ countryCode, phaseDetails });
@@ -270,6 +270,7 @@ async function formatClassroomsActivitiesByPhase(phase: number, classrooms: Clas
     const phaseDetails: PhaseDetails = {
       ...(await getActivityCounts(activities, phase)),
       commentCount: await getUserCommentsCountByPhase(classroom.user.id, phase),
+      videoCount: await getVideosCountByClassroomUserAndPhase(classroom.user.id, phase),
     };
 
     const classroomEntry = createClassroomEntry(classroom, phaseDetails);
