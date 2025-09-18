@@ -172,7 +172,7 @@ export const Navigation = (): JSX.Element => {
         phase: 2,
         disabled: isParent,
       },
-      /* VIL-727: invisibiliser sans supprimer la fonctionalité
+      /* 
       {
         label: 'Réagir à une activité',
         path: '/reagir-a-une-activite/1',
