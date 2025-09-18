@@ -4,7 +4,10 @@ import { AppDataSource } from '../../utils/data-source';
 const commentsRepository = AppDataSource.getRepository(Comment);
 
 export async function getCommentsTotalCount(phase?: number): Promise<number> {
-  const qb = commentsRepository.createQueryBuilder('c').innerJoin('user', 'u', `u.id = c.userId`).innerJoin('activity', 'a', `a.id = c.activityId`);
+  const qb = commentsRepository
+    .createQueryBuilder('c')
+    .innerJoin('user', 'u', `u.id = c.userId AND u.type = 3 AND u.accountRegistration = 10`)
+    .innerJoin('activity', 'a', `a.id = c.activityId`);
 
   if (phase) {
     qb.andWhere('a.phase = :phase', { phase });
@@ -16,7 +19,7 @@ export async function getCommentsTotalCount(phase?: number): Promise<number> {
 export async function getUserCommentsCount(userId: number, phase?: number): Promise<number> {
   const qb = commentsRepository
     .createQueryBuilder('c')
-    .innerJoin('user', 'u', `u.id = c.userId AND u.id = ${userId}`)
+    .innerJoin('user', 'u', `u.id = c.userId AND u.id = ${userId} AND u.type = 3 AND u.accountRegistration = 10`)
     .innerJoin('activity', 'a', `a.id = c.activityId`);
 
   if (phase) {
@@ -29,7 +32,11 @@ export async function getUserCommentsCount(userId: number, phase?: number): Prom
 export async function getCommentsCountByVillageCountryAndPhase(villageId: number, countryCode: string, phase: number): Promise<number> {
   return await commentsRepository
     .createQueryBuilder('c')
-    .innerJoin('user', 'u', `u.id = c.userId AND u.countryCode = '${countryCode}' AND u.villageId = ${villageId}`)
+    .innerJoin(
+      'user',
+      'u',
+      `u.id = c.userId AND u.countryCode = '${countryCode}' AND u.villageId = ${villageId} AND u.type = 3 AND u.accountRegistration = 10`,
+    )
     .innerJoin('activity', 'a', `a.id = c.activityId AND a.phase = ${phase}`)
     .getCount();
 }
@@ -37,7 +44,7 @@ export async function getCommentsCountByVillageCountryAndPhase(villageId: number
 export async function getCommentsCountByCountry(countryCode: string, phase?: number): Promise<number> {
   const qb = commentsRepository
     .createQueryBuilder('c')
-    .innerJoin('user', 'u', `u.id = c.userId AND u.countryCode = '${countryCode}'`)
+    .innerJoin('user', 'u', `u.id = c.userId AND u.countryCode = '${countryCode}' AND u.type = 3 AND u.accountRegistration = 10`)
     .innerJoin('activity', 'a', `a.id = c.activityId`);
 
   if (phase) {
@@ -50,7 +57,7 @@ export async function getCommentsCountByCountry(countryCode: string, phase?: num
 export async function getCommentsCountByVillageId(villageId: number, phase?: number): Promise<number> {
   const qb = commentsRepository
     .createQueryBuilder('c')
-    .innerJoin('user', 'u', `u.id = c.userId AND u.villageId = ${villageId}`)
+    .innerJoin('user', 'u', `u.id = c.userId AND u.villageId = ${villageId} AND u.type = 3 AND u.accountRegistration = 10`)
     .innerJoin('activity', 'a', `a.id = c.activityId`);
 
   if (phase) {
