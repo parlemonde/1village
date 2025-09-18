@@ -119,6 +119,13 @@ export const Navigation = (): JSX.Element => {
     () => [
       // ---- PHASE 1 ----
       {
+        label: 'Publier un indice',
+        path: '/indice-culturel',
+        icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 1,
+        disabled: isParent,
+      },
+      {
         label: 'Créer sa mascotte',
         path:
           mascotteActivity && mascotteActivity.id !== 0 && mascotteActivity.status === ActivityStatus.PUBLISHED
@@ -129,13 +136,6 @@ export const Navigation = (): JSX.Element => {
         icon: <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 1,
         disabled: !isTeacher,
-      },
-      {
-        label: 'Publier un indice',
-        path: '/indice-culturel',
-        icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-        phase: 1,
-        disabled: isParent,
       },
       // ---- PHASE 2 ----
       {
