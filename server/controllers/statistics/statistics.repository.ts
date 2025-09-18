@@ -6,11 +6,9 @@ import type { Village } from '../../entities/village';
 import { getCountryCodes } from '../../repositories/country.repository';
 import {
   getVideosCountByClassroomUser,
-  getVideosCountByClassroomUserAndPhase,
   getVideosCountByCountryCode,
-  getVideosCountByCountryCodeAndPhase,
+  getVideosCountByVillageCountryAndPhase,
   getVideosCountByVillageId,
-  getVideosCountByVillageIdAndPhase,
   getVideosTotalCount,
 } from '../../repositories/video.repository';
 import {
@@ -26,13 +24,10 @@ import {
 import { getClassroomById, getClassrooms } from '../classrooms/classroom.repository';
 import {
   getCommentsCountByCountry,
-  getCommentsCountByCountryAndPhase,
-  getCommentsCountByVillageAndPhase,
   getCommentsCountByVillageCountryAndPhase,
   getCommentsCountByVillageId,
   getCommentsTotalCount,
   getUserCommentsCount,
-  getUserCommentsCountByPhase,
 } from '../comments/comments.repository';
 import type { VillageWithNameAndId } from '../villages/village.repository';
 import { getAllVillagesNames, getVillageById } from '../villages/village.repository';
@@ -131,46 +126,46 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
   }
 };
 
-export async function getTotalActivitiesCountsByClassroomId(classroomId: number): Promise<TotalActivitiesCounts> {
+export async function getTotalActivitiesCountsByClassroomId(classroomId: number, phase?: number): Promise<TotalActivitiesCounts> {
   const classroom: Classroom | null = await getClassroomById(classroomId);
 
   if (!classroom) {
     throw new Error(`Classroom with id ${classroomId} not found`);
   }
 
-  const totalPublications = await getActivitiesCountByClassroomUser(classroom.user.id);
-  const totalComments = await getUserCommentsCount(classroom.user.id);
-  const totalVideos = await getVideosCountByClassroomUser(classroom.user.id);
+  const totalPublications = await getActivitiesCountByClassroomUser(classroom.user.id, phase);
+  const totalComments = await getUserCommentsCount(classroom.user.id, phase);
+  const totalVideos = await getVideosCountByClassroomUser(classroom.user.id, phase);
 
   return { totalPublications, totalComments, totalVideos };
 }
 
-export async function getTotalActivitiesCountsByVillageId(villageId: number): Promise<TotalActivitiesCounts> {
+export async function getTotalActivitiesCountsByVillageId(villageId: number, phase?: number): Promise<TotalActivitiesCounts> {
   const village: Village | null = await getVillageById(villageId);
 
   if (!village) {
     throw new Error(`Village with id ${villageId} not found`);
   }
 
-  const totalPublications = await getActivitiesCountByVillageId(village.id);
-  const totalComments = await getCommentsCountByVillageId(village.id);
-  const totalVideos = await getVideosCountByVillageId(village.id);
+  const totalPublications = await getActivitiesCountByVillageId(village.id, phase);
+  const totalComments = await getCommentsCountByVillageId(village.id, phase);
+  const totalVideos = await getVideosCountByVillageId(village.id, phase);
 
   return { totalPublications, totalComments, totalVideos };
 }
 
-export async function getTotalActivitiesCountsByCountryCode(countryCode: string): Promise<TotalActivitiesCounts> {
-  const totalPublications = await getActivitiesCountByCountry(countryCode);
-  const totalComments = await getCommentsCountByCountry(countryCode);
-  const totalVideos = await getVideosCountByCountryCode(countryCode);
+export async function getTotalActivitiesCountsByCountryCode(countryCode: string, phase?: number): Promise<TotalActivitiesCounts> {
+  const totalPublications = await getActivitiesCountByCountry(countryCode, phase);
+  const totalComments = await getCommentsCountByCountry(countryCode, phase);
+  const totalVideos = await getVideosCountByCountryCode(countryCode, phase);
 
   return { totalPublications, totalComments, totalVideos };
 }
 
-export async function getTotalActivitiesCounts(): Promise<TotalActivitiesCounts> {
-  const totalPublications = await getActivitiesTotalCount();
-  const totalComments = await getCommentsTotalCount();
-  const totalVideos = await getVideosTotalCount();
+export async function getTotalActivitiesCounts(phase?: number): Promise<TotalActivitiesCounts> {
+  const totalPublications = await getActivitiesTotalCount(phase);
+  const totalComments = await getCommentsTotalCount(phase);
+  const totalVideos = await getVideosTotalCount(phase);
 
   return { totalPublications, totalComments, totalVideos };
 }
@@ -188,8 +183,8 @@ async function formatVillagesActivitiesByPhase(phase: number, villages: VillageW
     const activities = await getActivitiesByVillageIdAndPhase(village.id, phase);
     const phaseDetails: PhaseDetails = {
       ...(await getActivityCounts(activities, phase)),
-      commentCount: await getCommentsCountByVillageAndPhase(village.id, phase),
-      videoCount: await getVideosCountByVillageIdAndPhase(village.id, phase),
+      commentCount: await getCommentsCountByVillageId(village.id, phase),
+      videoCount: await getVideosCountByVillageId(village.id, phase),
     };
 
     const villageEntry = { ...village, phaseDetails };
@@ -212,8 +207,8 @@ async function formatCountriesActivitiesByPhase(phase: number, countryCodes: str
     const activities = await getActivitiesByCountryAndPhase(countryCode, phase);
     const phaseDetails: PhaseDetails = {
       ...(await getActivityCounts(activities, phase)),
-      commentCount: await getCommentsCountByCountryAndPhase(countryCode, phase),
-      videoCount: await getVideosCountByCountryCodeAndPhase(countryCode, phase),
+      commentCount: await getCommentsCountByCountry(countryCode, phase),
+      videoCount: await getVideosCountByCountryCode(countryCode, phase),
     };
 
     countriesDetails.push({ countryCode, phaseDetails });
@@ -241,7 +236,7 @@ async function formatVillageActivitiesByPhase(villageId: number, phase: number, 
     const phaseDetails: PhaseDetails = {
       ...(await getActivityCounts(activities, phase)),
       commentCount: await getCommentsCountByVillageCountryAndPhase(villageId, countryCode, phase),
-      videoCount: await getVideosCountByVillageIdAndPhase(villageId, phase),
+      videoCount: await getVideosCountByVillageCountryAndPhase(villageId, countryCode, phase),
     };
 
     countriesDetails.push({ countryCode, phaseDetails });
@@ -269,8 +264,8 @@ async function formatClassroomsActivitiesByPhase(phase: number, classrooms: Clas
 
     const phaseDetails: PhaseDetails = {
       ...(await getActivityCounts(activities, phase)),
-      commentCount: await getUserCommentsCountByPhase(classroom.user.id, phase),
-      videoCount: await getVideosCountByClassroomUserAndPhase(classroom.user.id, phase),
+      commentCount: await getUserCommentsCount(classroom.user.id, phase),
+      videoCount: await getVideosCountByClassroomUser(classroom.user.id, phase),
     };
 
     const classroomEntry = createClassroomEntry(classroom, phaseDetails);

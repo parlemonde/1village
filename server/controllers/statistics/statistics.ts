@@ -376,7 +376,7 @@ statisticsController.get({ path: '/classrooms/details/:classroomId' }, async (re
 });
 
 statisticsController.get({ path: '/one-village' }, async (req, res) => {
-  const phase = req.query.phase as unknown as number;
+  const phase = req.query.phase ? parseInt(req.query.phase as string) : undefined;
 
   const filters: StatsFilterParams = {};
 
@@ -386,14 +386,9 @@ statisticsController.get({ path: '/one-village' }, async (req, res) => {
     familiesWithoutAccount: await getFamiliesWithoutAccountForGlobal(),
   };
 
-  const totalActivityCounts = await getTotalActivitiesCounts();
+  const totalActivityCounts = await getTotalActivitiesCounts(phase);
 
-  const response: StatisticsDto = {
-    family,
-    totalActivityCounts,
-  };
-
-  res.sendJSON(response);
+  res.sendJSON({ family, totalActivityCounts });
 });
 
 statisticsController.get({ path: '/one-village/countries-engagement-statuses' }, async (req, res) => {
@@ -447,7 +442,7 @@ statisticsController.get({ path: '/one-village/countries-engagement-statuses' },
 
 statisticsController.get({ path: '/villages/:villageId' }, async (req, res) => {
   const villageId = parseInt(req.params.villageId);
-  const phase = req.query.phase as unknown as number;
+  const phase = req.query.phase ? parseInt(req.query.phase as string) : undefined;
   const filters: StatsFilterParams = { villageId, phase };
 
   const family = {
@@ -456,12 +451,9 @@ statisticsController.get({ path: '/villages/:villageId' }, async (req, res) => {
     familiesWithoutAccount: await getFamiliesWithoutAccountForVillage(villageId),
   };
 
-  const totalActivityCounts = await getTotalActivitiesCountsByVillageId(villageId);
+  const totalActivityCounts = await getTotalActivitiesCountsByVillageId(villageId, phase);
 
-  res.sendJSON({
-    family,
-    totalActivityCounts,
-  });
+  res.sendJSON({ family, totalActivityCounts });
 });
 
 statisticsController.get({ path: '/villages/:villageId/engagement-status' }, async (req, res) => {
@@ -515,7 +507,7 @@ statisticsController.get({ path: '/villages/:villageId/engagement-status' }, asy
 
 statisticsController.get({ path: '/countries/:countryCode' }, async (req, res) => {
   const { countryCode } = req.params;
-  const phase = req.query.phase as unknown as number;
+  const phase = req.query.phase ? parseInt(req.query.phase as string) : undefined;
 
   const filters: StatsFilterParams = { countryId: countryCode, phase };
 
@@ -525,7 +517,7 @@ statisticsController.get({ path: '/countries/:countryCode' }, async (req, res) =
     familiesWithoutAccount: await getFamiliesWithoutAccountForCountry(countryCode),
   };
 
-  const totalActivityCounts = await getTotalActivitiesCountsByCountryCode(countryCode);
+  const totalActivityCounts = await getTotalActivitiesCountsByCountryCode(countryCode, phase);
 
   res.sendJSON({ family, totalActivityCounts });
 });
@@ -631,7 +623,7 @@ statisticsController.get({ path: '/compare/classrooms' }, async (req, res) => {
 
 statisticsController.get({ path: '/classrooms/:classroomId' }, async (req, res) => {
   const classroomId = parseInt(req.params.classroomId);
-  const phase = req.query.phase as unknown as number;
+  const phase = req.query.phase ? parseInt(req.query.phase as string) : undefined;
 
   const filters: StatsFilterParams = { classroomId, phase };
 
@@ -645,11 +637,11 @@ statisticsController.get({ path: '/classrooms/:classroomId' }, async (req, res) 
   const averageConnections = await getAverageDuration(filters);
   const medianConnections = await getMedianConnections(filters);
 
-  const childrenCodesCount = await getChildrenCodesCountForClassroom(classroomId, phase);
-  const connectedFamiliesCount = await getConnectedFamiliesCountForClassroom(classroomId, phase);
+  const childrenCodesCount = phase ? await getChildrenCodesCountForClassroom(classroomId, phase) : 0;
+  const connectedFamiliesCount = phase ? await getConnectedFamiliesCountForClassroom(classroomId, phase) : 0;
   const familiesWithoutAccount = await getFamiliesWithoutAccountForClassroom(classroomId);
 
-  const totalActivityCounts = await getTotalActivitiesCountsByClassroomId(classroomId);
+  const totalActivityCounts = await getTotalActivitiesCountsByClassroomId(classroomId, phase);
 
   const response: StatisticsDto = {
     family: {

@@ -24,12 +24,12 @@ async function getSessionsStats(phase?: number): Promise<SessionsStats> {
   ).data;
 }
 
-async function getOneVillageStats(): Promise<VillageStats> {
+async function getOneVillageStats(phase?: number): Promise<VillageStats> {
   return (
     await axiosRequest({
       method: 'GET',
       baseURL: '/api',
-      url: `/statistics/one-village`,
+      url: `/statistics/one-village${phase ? '?phase=' + phase : ''}`,
     })
   ).data;
 }
@@ -62,8 +62,8 @@ export function useGetSessionsStats(phase?: number) {
   });
 }
 
-export function useGetOneVillageStats() {
-  return useQuery(['1v-stats'], () => getOneVillageStats());
+export function useGetOneVillageStats(phase?: number) {
+  return useQuery(['1v-stats', phase], () => getOneVillageStats(phase));
 }
 
 async function getCountriesEngagementStatuses(): Promise<CountryEngagementStatus[]> {

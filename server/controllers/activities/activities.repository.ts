@@ -1,4 +1,4 @@
-import { Not, In } from 'typeorm';
+import { Not, In, IsNull } from 'typeorm';
 
 import { Activity } from '../../entities/activity';
 import { AppDataSource } from '../../utils/data-source';
@@ -21,23 +21,23 @@ export const getActivities = async ({ phase, villageIds = [] }: GetActivitiesPar
     activityQB.where('activity.villageId IN (:...villageIds)', { villageIds });
   }
 
-  return await activityQB.getMany();
+  return activityQB.getMany();
 };
 
-export async function getActivitiesTotalCount(): Promise<number> {
-  return activitiesRepository.count({ where: { deleteDate: undefined, status: 0, type: Not(In([0, 11])) } });
+export async function getActivitiesTotalCount(phase?: number): Promise<number> {
+  return activitiesRepository.count({ where: { phase, deleteDate: IsNull(), status: 0, type: Not(In([0, 11])) } });
 }
 
-export async function getActivitiesCountByClassroomUser(userId: number): Promise<number> {
-  return activitiesRepository.count({ where: { userId, deleteDate: undefined, status: 0, type: Not(In([0, 11])) } });
+export async function getActivitiesCountByClassroomUser(userId: number, phase?: number): Promise<number> {
+  return activitiesRepository.count({ where: { userId, phase, deleteDate: IsNull(), status: 0, type: Not(In([0, 11])) } });
 }
 
 export async function getActivitiesByClassroomUserAndPhase(userId: number, phase?: number): Promise<Activity[]> {
-  return activitiesRepository.find({ where: { userId, phase, deleteDate: undefined, status: 0, type: Not(In([0, 11])) } });
+  return activitiesRepository.find({ where: { userId, phase, deleteDate: IsNull(), status: 0, type: Not(In([0, 11])) } });
 }
 
 export async function getActivitiesByVillageCountryAndPhase(villageId: number, countryCode: string, phase: number): Promise<Activity[]> {
-  return await activitiesRepository
+  return activitiesRepository
     .createQueryBuilder('a')
     .innerJoin('user', 'u', `u.id = a.userId AND u.countryCode = '${countryCode}'`)
     .where('a.villageId = :villageId', { villageId })
@@ -48,18 +48,23 @@ export async function getActivitiesByVillageCountryAndPhase(villageId: number, c
     .getMany();
 }
 
-export async function getActivitiesCountByCountry(countryCode: string): Promise<number> {
-  return await activitiesRepository
+export async function getActivitiesCountByCountry(countryCode: string, phase?: number): Promise<number> {
+  const qb = activitiesRepository
     .createQueryBuilder('a')
     .innerJoin('user', 'u', `u.id = a.userId AND u.countryCode = '${countryCode}'`)
     .andWhere('a.deleteDate IS NULL')
     .andWhere('a.status = 0')
-    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [0, 11] }) // On exclut PRESENTATION et ANTHEM
-    .getCount();
+    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [0, 11] }); // On exclut PRESENTATION et ANTHEM
+
+  if (phase) {
+    qb.andWhere('a.phase = :phase', { phase });
+  }
+
+  return qb.getCount();
 }
 
 export async function getActivitiesByCountryAndPhase(countryCode: string, phase: number): Promise<Activity[]> {
-  return await activitiesRepository
+  return activitiesRepository
     .createQueryBuilder('a')
     .innerJoin('user', 'u', `u.id = a.userId AND u.countryCode = '${countryCode}'`)
     .where('a.phase = :phase', { phase })
@@ -69,18 +74,23 @@ export async function getActivitiesByCountryAndPhase(countryCode: string, phase:
     .getMany();
 }
 
-export async function getActivitiesCountByVillageId(villageId: number): Promise<number> {
-  return await activitiesRepository
+export async function getActivitiesCountByVillageId(villageId: number, phase?: number): Promise<number> {
+  const qb = activitiesRepository
     .createQueryBuilder('a')
     .where('a.villageId = :villageId', { villageId })
     .andWhere('a.deleteDate IS NULL')
     .andWhere('a.status = 0')
-    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [0, 11] }) // On exclut PRESENTATION et ANTHEM
-    .getCount();
+    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [0, 11] }); // On exclut PRESENTATION et ANTHEM
+
+  if (phase) {
+    qb.andWhere('a.phase = :phase', { phase });
+  }
+
+  return qb.getCount();
 }
 
 export async function getActivitiesByVillageIdAndPhase(villageId: number, phase: number): Promise<Activity[]> {
-  return await activitiesRepository
+  return activitiesRepository
     .createQueryBuilder('a')
     .where('a.villageId = :villageId', { villageId })
     .andWhere('a.phase = :phase', { phase })
