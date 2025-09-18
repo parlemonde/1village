@@ -130,7 +130,6 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
           </Box>
         </div>
         {activityPhase == 2 && activityType !== ActivityType.REACTION && (
-          /* VIL-727: garder la section de "réagir / ré-écrire" uniquement pour la phase 2 */
           <Box
             sx={{
               marginLeft: {
