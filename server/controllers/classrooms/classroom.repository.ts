@@ -27,5 +27,10 @@ export const getClassrooms = async ({ countryCode, villageId, classroomId }: Get
 };
 
 export async function getClassroomById(id: number): Promise<Classroom | null> {
-  return await classroomRepository.findOneBy({ id });
+  return await classroomRepository.findOne({
+    relations: {
+      user: true,
+    },
+    where: { id },
+  });
 }

@@ -1,15 +1,9 @@
 import { useMemo } from 'react';
 
-import type { cleanedEntityActivityCounts, EntityActivityCounts } from '../api/statistics/compare.api';
+import type { CleanedEntityActivityCounts, VillageCompareData } from '../api/statistics/compare.api';
 import { useGetCompareGlobalStats } from '../api/statistics/statistics.get';
 
-type VillageCompareData = {
-  id: number;
-  name: string;
-  phaseDetails: EntityActivityCounts[];
-};
-
-export function useOneVillageActivityTable(phaseId: number): cleanedEntityActivityCounts[] {
+export function useOneVillageActivityTable(phaseId: number): CleanedEntityActivityCounts[] {
   const { data: compareData, isLoading, error } = useGetCompareGlobalStats(phaseId);
 
   return useMemo(() => {
@@ -22,8 +16,7 @@ export function useOneVillageActivityTable(phaseId: number): cleanedEntityActivi
 
     const villagesPhaseActivityCounts = compareData.map((village: VillageCompareData) => {
       // Handle phase 0 (All phases) by aggregating all phases
-      // There should be only one phaseDetail since we query by phase
-      const phase = village.phaseDetails[0];
+      const phase = village.phaseDetails;
 
       const aggregatedPhase = {
         commentCount: phase.commentCount || 0,
@@ -47,7 +40,7 @@ export function useOneVillageActivityTable(phaseId: number): cleanedEntityActivi
       return { ...village, ...aggregatedPhase };
     });
 
-    const totalRow: cleanedEntityActivityCounts = {
+    const totalRow: CleanedEntityActivityCounts = {
       id: 'total',
       name: 'Total',
       commentCount: sumActivityCounts(villagesPhaseActivityCounts, 'commentCount'),
@@ -72,6 +65,6 @@ export function useOneVillageActivityTable(phaseId: number): cleanedEntityActivi
   }, [phaseId, compareData, isLoading, error]);
 }
 
-function sumActivityCounts(rows: EntityActivityCounts[], activityCountProperty: keyof EntityActivityCounts): number {
+function sumActivityCounts(rows: CleanedEntityActivityCounts[], activityCountProperty: keyof CleanedEntityActivityCounts): number {
   return rows.reduce((acc, row) => acc + (row[activityCountProperty] as number), 0);
 }

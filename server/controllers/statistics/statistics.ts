@@ -1,5 +1,4 @@
 import type { Request } from 'express';
-import { get } from 'lodash';
 
 import type { ClassroomDetails, CountryEngagementStatus, EngagementStatus, StatsFilterParams } from '../../../types/statistics.type';
 import { GroupType } from '../../../types/statistics.type';

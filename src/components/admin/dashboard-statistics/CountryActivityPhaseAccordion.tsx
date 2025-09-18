@@ -43,7 +43,7 @@ const CountryActivityPhaseAccordion: FC<Props> = ({ phaseId, countryCode, villag
       </div>
       {open && (
         <div style={{ padding: '1rem' }}>
-          {countryCode && <CountryActivityTable countryCode={countryCode} phaseId={phaseId} mode="country" />}
+          {countryCode && <CountryActivityTable countryCode={countryCode} phaseId={phaseId} />}
           {villageId && !classroomId && <VillageActivityTable villageId={villageId} phaseId={phaseId} />}
           {villageId && classroomId && <ClassroomActivityTable villageId={villageId} classroomId={classroomId} phaseId={phaseId} />}
         </div>

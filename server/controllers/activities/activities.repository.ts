@@ -23,15 +23,15 @@ export const getActivities = async ({ phase, villageIds = [] }: GetActivitiesPar
 };
 
 export async function getActivitiesTotalCount(): Promise<number> {
-  return activitiesRepository.count({ where: { deleteDate: undefined } });
+  return activitiesRepository.count({ where: { deleteDate: undefined, status: 0 } });
 }
 
 export async function getActivitiesCountByClassroomUser(userId: number): Promise<number> {
-  return activitiesRepository.count({ where: { userId, deleteDate: undefined } });
+  return activitiesRepository.count({ where: { userId, deleteDate: undefined, status: 0 } });
 }
 
 export async function getActivitiesByClassroomUserAndPhase(userId: number, phase?: number): Promise<Activity[]> {
-  return activitiesRepository.find({ where: { userId, phase, deleteDate: undefined } });
+  return activitiesRepository.find({ where: { userId, phase, deleteDate: undefined, status: 0 } });
 }
 
 export async function getActivitiesByVillageCountryAndPhase(villageId: number, countryCode: string, phase: number): Promise<Activity[]> {
@@ -41,6 +41,7 @@ export async function getActivitiesByVillageCountryAndPhase(villageId: number, c
     .where('a.villageId = :villageId', { villageId })
     .andWhere('a.phase = :phase', { phase })
     .andWhere('a.deleteDate IS NULL')
+    .andWhere('a.status = 0')
     .getMany();
 }
 
@@ -49,6 +50,7 @@ export async function getActivitiesCountByCountry(countryCode: string): Promise<
     .createQueryBuilder('a')
     .innerJoin('user', 'u', `u.id = a.userId AND u.countryCode = '${countryCode}'`)
     .andWhere('a.deleteDate IS NULL')
+    .andWhere('a.status = 0')
     .getCount();
 }
 
@@ -58,6 +60,7 @@ export async function getActivitiesByCountryAndPhase(countryCode: string, phase:
     .innerJoin('user', 'u', `u.id = a.userId AND u.countryCode = '${countryCode}'`)
     .where('a.phase = :phase', { phase })
     .andWhere('a.deleteDate IS NULL')
+    .andWhere('a.status = 0')
     .getMany();
 }
 
@@ -66,6 +69,7 @@ export async function getActivitiesCountByVillageId(villageId: number): Promise<
     .createQueryBuilder('a')
     .where('a.villageId = :villageId', { villageId })
     .andWhere('a.deleteDate IS NULL')
+    .andWhere('a.status = 0')
     .getCount();
 }
 
@@ -75,5 +79,6 @@ export async function getActivitiesByVillageIdAndPhase(villageId: number, phase:
     .where('a.villageId = :villageId', { villageId })
     .andWhere('a.phase = :phase', { phase })
     .andWhere('a.deleteDate IS NULL')
+    .andWhere('a.status = 0')
     .getMany();
 }

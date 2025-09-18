@@ -2,8 +2,8 @@ import type { FC } from 'react';
 import React from 'react';
 
 import { OneVillageTable } from '../OneVillageTable';
-import { CountryActivityTableHeaders, getCountryActivityTableHeaders } from './utils/tableHeaders';
-import type { EntityActivityCounts, PhaseTableRow } from 'src/api/statistics/compare.api';
+import { getCountryActivityTableHeaders } from './utils/tableHeaders';
+import type { PhaseTableRow } from 'src/api/statistics/compare.api';
 import { useCountryActivityTable } from 'src/services/useCountryActivityTable';
 
 export type CountryActivityMode = 'country' | 'class';
@@ -11,31 +11,15 @@ export type CountryActivityMode = 'country' | 'class';
 interface ClassroomActivityTableProps {
   countryCode: string;
   phaseId: number;
-  mode?: CountryActivityMode;
 }
 
 const CountryActivityTable: FC<ClassroomActivityTableProps> = (props: ClassroomActivityTableProps) => {
-  const { countryCode, phaseId, mode = 'class' } = props;
+  const { countryCode, phaseId } = props;
   const data = useCountryActivityTable(countryCode, phaseId);
 
   if (!data || data.length === 0) {
     return <div>Aucune donnée disponible pour cette phase.</div>;
   }
-
-  // On adapte les données pour le tableau (plat, phaseDetail à la racine)
-  const tableData: PhaseTableRow[] =
-    mode === 'country'
-      ? data.map((row: EntityActivityCounts, idx: number) => ({
-          ...row,
-          id: row.id || idx,
-        }))
-      : data.map((row: EntityActivityCounts, idx: number) => ({
-          ...row,
-          id: row.id || idx,
-          contentLibreCount: undefined,
-        }));
-
-  const columns = mode === 'country' ? getCountryActivityTableHeaders(phaseId) : CountryActivityTableHeaders;
 
   // Custom row style: bleu si isSelected
   const rowStyle = (row: PhaseTableRow) => {
@@ -53,8 +37,8 @@ const CountryActivityTable: FC<ClassroomActivityTableProps> = (props: ClassroomA
       <OneVillageTable
         admin={false}
         emptyPlaceholder={<p>Aucune donnée pour ce pays</p>}
-        data={tableData}
-        columns={columns}
+        data={data}
+        columns={getCountryActivityTableHeaders(phaseId)}
         rowStyle={rowStyle}
         tableLayout="auto"
       />

@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
 
-import type { ComparisonStatistic } from './compare.api';
+import type { ClassroomCompareData, CountryCompareData } from './compare.api';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Classroom } from 'types/classroom.type';
 import type {
@@ -154,7 +154,7 @@ async function getClassroomDetails(classroomId?: number): Promise<ClassroomDetai
 
 export function useGetClassroomsStats(classroomId?: number, phase?: number) {
   return useQuery(['classrooms-stats', classroomId, phase], () => getClassroomsStats(classroomId, phase), {
-    enabled: classroomId !== null,
+    enabled: !!classroomId,
   });
 }
 
@@ -253,7 +253,7 @@ export function useGetCompareGlobalStats(phase: number) {
   });
 }
 
-async function getCompareCountriesStats(phase: number): Promise<ComparisonStatistic[]> {
+async function getCompareCountriesStats(phase: number): Promise<CountryCompareData[]> {
   return (
     await axiosRequest({
       method: 'GET',
@@ -269,7 +269,7 @@ export function useGetCompareCountriesStats(countryCode: string, phase: number) 
   });
 }
 
-async function getCompareVillagesStats(villageId: number, phase: number): Promise<ComparisonStatistic[]> {
+async function getCompareVillagesStats(villageId: number, phase: number): Promise<CountryCompareData[]> {
   return (
     await axiosRequest({
       method: 'GET',
@@ -285,7 +285,7 @@ export function useGetCompareVillagesStats(villageId: number, phase: number) {
   });
 }
 
-async function getCompareClassroomsStats(villageId: number, phase?: number): Promise<ComparisonStatistic[]> {
+async function getCompareClassroomsStats(villageId: number, phase?: number): Promise<ClassroomCompareData[]> {
   return (
     await axiosRequest({
       method: 'GET',
@@ -296,7 +296,7 @@ async function getCompareClassroomsStats(villageId: number, phase?: number): Pro
 }
 
 export function useGetCompareClassroomsStats(villageId: number, phase: number) {
-  return useQuery<ComparisonStatistic[]>(['compare-classes-stats', villageId, phase], () => getCompareClassroomsStats(villageId, phase), {
+  return useQuery<ClassroomCompareData[]>(['compare-classes-stats', villageId, phase], () => getCompareClassroomsStats(villageId, phase), {
     enabled: !!villageId && !!phase,
   });
 }

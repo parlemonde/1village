@@ -21,7 +21,7 @@ import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
-import { useGetClassroomEngagementStatus, useGetClassroomsStats, useGetClassroomDetails } from 'src/api/statistics/statistics.get';
+import { useGetClassroomDetails, useGetClassroomEngagementStatus, useGetClassroomsStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
