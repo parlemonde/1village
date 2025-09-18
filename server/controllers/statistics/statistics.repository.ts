@@ -115,7 +115,7 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
     };
   } else if (phaseId === 3) {
     const reinventStoryCount = activityByType.get(14)?.length || 0;
-    const anthemCount = (activityByType.get(11)?.length || 0) + (activityByType.get(12)?.length || 0);
+    const anthemCount = activityByType.get(12)?.length || 0;
     const contentLibreCount = activityByType.get(5)?.length || 0;
     const storyCount = activityByType.get(13)?.length || 0;
 
