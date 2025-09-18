@@ -1,3 +1,5 @@
+import { Not, In } from 'typeorm';
+
 import { Activity } from '../../entities/activity';
 import { AppDataSource } from '../../utils/data-source';
 
@@ -23,15 +25,15 @@ export const getActivities = async ({ phase, villageIds = [] }: GetActivitiesPar
 };
 
 export async function getActivitiesTotalCount(): Promise<number> {
-  return activitiesRepository.count({ where: { deleteDate: undefined, status: 0 } });
+  return activitiesRepository.count({ where: { deleteDate: undefined, status: 0, type: Not(In([0, 12])) } });
 }
 
 export async function getActivitiesCountByClassroomUser(userId: number): Promise<number> {
-  return activitiesRepository.count({ where: { userId, deleteDate: undefined, status: 0 } });
+  return activitiesRepository.count({ where: { userId, deleteDate: undefined, status: 0, type: Not(In([0, 12])) } });
 }
 
 export async function getActivitiesByClassroomUserAndPhase(userId: number, phase?: number): Promise<Activity[]> {
-  return activitiesRepository.find({ where: { userId, phase, deleteDate: undefined, status: 0 } });
+  return activitiesRepository.find({ where: { userId, phase, deleteDate: undefined, status: 0, type: Not(In([0, 12])) } });
 }
 
 export async function getActivitiesByVillageCountryAndPhase(villageId: number, countryCode: string, phase: number): Promise<Activity[]> {
@@ -42,6 +44,7 @@ export async function getActivitiesByVillageCountryAndPhase(villageId: number, c
     .andWhere('a.phase = :phase', { phase })
     .andWhere('a.deleteDate IS NULL')
     .andWhere('a.status = 0')
+    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [0, 12] }) // Exclude PRESENTATION and CLASS_ANTHEM
     .getMany();
 }
 
@@ -51,6 +54,7 @@ export async function getActivitiesCountByCountry(countryCode: string): Promise<
     .innerJoin('user', 'u', `u.id = a.userId AND u.countryCode = '${countryCode}'`)
     .andWhere('a.deleteDate IS NULL')
     .andWhere('a.status = 0')
+    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [0, 12] }) // Exclude PRESENTATION and CLASS_ANTHEM
     .getCount();
 }
 
@@ -61,6 +65,7 @@ export async function getActivitiesByCountryAndPhase(countryCode: string, phase:
     .where('a.phase = :phase', { phase })
     .andWhere('a.deleteDate IS NULL')
     .andWhere('a.status = 0')
+    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [0, 12] }) // Exclude PRESENTATION and CLASS_ANTHEM
     .getMany();
 }
 
@@ -70,6 +75,7 @@ export async function getActivitiesCountByVillageId(villageId: number): Promise<
     .where('a.villageId = :villageId', { villageId })
     .andWhere('a.deleteDate IS NULL')
     .andWhere('a.status = 0')
+    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [0, 12] }) // Exclude PRESENTATION and CLASS_ANTHEM
     .getCount();
 }
 
@@ -80,5 +86,6 @@ export async function getActivitiesByVillageIdAndPhase(villageId: number, phase:
     .andWhere('a.phase = :phase', { phase })
     .andWhere('a.deleteDate IS NULL')
     .andWhere('a.status = 0')
+    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [0, 12] }) // Exclude PRESENTATION and CLASS_ANTHEM
     .getMany();
 }
