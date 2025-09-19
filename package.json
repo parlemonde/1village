@@ -65,7 +65,7 @@
     "@swc/cli": "^0.1.57",
     "@swc/core": "1.2.205",
     "@swc/jest": "0.2.21",
-    "@types/cookie-parser": "1.4.3",
+    "@types/cookie-parser": "1.4.9",
     "@types/cors": "2.8.19",
     "@types/cpx": "1.5.2",
     "@types/croppie": "2.6.4",

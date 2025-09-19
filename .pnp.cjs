@@ -46,7 +46,7 @@ const RAW_RUNTIME_STATE =
           ["@swc/cli", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.1.62"],\
           ["@swc/core", "npm:1.2.205"],\
           ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.21"],\
-          ["@types/cookie-parser", "npm:1.4.3"],\
+          ["@types/cookie-parser", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.4.9"],\
           ["@types/cors", "npm:2.8.19"],\
           ["@types/cpx", "npm:1.5.2"],\
           ["@types/croppie", "npm:2.6.4"],\
@@ -213,7 +213,7 @@ const RAW_RUNTIME_STATE =
           ["@swc/cli", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.1.62"],\
           ["@swc/core", "npm:1.2.205"],\
           ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.21"],\
-          ["@types/cookie-parser", "npm:1.4.3"],\
+          ["@types/cookie-parser", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.4.9"],\
           ["@types/cors", "npm:2.8.19"],\
           ["@types/cpx", "npm:1.5.2"],\
           ["@types/croppie", "npm:2.6.4"],\
@@ -5878,11 +5878,21 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@types/cookie-parser", [\
-      ["npm:1.4.3", {\
-        "packageLocation": "./.yarn/cache/@types-cookie-parser-npm-1.4.3-4bda65954a-f390f3af1b.zip/node_modules/@types/cookie-parser/",\
+      ["npm:1.4.9", {\
+        "packageLocation": "./.yarn/cache/@types-cookie-parser-npm-1.4.9-628dc5b6f4-6192a4899b.zip/node_modules/@types/cookie-parser/",\
         "packageDependencies": [\
-          ["@types/cookie-parser", "npm:1.4.3"],\
+          ["@types/cookie-parser", "npm:1.4.9"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.4.9", {\
+        "packageLocation": "./.yarn/__virtual__/@types-cookie-parser-virtual-f404c2e247/0/cache/@types-cookie-parser-npm-1.4.9-628dc5b6f4-6192a4899b.zip/node_modules/@types/cookie-parser/",\
+        "packageDependencies": [\
+          ["@types/cookie-parser", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.4.9"],\
           ["@types/express", "npm:4.17.13"]\
+        ],\
+        "packagePeers": [\
+          "@types/express"\
         ],\
         "linkType": "HARD"\
       }]\
