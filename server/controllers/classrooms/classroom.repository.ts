@@ -25,3 +25,12 @@ export const getClassrooms = async ({ countryCode, villageId, classroomId }: Get
     where: classroomFilters,
   });
 };
+
+export async function getClassroomById(id: number): Promise<Classroom | null> {
+  return await classroomRepository.findOne({
+    relations: {
+      user: true,
+    },
+    where: { id },
+  });
+}

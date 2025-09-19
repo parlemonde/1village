@@ -1,65 +1,6 @@
-import type { ClassroomToMonitor, OneVillageTableRow, VillageStats } from '../../../types/statistics.type';
+import type { ClassroomToMonitor, OneVillageTableRow } from '../../../types/statistics.type';
 import { ClassroomMonitoringStatus } from '../../../types/statistics.type';
 import { getUserDisplayName } from 'src/utils';
-
-export const getVideoCount = (data?: VillageStats, countryCode?: string) => {
-  if (!data?.activityCountDetails?.length) return 0;
-
-  return data.activityCountDetails.reduce((total, detail) => {
-    const classroomVideos = detail.classrooms
-      .filter((classroom) => !countryCode || classroom.countryCode === countryCode)
-      .reduce((sumClass, classroom) => {
-        const phaseVideos = classroom.phaseDetails.reduce((sumPhase, phase) => {
-          return sumPhase + (phase.videoCount || 0);
-        }, 0);
-        return sumClass + phaseVideos;
-      }, 0);
-    return total + classroomVideos;
-  }, 0);
-};
-
-export const getCommentCount = (data?: VillageStats, countryCode?: string) => {
-  if (!data?.activityCountDetails?.length) return 0;
-
-  return data.activityCountDetails.reduce((total, detail) => {
-    const classroomComments = detail.classrooms
-      .filter((classroom) => !countryCode || classroom.countryCode === countryCode)
-      .reduce((sumClass, classroom) => {
-        const phaseComments = classroom.phaseDetails.reduce((sumPhase, phase) => {
-          return sumPhase + (phase.commentCount || 0);
-        }, 0);
-        return sumClass + phaseComments;
-      }, 0);
-    return total + classroomComments;
-  }, 0);
-};
-
-export const getPublicationCount = (data?: VillageStats, countryCode?: string) => {
-  if (!data?.activityCountDetails?.length) return 0;
-
-  return data.activityCountDetails
-    .flatMap((detail) => detail.classrooms ?? [])
-    .filter((classroom) => !countryCode || classroom.countryCode === countryCode)
-    .flatMap((classroom) => classroom.phaseDetails ?? [])
-    .reduce((total, phase) => {
-      const countKeys = [
-        'mascotCount',
-        'videoCount',
-        'challengeCount',
-        'enigmaCount',
-        'gameCount',
-        'questionCount',
-        'reactionCount',
-        'reportingCount',
-        'storyCount',
-        'anthemCount',
-        'contentLibreCount',
-        'reinventStoryCount',
-      ];
-
-      return total + countKeys.reduce((sum, key) => sum + ((phase[key as keyof typeof phase] as number) || 0), 0);
-    }, 0);
-};
 
 export const getStatusLabel = (status: ClassroomMonitoringStatus): string => {
   return (

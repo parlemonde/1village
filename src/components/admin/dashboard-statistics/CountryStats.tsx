@@ -40,7 +40,7 @@ const CountryStats = () => {
   const { data: engagementStatusStatistics, isLoading: isLoadingEngagementStatusStatistics } = useGetClassroomsEngagementStatus({
     countryCode: selectedCountry,
   });
-  const { data: activityCountDetails, isLoading: isLoadingActivityCountDetails } = useGetCompareGlobalStats(selectedPhase);
+  const { data: activityCountDetails, isLoading: isLoadingActivityCountDetails } = useGetCompareGlobalStats(selectedPhase || 0);
 
   // On mocke l'asynchronisme en attendant d'avoir l'appel serveur censé retourner les interactions des villages-mondes
   // A refacto lors de l'implémentation des tickets VIL-407 et VIL-63
@@ -79,7 +79,14 @@ const CountryStats = () => {
     }, 5000);
   }, []);
 
-  const isLoadingCountryStatistics = isLoadingCountryEngagementStatus || loadingHighlightedCountry || loadingBarsChartData || loadingVillageList;
+  const isLoadingCountryStatisticsForGraphs =
+    isLoadingCountryEngagementStatus || loadingHighlightedCountry || loadingBarsChartData || loadingVillageList;
+  const isLoadingClassroomStatisticsForWidgets =
+    isLoadingClassroomStatistics ||
+    isLoadingSessionsStatistics ||
+    isLoadingFamilyStatistics ||
+    isLoadingEngagementStatusStatistics ||
+    isLoadingActivityCountDetails;
 
   const onCountrySelect = (_country: string) => {
     // TODO VIL-815 changer la valeur de selectedCountry quand on clique sur une barre du graphique
@@ -93,7 +100,7 @@ const CountryStats = () => {
         <PelicoCard message={'Merci de sélectionner un pays pour analyser ses statistiques'} />
       ) : (
         <Box mt={2}>
-          {isLoadingCountryStatistics ? (
+          {isLoadingCountryStatisticsForGraphs ? (
             <Loader analyticsDataType={AnalyticsDataType.GRAPHS} />
           ) : (
             <>
@@ -106,11 +113,7 @@ const CountryStats = () => {
               {villageList && <VillageListCard villageList={villageList} />}
             </>
           )}
-          {isLoadingClassroomStatistics ||
-          isLoadingSessionsStatistics ||
-          isLoadingFamilyStatistics ||
-          isLoadingEngagementStatusStatistics ||
-          isLoadingActivityCountDetails ? (
+          {isLoadingClassroomStatisticsForWidgets ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
           ) : (
             classroomsStatistics &&

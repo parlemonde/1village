@@ -4,7 +4,6 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Grid from '@mui/material/Grid';
 
-import { getCommentCount, getPublicationCount, getVideoCount } from '../../StatisticsUtils';
 import CountryActivityPhaseAccordion from '../CountryActivityPhaseAccordion';
 import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
 import ClassesContributionCard from '../cards/ClassesContributionCard/ClassesContributionCard';
@@ -34,12 +33,9 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
     3: true,
   });
 
-  const videoCount = getVideoCount(dashboardSummaryData);
-  const commentCount = getCommentCount(dashboardSummaryData);
-  const publicationCount = getPublicationCount(dashboardSummaryData);
-
-  // Extract barChartData for better readability
   const barChartData = dashboardSummaryData.barChartData || [];
+
+  const totalActivitiesCounts = dashboardSummaryData?.totalActivityCounts;
 
   return (
     <>
@@ -110,7 +106,11 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
             gap: '2rem',
           }}
         >
-          <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
+          <ClassesExchangesCard
+            totalPublications={totalActivitiesCounts?.totalPublications || 0}
+            totalComments={totalActivitiesCounts?.totalComments || 0}
+            totalVideos={totalActivitiesCounts?.totalVideos || 0}
+          />
           <ClassesContributionCard />
         </Grid>
         <Grid item xs={12} lg={12}>

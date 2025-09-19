@@ -1,9 +1,11 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 
 import { OneVillageTable } from '../OneVillageTable';
+import { getVillageActivityTableHeaders } from './utils/tableHeaders';
+import { useOneVillageActivityTable } from 'src/services/useOneVillageActivityTable';
 
 interface PhaseTableRow {
   id: string | number;
@@ -11,22 +13,22 @@ interface PhaseTableRow {
   [key: string]: string | number;
 }
 
-interface Props {
+interface OneVillagePhaseAccordionProps {
   phaseId: number;
-  data: PhaseTableRow[];
-  columns: Array<{ key: string; label: string; sortable?: boolean }>;
-  rowStyle: (row: PhaseTableRow) => React.CSSProperties;
   open: boolean;
   onClick: () => void;
 }
 
-const phaseLabels: Record<number, string> = {
-  1: 'Phase 1',
-  2: 'Phase 2',
-  3: 'Phase 3',
-};
+const OneVillagePhaseAccordion: FC<OneVillagePhaseAccordionProps> = ({ phaseId, open, onClick }) => {
+  const villagesPhaseActivityCounts = useOneVillageActivityTable(phaseId);
 
-const OneVillagePhaseAccordion: React.FC<Props> = ({ phaseId, data, columns, rowStyle, open, onClick }) => {
+  const rowStyle = (row: PhaseTableRow) => {
+    if (row.name === 'Total') {
+      return { color: 'black', fontWeight: 'bold', borderBottom: '2px solid black' };
+    }
+    return {};
+  };
+
   return (
     <div style={{ marginTop: '1.5rem', borderRadius: 8, border: '1px solid #eee', background: '#fafbfc' }}>
       <div
@@ -42,16 +44,16 @@ const OneVillagePhaseAccordion: React.FC<Props> = ({ phaseId, data, columns, row
         }}
         onClick={onClick}
       >
-        <span>{phaseLabels[phaseId]}</span>
+        <span>Phase {phaseId}</span>
         {open ? <KeyboardDoubleArrowUpIcon fontSize="large" /> : <KeyboardDoubleArrowDownIcon fontSize="large" />}
       </div>
       {open && (
         <div style={{ padding: '1rem' }}>
           <OneVillageTable
             admin={false}
-            emptyPlaceholder={<p>Aucune donnée disponible pour la {phaseLabels[phaseId]}</p>}
-            data={data}
-            columns={columns}
+            emptyPlaceholder={<p>Aucune donnée disponible pour la phase {phaseId}</p>}
+            data={villagesPhaseActivityCounts}
+            columns={getVillageActivityTableHeaders(phaseId)}
             rowStyle={rowStyle}
             tableLayout="auto"
           />

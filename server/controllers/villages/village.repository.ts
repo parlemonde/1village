@@ -1,6 +1,11 @@
 import { Village } from '../../entities/village';
 import { AppDataSource } from '../../utils/data-source';
 
+export interface VillageWithNameAndId {
+  id: number;
+  name: string;
+}
+
 const villageRepository = AppDataSource.getRepository(Village);
 
 type GetVillagesParams = {
@@ -16,3 +21,11 @@ export const getVillages = async ({ villageIds = [] }: GetVillagesParams) => {
 
   return await villageQB.getMany();
 };
+
+export async function getAllVillagesNames(): Promise<VillageWithNameAndId[]> {
+  return villageRepository.find({ select: { id: true, name: true } });
+}
+
+export async function getVillageById(id: number): Promise<Village | null> {
+  return await villageRepository.findOneBy({ id });
+}
