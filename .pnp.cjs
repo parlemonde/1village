@@ -51,7 +51,7 @@ const RAW_RUNTIME_STATE =
           ["@types/cpx", "npm:1.5.5"],\
           ["@types/croppie", "npm:2.6.4"],\
           ["@types/d3-geo", "npm:3.0.2"],\
-          ["@types/draft-js", "npm:0.11.9"],\
+          ["@types/draft-js", "npm:0.11.18"],\
           ["@types/draftjs-to-html", "npm:0.8.1"],\
           ["@types/earcut", "npm:2.1.1"],\
           ["@types/express", "npm:4.17.13"],\
@@ -218,7 +218,7 @@ const RAW_RUNTIME_STATE =
           ["@types/cpx", "npm:1.5.5"],\
           ["@types/croppie", "npm:2.6.4"],\
           ["@types/d3-geo", "npm:3.0.2"],\
-          ["@types/draft-js", "npm:0.11.9"],\
+          ["@types/draft-js", "npm:0.11.18"],\
           ["@types/draftjs-to-html", "npm:0.8.1"],\
           ["@types/earcut", "npm:2.1.1"],\
           ["@types/express", "npm:4.17.13"],\
@@ -6073,6 +6073,15 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@types/draft-js", [\
+      ["npm:0.11.18", {\
+        "packageLocation": "./.yarn/cache/@types-draft-js-npm-0.11.18-341b7b6b6c-c8b2fabde2.zip/node_modules/@types/draft-js/",\
+        "packageDependencies": [\
+          ["@types/draft-js", "npm:0.11.18"],\
+          ["@types/react", "npm:18.3.3"],\
+          ["immutable", "npm:3.7.6"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:0.11.9", {\
         "packageLocation": "./.yarn/cache/@types-draft-js-npm-0.11.9-62e5c343ca-9040c2752e.zip/node_modules/@types/draft-js/",\
         "packageDependencies": [\
@@ -10957,7 +10966,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/__virtual__/draftjs-utils-virtual-e443d59ecf/0/cache/draftjs-utils-npm-0.10.2-b7f318899b-6ac237b67d.zip/node_modules/draftjs-utils/",\
         "packageDependencies": [\
           ["draftjs-utils", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.10.2"],\
-          ["@types/draft-js", "npm:0.11.9"],\
+          ["@types/draft-js", "npm:0.11.18"],\
           ["@types/immutable", null],\
           ["draft-js", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.11.7"],\
           ["immutable", "npm:4.3.0"]\
@@ -13551,7 +13560,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/__virtual__/html-to-draftjs-virtual-fad015c0b8/0/cache/html-to-draftjs-npm-1.5.0-6e3e802864-c4a6d2caec.zip/node_modules/html-to-draftjs/",\
         "packageDependencies": [\
           ["html-to-draftjs", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.5.0"],\
-          ["@types/draft-js", "npm:0.11.9"],\
+          ["@types/draft-js", "npm:0.11.18"],\
           ["@types/immutable", null],\
           ["draft-js", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.11.7"],\
           ["immutable", "npm:4.3.0"]\
