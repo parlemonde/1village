@@ -80,7 +80,7 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
           <BarChartWithMonthSelector
             data={dashboardSummaryData.dailyConnectionCountByMonth}
             title="Évolution des connexions"
-            legend="Nombre de connexions"
+            yAxisLabel="Nombre de connexions"
           />
         </Grid>
         <Grid container spacing={2} alignItems="stretch" style={{ paddingLeft: '32px', paddingTop: '32px', display: 'flex' }}>

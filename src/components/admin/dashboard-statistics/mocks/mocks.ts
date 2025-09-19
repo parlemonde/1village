@@ -1,4 +1,4 @@
-import type { ClassroomStat, DailyCountByMonth, SessionsStats } from 'types/statistics.type';
+import type { ClassroomStat, DailyCountsByMonth, SessionsStats } from 'types/statistics.type';
 
 export const mockClassroomsStats: ClassroomStat[] = [
   {
@@ -186,77 +186,19 @@ export const mockConnectionsStats: SessionsStats[] = [
   },
 ];
 
-export const mockDailyCountByMonth: DailyCountByMonth[] = [
+export const mockDailyCountByMonth: DailyCountsByMonth[] = [
   {
-    month: 'Mars 2023',
+    month: 'Août 2025',
     counts: [
-      { value: 100000, selected: false }, // 1er mars 2023
-      { value: 150000, selected: false }, // 2 mars 2023
-      { value: 200000, selected: true },
-      { value: 180000, selected: false },
-      { value: 220000, selected: false },
-      { value: 250000, selected: false },
-      { value: 400000, selected: true },
-      { value: 120000, selected: false },
-      { value: 170000, selected: false },
-      { value: 300000, selected: false },
-      { value: 230000, selected: false },
-      { value: 270000, selected: false },
-      { value: 100000, selected: false },
-      { value: 310000, selected: true },
-      { value: 140000, selected: false },
-      { value: 160000, selected: false },
-      { value: 190000, selected: false },
-      { value: 210000, selected: false },
-      { value: 290000, selected: false },
-      { value: 350000, selected: true },
-      { value: 260000, selected: false },
-      { value: 110000, selected: false },
-      { value: 100000, selected: false },
-      { value: 280000, selected: false },
-      { value: 330000, selected: false },
-      { value: 150000, selected: false },
-      { value: 240000, selected: true },
-      { value: 130000, selected: false },
-      { value: 180000, selected: false },
-      { value: 220000, selected: false },
-      { value: 220000, selected: false },
+      156, 234, 189, 167, 245, 198, 312, 287, 165, 178, 201, 187, 256, 298, 321, 187, 199, 267, 289, 301, 188, 167, 198, 234, 267, 289, 301, 278, 245,
+      198, 167,
     ],
   },
   {
-    month: 'Avril 2023',
+    month: 'Septembre 2025',
     counts: [
-      { value: 290000, selected: false },
-      { value: 350000, selected: true },
-      { value: 260000, selected: false },
-      { value: 110000, selected: false },
-      { value: 100000, selected: false },
-      { value: 280000, selected: false },
-      { value: 330000, selected: false },
-      { value: 150000, selected: false },
-      { value: 240000, selected: true },
-      { value: 130000, selected: false },
-      { value: 180000, selected: false },
-      { value: 220000, selected: false },
-      { value: 220000, selected: false },
-      { value: 100000, selected: false },
-      { value: 150000, selected: false },
-      { value: 200000, selected: true },
-      { value: 180000, selected: false },
-      { value: 220000, selected: false },
-      { value: 250000, selected: false },
-      { value: 400000, selected: true },
-      { value: 120000, selected: false },
-      { value: 170000, selected: false },
-      { value: 300000, selected: false },
-      { value: 230000, selected: false },
-      { value: 270000, selected: false },
-      { value: 100000, selected: false },
-      { value: 310000, selected: true },
-      { value: 140000, selected: false },
-      { value: 160000, selected: false },
-      { value: 190000, selected: false },
-      { value: 210000, selected: false },
+      178, 201, 187, 256, 298, 321, 187, 199, 267, 289, 301, 188, 167, 198, 234, 267, 289, 301, 278, 245, 198, 167, 156, 234, 189, 167, 245, 198, 312,
+      287,
     ],
   },
   // Ajouter d'autres mois si nécessaire

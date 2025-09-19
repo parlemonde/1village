@@ -89,7 +89,7 @@ const DashboardFamilyTab = ({ dashboardSummaryData }: DashboardFamilyTabProps) =
         <BarChartWithMonthSelector
           data={dashboardSummaryData.family.dailyConnectionCountByMonth}
           title="Évolution des connexions"
-          legend="Nombre de connexions"
+          yAxisLabel="Nombre de connexions"
         />
       </div>
     </>
