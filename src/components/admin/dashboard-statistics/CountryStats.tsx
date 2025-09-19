@@ -9,7 +9,6 @@ import VillageListCard from './cards/VillageListCard/VillageListCard';
 import HorizontalBarsChart from './charts/HorizontalChart';
 import DashboardSummary from './dashboard-summary/DashboardSummary';
 import StatisticFilters from './filters/StatisticFilters';
-import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { useGetClassroomsEngagementStatus, useGetCountriesStats, useGetCountryEngagementStatus } from 'src/api/statistics/statistics.get';
@@ -112,7 +111,6 @@ const CountryStats = () => {
                   ...classroomsStatistics,
                   ...sessionsStatistics,
                   ...familyStatistics,
-                  barChartData: mockDataByMonth,
                   engagementStatusData: engagementStatusStatistics,
                 }}
                 selectedCountry={selectedCountry}
