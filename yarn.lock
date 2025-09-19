@@ -30,7 +30,7 @@ __metadata:
     "@swc/jest": "npm:0.2.21"
     "@types/cookie-parser": "npm:1.4.9"
     "@types/cors": "npm:2.8.19"
-    "@types/cpx": "npm:1.5.2"
+    "@types/cpx": "npm:1.5.5"
     "@types/croppie": "npm:2.6.4"
     "@types/d3-geo": "npm:3.0.2"
     "@types/draft-js": "npm:0.11.9"
@@ -3860,12 +3860,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cpx@npm:1.5.2":
-  version: 1.5.2
-  resolution: "@types/cpx@npm:1.5.2"
+"@types/cpx@npm:1.5.5":
+  version: 1.5.5
+  resolution: "@types/cpx@npm:1.5.5"
   dependencies:
     "@types/node": "npm:*"
-  checksum: 10/83369974de2a4636b9f759918186db32d8f076d8d099b1588fd904b9097735717426730a866d22d2c510f9da45ab9440810fc0119a2261390983049f63e9358b
+  checksum: 10/3fc715ebc5d8af2fe3dac4307e7179d4b3cf09be29612c3410b2c5d491efbd85b44a8b44996081a612eb1c18078daf5554232c9f3f07e3fadf193d7e245831b3
   languageName: node
   linkType: hard
 
