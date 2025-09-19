@@ -1,5 +1,6 @@
 import { ActivityStatus, ActivityType } from '../../../types/activity.type';
 import type { Activity } from '../../entities/activity';
+import type { Classroom } from '../../entities/classroom';
 import { getActivities } from '../activities/activities.repository';
 import { getClassrooms } from '../classrooms/classroom.repository';
 import { getCommentCountForActivities } from '../comments/comments.repository';
@@ -34,9 +35,11 @@ export const getActivityTypeCountByVillages = async (params?: GetActivityTypeCou
   const { phase, countryCode, villageId, classroomId } = params || {};
 
   const classrooms = await getClassrooms({ countryCode, villageId, classroomId });
+  const classroomIds = classrooms.map((classroom: Classroom) => classroom.id);
+
   const villageIds = [...new Set(classrooms.map((classroom) => classroom.villageId))];
   const villages = await getVillages({ villageIds });
-  const activities = await getActivities({ phase, villageIds });
+  const activities = await getActivities({ phase, classroomIds });
 
   const activitiesByPhase = groupBy(activities, (activity: Activity) => activity.phase);
 
