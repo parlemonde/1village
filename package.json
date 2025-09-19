@@ -68,7 +68,7 @@
     "@types/cookie-parser": "1.4.3",
     "@types/cors": "2.8.19",
     "@types/cpx": "1.5.2",
-    "@types/croppie": "2.6.1",
+    "@types/croppie": "2.6.4",
     "@types/d3-geo": "3.0.2",
     "@types/draft-js": "0.11.9",
     "@types/draftjs-to-html": "0.8.1",
