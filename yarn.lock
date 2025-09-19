@@ -28,7 +28,7 @@ __metadata:
     "@swc/cli": "npm:^0.1.57"
     "@swc/core": "npm:1.2.205"
     "@swc/jest": "npm:0.2.21"
-    "@types/cookie-parser": "npm:1.4.3"
+    "@types/cookie-parser": "npm:1.4.9"
     "@types/cors": "npm:2.8.19"
     "@types/cpx": "npm:1.5.2"
     "@types/croppie": "npm:2.6.4"
@@ -3835,12 +3835,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cookie-parser@npm:1.4.3":
-  version: 1.4.3
-  resolution: "@types/cookie-parser@npm:1.4.3"
-  dependencies:
-    "@types/express": "npm:*"
-  checksum: 10/f390f3af1b1711190dee2c2ecd9af33af81fbde8d81ee820dadb6fe1e0d80c3faba40af37c6ed36fb88b04b64870f6a021f7e9edceecd17c42fe22abe0af5005
+"@types/cookie-parser@npm:1.4.9":
+  version: 1.4.9
+  resolution: "@types/cookie-parser@npm:1.4.9"
+  peerDependencies:
+    "@types/express": "*"
+  checksum: 10/6192a4899b5412a4c3be0f47158321aef73a4cd7e7a4f7b2a37e2e1045f11a21209681cb1bc5335f250ee2a6ce64d8a3fefb851181a98e6415d3716ef9ed1f62
   languageName: node
   linkType: hard
 
