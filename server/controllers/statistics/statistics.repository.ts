@@ -62,8 +62,10 @@ const createClassroomEntry = (classroom: Classroom, phaseDetails: PhaseDetails):
 
 function getClassroomDisplayName(classroom: Classroom): string {
   const classroomUser = classroom.user;
-  const nameWithUserLevelAndCity = classroomUser.level && classroomUser.city ? `La classe de ${classroomUser.level} à ${classroomUser.city}` : '';
-  const nameWithUserCity = classroomUser.city ? `La classe de ${classroomUser.city}` : '';
+  const nameWithUserLevelAndCity =
+    classroomUser.level && classroomUser.city ? `La classe de ${classroomUser.level} à ${classroomUser.city}` : undefined;
+  const nameWithUserCity = classroomUser.city ? `La classe de ${classroomUser.city}` : undefined;
+
   return classroom.name ?? classroomUser.displayName ?? nameWithUserLevelAndCity ?? nameWithUserCity ?? `Classe n°${classroom.id}`;
 }
 
@@ -74,55 +76,38 @@ const getActivityCounts = async (activities: Activity[], phaseId: number) => {
 
   const activityByType = groupBy(activities, (activity: Activity) => activity.type);
 
-  if (phaseId === 1) {
-    const indiceCount = activityByType.get(6)?.length || 0;
-    const mascotCount = activityByType.get(8)?.length || 0;
-    const enigmaCount = activityByType.get(1)?.length || 0;
-    const challengeCount = activityByType.get(2)?.length || 0; // Challenge = Defi
-    const questionCount = activityByType.get(3)?.length || 0;
-    const gameCount = activityByType.get(4)?.length || 0;
-
-    return {
-      ...baseActivityCount,
-      indiceCount,
-      mascotCount,
-      enigmaCount,
-      challengeCount,
-      questionCount,
-      gameCount,
-    };
-  } else if (phaseId === 2) {
-    const reportingCount = activityByType.get(9)?.length || 0;
-    const challengeCount = activityByType.get(2)?.length || 0; // Challenge = Defi
-    const enigmaCount = activityByType.get(1)?.length || 0;
-    const gameCount = activityByType.get(4)?.length || 0;
-    const questionCount = activityByType.get(3)?.length || 0;
-    const reactionCount = activityByType.get(10)?.length || 0;
-
-    return {
-      ...baseActivityCount,
-      reportingCount,
-      challengeCount,
-      enigmaCount,
-      gameCount,
-      questionCount,
-      reactionCount,
-    };
-  } else if (phaseId === 3) {
-    const reinventStoryCount = activityByType.get(14)?.length || 0;
-    const anthemCount = activityByType.get(12)?.length || 0;
-    const contentLibreCount = activityByType.get(5)?.length || 0;
-    const storyCount = activityByType.get(13)?.length || 0;
-
-    return {
-      ...baseActivityCount,
-      reinventStoryCount,
-      anthemCount,
-      contentLibreCount,
-      storyCount,
-    };
-  } else {
-    return { ...baseActivityCount };
+  // Se référer à l'enum ActivityType dans types/activity.type.ts pour les types d'activités
+  switch (phaseId) {
+    case 1:
+      return {
+        ...baseActivityCount,
+        indiceCount: activityByType.get(6)?.length || 0,
+        mascotCount: activityByType.get(8)?.length || 0,
+        enigmaCount: activityByType.get(1)?.length || 0,
+        challengeCount: activityByType.get(2)?.length || 0, // Challenge = Defi
+        questionCount: activityByType.get(3)?.length || 0,
+        gameCount: activityByType.get(4)?.length || 0,
+      };
+    case 2:
+      return {
+        ...baseActivityCount,
+        reportingCount: activityByType.get(9)?.length || 0,
+        challengeCount: activityByType.get(2)?.length || 0, // Challenge = Defi
+        enigmaCount: activityByType.get(1)?.length || 0,
+        gameCount: activityByType.get(4)?.length || 0,
+        questionCount: activityByType.get(3)?.length || 0,
+        reactionCount: activityByType.get(10)?.length || 0,
+      };
+    case 3:
+      return {
+        ...baseActivityCount,
+        reinventStoryCount: activityByType.get(14)?.length || 0,
+        anthemCount: activityByType.get(12)?.length || 0,
+        contentLibreCount: activityByType.get(5)?.length || 0,
+        storyCount: activityByType.get(13)?.length || 0,
+      };
+    default:
+      return { ...baseActivityCount };
   }
 };
 

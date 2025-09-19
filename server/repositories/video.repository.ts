@@ -1,5 +1,9 @@
+import { ActivityStatus } from '../../types/activity.type';
+import { UserType } from '../../types/user.type';
 import { Activity } from '../entities/activity';
 import { AppDataSource } from '../utils/data-source';
+
+const USER_WITH_PLM_SSO_REGISTRATION = 10;
 
 const activitiesRepository = AppDataSource.getRepository(Activity);
 
@@ -10,8 +14,12 @@ export async function getVideosCountByClassroomUser(userId: number, phase?: numb
     .createQueryBuilder('a')
     .where(`JSON_SEARCH(a.content, 'one', :type, NULL, '$[*].type') IS NOT NULL`, { type: 'video' })
     .andWhere('a.deleteDate IS NULL')
-    .andWhere('a.status = 0')
-    .innerJoin('user', 'u', `u.id = a.userId AND u.id = ${userId} AND u.type = 3 AND u.accountRegistration = 10`);
+    .andWhere(`a.status = ${ActivityStatus.PUBLISHED}`)
+    .innerJoin(
+      'user',
+      'u',
+      `u.id = a.userId AND u.id = ${userId} AND u.type = ${UserType.TEACHER} AND u.accountRegistration = ${USER_WITH_PLM_SSO_REGISTRATION}`,
+    );
 
   if (phase) {
     qb.andWhere('a.phase = :phase', { phase });
@@ -25,8 +33,12 @@ export async function getVideosCountByVillageId(villageId: number, phase?: numbe
     .createQueryBuilder('a')
     .where(`JSON_SEARCH(a.content, 'one', :type, NULL, '$[*].type') IS NOT NULL`, { type: 'video' })
     .andWhere('a.deleteDate IS NULL')
-    .andWhere('a.status = 0')
-    .innerJoin('user', 'u', `u.id = a.userId AND u.villageId = ${villageId} AND u.type = 3 AND u.accountRegistration = 10`);
+    .andWhere(`a.status = ${ActivityStatus.PUBLISHED}`)
+    .innerJoin(
+      'user',
+      'u',
+      `u.id = a.userId AND u.villageId = ${villageId} AND u.type = ${UserType.TEACHER} AND u.accountRegistration = ${USER_WITH_PLM_SSO_REGISTRATION}`,
+    );
 
   if (phase) {
     qb.andWhere('a.phase = :phase', { phase });
@@ -40,12 +52,12 @@ export async function getVideosCountByVillageCountryAndPhase(villageId: number, 
     .createQueryBuilder('a')
     .where(`JSON_SEARCH(a.content, 'one', :type, NULL, '$[*].type') IS NOT NULL`, { type: 'video' })
     .andWhere('a.deleteDate IS NULL')
-    .andWhere('a.status = 0')
+    .andWhere(`a.status = ${ActivityStatus.PUBLISHED}`)
     .andWhere('a.phase = :phase', { phase })
     .innerJoin(
       'user',
       'u',
-      `u.id = a.userId AND u.villageId = ${villageId} AND u.countryCode = '${countryCode} AND u.type = 3 AND u.accountRegistration = 10'`,
+      `u.id = a.userId AND u.villageId = ${villageId} AND u.countryCode = '${countryCode}' AND u.type = ${UserType.TEACHER} AND u.accountRegistration = ${USER_WITH_PLM_SSO_REGISTRATION}`,
     )
     .getCount();
 }
@@ -55,8 +67,12 @@ export async function getVideosCountByCountryCode(countryCode: string, phase?: n
     .createQueryBuilder('a')
     .where(`JSON_SEARCH(a.content, 'one', :type, NULL, '$[*].type') IS NOT NULL`, { type: 'video' })
     .andWhere('a.deleteDate IS NULL')
-    .andWhere('a.status = 0')
-    .innerJoin('user', 'u', `u.id = a.userId AND u.countryCode = '${countryCode}' AND u.type = 3 AND u.accountRegistration = 10`);
+    .andWhere(`a.status = ${ActivityStatus.PUBLISHED}`)
+    .innerJoin(
+      'user',
+      'u',
+      `u.id = a.userId AND u.countryCode = '${countryCode}' AND u.type = ${UserType.TEACHER} AND u.accountRegistration = ${USER_WITH_PLM_SSO_REGISTRATION}`,
+    );
 
   if (phase) {
     qb.andWhere('a.phase = :phase', { phase });
@@ -70,8 +86,8 @@ export async function getVideosTotalCount(phase?: number): Promise<number> {
     .createQueryBuilder('a')
     .where(`JSON_SEARCH(a.content, 'one', :type, NULL, '$[*].type') IS NOT NULL`, { type: 'video' })
     .andWhere('a.deleteDate IS NULL')
-    .andWhere('a.status = 0')
-    .innerJoin('user', 'u', `u.id = a.userId AND u.type = 3 AND u.accountRegistration = 10`);
+    .andWhere(`a.status = ${ActivityStatus.PUBLISHED}`)
+    .innerJoin('user', 'u', `u.id = a.userId AND u.type = ${UserType.TEACHER} AND u.accountRegistration = ${USER_WITH_PLM_SSO_REGISTRATION}`);
 
   if (phase) {
     qb.andWhere('a.phase = :phase', { phase });

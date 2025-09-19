@@ -19,15 +19,6 @@ const ClassroomActivityTable: React.FC<ClassroomActivityTableProps> = (props: Cl
     return <div>Aucune donnée disponible pour cette phase.</div>;
   }
 
-  // On adapte les données pour le tableau
-  const tableData: PhaseTableRow[] = data.map(
-    (row: { id?: string | number; name?: string; isSelected?: boolean; [key: string]: unknown }, idx: number) => ({
-      ...row,
-      id: row.id || idx,
-      name: row.name || `Row ${idx}`,
-    }),
-  );
-
   // Custom row style: bleu si isSelected
   const rowStyle = (row: PhaseTableRow) => {
     if (row.id === 'total') {
@@ -44,7 +35,7 @@ const ClassroomActivityTable: React.FC<ClassroomActivityTableProps> = (props: Cl
       <OneVillageTable
         admin={false}
         emptyPlaceholder={<p>Aucune donnée pour cette classe</p>}
-        data={tableData}
+        data={data}
         columns={getClassroomActivityTableHeaders(phaseId)}
         rowStyle={rowStyle}
         tableLayout="auto"

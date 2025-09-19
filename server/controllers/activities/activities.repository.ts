@@ -1,7 +1,11 @@
 import { Not, In, IsNull } from 'typeorm';
 
+import { ActivityStatus, ActivityType } from '../../../types/activity.type';
+import { UserType } from '../../../types/user.type';
 import { Activity } from '../../entities/activity';
 import { AppDataSource } from '../../utils/data-source';
+
+const USER_WITH_PLM_SSO_REGISTRATION = 10;
 
 const activitiesRepository = AppDataSource.getRepository(Activity);
 
@@ -26,41 +30,67 @@ export const getActivities = async ({ phase, villageIds = [] }: GetActivitiesPar
 
 export async function getActivitiesTotalCount(phase?: number): Promise<number> {
   return activitiesRepository.count({
-    where: { phase, deleteDate: IsNull(), status: 0, type: Not(In([0, 11])), user: { type: 3, accountRegistration: 10 } },
+    where: {
+      phase,
+      deleteDate: IsNull(),
+      status: ActivityStatus.PUBLISHED,
+      type: Not(In([ActivityType.PRESENTATION, ActivityType.ANTHEM])),
+      user: { type: UserType.TEACHER, accountRegistration: USER_WITH_PLM_SSO_REGISTRATION },
+    },
   });
 }
 
 export async function getActivitiesCountByClassroomUser(userId: number, phase?: number): Promise<number> {
   return activitiesRepository.count({
-    where: { phase, deleteDate: IsNull(), status: 0, type: Not(In([0, 11])), user: { id: userId, type: 3, accountRegistration: 10 } },
+    where: {
+      phase,
+      deleteDate: IsNull(),
+      status: ActivityStatus.PUBLISHED,
+      type: Not(In([ActivityType.PRESENTATION, ActivityType.ANTHEM])),
+      user: { id: userId, type: UserType.TEACHER, accountRegistration: USER_WITH_PLM_SSO_REGISTRATION },
+    },
   });
 }
 
 export async function getActivitiesByClassroomUserAndPhase(userId: number, phase?: number): Promise<Activity[]> {
   return activitiesRepository.find({
-    where: { phase, deleteDate: IsNull(), status: 0, type: Not(In([0, 11])), user: { id: userId, type: 3, accountRegistration: 10 } },
+    where: {
+      phase,
+      deleteDate: IsNull(),
+      status: ActivityStatus.PUBLISHED,
+      type: Not(In([ActivityType.PRESENTATION, ActivityType.ANTHEM])),
+      user: { id: userId, type: UserType.TEACHER, accountRegistration: USER_WITH_PLM_SSO_REGISTRATION },
+    },
   });
 }
 
 export async function getActivitiesByVillageCountryAndPhase(villageId: number, countryCode: string, phase: number): Promise<Activity[]> {
   return activitiesRepository
     .createQueryBuilder('a')
-    .innerJoin('user', 'u', `u.id = a.userId AND u.countryCode = '${countryCode} AND u.type = 3 AND u.accountRegistration = 10'`)
+    .innerJoin(
+      'user',
+      'u',
+      `u.id = a.userId AND u.countryCode = '${countryCode}' AND u.type = ${UserType.TEACHER} AND u.accountRegistration = ${USER_WITH_PLM_SSO_REGISTRATION}`,
+    )
     .where('a.villageId = :villageId', { villageId })
     .andWhere('a.phase = :phase', { phase })
     .andWhere('a.deleteDate IS NULL')
-    .andWhere('a.status = 0')
-    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [0, 11] }) // On exclut PRESENTATION et ANTHEM
+    .andWhere(`a.status = ${ActivityStatus.PUBLISHED}`)
+    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [ActivityType.PRESENTATION, ActivityType.ANTHEM] })
     .getMany();
 }
 
 export async function getActivitiesCountByCountry(countryCode: string, phase?: number): Promise<number> {
   const qb = activitiesRepository
     .createQueryBuilder('a')
-    .innerJoin('user', 'u', `u.id = a.userId AND u.countryCode = '${countryCode}' AND u.type = 3 AND u.accountRegistration = 10`)
+    .innerJoin(
+      'user',
+      'u',
+      `u.id = a.userId AND u.countryCode = '${countryCode}' AND u.type = ${UserType.TEACHER} AND u.accountRegistration = ${USER_WITH_PLM_SSO_REGISTRATION}`,
+    )
     .andWhere('a.deleteDate IS NULL')
-    .andWhere('a.status = 0')
-    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [0, 11] }); // On exclut PRESENTATION et ANTHEM
+    .andWhere(`a.status = ${ActivityStatus.PUBLISHED}`)
+    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [ActivityType.PRESENTATION, ActivityType.ANTHEM] });
 
   if (phase) {
     qb.andWhere('a.phase = :phase', { phase });
@@ -72,22 +102,26 @@ export async function getActivitiesCountByCountry(countryCode: string, phase?: n
 export async function getActivitiesByCountryAndPhase(countryCode: string, phase: number): Promise<Activity[]> {
   return activitiesRepository
     .createQueryBuilder('a')
-    .innerJoin('user', 'u', `u.id = a.userId AND u.countryCode = '${countryCode}' AND u.type = 3 AND u.accountRegistration = 10`)
+    .innerJoin(
+      'user',
+      'u',
+      `u.id = a.userId AND u.countryCode = '${countryCode}' AND u.type = ${UserType.TEACHER} AND u.accountRegistration = ${USER_WITH_PLM_SSO_REGISTRATION}`,
+    )
     .where('a.phase = :phase', { phase })
     .andWhere('a.deleteDate IS NULL')
-    .andWhere('a.status = 0')
-    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [0, 11] }) // On exclut PRESENTATION et ANTHEM
+    .andWhere(`a.status = ${ActivityStatus.PUBLISHED}`)
+    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [ActivityType.PRESENTATION, ActivityType.ANTHEM] })
     .getMany();
 }
 
 export async function getActivitiesCountByVillageId(villageId: number, phase?: number): Promise<number> {
   const qb = activitiesRepository
     .createQueryBuilder('a')
-    .innerJoin('user', 'u', `u.id = a.userId AND u.type = 3 AND u.accountRegistration = 10`)
+    .innerJoin('user', 'u', `u.id = a.userId AND u.type = ${UserType.TEACHER} AND u.accountRegistration = ${USER_WITH_PLM_SSO_REGISTRATION}`)
     .where('a.villageId = :villageId', { villageId })
     .andWhere('a.deleteDate IS NULL')
-    .andWhere('a.status = 0')
-    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [0, 11] }); // On exclut PRESENTATION et ANTHEM
+    .andWhere(`a.status = ${ActivityStatus.PUBLISHED}`)
+    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [ActivityType.PRESENTATION, ActivityType.ANTHEM] });
 
   if (phase) {
     qb.andWhere('a.phase = :phase', { phase });
@@ -99,11 +133,11 @@ export async function getActivitiesCountByVillageId(villageId: number, phase?: n
 export async function getActivitiesByVillageIdAndPhase(villageId: number, phase: number): Promise<Activity[]> {
   return activitiesRepository
     .createQueryBuilder('a')
-    .innerJoin('user', 'u', `u.id = a.userId AND u.type = 3 AND u.accountRegistration = 10`)
+    .innerJoin('user', 'u', `u.id = a.userId AND u.type = ${UserType.TEACHER} AND u.accountRegistration = ${USER_WITH_PLM_SSO_REGISTRATION}`)
     .where('a.villageId = :villageId', { villageId })
     .andWhere('a.phase = :phase', { phase })
     .andWhere('a.deleteDate IS NULL')
-    .andWhere('a.status = 0')
-    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [0, 11] }) // On exclut PRESENTATION et ANTHEM
+    .andWhere(`a.status = ${ActivityStatus.PUBLISHED}`)
+    .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [ActivityType.PRESENTATION, ActivityType.ANTHEM] })
     .getMany();
 }

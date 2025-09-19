@@ -1,12 +1,15 @@
+import { UserType } from '../../../types/user.type';
 import { Comment } from '../../entities/comment';
 import { AppDataSource } from '../../utils/data-source';
+
+const USER_WITH_PLM_SSO_REGISTRATION = 10;
 
 const commentsRepository = AppDataSource.getRepository(Comment);
 
 export async function getCommentsTotalCount(phase?: number): Promise<number> {
   const qb = commentsRepository
     .createQueryBuilder('c')
-    .innerJoin('user', 'u', `u.id = c.userId AND u.type = 3 AND u.accountRegistration = 10`)
+    .innerJoin('user', 'u', `u.id = c.userId AND u.type = ${UserType.TEACHER} AND u.accountRegistration = ${USER_WITH_PLM_SSO_REGISTRATION}`)
     .innerJoin('activity', 'a', `a.id = c.activityId`);
 
   if (phase) {
@@ -19,7 +22,11 @@ export async function getCommentsTotalCount(phase?: number): Promise<number> {
 export async function getUserCommentsCount(userId: number, phase?: number): Promise<number> {
   const qb = commentsRepository
     .createQueryBuilder('c')
-    .innerJoin('user', 'u', `u.id = c.userId AND u.id = ${userId} AND u.type = 3 AND u.accountRegistration = 10`)
+    .innerJoin(
+      'user',
+      'u',
+      `u.id = c.userId AND u.id = ${userId} AND u.type = ${UserType.TEACHER} AND u.accountRegistration = ${USER_WITH_PLM_SSO_REGISTRATION}`,
+    )
     .innerJoin('activity', 'a', `a.id = c.activityId`);
 
   if (phase) {
@@ -35,7 +42,7 @@ export async function getCommentsCountByVillageCountryAndPhase(villageId: number
     .innerJoin(
       'user',
       'u',
-      `u.id = c.userId AND u.countryCode = '${countryCode}' AND u.villageId = ${villageId} AND u.type = 3 AND u.accountRegistration = 10`,
+      `u.id = c.userId AND u.countryCode = '${countryCode}' AND u.villageId = ${villageId} AND u.type = ${UserType.TEACHER} AND u.accountRegistration = ${USER_WITH_PLM_SSO_REGISTRATION}`,
     )
     .innerJoin('activity', 'a', `a.id = c.activityId AND a.phase = ${phase}`)
     .getCount();
@@ -44,7 +51,11 @@ export async function getCommentsCountByVillageCountryAndPhase(villageId: number
 export async function getCommentsCountByCountry(countryCode: string, phase?: number): Promise<number> {
   const qb = commentsRepository
     .createQueryBuilder('c')
-    .innerJoin('user', 'u', `u.id = c.userId AND u.countryCode = '${countryCode}' AND u.type = 3 AND u.accountRegistration = 10`)
+    .innerJoin(
+      'user',
+      'u',
+      `u.id = c.userId AND u.countryCode = '${countryCode}' AND u.type = ${UserType.TEACHER} AND u.accountRegistration = ${USER_WITH_PLM_SSO_REGISTRATION}`,
+    )
     .innerJoin('activity', 'a', `a.id = c.activityId`);
 
   if (phase) {
@@ -57,7 +68,11 @@ export async function getCommentsCountByCountry(countryCode: string, phase?: num
 export async function getCommentsCountByVillageId(villageId: number, phase?: number): Promise<number> {
   const qb = commentsRepository
     .createQueryBuilder('c')
-    .innerJoin('user', 'u', `u.id = c.userId AND u.villageId = ${villageId} AND u.type = 3 AND u.accountRegistration = 10`)
+    .innerJoin(
+      'user',
+      'u',
+      `u.id = c.userId AND u.villageId = ${villageId} AND u.type = ${UserType.TEACHER} AND u.accountRegistration = ${USER_WITH_PLM_SSO_REGISTRATION}`,
+    )
     .innerJoin('activity', 'a', `a.id = c.activityId`);
 
   if (phase) {

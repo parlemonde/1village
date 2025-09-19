@@ -16,9 +16,7 @@ export interface StatisticsDto {
     familyAccountsCount?: number;
     floatingAccounts?: Array<any>;
   };
-  // TODO : remove
-  activityCountDetails?: any;
-  totalActivityCounts?: TotalActivitiesCounts;
+  totalActivityCounts: TotalActivitiesCounts;
 }
 
 export interface TotalActivitiesCounts {
