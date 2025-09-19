@@ -35,6 +35,7 @@ import {
 } from '../../stats/sessionStats';
 import { getFamiliesWithoutAccountForVillage } from '../../stats/villageStats';
 import { AppDataSource } from '../../utils/data-source';
+import { countries } from '../../utils/iso-3166-countries-french';
 import { Controller } from '../controller';
 import type { StatisticsDto } from './statistics.dto';
 import { getActivityTypeCountByVillages } from './statistics.repository';
@@ -403,6 +404,63 @@ statisticsController.get({ path: '/one-village/countries-engagement-statuses' },
 `);
 
   res.sendJSON(countryEngagementStatus);
+});
+
+statisticsController.get({ path: '/one-village/village-engagement-statuses' }, async (req, res) => {
+  const villageEngagementStatus = await AppDataSource.query<
+    {
+      villageId: number;
+      villageName: string;
+      countryCodes: string;
+      status: string;
+      statusCount: number;
+    }[]
+  >(`
+    WITH villages AS (
+      SELECT DISTINCT v.id, v.name, v.countryCodes
+      FROM village v
+      INNER JOIN classroom c ON c.villageId = v.id
+    ),
+    getUsersStatus AS (
+      SELECT
+        u.id,
+        u.villageId,
+        v.name as villageName,
+        v.countryCodes,
+        CASE
+          WHEN MAX(sess.date) IS NULL OR MAX(sess.date) < (NOW() - INTERVAL 21 DAY) THEN 'ghost'
+          WHEN MAX(act.publishDate) >= (NOW() - INTERVAL 21 DAY)
+            OR MAX(com.createDate) >= (NOW() - INTERVAL 21 DAY) THEN 'active'
+          ELSE 'observer'
+        END AS status
+      FROM villages v
+      INNER JOIN user u ON u.villageId = v.id
+      LEFT JOIN analytic_session sess ON sess.userId = u.id
+      LEFT JOIN activity act ON act.userId = u.id AND act.status = 0 AND act.deleteDate IS NULL
+      LEFT JOIN comment com ON com.userId = u.id
+      GROUP BY u.id, u.villageId, v.name
+    )
+    SELECT 
+      villageId,
+      villageName,
+      v.countryCodes,
+      status,
+      COUNT(*) as totalConnections
+    FROM getUsersStatus
+    INNER JOIN villages v ON v.id = villageId
+    GROUP BY villageId, villageName, v.countryCodes, status
+    ORDER BY totalConnections DESC;
+  `);
+
+  res.sendJSON(
+    villageEngagementStatus.map(({ countryCodes, ...rest }) => ({
+      ...rest,
+      countries: countryCodes.split(',').map((countryCode) => ({
+        isoCode: countryCode,
+        name: countries.find((country) => country.isoCode === countryCode)?.name,
+      })),
+    })),
+  );
 });
 
 statisticsController.get({ path: '/villages/:villageId' }, async (req, res) => {
