@@ -10,8 +10,8 @@ import StatsCard from '../cards/StatsCard/StatsCard';
 import BarCharts from '../charts/BarCharts';
 import { mockDataByMonth } from '../mocks/mocks';
 import styles from '../styles/charts.module.css';
-import { createFamiliesWithoutAccountRows, createFloatingAccountsRows } from '../utils/tableCreator';
-import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from '../utils/tableHeader';
+import { createFamiliesWithoutAccountRows } from '../utils/tableCreator';
+import { FamiliesWithoutAccountHeaders } from '../utils/tableHeader';
 import type { DashboardSummaryData } from 'types/dashboard.type';
 import { AverageStatsProcessingMethod } from 'types/dashboard.type';
 
@@ -29,7 +29,6 @@ const DashboardFamilyTab = ({ dashboardSummaryData }: DashboardFamilyTabProps) =
   }
 
   const familiesWithoutAccountRows = createFamiliesWithoutAccountRows(familyData.familiesWithoutAccount);
-  const floatingAccountsRows = createFloatingAccountsRows(familyData.floatingAccounts);
 
   return (
     <>
@@ -39,13 +38,6 @@ const DashboardFamilyTab = ({ dashboardSummaryData }: DashboardFamilyTabProps) =
         data={familiesWithoutAccountRows}
         columns={FamiliesWithoutAccountHeaders}
         titleContent={`À surveiller : comptes non créés (${familiesWithoutAccountRows.length})`}
-      />
-      <OneVillageTable
-        admin={false}
-        emptyPlaceholder={<p>{'Pas de données'}</p>}
-        data={floatingAccountsRows}
-        columns={FloatingAccountsHeaders}
-        titleContent={`À surveiller : comptes flottants (${floatingAccountsRows.length})`}
       />
       <Box
         className={styles.classroomStats}

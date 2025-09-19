@@ -6,13 +6,6 @@ export const FamiliesWithoutAccountHeaders = [
   { key: 'creationDate', label: 'Date de création identifiant', sortable: true },
 ];
 
-export const FloatingAccountsHeaders = [
-  { key: 'family', label: 'Nom Prénom Famille', sortable: true },
-  { key: 'language', label: 'Langue', sortable: true },
-  { key: 'email', label: 'Mail', sortable: true },
-  { key: 'creationDate', label: 'Date de création compte', sortable: true },
-];
-
 export const CountryActivityTableHeaders = [
   { key: 'name', label: 'Classe', sortable: true },
   { key: 'totalPublications', label: 'Publications', sortable: true },
