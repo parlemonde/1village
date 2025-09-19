@@ -48,7 +48,7 @@ const RAW_RUNTIME_STATE =
           ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.21"],\
           ["@types/cookie-parser", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.4.9"],\
           ["@types/cors", "npm:2.8.19"],\
-          ["@types/cpx", "npm:1.5.2"],\
+          ["@types/cpx", "npm:1.5.5"],\
           ["@types/croppie", "npm:2.6.4"],\
           ["@types/d3-geo", "npm:3.0.2"],\
           ["@types/draft-js", "npm:0.11.9"],\
@@ -215,7 +215,7 @@ const RAW_RUNTIME_STATE =
           ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.21"],\
           ["@types/cookie-parser", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.4.9"],\
           ["@types/cors", "npm:2.8.19"],\
-          ["@types/cpx", "npm:1.5.2"],\
+          ["@types/cpx", "npm:1.5.5"],\
           ["@types/croppie", "npm:2.6.4"],\
           ["@types/d3-geo", "npm:3.0.2"],\
           ["@types/draft-js", "npm:0.11.9"],\
@@ -5917,10 +5917,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@types/cpx", [\
-      ["npm:1.5.2", {\
-        "packageLocation": "./.yarn/cache/@types-cpx-npm-1.5.2-2d6329e9fd-83369974de.zip/node_modules/@types/cpx/",\
+      ["npm:1.5.5", {\
+        "packageLocation": "./.yarn/cache/@types-cpx-npm-1.5.5-797310dd27-3fc715ebc5.zip/node_modules/@types/cpx/",\
         "packageDependencies": [\
-          ["@types/cpx", "npm:1.5.2"],\
+          ["@types/cpx", "npm:1.5.5"],\
           ["@types/node", "npm:16.11.41"]\
         ],\
         "linkType": "HARD"\
