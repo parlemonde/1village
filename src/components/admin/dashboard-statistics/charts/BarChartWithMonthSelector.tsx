@@ -71,7 +71,7 @@ const BarChartWithMonthSelector = ({ data, legend, title }: BarChartWithMonthSel
             >
               <YAxis type="number" domain={[0, yMax]} tickLine={false} axisLine={false} tick={{ fontSize: 14, fill: '#374151' }} />
               <XAxis dataKey="index" interval={0} tickLine={false} axisLine={false} tick={{ fontSize: 14, fill: '#374151' }} />
-              <Tooltip />
+              <Tooltip formatter={(value) => [value, 'Connexion']} labelFormatter={(label) => `${label} ${data[selectedMonthIndex].month}`} />
               {legend && (
                 <Legend
                   verticalAlign="bottom"
