@@ -49,7 +49,7 @@ const RAW_RUNTIME_STATE =
           ["@types/cookie-parser", "npm:1.4.3"],\
           ["@types/cors", "npm:2.8.19"],\
           ["@types/cpx", "npm:1.5.2"],\
-          ["@types/croppie", "npm:2.6.1"],\
+          ["@types/croppie", "npm:2.6.4"],\
           ["@types/d3-geo", "npm:3.0.2"],\
           ["@types/draft-js", "npm:0.11.9"],\
           ["@types/draftjs-to-html", "npm:0.8.1"],\
@@ -216,7 +216,7 @@ const RAW_RUNTIME_STATE =
           ["@types/cookie-parser", "npm:1.4.3"],\
           ["@types/cors", "npm:2.8.19"],\
           ["@types/cpx", "npm:1.5.2"],\
-          ["@types/croppie", "npm:2.6.1"],\
+          ["@types/croppie", "npm:2.6.4"],\
           ["@types/d3-geo", "npm:3.0.2"],\
           ["@types/draft-js", "npm:0.11.9"],\
           ["@types/draftjs-to-html", "npm:0.8.1"],\
@@ -5917,10 +5917,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@types/croppie", [\
-      ["npm:2.6.1", {\
-        "packageLocation": "./.yarn/cache/@types-croppie-npm-2.6.1-b4b3849831-1552d73a1d.zip/node_modules/@types/croppie/",\
+      ["npm:2.6.4", {\
+        "packageLocation": "./.yarn/cache/@types-croppie-npm-2.6.4-7c220fe1ff-a24ba73071.zip/node_modules/@types/croppie/",\
         "packageDependencies": [\
-          ["@types/croppie", "npm:2.6.1"]\
+          ["@types/croppie", "npm:2.6.4"]\
         ],\
         "linkType": "HARD"\
       }]\
