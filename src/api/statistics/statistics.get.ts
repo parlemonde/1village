@@ -11,6 +11,7 @@ import type {
   EngagementStatus,
   CountryEngagementStatus,
 } from 'types/statistics.type';
+import type { Village } from 'types/village.type';
 
 async function getSessionsStats(phase?: number): Promise<SessionsStats> {
   return (
@@ -41,6 +42,22 @@ async function getVillagesStats(villageId?: number, phase?: number): Promise<Vil
     })
   ).data;
 }
+
+async function getVillages(countryIsoCode?: string): Promise<Village[]> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: countryIsoCode ? `/villages?countryIsoCode=${countryIsoCode}` : '/villages',
+    })
+  ).data;
+}
+
+export const useGetVillages = (countryIsoCode?: string) => {
+  return useQuery(['villages', countryIsoCode], () => getVillages(countryIsoCode), {
+    enabled: !!countryIsoCode,
+  });
+};
 
 async function getCountriesStats(countryId?: string, phase?: number): Promise<VillageStats> {
   return (
