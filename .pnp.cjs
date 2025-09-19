@@ -58,7 +58,7 @@ const RAW_RUNTIME_STATE =
           ["@types/express-useragent", "npm:1.0.2"],\
           ["@types/file-saver", "npm:2.0.7"],\
           ["@types/fs-extra", "npm:9.0.13"],\
-          ["@types/geojson", "npm:7946.0.8"],\
+          ["@types/geojson", "npm:7946.0.16"],\
           ["@types/jest", "npm:28.1.3"],\
           ["@types/json-stable-stringify", "npm:1.0.34"],\
           ["@types/jsonwebtoken", "npm:8.5.8"],\
@@ -225,7 +225,7 @@ const RAW_RUNTIME_STATE =
           ["@types/express-useragent", "npm:1.0.2"],\
           ["@types/file-saver", "npm:2.0.7"],\
           ["@types/fs-extra", "npm:9.0.13"],\
-          ["@types/geojson", "npm:7946.0.8"],\
+          ["@types/geojson", "npm:7946.0.16"],\
           ["@types/jest", "npm:28.1.3"],\
           ["@types/json-stable-stringify", "npm:1.0.34"],\
           ["@types/jsonwebtoken", "npm:8.5.8"],\
@@ -6202,10 +6202,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:7946.0.8", {\
-        "packageLocation": "./.yarn/cache/@types-geojson-npm-7946.0.8-df9187edab-6049a39b02.zip/node_modules/@types/geojson/",\
+      ["npm:7946.0.16", {\
+        "packageLocation": "./.yarn/cache/@types-geojson-npm-7946.0.16-7a73d95991-34d07421bd.zip/node_modules/@types/geojson/",\
         "packageDependencies": [\
-          ["@types/geojson", "npm:7946.0.8"]\
+          ["@types/geojson", "npm:7946.0.16"]\
         ],\
         "linkType": "HARD"\
       }]\
