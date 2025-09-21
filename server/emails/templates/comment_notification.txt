@@ -1,7 +1,7 @@
 1Village - Par Le Monde
 --------------------------------------
 
-"{{userWhoComment}}" a commenté votre activité "{{activityType}}"
+"Il y a un nouveau commentaire sous votre activité  "{{activityType}}"
 
 Retrouvez-le juste ici : {{url}}
 
