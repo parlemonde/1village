@@ -19,25 +19,6 @@ export const FloatingAccountsHeaders: PhaseTableHeader[] = [
   { key: 'creationDate', label: 'Date de création compte', sortable: true },
 ];
 
-export const CountryActivityTableHeaders: PhaseTableHeader[] = [
-  { key: 'name', label: 'Classe', sortable: true },
-  { key: 'totalPublications', label: 'Publications', sortable: true },
-  { key: 'commentCount', label: 'Commentaires', sortable: true },
-  { key: 'draftCount', label: 'Brouillons', sortable: true },
-  { key: 'indiceCount', label: 'Indices', sortable: true },
-  { key: 'mascotCount', label: 'Mascottes', sortable: true },
-  { key: 'videoCount', label: 'Vidéos', sortable: true },
-];
-
-export const CountryActivityTableCountryHeaders: PhaseTableHeader[] = [
-  { key: 'name', label: 'Nom du pays', sortable: true },
-  { key: 'indiceCount', label: 'Indices', sortable: true },
-  { key: 'mascotCount', label: 'Mascottes', sortable: true },
-  { key: 'videoCount', label: 'Vidéos', sortable: true },
-  { key: 'draftCount', label: 'Brouillons non publiés', sortable: true },
-  { key: 'commentCount', label: 'Commentaires', sortable: true },
-];
-
 export function getPhaseTableHeaders(phaseId: number, baseHeaders: PhaseTableHeader[]) {
   switch (phaseId) {
     case 1:
@@ -78,7 +59,7 @@ export function getPhaseTableHeaders(phaseId: number, baseHeaders: PhaseTableHea
 }
 
 export function getVillageActivityTableHeaders(phaseId: number) {
-  const baseHeaders = [{ key: 'villageName', label: 'Nom du village', sortable: true }];
+  const baseHeaders = [{ key: 'name', label: 'Nom du village', sortable: true }];
 
   return getPhaseTableHeaders(phaseId, baseHeaders);
 }

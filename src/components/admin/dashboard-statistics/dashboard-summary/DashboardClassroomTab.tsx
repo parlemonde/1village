@@ -4,7 +4,6 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Grid from '@mui/material/Grid';
 
-import { getCommentCount, getPublicationCount, getVideoCount } from '../../StatisticsUtils';
 import CountryActivityPhaseAccordion from '../CountryActivityPhaseAccordion';
 import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchangesCard';
@@ -34,12 +33,9 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
     3: true,
   });
 
-  const videoCount = getVideoCount(dashboardSummaryData);
-  const commentCount = getCommentCount(dashboardSummaryData);
-  const publicationCount = getPublicationCount(dashboardSummaryData);
-
-  // Extract barChartData for better readability
   const barChartData = dashboardSummaryData.barChartData || [];
+
+  const totalActivitiesCounts = dashboardSummaryData?.totalActivityCounts;
 
   return (
     <>
@@ -103,7 +99,11 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
         )}
         <Grid container spacing={2} alignItems="stretch" style={{ paddingLeft: '32px', paddingTop: '32px', display: 'flex' }}>
           <Grid item xs={12} md={6} style={{ display: 'flex' }}>
-            <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
+            <ClassesExchangesCard
+              totalPublications={totalActivitiesCounts?.totalPublications || 0}
+              totalComments={totalActivitiesCounts?.totalComments || 0}
+              totalVideos={totalActivitiesCounts?.totalVideos || 0}
+            />
           </Grid>
           <Grid item xs={12} md={6} style={{ paddingLeft: '32px', display: 'flex' }}>
             <ContributionBarChart dataByStep={dashboardSummaryData.contributionsBarChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />

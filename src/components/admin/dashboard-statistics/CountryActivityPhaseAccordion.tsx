@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
@@ -11,7 +11,7 @@ interface Props {
   phaseId: number;
   countryCode?: string;
   villageId?: number;
-  classroomId?: string;
+  classroomId?: number;
   open: boolean;
   onClick: () => void;
 }
@@ -22,7 +22,7 @@ const phaseLabels: Record<number, string> = {
   3: 'Phase 3',
 };
 
-const CountryActivityPhaseAccordion: React.FC<Props> = ({ phaseId, countryCode, villageId, classroomId, open, onClick }) => {
+const CountryActivityPhaseAccordion: FC<Props> = ({ phaseId, countryCode, villageId, classroomId, open, onClick }) => {
   return (
     <div style={{ marginTop: '1.5rem', borderRadius: 8, border: '1px solid #eee', background: '#fafbfc' }}>
       <div
@@ -43,9 +43,9 @@ const CountryActivityPhaseAccordion: React.FC<Props> = ({ phaseId, countryCode, 
       </div>
       {open && (
         <div style={{ padding: '1rem' }}>
-          {countryCode && <CountryActivityTable countryCode={countryCode} phaseId={phaseId} mode="country" />}
+          {countryCode && <CountryActivityTable countryCode={countryCode} phaseId={phaseId} />}
           {villageId && !classroomId && <VillageActivityTable villageId={villageId} phaseId={phaseId} />}
-          {villageId && classroomId && <ClassroomActivityTable classroomId={parseInt(classroomId)} phaseId={phaseId} />}
+          {villageId && classroomId && <ClassroomActivityTable villageId={villageId} classroomId={classroomId} phaseId={phaseId} />}
         </div>
       )}
     </div>
