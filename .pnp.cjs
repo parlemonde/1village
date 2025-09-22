@@ -52,7 +52,7 @@ const RAW_RUNTIME_STATE =
           ["@types/croppie", "npm:2.6.4"],\
           ["@types/d3-geo", "npm:3.0.2"],\
           ["@types/draft-js", "npm:0.11.18"],\
-          ["@types/draftjs-to-html", "npm:0.8.1"],\
+          ["@types/draftjs-to-html", "npm:0.8.4"],\
           ["@types/earcut", "npm:2.1.1"],\
           ["@types/express", "npm:4.17.13"],\
           ["@types/express-useragent", "npm:1.0.2"],\
@@ -219,7 +219,7 @@ const RAW_RUNTIME_STATE =
           ["@types/croppie", "npm:2.6.4"],\
           ["@types/d3-geo", "npm:3.0.2"],\
           ["@types/draft-js", "npm:0.11.18"],\
-          ["@types/draftjs-to-html", "npm:0.8.1"],\
+          ["@types/draftjs-to-html", "npm:0.8.4"],\
           ["@types/earcut", "npm:2.1.1"],\
           ["@types/express", "npm:4.17.13"],\
           ["@types/express-useragent", "npm:1.0.2"],\
@@ -6093,10 +6093,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@types/draftjs-to-html", [\
-      ["npm:0.8.1", {\
-        "packageLocation": "./.yarn/cache/@types-draftjs-to-html-npm-0.8.1-3a39b1081c-f1fef0b5dc.zip/node_modules/@types/draftjs-to-html/",\
+      ["npm:0.8.4", {\
+        "packageLocation": "./.yarn/cache/@types-draftjs-to-html-npm-0.8.4-b3b705a4ef-cf2b99a2e5.zip/node_modules/@types/draftjs-to-html/",\
         "packageDependencies": [\
-          ["@types/draftjs-to-html", "npm:0.8.1"],\
+          ["@types/draftjs-to-html", "npm:0.8.4"],\
           ["@types/draft-js", "npm:0.11.9"]\
         ],\
         "linkType": "HARD"\
