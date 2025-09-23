@@ -48,7 +48,7 @@ const DashboardFamilyTab = ({ dashboardSummaryData }: DashboardFamilyTabProps) =
           emptyPlaceholder={<p>{'Pas de données'}</p>}
           data={floatingAccountsRows}
           columns={FloatingAccountsHeaders}
-          titleContent={`À surveiller : comptes flottants (${floatingAccountsRows.length})`}
+          titleContent={`À surveiller : (${floatingAccountsRows.length}) comptes flottants`}
         />
       )}
       <Box
