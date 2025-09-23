@@ -12,13 +12,22 @@ import StatisticFilters from './filters/StatisticFilters';
 import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
-import { useGetClassroomsEngagementStatus, useGetCountriesStats, useGetCountryEngagementStatus } from 'src/api/statistics/statistics.get';
+import {
+  useGetClassroomsEngagementStatus,
+  useGetCountriesStats,
+  useGetCountryEngagementStatus,
+  useGetVillages,
+} from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import type { CountryStat } from 'types/analytics/country-stat';
-import type { VillageListItem } from 'types/analytics/village-list-item';
 import { TeamCommentType } from 'types/teamComment.type';
 
-const CountryStats = () => {
+interface CountryStatsProps {
+  onVillageSelect?: (villageId: number, selectedCountry?: string) => void;
+}
+
+// eslint-disable-next-line react/prop-types
+const CountryStats: React.FC<CountryStatsProps> = ({ onVillageSelect }) => {
   const [selectedPhase, setSelectedPhase] = useState<number>();
   const [selectedCountry, setSelectedCountry] = useState<string>();
 
@@ -26,8 +35,6 @@ const CountryStats = () => {
   const [loadingHighlightedCountry, setLoadingHighlightedCountry] = useState<boolean>(true);
   const [barsChartData, setBarsChartData] = useState<CountryStat[]>([]);
   const [loadingBarsChartData, setLoadingBarsChartData] = useState<boolean>(true);
-  const [villageList, setVillageList] = useState<VillageListItem[]>([]);
-  const [loadingVillageList, setLoadingVillageList] = useState<boolean>(true);
 
   const { data: countryEngagementStatus, isLoading: isLoadingCountryEngagementStatus } = useGetCountryEngagementStatus(selectedCountry);
   const { data: classroomsStatistics, isLoading: isLoadingClassroomStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
@@ -36,6 +43,7 @@ const CountryStats = () => {
   const { data: engagementStatusStatistics, isLoading: isLoadingEngagementStatusStatistics } = useGetClassroomsEngagementStatus({
     countryCode: selectedCountry,
   });
+  const { data: villages, isLoading: isLoadingVillages } = useGetVillages(selectedCountry);
 
   // On mocke l'asynchronisme en attendant d'avoir l'appel serveur censé retourner les interactions des villages-mondes
   // A refacto lors de l'implémentation des tickets VIL-407 et VIL-63
@@ -53,29 +61,16 @@ const CountryStats = () => {
         { country: 'Roumanie', total: 10 },
       ];
 
-      const fakeVillageListData = [
-        { name: 'Village France - Canada', color: 'green' },
-        { name: 'Village France - Liban', color: 'orange' },
-        { name: 'Village France - Italie', color: 'gold' },
-        { name: 'Village France - Hongrie', color: 'yellow' },
-        { name: 'Village France - Belgique', color: 'green' },
-        { name: 'Village France - Angleterre', color: 'limegreen' },
-        { name: 'Village France - Mexique', color: 'blue' },
-        { name: 'Village France - Russie', color: 'red' },
-        { name: 'Village France - Australie', color: 'orange' },
-      ];
-
       setHighlightedCountry(fakeHighlightedCountry);
       setLoadingHighlightedCountry(false);
       setBarsChartData(fakeContributionsByCountry);
       setLoadingBarsChartData(false);
-      setVillageList(fakeVillageListData);
-      setLoadingVillageList(false);
     }, 5000);
   }, []);
 
-  const isLoadingCountryStatistics = isLoadingCountryEngagementStatus || loadingHighlightedCountry || loadingBarsChartData || loadingVillageList;
+  const isLoadingCountryStatistics = isLoadingCountryEngagementStatus || loadingHighlightedCountry || loadingBarsChartData || isLoadingVillages;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onCountrySelect = (_country: string) => {
     // TODO VIL-815 changer la valeur de selectedCountry quand on clique sur une barre du graphique
   };
@@ -88,7 +83,7 @@ const CountryStats = () => {
         <PelicoCard message={'Merci de sélectionner un pays pour analyser ses statistiques'} />
       ) : (
         <Box mt={2}>
-          {isLoadingCountryStatistics ? (
+          {isLoadingCountryStatistics || isLoadingVillages ? (
             <Loader analyticsDataType={AnalyticsDataType.GRAPHS} />
           ) : (
             <>
@@ -98,7 +93,15 @@ const CountryStats = () => {
                   <HorizontalBarsChart highlightedCountry={highlightedCountry} barsChartData={barsChartData} onCountrySelect={onCountrySelect} />
                 </div>
               )}
-              {villageList && <VillageListCard villageList={villageList} />}
+              {villages && (
+                <VillageListCard
+                  villageList={villages}
+                  selectedCountry={selectedCountry}
+                  onVillageClick={(villageId, selectedCountry) => {
+                    onVillageSelect?.(villageId, selectedCountry);
+                  }}
+                />
+              )}
             </>
           )}
           {isLoadingClassroomStatistics || isLoadingSessionsStatistics || isLoadingFamilyStatistics || isLoadingEngagementStatusStatistics ? (
