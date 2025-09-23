@@ -34,7 +34,7 @@ __metadata:
     "@types/croppie": "npm:2.6.4"
     "@types/d3-geo": "npm:3.0.2"
     "@types/draft-js": "npm:0.11.18"
-    "@types/draftjs-to-html": "npm:0.8.1"
+    "@types/draftjs-to-html": "npm:0.8.4"
     "@types/earcut": "npm:2.1.1"
     "@types/express": "npm:4.17.13"
     "@types/express-useragent": "npm:1.0.2"
@@ -4016,12 +4016,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/draftjs-to-html@npm:0.8.1":
-  version: 0.8.1
-  resolution: "@types/draftjs-to-html@npm:0.8.1"
+"@types/draftjs-to-html@npm:0.8.4":
+  version: 0.8.4
+  resolution: "@types/draftjs-to-html@npm:0.8.4"
   dependencies:
     "@types/draft-js": "npm:*"
-  checksum: 10/f1fef0b5dc908b0a28916582bd0ce6373812334a4fd66319c005b67ed260f418273951129153638f5692109cc619e6368d20c4be5192f225bb7e65fd70b8a766
+  checksum: 10/cf2b99a2e5b7c8b612dd6b1645a1fe152c7a6cc1457895c5476b28693ef812025a99dc6e2d7d3be44ae9bb6e2392381820f36948c4031972c8fbb33aca3c065a
   languageName: node
   linkType: hard
 
