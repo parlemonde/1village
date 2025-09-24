@@ -34,7 +34,7 @@ interface EmailMapping {
   [Email.INVALID_COUNTRY]: { userName: string; userEmail: string };
   [Email.CONFIRMATION_EMAIL]: { url: string; firstname: string; email: string; verificationHash: string };
   [Email.RESET_PASSWORD_EMAIL]: { url: string; email: string; verificationHash: string };
-  [Email.COMMENT_NOTIFICATION]: { userWhoComment: string; activityType: string; url: string };
+  [Email.COMMENT_NOTIFICATION]: { userWhoComment: string; activityType: string; url: string; token: string };
 }
 type EmailOptions<E extends Email> = EmailMapping[E];
 
