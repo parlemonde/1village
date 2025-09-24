@@ -1,18 +1,22 @@
 import { useEffect, useState } from 'react';
 
-import Box from '@mui/material/Box';
+import { Box } from '@mui/material';
 
 import EntityEngagementStatus, { EntityType } from './EntityEngagementStatus';
 import Loader, { AnalyticsDataType } from './Loader';
 import TeamCommentCard from './TeamCommentCard';
 import VillageListCard from './cards/VillageListCard/VillageListCard';
-import HorizontalBarsChart from './charts/HorizontalChart';
+import HorizontalChart from './charts/HorizontalChart';
 import DashboardSummary from './dashboard-summary/DashboardSummary';
 import StatisticFilters from './filters/StatisticFilters';
-import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
-import { useGetClassroomsEngagementStatus, useGetCountriesStats, useGetCountryEngagementStatus } from 'src/api/statistics/statistics.get';
+import {
+  useGetCountryEngagementStatus,
+  useGetCountriesStats,
+  useGetClassroomsEngagementStatus,
+  useGetCompareGlobalStats,
+} from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import type { CountryStat } from 'types/analytics/country-stat';
 import type { VillageListItem } from 'types/analytics/village-list-item';
@@ -36,6 +40,7 @@ const CountryStats = () => {
   const { data: engagementStatusStatistics, isLoading: isLoadingEngagementStatusStatistics } = useGetClassroomsEngagementStatus({
     countryCode: selectedCountry,
   });
+  const { data: activityCountDetails, isLoading: isLoadingActivityCountDetails } = useGetCompareGlobalStats(selectedPhase || 0);
 
   // On mocke l'asynchronisme en attendant d'avoir l'appel serveur censé retourner les interactions des villages-mondes
   // A refacto lors de l'implémentation des tickets VIL-407 et VIL-63
@@ -74,7 +79,14 @@ const CountryStats = () => {
     }, 5000);
   }, []);
 
-  const isLoadingCountryStatistics = isLoadingCountryEngagementStatus || loadingHighlightedCountry || loadingBarsChartData || loadingVillageList;
+  const isLoadingCountryStatisticsForGraphs =
+    isLoadingCountryEngagementStatus || loadingHighlightedCountry || loadingBarsChartData || loadingVillageList;
+  const isLoadingClassroomStatisticsForWidgets =
+    isLoadingClassroomStatistics ||
+    isLoadingSessionsStatistics ||
+    isLoadingFamilyStatistics ||
+    isLoadingEngagementStatusStatistics ||
+    isLoadingActivityCountDetails;
 
   const onCountrySelect = (_country: string) => {
     // TODO VIL-815 changer la valeur de selectedCountry quand on clique sur une barre du graphique
@@ -88,20 +100,20 @@ const CountryStats = () => {
         <PelicoCard message={'Merci de sélectionner un pays pour analyser ses statistiques'} />
       ) : (
         <Box mt={2}>
-          {isLoadingCountryStatistics ? (
+          {isLoadingCountryStatisticsForGraphs ? (
             <Loader analyticsDataType={AnalyticsDataType.GRAPHS} />
           ) : (
             <>
               {countryEngagementStatus && <EntityEngagementStatus entityType={EntityType.COUNTRY} entityEngagementStatus={countryEngagementStatus} />}
               {highlightedCountry && barsChartData && (
                 <div className={styles.simpleContainer}>
-                  <HorizontalBarsChart highlightedCountry={highlightedCountry} barsChartData={barsChartData} onCountrySelect={onCountrySelect} />
+                  <HorizontalChart highlightedCountry={highlightedCountry} barsChartData={barsChartData} onCountrySelect={onCountrySelect} />
                 </div>
               )}
               {villageList && <VillageListCard villageList={villageList} />}
             </>
           )}
-          {isLoadingClassroomStatistics || isLoadingSessionsStatistics || isLoadingFamilyStatistics || isLoadingEngagementStatusStatistics ? (
+          {isLoadingClassroomStatisticsForWidgets ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
           ) : (
             classroomsStatistics &&
@@ -112,7 +124,8 @@ const CountryStats = () => {
                   ...classroomsStatistics,
                   ...sessionsStatistics,
                   ...familyStatistics,
-                  barChartData: mockDataByMonth,
+                  ...activityCountDetails,
+                  barChartData: sessionsStatistics?.barChartData || [],
                   engagementStatusData: engagementStatusStatistics,
                 }}
                 selectedCountry={selectedCountry}

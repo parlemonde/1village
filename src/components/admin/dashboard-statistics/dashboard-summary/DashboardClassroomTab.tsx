@@ -4,7 +4,6 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Grid from '@mui/material/Grid';
 
-import { getCommentCount, getPublicationCount, getVideoCount } from '../../StatisticsUtils';
 import CountryActivityPhaseAccordion from '../CountryActivityPhaseAccordion';
 import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchangesCard';
@@ -12,7 +11,6 @@ import StatsCard from '../cards/StatsCard/StatsCard';
 import BarCharts from '../charts/BarCharts';
 import ContributionBarChart from '../charts/ContributionBarChart';
 import PieCharts from '../charts/PieCharts';
-import PhaseDetails from '../menu/PhaseDetails';
 import styles from '../styles/charts.module.css';
 import ClassroomsToMonitorTable from '../tables/ClassroomsToMonitorTable';
 import { AverageStatsProcessingMethod, DashboardType } from 'types/dashboard.type';
@@ -30,14 +28,15 @@ export interface DashboardClassroomTabProps {
 
 const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCountry, selectedPhase = 0 }: DashboardClassroomTabProps) => {
   const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
-    1: false,
-    2: false,
-    3: false,
+    1: true,
+    2: true,
+    3: true,
   });
 
-  const videoCount = getVideoCount(dashboardSummaryData);
-  const commentCount = getCommentCount(dashboardSummaryData);
-  const publicationCount = getPublicationCount(dashboardSummaryData);
+  const barChartData = dashboardSummaryData.barChartData || [];
+
+  const totalActivitiesCounts = dashboardSummaryData?.totalActivityCounts;
+
   return (
     <>
       <ClassroomsToMonitorTable countryId={selectedCountry} />
@@ -83,7 +82,7 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
         </Grid>
         {dashboardType === DashboardType.ONE_VILLAGE_PANEL ? (
           <Grid item xs={12} lg={12}>
-            <BarCharts className={styles.midContainer} dataByMonth={dashboardSummaryData.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+            <BarCharts className={styles.midContainer} dataByMonth={barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
           </Grid>
         ) : (
           <>
@@ -94,34 +93,23 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
             )}
 
             <Grid item xs={12} lg={6}>
-              <BarCharts className={styles.midContainer} dataByMonth={dashboardSummaryData.barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+              <BarCharts className={styles.midContainer} dataByMonth={barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
             </Grid>
           </>
         )}
         <Grid container spacing={2} alignItems="stretch" style={{ paddingLeft: '32px', paddingTop: '32px', display: 'flex' }}>
           <Grid item xs={12} md={6} style={{ display: 'flex' }}>
-            <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
+            <ClassesExchangesCard
+              totalPublications={totalActivitiesCounts?.totalPublications || 0}
+              totalComments={totalActivitiesCounts?.totalComments || 0}
+              totalVideos={totalActivitiesCounts?.totalVideos || 0}
+            />
           </Grid>
           <Grid item xs={12} md={6} style={{ paddingLeft: '32px', display: 'flex' }}>
             <ContributionBarChart dataByStep={dashboardSummaryData.contributionsBarChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
           </Grid>
         </Grid>
 
-        {dashboardSummaryData?.phases && (
-          <Grid item xs={12} lg={12}>
-            <div className="statistic__phase--container">
-              <div>
-                <PhaseDetails phase={1} data={dashboardSummaryData.phases[0].data} />
-              </div>
-              <div className="statistic__phase">
-                <PhaseDetails phase={2} data={dashboardSummaryData.phases[1].data} />
-              </div>
-              <div className="statistic__phase">
-                <PhaseDetails phase={3} data={dashboardSummaryData.phases[1].data} />
-              </div>
-            </div>
-          </Grid>
-        )}
         {/* Accordéons par phase */}
         {selectedCountry &&
           (selectedPhase === 0 ? (

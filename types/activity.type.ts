@@ -29,6 +29,9 @@ export const ActivityStatus = {
   DRAFT: 1,
 };
 
+// (Erreur TS2749) Pour pouvoir typer les activityStatus sans passer par une enum il faut rajouter le type suivant :
+export type ActivityStatus = typeof ActivityStatus[keyof typeof ActivityStatus];
+
 export interface Activity<T extends AnyData = AnyData> {
   id: number;
   type: number;

@@ -10,14 +10,16 @@ const Loader = ({ analyticsDataType }: { analyticsDataType: AnalyticsDataType })
     <div
       style={{
         height: '4.5rem',
-        margin: '6rem 21.5rem',
         padding: '0.75rem',
+        margin: '6rem auto',
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '1rem',
       }}
     >
       <CircularProgress />
-      <p style={{ margin: 0, padding: '0.4rem 0 0.6rem', fontSize: '1.3rem' }}>{getLoaderLegend(analyticsDataType)}...</p>
+      <p style={{ margin: 0, padding: '0.4rem 0 0.6rem 0.4rem', fontSize: '1.3rem' }}>{getLoaderLegend(analyticsDataType)}...</p>
     </div>
   );
 };

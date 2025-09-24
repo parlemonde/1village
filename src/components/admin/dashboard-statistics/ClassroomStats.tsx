@@ -5,7 +5,6 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box, Tab, Tabs } from '@mui/material';
 
 import { OneVillageTable } from '../OneVillageTable';
-import { getCommentCount, getPublicationCount, getVideoCount } from '../StatisticsUtils';
 import CountryActivityPhaseAccordion from './CountryActivityPhaseAccordion';
 import EntityEngagementStatus, { EntityType } from './EntityEngagementStatus';
 import Loader, { AnalyticsDataType } from './Loader';
@@ -17,14 +16,13 @@ import ClassroomDetailsCard from './cards/ClassroomDetailsCard/ClassroomDetailsC
 import StatsCard from './cards/StatsCard/StatsCard';
 import BarCharts from './charts/BarCharts';
 import StatisticFilters from './filters/StatisticFilters';
-import PhaseDetails from './menu/PhaseDetails';
 import { mockDataByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
-import { useGetClassroomEngagementStatus, useGetClassroomsStats } from 'src/api/statistics/statistics.get';
-import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
+import { useGetClassroomDetails, useGetClassroomEngagementStatus, useGetClassroomsStats } from 'src/api/statistics/statistics.get';
+import { useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
@@ -38,25 +36,20 @@ const ClassroomStats = () => {
   const [selectedClassroom, setSelectedClassroom] = useState<number>();
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = useState<Array<OneVillageTableRow>>([]);
   const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
-    1: false,
-    2: false,
-    3: false,
+    1: true,
+    2: true,
+    3: true,
   });
 
-  const [classroomDetails, setClassroomDetails] = useState<string>();
-  const [loadingClassroomDetails, setLoadingClassroomDetails] = useState<boolean>(true);
-
   const { data: classroomEngagementStatus, isLoading: isLoadingClassroomEngagementStatus } = useGetClassroomEngagementStatus(selectedClassroom);
-  const { data: classroomsStatistics, isLoading: isLoadingClassroomsStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
   const { data: sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, null, 1);
   const { data: selectedClassroomStatistics, isLoading: isLoadingSelectedClassroomsStatistics } = useGetClassroomsStats(
     selectedClassroom,
     selectedPhase,
   );
+  const { data: classroomDetails, isLoading: isLoadingClassroomDetail } = useGetClassroomDetails(selectedClassroom);
 
-  const videoCount = getVideoCount(selectedClassroomStatistics);
-  const commentCount = getCommentCount(selectedClassroomStatistics);
-  const publicationCount = getPublicationCount(selectedClassroomStatistics);
+  const totalActivitiesCounts = selectedClassroomStatistics?.totalActivityCounts;
 
   useEffect(() => {
     if (selectedClassroomStatistics?.family?.familiesWithoutAccount) {
@@ -67,17 +60,6 @@ const ClassroomStats = () => {
   const handleTabChange = (_event: React.SyntheticEvent, selectedTab: number) => {
     setSelectedTab(selectedTab);
   };
-
-  // On mocke l'asynchronisme en attendant d'avoir l'appel serveur censé retourner les interactions des villages-mondes
-  // A refacto lors de l'implémentation du ticket VIL-65 et des autres tickets associées au dashboard classe
-  useEffect(() => {
-    setTimeout(() => {
-      const fakeClassroomDetails = 'France';
-
-      setClassroomDetails(fakeClassroomDetails);
-      setLoadingClassroomDetails(false);
-    }, 3000);
-  }, []);
 
   return (
     <>
@@ -90,7 +72,7 @@ const ClassroomStats = () => {
       />
       {selectedCountry && selectedVillage && selectedClassroom ? (
         <Box mt={2}>
-          {isLoadingClassroomEngagementStatus || loadingClassroomDetails ? (
+          {isLoadingClassroomEngagementStatus || isLoadingClassroomDetail ? (
             <Loader analyticsDataType={AnalyticsDataType.GRAPHS} />
           ) : (
             <>
@@ -100,11 +82,11 @@ const ClassroomStats = () => {
               {classroomDetails && <ClassroomDetailsCard classroomDetails={classroomDetails} />}
             </>
           )}
-          {isLoadingSessionsStatistics || isLoadingSelectedClassroomsStatistics || isLoadingClassroomsStatistics ? (
+          {isLoadingSessionsStatistics || isLoadingSelectedClassroomsStatistics ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
           ) : (
             <>
-              <Tabs value={selectedTab} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
+              <Tabs value={selectedTab} onChange={handleTabChange} aria-label="Données par classe ou par famille" sx={{ py: 3 }}>
                 <Tab label="En classe" />
                 <Tab label="En famille" />
               </Tabs>
@@ -124,10 +106,10 @@ const ClassroomStats = () => {
                   </AverageStatsCard>
                   <AverageStatsCard
                     data={{
-                      min: sessionsStatistics.minConnections ? sessionsStatistics.minConnections : 0,
-                      max: sessionsStatistics.maxConnections ? sessionsStatistics.maxConnections : 0,
-                      average: sessionsStatistics.averageConnections ? sessionsStatistics.averageConnections : 0,
-                      median: sessionsStatistics.medianConnections ? sessionsStatistics.medianConnections : 0,
+                      min: sessionsStatistics.minConnections ?? 0,
+                      max: sessionsStatistics.maxConnections ?? 0,
+                      average: sessionsStatistics.averageConnections ?? 0,
+                      median: sessionsStatistics.medianConnections ?? 0,
                     }}
                     icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
                   >
@@ -137,22 +119,14 @@ const ClassroomStats = () => {
                 <div className="statistic--container">
                   <BarCharts dataByMonth={mockDataByMonth} title={BarChartTitle} />
                 </div>
-                <div className="statistic__average--container">
-                  <ClassesExchangesCard totalPublications={publicationCount} totalComments={commentCount} totalVideos={videoCount} />
+                <div style={{ marginTop: '2.5rem' }}>
+                  <ClassesExchangesCard
+                    totalPublications={totalActivitiesCounts?.totalPublications || 0}
+                    totalComments={totalActivitiesCounts?.totalComments || 0}
+                    totalVideos={totalActivitiesCounts?.totalVideos || 0}
+                  />
                 </div>
-                {classroomsStatistics?.phases && (
-                  <div className="statistic__phase--container">
-                    <div>
-                      <PhaseDetails phase={1} data={classroomsStatistics.phases[0].data} />
-                    </div>
-                    <div className="statistic__phase">
-                      <PhaseDetails phase={2} data={classroomsStatistics.phases[1].data} />
-                    </div>
-                    <div className="statistic__phase">
-                      <PhaseDetails phase={3} data={classroomsStatistics.phases[1].data} />
-                    </div>
-                  </div>
-                )}
+
                 {selectedClassroom &&
                   selectedVillage &&
                   (selectedPhase === 0 ? (
@@ -160,8 +134,8 @@ const ClassroomStats = () => {
                       <CountryActivityPhaseAccordion
                         key={phase}
                         phaseId={phase}
-                        classroomId={selectedClassroom.toString()}
-                        villageId={+selectedVillage}
+                        classroomId={selectedClassroom}
+                        villageId={selectedVillage}
                         open={openPhases[phase]}
                         onClick={() =>
                           setOpenPhases((prev) => ({
@@ -174,8 +148,8 @@ const ClassroomStats = () => {
                   ) : (
                     <CountryActivityPhaseAccordion
                       phaseId={selectedPhase}
-                      classroomId={selectedClassroom.toString()}
-                      villageId={+selectedVillage}
+                      classroomId={selectedClassroom}
+                      villageId={selectedVillage}
                       open={openPhases[selectedPhase]}
                       onClick={() =>
                         setOpenPhases((prev) => ({

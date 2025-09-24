@@ -1,36 +1,36 @@
 import { Classroom } from '../../entities/classroom';
 import { AppDataSource } from '../../utils/data-source';
 
-type GetClassroomsParams = {
+interface GetClassroomsParams {
   countryCode?: string;
   villageId?: number;
   classroomId?: number;
-};
+}
+
+interface ClassroomFilters {
+  id?: number;
+  countryCode?: string;
+  villageId?: number;
+}
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
 
 export const getClassrooms = async ({ countryCode, villageId, classroomId }: GetClassroomsParams) => {
-  const classroomQB = classroomRepository
-    .createQueryBuilder('classroom')
-    .select(['classroom.id', 'classroom.villageId', 'classroom.name', 'classroom.countryCode']);
+  const classroomFilters: ClassroomFilters = { id: classroomId, countryCode, villageId };
 
-  if (countryCode) {
-    classroomQB.where('classroom.countryCode = :countryCode', { countryCode });
-  }
-
-  if (classroomId) {
-    classroomQB.andWhere('classroom.id = :classroomId', { classroomId });
-  }
-
-  if (villageId) {
-    classroomQB.andWhere('classroom.villageId = :villageId', { villageId });
-  }
-
-  return await classroomQB
-    .setFindOptions({
-      relations: {
-        user: true,
-      },
-    })
-    .getMany();
+  return await classroomRepository.find({
+    relations: {
+      user: true,
+    },
+    where: classroomFilters,
+  });
 };
+
+export async function getClassroomById(id: number): Promise<Classroom | null> {
+  return await classroomRepository.findOne({
+    relations: {
+      user: true,
+    },
+    where: { id },
+  });
+}

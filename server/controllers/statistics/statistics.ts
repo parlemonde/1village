@@ -1,6 +1,6 @@
 import type { Request } from 'express';
 
-import type { CountryEngagementStatus, EngagementStatus, StatsFilterParams } from '../../../types/statistics.type';
+import type { ClassroomDetails, CountryEngagementStatus, EngagementStatus, StatsFilterParams } from '../../../types/statistics.type';
 import { GroupType } from '../../../types/statistics.type';
 import { Activity } from '../../entities/activity';
 import { AnalyticSession } from '../../entities/analytic';
@@ -37,7 +37,16 @@ import { getFamiliesWithoutAccountForVillage } from '../../stats/villageStats';
 import { AppDataSource } from '../../utils/data-source';
 import { Controller } from '../controller';
 import type { StatisticsDto } from './statistics.dto';
-import { getActivityTypeCountByVillages } from './statistics.repository';
+import {
+  getDetailedActivitiesCountsByClassrooms,
+  getDetailedActivitiesCountsByCountries,
+  getDetailedActivitiesCountsByVillage,
+  getDetailedActivitiesCountsByVillages,
+  getTotalActivitiesCounts,
+  getTotalActivitiesCountsByClassroomId,
+  getTotalActivitiesCountsByCountryCode,
+  getTotalActivitiesCountsByVillageId,
+} from './statistics.repository';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
 export const statisticsController = new Controller('/statistics');
@@ -335,8 +344,42 @@ statisticsController.get({ path: '/classrooms-engagement-status' }, async (req, 
   res.sendJSON(classroomEngagementStatuses);
 });
 
+statisticsController.get({ path: '/classrooms/details/:classroomId' }, async (req, res) => {
+  const id = parseInt(req.params.classroomId);
+
+  const classroomDetails = await AppDataSource.getRepository(Classroom)
+    .createQueryBuilder('class')
+    .select([
+      'class.id AS id',
+      'class.countryCode AS countryCode',
+      'v.name AS villageName',
+      'COUNT(comment.id) AS commentsCount',
+      'COUNT(video.id) AS videosCount',
+    ])
+    .addSelect(
+      `CASE
+        WHEN class.name IS NOT NULL THEN class.name
+        WHEN u.displayName IS NOT NULL THEN u.displayName
+        WHEN u.level IS NOT NULL AND u.city IS NOT NULL THEN CONCAT('La classe de ', u.level, ' à ', u.city)
+        WHEN u.city IS NOT NULL THEN CONCAT('La classe de ', u.city)
+        ELSE NULL
+      END`,
+      'classroomName',
+    )
+    .innerJoin('village', 'v', 'v.id = class.villageId')
+    .innerJoin('user', 'u', 'u.id = class.userId')
+    .leftJoin('comment', 'comment', 'comment.userId = u.id')
+    .leftJoin('video', 'video', 'video.userId = u.id')
+    .where('class.id = :id', { id })
+    .groupBy('class.id')
+    .addGroupBy('u.id')
+    .getRawOne<ClassroomDetails>();
+
+  res.sendJSON(classroomDetails);
+});
+
 statisticsController.get({ path: '/one-village' }, async (req, res) => {
-  const phase = req.query.phase as unknown as number;
+  const phase = req.query.phase ? parseInt(req.query.phase as string) : undefined;
 
   const filters: StatsFilterParams = {};
 
@@ -346,14 +389,9 @@ statisticsController.get({ path: '/one-village' }, async (req, res) => {
     familiesWithoutAccount: await getFamiliesWithoutAccountForGlobal(),
   };
 
-  const activityCountDetails = await getActivityTypeCountByVillages({ phase });
+  const totalActivityCounts = await getTotalActivitiesCounts(phase);
 
-  const response: StatisticsDto = {
-    family,
-    activityCountDetails,
-  };
-
-  res.sendJSON(response);
+  res.sendJSON({ family, totalActivityCounts });
 });
 
 statisticsController.get({ path: '/one-village/countries-engagement-statuses' }, async (req, res) => {
@@ -407,8 +445,7 @@ statisticsController.get({ path: '/one-village/countries-engagement-statuses' },
 
 statisticsController.get({ path: '/villages/:villageId' }, async (req, res) => {
   const villageId = parseInt(req.params.villageId);
-  const { countryCode } = req.params;
-  const phase = req.query.phase as unknown as number;
+  const phase = req.query.phase ? parseInt(req.query.phase as string) : undefined;
   const filters: StatsFilterParams = { villageId, phase };
 
   const family = {
@@ -417,12 +454,9 @@ statisticsController.get({ path: '/villages/:villageId' }, async (req, res) => {
     familiesWithoutAccount: await getFamiliesWithoutAccountForVillage(villageId),
   };
 
-  const activityCountDetails = await getActivityTypeCountByVillages({ phase, countryCode, villageId });
+  const totalActivityCounts = await getTotalActivitiesCountsByVillageId(villageId, phase);
 
-  res.sendJSON({
-    family,
-    activityCountDetails,
-  });
+  res.sendJSON({ family, totalActivityCounts });
 });
 
 statisticsController.get({ path: '/villages/:villageId/engagement-status' }, async (req, res) => {
@@ -476,7 +510,7 @@ statisticsController.get({ path: '/villages/:villageId/engagement-status' }, asy
 
 statisticsController.get({ path: '/countries/:countryCode' }, async (req, res) => {
   const { countryCode } = req.params;
-  const phase = req.query.phase as unknown as number;
+  const phase = req.query.phase ? parseInt(req.query.phase as string) : undefined;
 
   const filters: StatsFilterParams = { countryId: countryCode, phase };
 
@@ -486,12 +520,9 @@ statisticsController.get({ path: '/countries/:countryCode' }, async (req, res) =
     familiesWithoutAccount: await getFamiliesWithoutAccountForCountry(countryCode),
   };
 
-  const activityCountDetails = await getActivityTypeCountByVillages({ phase, countryCode });
+  const totalActivityCounts = await getTotalActivitiesCountsByCountryCode(countryCode, phase);
 
-  res.sendJSON({
-    family,
-    activityCountDetails,
-  });
+  res.sendJSON({ family, totalActivityCounts });
 });
 
 statisticsController.get({ path: '/countries/:countryCode/engagement-status' }, async (req, res) => {
@@ -541,10 +572,61 @@ statisticsController.get({ path: '/countries/:countryCode/engagement-status' }, 
   res.sendJSON(countryEngagementStatus[0]);
 });
 
+statisticsController.get({ path: '/compare/one-village' }, async (req, res) => {
+  const phase = typeof req.query.phase === 'string' ? parseInt(req.query.phase) : undefined;
+
+  if (!phase) {
+    res.status(403).send(`La phase à observer est manquante`);
+    return;
+  }
+
+  const activitiesCountsByVillages = await getDetailedActivitiesCountsByVillages(phase);
+
+  res.sendJSON(activitiesCountsByVillages);
+});
+
+statisticsController.get({ path: '/compare/countries' }, async (req, res) => {
+  const phase = typeof req.query.phase === 'string' ? parseInt(req.query.phase) : undefined;
+
+  if (!phase) {
+    res.status(403).send(`La phase à observer est manquante`);
+    return;
+  }
+
+  const activitiesCountsByCountries = await getDetailedActivitiesCountsByCountries(phase);
+
+  res.sendJSON(activitiesCountsByCountries);
+});
+
+statisticsController.get({ path: '/compare/villages/:villageId' }, async (req, res) => {
+  const villageId = parseInt(req.params.villageId);
+  const phase = typeof req.query.phase === 'string' ? parseInt(req.query.phase) : undefined;
+
+  if (!phase) {
+    res.status(403).send(`La phase à observer est manquante`);
+    return;
+  }
+
+  const activitiesCountsByVillageCountries = await getDetailedActivitiesCountsByVillage(villageId, phase);
+  res.sendJSON(activitiesCountsByVillageCountries);
+});
+
+statisticsController.get({ path: '/compare/classrooms' }, async (req, res) => {
+  const villageId = typeof req.query.villageId === 'string' ? parseInt(req.query.villageId) : undefined;
+  const phase = typeof req.query.phase === 'string' ? parseInt(req.query.phase) : undefined;
+
+  if (!villageId || !phase) {
+    res.status(403).send(`L'identifiant du village associé à la classe et/ou la phase à observer sont manquants`);
+    return;
+  }
+
+  const activitiesCountsByVillageClassrooms = await getDetailedActivitiesCountsByClassrooms(villageId, phase);
+  res.sendJSON(activitiesCountsByVillageClassrooms);
+});
+
 statisticsController.get({ path: '/classrooms/:classroomId' }, async (req, res) => {
   const classroomId = parseInt(req.params.classroomId);
-  const { countryCode } = req.params;
-  const phase = req.query.phase as unknown as number;
+  const phase = req.query.phase ? parseInt(req.query.phase as string) : undefined;
 
   const filters: StatsFilterParams = { classroomId, phase };
 
@@ -558,11 +640,11 @@ statisticsController.get({ path: '/classrooms/:classroomId' }, async (req, res) 
   const averageConnections = await getAverageDuration(filters);
   const medianConnections = await getMedianConnections(filters);
 
-  const childrenCodesCount = await getChildrenCodesCountForClassroom(classroomId, phase);
-  const connectedFamiliesCount = await getConnectedFamiliesCountForClassroom(classroomId, phase);
+  const childrenCodesCount = phase ? await getChildrenCodesCountForClassroom(classroomId, phase) : 0;
+  const connectedFamiliesCount = phase ? await getConnectedFamiliesCountForClassroom(classroomId, phase) : 0;
   const familiesWithoutAccount = await getFamiliesWithoutAccountForClassroom(classroomId);
 
-  const activityCountDetails = await getActivityTypeCountByVillages({ phase, countryCode, classroomId });
+  const totalActivityCounts = await getTotalActivitiesCountsByClassroomId(classroomId, phase);
 
   const response: StatisticsDto = {
     family: {
@@ -580,7 +662,7 @@ statisticsController.get({ path: '/classrooms/:classroomId' }, async (req, res) 
       connectedFamiliesCount,
       familiesWithoutAccount,
     },
-    activityCountDetails,
+    totalActivityCounts,
   };
 
   res.sendJSON(response);

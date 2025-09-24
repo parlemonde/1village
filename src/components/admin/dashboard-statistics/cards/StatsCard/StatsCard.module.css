@@ -1,35 +1,41 @@
+.root {
+  --gradient-start: #9198e5;
+  --gradient-end: #6065fc;
+  --text-color: #fff;
+}
+
 .cardContainer {
-    background: radial-gradient(ellipse at top, #9198e5, #6065FC);
-    text-align: center;
-    padding: 16px;
-    border-radius: 1rem;
-    width: 300px;
-    flex-wrap: wrap;
-    color: #FFF;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
+  background: radial-gradient(ellipse at top, var(--gradient-start), var(--gradient-end));
+  text-align: center;
+  padding: 16px;
+  border-radius: 1rem;
+  width: 300px;
+  flex-wrap: wrap;
+  color: var(--text-color);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.cardContainer:first-child{
-    margin-left: 0;
+.cardContainer:first-child {
+  margin-left: 0;
 }
-.cardContainer:last-child{
-    margin-right: 0;
-}
-
-.cardContainer>p {
-    margin: 0;
-    padding: 0 1rem;
+.cardContainer:last-child {
+  margin-right: 0;
 }
 
-.cardContainer>p:first-child {
-    font-size: 1.25rem;
+.cardContainer > p {
+  margin: 0;
+  padding: 0 1rem;
 }
 
-.cardContainer>p:last-child {
-    font-size: 2rem;
-    font-weight: 600;
+.cardContainer > p:first-child {
+  font-size: 1.25rem;
+}
+
+.cardContainer > p:last-child {
+  font-size: 2rem;
+  font-weight: 600;
 }
