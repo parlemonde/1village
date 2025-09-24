@@ -17,7 +17,6 @@ import {
   getContributedClassroomsCount,
   getContributionsBarChartData,
 } from '../../stats/classroomStats';
-import { getBarChartData } from '../../stats/connectionStats';
 import { getFamiliesWithoutAccountForCountry } from '../../stats/countryStats';
 import { getFamiliesWithoutAccountForGlobal } from '../../stats/globalStats';
 import { getChildrenCodesCount, getConnectedFamiliesCount, getFamilyAccountsCount, getFloatingAccounts } from '../../stats/queryStatsByFilter';
@@ -46,6 +45,7 @@ import {
   getTotalActivitiesCountsByClassroomId,
   getTotalActivitiesCountsByCountryCode,
   getTotalActivitiesCountsByVillageId,
+  getDailyConnectionsCountsByMonth,
 } from './statistics.repository';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
@@ -69,6 +69,8 @@ const constructFamilyResponseFromFilters = async (filters: StatsFilterParams) =>
   const connectedFamiliesCount = await getConnectedFamiliesCount(filtersFamily);
   const floatingAccounts = await getFloatingAccounts(filtersFamily);
 
+  const dailyConnectionsCountsByMonth = await getDailyConnectionsCountsByMonth(filtersFamily);
+
   return {
     minDuration,
     maxDuration,
@@ -84,6 +86,8 @@ const constructFamilyResponseFromFilters = async (filters: StatsFilterParams) =>
     childrenCodesCount,
     connectedFamiliesCount,
     floatingAccounts,
+
+    dailyConnectionsCountsByMonth,
   };
 };
 
@@ -112,7 +116,7 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
     const connectedFamiliesCount = await getConnectedFamiliesCount(filters);
     const familyAccountCount = await getFamilyAccountsCount(filters);
     const childrenCodesCount = await getChildrenCodesCount(filters);
-    const barChartData = await getBarChartData();
+    const dailyConnectionsCountsByMonth = await getDailyConnectionsCountsByMonth();
     const contributionsBarChartData = await getContributionsBarChartData(villageId, countryCode, classroomId);
 
     return res.sendJSON({
@@ -131,7 +135,7 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
       connectedFamiliesCount,
       familyAccountCount,
       childrenCodesCount,
-      barChartData,
+      dailyConnectionsCountsByMonth,
       contributionsBarChartData,
     });
   } catch (error) {
