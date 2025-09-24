@@ -9,7 +9,6 @@ import { UserContext } from 'src/contexts/userContext';
 import { useCommentRequests } from 'src/services/useComments';
 import { primaryColor, bgPage } from 'src/styles/variables.const';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
-import RouletteIcon from 'src/svg/navigation/roulette-icon.svg';
 import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
@@ -130,7 +129,7 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
             )}
           </Box>
         </div>
-        {activityPhase >= 2 && activityType !== ActivityType.REACTION && (
+        {activityPhase == 2 && activityType !== ActivityType.REACTION && (
           <Box
             sx={{
               marginLeft: {
@@ -139,65 +138,37 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
               },
             }}
           >
-            {activityPhase >= 3 && (activityType === ActivityType.STORY || activityType === ActivityType.RE_INVENT_STORY) ? (
-              <p style={{ fontWeight: 600 }}>Ou bien ré-écrivez l&apos;histoire !</p>
+            <p style={{ fontWeight: 600 }}>Réagissez en image, son ou vidéo :</p>
+            {isObservator ? (
+              <Tooltip title="Action non autorisée" arrow>
+                <span>
+                  <Button component="a" variant="outlined" color="primary" style={{ width: '100%' }} disabled={isObservator}>
+                    <ReactionIcon
+                      style={{
+                        fill: bgPage,
+                      }}
+                    />
+                    Réagir
+                  </Button>
+                </span>
+              </Tooltip>
             ) : (
-              <p style={{ fontWeight: 600 }}>Réagissez en image, son ou vidéo :</p>
-            )}
-            {activityPhase >= 3 && (activityType === ActivityType.STORY || activityType === ActivityType.RE_INVENT_STORY) ? (
-              <Link href={`/re-inventer-une-histoire?activityId=${activityId}`} passHref>
+              <Link href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`} passHref>
                 <Button
                   component="a"
-                  href={`/re-inventer-une-histoire?activityId=${activityId}`}
+                  href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
                   variant="outlined"
                   color="primary"
                   style={{ width: '100%' }}
                 >
-                  <RouletteIcon
+                  <ReactionIcon
                     style={{
                       fill: primaryColor,
-                      position: 'relative',
-                      display: 'inline-block',
-                      marginRight: '0.6rem',
                     }}
                   />
-                  Ré-inventer une histoire
+                  Réagir
                 </Button>
               </Link>
-            ) : (
-              <>
-                {isObservator ? (
-                  <Tooltip title="Action non autorisée" arrow>
-                    <span>
-                      <Button component="a" variant="outlined" color="primary" style={{ width: '100%' }} disabled={isObservator}>
-                        <ReactionIcon
-                          style={{
-                            fill: bgPage,
-                          }}
-                        />
-                        Réagir
-                      </Button>
-                    </span>
-                  </Tooltip>
-                ) : (
-                  <Link href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`} passHref>
-                    <Button
-                      component="a"
-                      href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
-                      variant="outlined"
-                      color="primary"
-                      style={{ width: '100%' }}
-                    >
-                      <ReactionIcon
-                        style={{
-                          fill: primaryColor,
-                        }}
-                      />
-                      Réagir
-                    </Button>
-                  </Link>
-                )}
-              </>
             )}
           </Box>
         )}
