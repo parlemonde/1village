@@ -5,7 +5,7 @@ import { AppDataSource } from '../../utils/data-source';
 
 export type Last12MonthDailyCountRawData = { count: number; year: number; month: number; day: number; date: string };
 
-export const getLast12MonthDailyCounts = async (filters?: StatsFilterParams): Promise<Last12MonthDailyCountRawData[]> => {
+export const getLast12MonthDailyConnectionCounts = async (filters?: StatsFilterParams): Promise<Last12MonthDailyCountRawData[]> => {
   const query = AppDataSource.getRepository(AnalyticSession)
     .createQueryBuilder('as')
     .select('COUNT(*) as count, YEAR(as.date) as year, MONTH(as.date) as month, DAY(as.date) as day, DATE(as.date) as date')

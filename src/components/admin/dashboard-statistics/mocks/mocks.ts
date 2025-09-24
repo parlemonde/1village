@@ -1,4 +1,4 @@
-import type { ClassroomStat, DailyCountsByMonth, SessionsStats } from 'types/statistics.type';
+import type { ClassroomStat, DailyConnectionsCountsByMonth, SessionsStats } from 'types/statistics.type';
 
 export const mockClassroomsStats: ClassroomStat[] = [
   {
@@ -178,7 +178,7 @@ export const mockConnectionsStats: SessionsStats[] = [
     registeredClassroomsCount: 100,
     connectedClassroomsCount: 80,
     contributedClassroomsCount: 50,
-    dailyConnectionCountByMonth: [],
+    dailyConnectionsCountsByMonth: [],
     contributionsBarChartData: {
       total: 0,
       dataBySteps: [],
@@ -186,20 +186,19 @@ export const mockConnectionsStats: SessionsStats[] = [
   },
 ];
 
-export const mockDailyCountByMonth: DailyCountsByMonth[] = [
+export const mockDailyConnectionsCountsByMonth: DailyConnectionsCountsByMonth[] = [
   {
-    month: 'Août 2025',
+    monthLabel: 'Août 2025',
     counts: [
       156, 234, 189, 167, 245, 198, 312, 287, 165, 178, 201, 187, 256, 298, 321, 187, 199, 267, 289, 301, 188, 167, 198, 234, 267, 289, 301, 278, 245,
       198, 167,
     ],
   },
   {
-    month: 'Septembre 2025',
+    monthLabel: 'Septembre 2025',
     counts: [
       178, 201, 187, 256, 298, 321, 187, 199, 267, 289, 301, 188, 167, 198, 234, 267, 289, 301, 278, 245, 198, 167, 156, 234, 189, 167, 245, 198, 312,
       287,
     ],
   },
-  // Ajouter d'autres mois si nécessaire
 ];

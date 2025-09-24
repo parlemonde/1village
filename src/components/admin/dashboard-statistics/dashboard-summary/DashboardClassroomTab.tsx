@@ -77,11 +77,7 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
           </Grid>
         )}
         <Grid item xs={12} lg={dashboardType === DashboardType.ONE_VILLAGE_PANEL ? 12 : 8}>
-          <BarChartWithMonthSelector
-            data={dashboardSummaryData.dailyConnectionCountByMonth}
-            title="Évolution des connexions"
-            yAxisLabel="Nombre de connexions"
-          />
+          <BarChartWithMonthSelector data={dashboardSummaryData.dailyConnectionsCountsByMonth} title="Évolution des connexions" />
         </Grid>
         <Grid container spacing={2} alignItems="stretch" style={{ paddingLeft: '32px', paddingTop: '32px', display: 'flex' }}>
           <Grid item xs={12} md={6} style={{ display: 'flex' }}>
