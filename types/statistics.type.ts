@@ -40,7 +40,7 @@ export interface SessionsStats {
   registeredClassroomsCount: number;
   connectedClassroomsCount: number;
   contributedClassroomsCount: number;
-  dailyConnectionCountByMonth: DailyCountsByMonth[];
+  dailyConnectionsCountsByMonth: DailyConnectionsCountsByMonth[];
   contributionsBarChartData: ContributionBarChartData;
 }
 
@@ -149,7 +149,7 @@ export enum GroupType {
 
 export type MonthLabel = string;
 
-export interface DailyCountsByMonth {
+export interface DailyConnectionsCountsByMonth {
   readonly month: MonthLabel;
   readonly counts: number[];
 }

@@ -45,7 +45,7 @@ import {
   getTotalActivitiesCountsByClassroomId,
   getTotalActivitiesCountsByCountryCode,
   getTotalActivitiesCountsByVillageId,
-  getDailyConnectionCountByMonth,
+  getDailyConnectionsCountsByMonth,
 } from './statistics.repository';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
@@ -69,7 +69,7 @@ const constructFamilyResponseFromFilters = async (filters: StatsFilterParams) =>
   const connectedFamiliesCount = await getConnectedFamiliesCount(filtersFamily);
   const floatingAccounts = await getFloatingAccounts(filtersFamily);
 
-  const dailyConnectionCountByMonth = await getDailyConnectionCountByMonth(filtersFamily);
+  const dailyConnectionsCountsByMonth = await getDailyConnectionsCountsByMonth(filtersFamily);
 
   return {
     minDuration,
@@ -87,7 +87,7 @@ const constructFamilyResponseFromFilters = async (filters: StatsFilterParams) =>
     connectedFamiliesCount,
     floatingAccounts,
 
-    dailyConnectionCountByMonth,
+    dailyConnectionsCountsByMonth,
   };
 };
 
@@ -116,7 +116,7 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
     const connectedFamiliesCount = await getConnectedFamiliesCount(filters);
     const familyAccountCount = await getFamilyAccountsCount(filters);
     const childrenCodesCount = await getChildrenCodesCount(filters);
-    const dailyConnectionCountByMonth = await getDailyConnectionCountByMonth();
+    const dailyConnectionsCountsByMonth = await getDailyConnectionsCountsByMonth();
     const contributionsBarChartData = await getContributionsBarChartData(villageId, countryCode, classroomId);
 
     return res.sendJSON({
@@ -135,7 +135,7 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
       connectedFamiliesCount,
       familyAccountCount,
       childrenCodesCount,
-      dailyConnectionCountByMonth,
+      dailyConnectionsCountsByMonth,
       contributionsBarChartData,
     });
   } catch (error) {
