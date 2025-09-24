@@ -1,3 +1,4 @@
+import { isNil } from 'lodash';
 import React from 'react';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -30,6 +31,7 @@ const DashboardFamilyTab = ({ dashboardSummaryData }: DashboardFamilyTabProps) =
 
   const familiesWithoutAccountRows = createFamiliesWithoutAccountRows(familyData.familiesWithoutAccount);
   const floatingAccountsRows = createFloatingAccountsRows(familyData.floatingAccounts);
+  const isVillagePanel = !isNil(dashboardSummaryData.villageName);
 
   return (
     <>
@@ -40,13 +42,15 @@ const DashboardFamilyTab = ({ dashboardSummaryData }: DashboardFamilyTabProps) =
         columns={FamiliesWithoutAccountHeaders}
         titleContent={`À surveiller : comptes non créés (${familiesWithoutAccountRows.length})`}
       />
-      <OneVillageTable
-        admin={false}
-        emptyPlaceholder={<p>{'Pas de données'}</p>}
-        data={floatingAccountsRows}
-        columns={FloatingAccountsHeaders}
-        titleContent={`À surveiller : comptes flottants (${floatingAccountsRows.length})`}
-      />
+      {isVillagePanel && (
+        <OneVillageTable
+          admin={false}
+          emptyPlaceholder={<p>{'Pas de données'}</p>}
+          data={floatingAccountsRows}
+          columns={FloatingAccountsHeaders}
+          titleContent={`À surveiller : (${floatingAccountsRows.length}) comptes flottants`}
+        />
+      )}
       <Box
         className={styles.classroomStats}
         sx={{
