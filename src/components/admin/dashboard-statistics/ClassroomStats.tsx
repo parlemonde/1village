@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box, Tab, Tabs } from '@mui/material';
 
 import { OneVillageTable } from '../OneVillageTable';
@@ -10,7 +8,6 @@ import EntityEngagementStatus, { EntityType } from './EntityEngagementStatus';
 import Loader, { AnalyticsDataType } from './Loader';
 import TabPanel from './TabPanel';
 import TeamCommentCard from './TeamCommentCard';
-import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import ClassroomDetailsCard from './cards/ClassroomDetailsCard/ClassroomDetailsCard';
 import StatsCard from './cards/StatsCard/StatsCard';
@@ -42,7 +39,7 @@ const ClassroomStats = () => {
   });
 
   const { data: classroomEngagementStatus, isLoading: isLoadingClassroomEngagementStatus } = useGetClassroomEngagementStatus(selectedClassroom);
-  const { data: sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, null, 1);
+  const { data: _sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, null, 1);
   const { data: selectedClassroomStatistics, isLoading: isLoadingSelectedClassroomsStatistics } = useGetClassroomsStats(
     selectedClassroom,
     selectedPhase,
@@ -91,7 +88,8 @@ const ClassroomStats = () => {
                 <Tab label="En famille" />
               </Tabs>
               <TabPanel value={selectedTab} index={0}>
-                <div className="statistic__average--container">
+                {/* VIL-824 : invisibiliser ces éléments dans le dashboard */}
+                {/* <div className="statistic__average--container">
                   <AverageStatsCard
                     data={{
                       min: sessionsStatistics.minDuration ? Math.floor(sessionsStatistics.minDuration / 60) : 0,
@@ -115,7 +113,7 @@ const ClassroomStats = () => {
                   >
                     Nombre de connexions moyen par classe
                   </AverageStatsCard>
-                </div>
+                </div> */}
                 <div className="statistic--container">
                   <BarCharts dataByMonth={mockDataByMonth} title={BarChartTitle} />
                 </div>
