@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Tabs, Tab, Box } from '@mui/material';
 
 import { OneVillageTable } from '../OneVillageTable';
@@ -10,7 +8,6 @@ import EntityEngagementStatus, { EntityType } from './EntityEngagementStatus';
 import Loader, { AnalyticsDataType } from './Loader';
 import TabPanel from './TabPanel';
 import TeamCommentCard from './TeamCommentCard';
-import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesContributionCard from './cards/ClassesContributionCard/ClassesContributionCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
@@ -139,7 +136,8 @@ const VillageStats = () => {
                   <StatsCard data={sessionsStatistics.connectedClassroomsCount ?? 0}>Nombre de classes connectées</StatsCard>
                   <StatsCard data={sessionsStatistics.contributedClassroomsCount ?? 0}>Nombre de classes contributrices</StatsCard>
                 </div>
-                <div className="statistic__average--container">
+                {/* VIL-824 : invisibiliser ces éléments dans le dashboard */}
+                {/* <div className="statistic__average--container">
                   <AverageStatsCard
                     data={{
                       min: sessionsStatistics.minDuration ? Math.floor(sessionsStatistics.minDuration / 60) : 0,
@@ -163,7 +161,7 @@ const VillageStats = () => {
                   >
                     Nombre de connexions moyen par classe
                   </AverageStatsCard>
-                </div>
+                </div> */}
                 <div className="statistic__average--container">
                   {engagementStatusStatistics && <PieCharts engagementStatusData={engagementStatusStatistics} />}
                   <BarCharts dataByMonth={barChartData} title="Évolution des connexions" />

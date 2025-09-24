@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import Grid from '@mui/material/Grid';
 
 import CountryActivityPhaseAccordion from '../CountryActivityPhaseAccordion';
-import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from '../cards/StatsCard/StatsCard';
 import BarCharts from '../charts/BarCharts';
@@ -13,7 +10,7 @@ import ContributionBarChart from '../charts/ContributionBarChart';
 import PieCharts from '../charts/PieCharts';
 import styles from '../styles/charts.module.css';
 import ClassroomsToMonitorTable from '../tables/ClassroomsToMonitorTable';
-import { AverageStatsProcessingMethod, DashboardType } from 'types/dashboard.type';
+import { DashboardType } from 'types/dashboard.type';
 import type { DashboardSummaryData } from 'types/dashboard.type';
 
 const ENGAGEMENT_BAR_CHAR_TITLE = 'Évolution des connexions';
@@ -51,8 +48,8 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
         <Grid item xs={12} lg={4}>
           <StatsCard data={dashboardSummaryData.contributedClassroomsCount}>Nombre de classes contributrices</StatsCard>
         </Grid>
-
-        <Grid item xs={12} lg={6}>
+        {/* VIL-824 : invisibiliser ces éléments dans le dashboard */}
+        {/* <Grid item xs={12} lg={6}>
           <AverageStatsCard
             data={{
               min: dashboardSummaryData.minDuration,
@@ -79,7 +76,7 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
           >
             Nombre de connexions moyen par classe
           </AverageStatsCard>
-        </Grid>
+        </Grid> */}
         {dashboardType === DashboardType.ONE_VILLAGE_PANEL ? (
           <Grid item xs={12} lg={12}>
             <BarCharts className={styles.midContainer} dataByMonth={barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />

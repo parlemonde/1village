@@ -69,7 +69,6 @@ const Creer = () => {
       link: '/admin/newportal/create/parametrer-hymne',
       rights: [UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN],
     },
-    { name: 'Mixer l’hymne', link: 'https://' },
   ];
   useEffect(() => {
     if (user?.type === UserType.OBSERVATOR) {
