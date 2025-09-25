@@ -1,6 +1,7 @@
 import { UserType } from '../../types/user.type';
 import { Classroom } from '../entities/classroom';
 import type { VillagePhase } from '../entities/village';
+import { countriesMap } from '../utils/countries-map';
 import { AppDataSource } from '../utils/data-source';
 import { generateEmptyFilterParams } from './helpers';
 import { getChildrenCodesCount, getConnectedFamiliesCount, getFamiliesWithoutAccount } from './queryStatsByFilters';
@@ -227,5 +228,48 @@ export const getContributionsBarChartData = async (villageId?: number | null, co
       step: p.step,
       contributionCount: phaseCounts[idx],
     })),
+  };
+};
+
+/**
+ * Retourne les informations constituant la carte d'identité de la classe.
+ */
+export const getClassroomIdentity = async (classroomId: number) => {
+  const result = await classroomRepository
+    .createQueryBuilder('classroom')
+    .innerJoin('classroom.village', 'village')
+    .innerJoin('classroom.user', 'user')
+    .leftJoinAndSelect('analytic_session', 'analytic_session', 'analytic_session.userId = user.id')
+    .select([
+      'user.school AS school',
+      'user.email AS email',
+      'user.firstname AS firstname',
+      'user.lastname AS lastname',
+      'user.city AS city',
+      'user.postalCode AS postalCode',
+      'user.address AS address',
+      'user.positionLat AS positionLat',
+      'user.positionLon AS positionLon',
+      'user.countryCode AS countryCode',
+      'user.countryCode AS countryCode',
+      'village.name AS village',
+      'MAX(analytic_session.date) AS lastConnexion',
+    ])
+    .where('classroom.id = :classroomId', { classroomId })
+    .groupBy('user.id, village.id')
+    .getRawOne();
+
+  const country = countriesMap[result.countryCode] || null;
+  const position = {
+    lat: result.positionLat,
+    lng: result.positionLon,
+  };
+
+  const { positionLat, positionLon, countryCode, userType, ...rest } = result;
+
+  return {
+    ...result,
+    position,
+    country,
   };
 };
