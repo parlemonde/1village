@@ -10,6 +10,7 @@ import type {
   ClassroomToMonitor,
   EngagementStatus,
   CountryEngagementStatus,
+  ClassroomDetails,
 } from 'types/statistics.type';
 
 async function getSessionsStats(phase?: number): Promise<SessionsStats> {
@@ -216,4 +217,20 @@ export function useGetClassroomEngagementStatus(classroomId?: Classroom['id']) {
   return useQuery(['classroom-engagement-status', classroomId], () => getClassroomEngagementStatus(classroomId), {
     enabled: !!classroomId,
   });
+}
+
+export function useGetClassroomDetails(classroomId?: Classroom['id']) {
+  return useQuery(['classroom-details', classroomId], () => getClassroomDetails(classroomId), {
+    enabled: classroomId !== null,
+  });
+}
+
+async function getClassroomDetails(classroomId?: Classroom['id']): Promise<ClassroomDetails> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: `/statistics/classrooms-identity/${classroomId}`,
+    })
+  ).data;
 }

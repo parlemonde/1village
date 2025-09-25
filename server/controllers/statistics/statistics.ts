@@ -16,6 +16,7 @@ import {
   getFamiliesWithoutAccountForClassroom,
   getContributedClassroomsCount,
   getContributionsBarChartData,
+  getClassroomIdentity,
 } from '../../stats/classroomStats';
 import { getBarChartData } from '../../stats/connectionStats';
 import { getFamiliesWithoutAccountForCountry } from '../../stats/countryStats';
@@ -333,6 +334,27 @@ statisticsController.get({ path: '/classrooms-engagement-status' }, async (req, 
   }));
 
   res.sendJSON(classroomEngagementStatuses);
+});
+
+statisticsController.get({ path: '/classrooms-identity/:classroomId' }, async (req, res) => {
+  try {
+    const classroomId = parseInt(req.params.classroomId);
+    if (isNaN(classroomId)) {
+      res.status(400).send(`L'identifiant de la classe est invalide.`);
+      return;
+    }
+
+    const classroomDetails = await getClassroomIdentity(classroomId);
+
+    if (!classroomDetails) {
+      return res.status(404).send('Error 404 - Not found.');
+    }
+
+    return res.status(200).json(classroomDetails);
+  } catch (error) {
+    console.error('Error fetching classroom identity:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 statisticsController.get({ path: '/one-village' }, async (req, res) => {

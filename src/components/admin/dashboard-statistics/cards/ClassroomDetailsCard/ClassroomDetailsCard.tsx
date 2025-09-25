@@ -2,29 +2,39 @@ import React from 'react';
 
 import CountryMap from '../../map/CountryMap/CountryMap';
 import styles from './ClassroomDetailsCard.module.css';
+import { UserContext } from 'src/contexts/userContext';
+import { toDate } from 'src/utils';
+import type { ClassroomDetails } from 'types/statistics.type';
+import { UserType } from 'types/user.type';
 
 interface ClassroomDetailsCardProps {
-  classroomDetails: string;
+  classroomDetails: ClassroomDetails;
 }
 
 const ClassroomDetailsCard = ({ classroomDetails }: ClassroomDetailsCardProps) => {
+  const { user } = React.useContext(UserContext);
+  const isObservator = user !== null && user.type === UserType.OBSERVATOR;
+
   return (
     <div className={styles.mainContainer}>
-      <CountryMap countryIso2="VN" />
+      <CountryMap classroomDetails={classroomDetails} />
       <div className={styles.infoContainer}>
-        <h1>Ecole</h1>
+        <h1>École {classroomDetails.school}</h1>
         <ul>
-          <li>Adresse</li>
-          <li>Pays: {classroomDetails}</li>
-          <li>Village Monde: </li>
-          <li>Adresse Mail: </li>
-          <li>Dernière connexion: </li>
           <li>
-            <a href="#">Lien vers la fiche civicrm</a>
+            Adresse: {classroomDetails.address}, {classroomDetails.postalCode} {classroomDetails.city}
           </li>
-          <li>
-            <a href="#">Lien vers la salle des professeurs</a>
-          </li>
+          <li>Pays: {classroomDetails.country?.name}</li>
+          <li>Village Monde: {classroomDetails.village}</li>
+          {!isObservator && (
+            <>
+              <li>Adresse Mail: {classroomDetails.email}</li>
+              <li>Dernière connexion: {toDate(classroomDetails.lastConnexion as string)} </li>
+              <li>
+                Professeur: {classroomDetails.firstname} {classroomDetails.lastname}
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </div>

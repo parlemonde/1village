@@ -23,7 +23,7 @@ import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
-import { useGetClassroomEngagementStatus, useGetClassroomsStats } from 'src/api/statistics/statistics.get';
+import { useGetClassroomDetails, useGetClassroomEngagementStatus, useGetClassroomsStats } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
@@ -43,9 +43,7 @@ const ClassroomStats = () => {
     3: false,
   });
 
-  const [classroomDetails, setClassroomDetails] = useState<string>();
-  const [loadingClassroomDetails, setLoadingClassroomDetails] = useState<boolean>(true);
-
+  const { data: classroomDetails, isLoading: isLoadingClassroomDetails } = useGetClassroomDetails(selectedClassroom);
   const { data: classroomEngagementStatus, isLoading: isLoadingClassroomEngagementStatus } = useGetClassroomEngagementStatus(selectedClassroom);
   const { data: classroomsStatistics, isLoading: isLoadingClassroomsStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
   const { data: sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, null, 1);
@@ -68,17 +66,6 @@ const ClassroomStats = () => {
     setSelectedTab(selectedTab);
   };
 
-  // On mocke l'asynchronisme en attendant d'avoir l'appel serveur censé retourner les interactions des villages-mondes
-  // A refacto lors de l'implémentation du ticket VIL-65 et des autres tickets associées au dashboard classe
-  useEffect(() => {
-    setTimeout(() => {
-      const fakeClassroomDetails = 'France';
-
-      setClassroomDetails(fakeClassroomDetails);
-      setLoadingClassroomDetails(false);
-    }, 3000);
-  }, []);
-
   return (
     <>
       <TeamCommentCard type={TeamCommentType.CLASSROOM} />
@@ -90,7 +77,7 @@ const ClassroomStats = () => {
       />
       {selectedCountry && selectedVillage && selectedClassroom ? (
         <Box mt={2}>
-          {isLoadingClassroomEngagementStatus || loadingClassroomDetails ? (
+          {isLoadingClassroomEngagementStatus || isLoadingClassroomDetails ? (
             <Loader analyticsDataType={AnalyticsDataType.GRAPHS} />
           ) : (
             <>
