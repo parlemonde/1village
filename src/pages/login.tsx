@@ -102,7 +102,7 @@ const SignInTeacher = () => {
                 <Typography color="error">{errorMessages[errorCode as 0] || errorMessages[0]}</Typography>
                 <Box mt={3}>
                   <a href="/" style={{ color: '#1976d2', textDecoration: 'none' }}>
-                    Retour à l'accueil
+                    {"Retour à l'accueil"}
                   </a>
                 </Box>
               </div>
