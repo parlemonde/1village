@@ -1,10 +1,11 @@
 import { useSnackbar } from 'notistack';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 
 import { usePutNotifications } from 'src/api/notifications/notifications.put';
+import { useGetNotifications } from 'src/api/notifications/notifications.get';
 import { UserContext } from 'src/contexts/userContext';
 
 export const NotifCheckbox = () => {
@@ -18,6 +19,14 @@ export const NotifCheckbox = () => {
   // const [publicationFromAdminChecked, setPublicationFromAdminChecked] = React.useState(true);
   // const [creationAccountFamilyChecked, setCreationAccountFamilyChecked] = React.useState(true);
   // const [phaseOpeningChecked, setPhaseOpeningChecked] = React.useState(true);
+  const { data: notifications } = useGetNotifications(user?.id || 0);
+
+  useEffect(() => {
+    if (notifications) {
+      setCommentChecked(notifications.commentary);
+    }
+  }, [notifications]);
+
   const putNotifications = usePutNotifications({
     userId: user?.id || 0,
     data: {
@@ -67,17 +76,26 @@ export const NotifCheckbox = () => {
   ];
 
   const handleChoice = () => {
-    putNotifications.mutate();
-    if (putNotifications.isSuccess) {
-      enqueueSnackbar('Modifications mises à jour !', {
-        variant: 'success',
-      });
-    }
-    if (putNotifications.isError) {
-      enqueueSnackbar('Une erreur est survenue...', {
-        variant: 'error',
-      });
-    }
+    const notificationData = {
+      commentary: commentChecked,
+      reaction: false,
+      publicationFromSchool: false,
+      publicationFromAdmin: false,
+      creationAccountFamily: false,
+      openingVillageStep: false,
+    };
+    putNotifications.mutate(notificationData, {
+      onSuccess: () => {
+        enqueueSnackbar('Modifications mises à jour !', {
+          variant: 'success',
+        });
+      },
+      onError: () => {
+        enqueueSnackbar('Une erreur est survenue...', {
+          variant: 'error',
+        });
+      },
+    });
   };
 
   return (
@@ -90,7 +108,7 @@ export const NotifCheckbox = () => {
         </div>
       ))}
 
-      <Button size="small" variant="contained" onClick={handleChoice} style={{ margin: '1rem 0.5rem' }}>
+      <Button size="small" variant="contained" onClick={handleChoice} disabled={putNotifications.isLoading} style={{ margin: '1rem 0.5rem' }}>
         Enregister mes choix
       </Button>
     </div>
