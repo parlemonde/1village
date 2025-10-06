@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -16,6 +16,7 @@ import { Modal } from 'src/components/Modal';
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { OneVillageTable } from 'src/components/admin/OneVillageTable';
 import { UserContext } from 'src/contexts/userContext';
+import { useClassroomsRequests } from 'src/services/useClassrooms';
 import { useVillages, useVillageRequests } from 'src/services/useVillages';
 import BackArrow from 'src/svg/back-arrow.svg';
 import { countryToFlag } from 'src/utils';
@@ -26,12 +27,13 @@ import { UserType } from 'types/user.type';
 
 const Villages = () => {
   const router = useRouter();
-  const { user } = React.useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const { villages } = useVillages();
   const { deleteVillage, importVillages } = useVillageRequests();
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [deleteIndex, setDeleteIndex] = React.useState(-1);
+  const { importClassrooms } = useClassroomsRequests();
+  const [isLoading, setIsLoading] = useState(false);
+  const [deleteIndex, setDeleteIndex] = useState(-1);
   const [search, setSearch] = useState('');
 
   const filteredVillages = useMemo(
@@ -55,6 +57,7 @@ const Villages = () => {
   const onImportVillages = async () => {
     setIsLoading(true);
     await importVillages();
+    await importClassrooms();
     setIsLoading(false);
   };
 
