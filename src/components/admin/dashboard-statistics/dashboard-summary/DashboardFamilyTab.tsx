@@ -1,11 +1,8 @@
 import React from 'react';
 
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box } from '@mui/material';
 
 import { OneVillageTable } from '../../OneVillageTable';
-import AverageStatsCard from '../cards/AverageStatsCard/AverageStatsCard';
 import StatsCard from '../cards/StatsCard/StatsCard';
 import BarCharts from '../charts/BarCharts';
 import { mockDataByMonth } from '../mocks/mocks';
@@ -13,7 +10,6 @@ import styles from '../styles/charts.module.css';
 import { createFamiliesWithoutAccountRows, createFloatingAccountsRows } from '../utils/tableCreator';
 import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from '../utils/tableHeader';
 import type { DashboardSummaryData } from 'types/dashboard.type';
-import { AverageStatsProcessingMethod } from 'types/dashboard.type';
 
 const ENGAGEMENT_BAR_CHAR_TITLE = 'Évolution des connexions';
 
@@ -62,8 +58,8 @@ const DashboardFamilyTab = ({ dashboardSummaryData }: DashboardFamilyTabProps) =
         <StatsCard data={familyData.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
         <StatsCard data={familyData.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
       </Box>
-
-      <div className="statistic__average--container">
+      {/* VIL-824 : invisibiliser ces éléments dans le dashboard */}
+      {/* <div className="statistic__average--container">
         <AverageStatsCard
           data={{
             min: familyData.minDuration,
@@ -88,7 +84,7 @@ const DashboardFamilyTab = ({ dashboardSummaryData }: DashboardFamilyTabProps) =
         >
           Nombre de connexions moyen par classe
         </AverageStatsCard>
-      </div>
+      </div> */}
 
       <div className="statistic--container">
         <BarCharts className={styles.midContainer} dataByMonth={mockDataByMonth} title={ENGAGEMENT_BAR_CHAR_TITLE} />
