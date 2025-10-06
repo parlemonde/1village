@@ -42,6 +42,7 @@ import {
   getDetailedActivitiesCountsByCountries,
   getDetailedActivitiesCountsByVillage,
   getDetailedActivitiesCountsByVillages,
+  getPublishedContributionsByCountry,
   getTotalActivitiesCounts,
   getTotalActivitiesCountsByClassroomId,
   getTotalActivitiesCountsByCountryCode,
@@ -547,8 +548,9 @@ statisticsController.get({ path: '/countries/:countryCode' }, async (req, res) =
   };
 
   const totalActivityCounts = await getTotalActivitiesCountsByCountryCode(countryCode, phase);
+  const contributionsByCountry = await getPublishedContributionsByCountry();
 
-  res.sendJSON({ family, totalActivityCounts });
+  res.sendJSON({ family, totalActivityCounts, contributionsByCountry });
 });
 
 statisticsController.get({ path: '/countries/:countryCode/engagement-status' }, async (req, res) => {
