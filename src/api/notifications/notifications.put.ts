@@ -23,11 +23,9 @@ async function putNotifications(params: { userId: number; data: NotificationChoi
   });
 }
 
-export const usePutNotifications = (args: { userId: number; data: NotificationChoice }) => {
-  const { userId, data } = args;
-
+export const usePutNotifications = (userId: number) => {
   return useMutation({
-    mutationFn: () => {
+    mutationFn: (data: NotificationChoice) => {
       return putNotifications({ userId, data });
     },
   });

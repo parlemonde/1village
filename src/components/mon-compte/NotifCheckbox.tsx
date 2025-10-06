@@ -4,8 +4,8 @@ import React, { useContext, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 
-import { usePutNotifications } from 'src/api/notifications/notifications.put';
 import { useGetNotifications } from 'src/api/notifications/notifications.get';
+import { usePutNotifications } from 'src/api/notifications/notifications.put';
 import { UserContext } from 'src/contexts/userContext';
 
 export const NotifCheckbox = () => {
@@ -28,17 +28,7 @@ export const NotifCheckbox = () => {
     }
   }, [notifications]);
 
-  const putNotifications = usePutNotifications({
-    userId: user?.id || 0,
-    data: {
-      commentary: commentChecked,
-      reaction: false,
-      publicationFromSchool: false,
-      publicationFromAdmin: false,
-      creationAccountFamily: false,
-      openingVillageStep: false,
-    },
-  });
+  const putNotifications = usePutNotifications(user?.id || 0);
 
   const handleCommentChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCommentChecked(event.target.checked);
