@@ -1,4 +1,5 @@
-import React from 'react';
+import { useSnackbar } from 'notistack';
+import React, { useCallback } from 'react';
 import type { QueryFunction } from 'react-query';
 import { useQueryClient, useQuery } from 'react-query';
 
@@ -46,5 +47,33 @@ export const useClassrooms = (options?: ClassroomFilter): { classrooms: Classroo
   return {
     classrooms: isLoading || error ? [] : data || [],
     setClassrooms,
+  };
+};
+
+export const useClassroomsRequests = () => {
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const importClassrooms = useCallback(async () => {
+    const response = await axiosRequest({
+      method: 'POST',
+      url: '/classrooms/import/plm',
+    });
+
+    if (response.error) {
+      enqueueSnackbar('Une erreur est survenue...', {
+        variant: 'error',
+      });
+      return;
+    }
+
+    enqueueSnackbar(response.data.count === 0 ? 'Aucun nouveau village importé!' : 'Les classes ont été importés avec succès !', {
+      variant: 'success',
+    });
+    queryClient.invalidateQueries('classrooms');
+  }, [queryClient, enqueueSnackbar]);
+
+  return {
+    importClassrooms,
   };
 };
