@@ -79,6 +79,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
     if (!user) return;
     if (user.type !== UserType.TEACHER) return;
     if (!village) return;
+
     await axiosRequest({
       method: 'POST',
       url: '/classrooms',

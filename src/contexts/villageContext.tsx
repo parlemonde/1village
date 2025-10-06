@@ -66,6 +66,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
     }
     return response.data as Village;
   }, []);
+
   const getVillages = React.useCallback(async () => {
     const response = await axiosRequest({
       method: 'GET',

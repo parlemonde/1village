@@ -4,10 +4,12 @@ import axios from 'axios';
 import { User } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';
 import { logger } from '../utils/logger';
+import type { PlmClassroom } from './classroom';
+import { createClassroom } from './classroom';
 import type { PLM_User } from './user';
 import { createPLMUserToDB } from './user';
-import type { PLM_Village } from './village';
 import { createVillages } from './village';
+import type { PLM_Village } from './village';
 
 const plmSsoUrl = process.env.PLM_HOST || '';
 const client_id = process.env.CLIENT_ID || '';
@@ -53,6 +55,22 @@ export async function createVillagesFromPLM(): Promise<number | null> {
     });
     const villages = villageRequest.data as PLM_Village[];
     return await createVillages(villages);
+  } catch (error) {
+    logger.error(error);
+    return null;
+  }
+}
+
+export async function createClassroomsFromPLM(): Promise<number | null> {
+  try {
+    const result = await axios({
+      method: 'GET',
+      url: `${plmSsoUrl}/wp-json/api/v1/registered-classrooms?client_id=${client_id}&client_secret=${client_secret}`,
+    });
+
+    const registeredClassrooms = result.data as PlmClassroom[];
+
+    return await createClassroom(registeredClassrooms);
   } catch (error) {
     logger.error(error);
     return null;
