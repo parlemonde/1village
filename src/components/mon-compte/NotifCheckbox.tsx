@@ -12,18 +12,19 @@ export const NotifCheckbox = () => {
   const { user } = useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
 
-  const [commentChecked, setCommentChecked] = React.useState(true);
+  const [commentChecked, setCommentChecked] = React.useState(false);
   // ---------- Uncomment the following lines to add more checkboxes ----------
   // const [reactionChecked, setReactionChecked] = React.useState(true);
   // const [publicationFromAClassChecked, setPublicationFromAClassChecked] = React.useState(true);
   // const [publicationFromAdminChecked, setPublicationFromAdminChecked] = React.useState(true);
   // const [creationAccountFamilyChecked, setCreationAccountFamilyChecked] = React.useState(true);
   // const [phaseOpeningChecked, setPhaseOpeningChecked] = React.useState(true);
-  const { data: notifications } = useGetNotifications(user?.id || 0);
+
+  const { data: notifications, isLoading: isLoadingNotifications } = useGetNotifications(user?.id || 0);
 
   useEffect(() => {
     if (notifications) {
-      setCommentChecked(notifications.commentary);
+      setCommentChecked(notifications.commentary ?? false);
     }
   }, [notifications]);
 
@@ -84,6 +85,7 @@ export const NotifCheckbox = () => {
       creationAccountFamily: false,
       openingVillageStep: false,
     };
+
     putNotifications.mutate(notificationData, {
       onSuccess: () => {
         enqueueSnackbar('Modifications mises à jour !', {
@@ -101,16 +103,22 @@ export const NotifCheckbox = () => {
   return (
     <div className="account__panel">
       <h2>Notifications</h2>
-      {mappingCheckbox.map((notif, index) => (
-        <div key={index} className="account__panel__checkbox" style={{ display: 'flex', alignItems: 'center' }}>
-          <Checkbox checked={notif.checked} onChange={notif.handle} inputProps={{ 'aria-label': 'controlled' }} />
-          <p style={{ marginLeft: '8px' }}>{notif.label}</p>
-        </div>
-      ))}
+      {isLoadingNotifications ? (
+        <p>Chargement...</p>
+      ) : (
+        <>
+          {mappingCheckbox.map((notif, index) => (
+            <div key={index} className="account__panel__checkbox" style={{ display: 'flex', alignItems: 'center' }}>
+              <Checkbox checked={notif.checked} onChange={notif.handle} inputProps={{ 'aria-label': 'controlled' }} />
+              <p style={{ marginLeft: '8px' }}>{notif.label}</p>
+            </div>
+          ))}
 
-      <Button size="small" variant="contained" onClick={handleChoice} disabled={putNotifications.isLoading} style={{ margin: '1rem 0.5rem' }}>
-        Enregister mes choix
-      </Button>
+          <Button size="small" variant="contained" onClick={handleChoice} disabled={putNotifications.isLoading} style={{ margin: '1rem 0.5rem' }}>
+            {putNotifications.isLoading ? 'Enregistrement...' : 'Enregister mes choix'}
+          </Button>
+        </>
+      )}
     </div>
   );
 };

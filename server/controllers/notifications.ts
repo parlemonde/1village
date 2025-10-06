@@ -25,6 +25,38 @@ export const EditNotificationPreferences = async (notification: Notifications) =
 
 const notificationsController = new Controller('/notifications');
 
+notificationsController.get({ path: '/suscribe/:userId' }, async (req: Request, res: Response) => {
+  const { userId } = req.params;
+
+  try {
+    const userNotifications = await AppDataSource.getRepository(Notifications).findOne({
+      where: { userId: parseInt(userId, 10) },
+    });
+
+    if (!userNotifications) {
+      return res.status(200).json({
+        commentary: false,
+        reaction: false,
+        publicationFromSchool: false,
+        publicationFromAdmin: false,
+        creationAccountFamily: false,
+        openingVillageStep: false,
+      });
+    }
+
+    return res.status(200).json({
+      commentary: userNotifications.commentary,
+      reaction: userNotifications.reaction,
+      publicationFromSchool: userNotifications.publicationFromSchool,
+      publicationFromAdmin: userNotifications.publicationFromAdmin,
+      creationAccountFamily: userNotifications.creationAccountFamily,
+      openingVillageStep: userNotifications.openingVillageStep,
+    });
+  } catch (e) {
+    return res.status(500).json({ message: 'Erreur lors de la récupération des données' });
+  }
+});
+
 notificationsController.put({ path: '/suscribe/:userId' }, async (req: Request, res: Response) => {
   const { userId } = req.params;
   const { data } = req.body;
