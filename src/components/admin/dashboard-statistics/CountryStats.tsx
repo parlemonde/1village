@@ -125,7 +125,6 @@ const CountryStats = () => {
                   ...sessionsStatistics,
                   ...familyStatistics,
                   ...activityCountDetails,
-                  barChartData: sessionsStatistics?.barChartData || [],
                   engagementStatusData: engagementStatusStatistics,
                 }}
                 selectedCountry={selectedCountry}

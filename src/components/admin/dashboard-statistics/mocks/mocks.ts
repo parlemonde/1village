@@ -1,4 +1,4 @@
-import type { ClassroomStat, SessionsStats } from 'types/statistics.type';
+import type { ClassroomStat, DailyConnectionsCountsByMonth, SessionsStats } from 'types/statistics.type';
 
 export const mockClassroomsStats: ClassroomStat[] = [
   {
@@ -178,7 +178,7 @@ export const mockConnectionsStats: SessionsStats[] = [
     registeredClassroomsCount: 100,
     connectedClassroomsCount: 80,
     contributedClassroomsCount: 50,
-    barChartData: [],
+    dailyConnectionsCountsByMonth: [],
     contributionsBarChartData: {
       total: 0,
       dataBySteps: [],
@@ -186,78 +186,19 @@ export const mockConnectionsStats: SessionsStats[] = [
   },
 ];
 
-export const mockDataByMonth = [
+export const mockDailyConnectionsCountsByMonth: DailyConnectionsCountsByMonth[] = [
   {
-    month: 'Mars 2023',
-    barChartData: [
-      { value: 100000, isSelected: false }, //1er mars 2023
-      { value: 150000, isSelected: false }, // 2 mars 2023
-      { value: 200000, isSelected: true },
-      { value: 180000, isSelected: false },
-      { value: 220000, isSelected: false },
-      { value: 250000, isSelected: false },
-      { value: 400000, isSelected: true },
-      { value: 120000, isSelected: false },
-      { value: 170000, isSelected: false },
-      { value: 300000, isSelected: false },
-      { value: 230000, isSelected: false },
-      { value: 270000, isSelected: false },
-      { value: 100000, isSelected: false },
-      { value: 310000, isSelected: true },
-      { value: 140000, isSelected: false },
-      { value: 160000, isSelected: false },
-      { value: 190000, isSelected: false },
-      { value: 210000, isSelected: false },
-      { value: 290000, isSelected: false },
-      { value: 350000, isSelected: true },
-      { value: 260000, isSelected: false },
-      { value: 110000, isSelected: false },
-      { value: 100000, isSelected: false },
-      { value: 280000, isSelected: false },
-      { value: 330000, isSelected: false },
-      { value: 150000, isSelected: false },
-      { value: 240000, isSelected: true },
-      { value: 130000, isSelected: false },
-      { value: 180000, isSelected: false },
-      { value: 220000, isSelected: false },
-      { value: 220000, isSelected: false },
+    monthLabel: 'Août 2025',
+    counts: [
+      156, 234, 189, 167, 245, 198, 312, 287, 165, 178, 201, 187, 256, 298, 321, 187, 199, 267, 289, 301, 188, 167, 198, 234, 267, 289, 301, 278, 245,
+      198, 167,
     ],
   },
   {
-    month: 'Avril 2023',
-    barChartData: [
-      { value: 290000, isSelected: false },
-      { value: 350000, isSelected: true },
-      { value: 260000, isSelected: false },
-      { value: 110000, isSelected: false },
-      { value: 100000, isSelected: false },
-      { value: 280000, isSelected: false },
-      { value: 330000, isSelected: false },
-      { value: 150000, isSelected: false },
-      { value: 240000, isSelected: true },
-      { value: 130000, isSelected: false },
-      { value: 180000, isSelected: false },
-      { value: 220000, isSelected: false },
-      { value: 220000, isSelected: false },
-      { value: 100000, isSelected: false },
-      { value: 150000, isSelected: false },
-      { value: 200000, isSelected: true },
-      { value: 180000, isSelected: false },
-      { value: 220000, isSelected: false },
-      { value: 250000, isSelected: false },
-      { value: 400000, isSelected: true },
-      { value: 120000, isSelected: false },
-      { value: 170000, isSelected: false },
-      { value: 300000, isSelected: false },
-      { value: 230000, isSelected: false },
-      { value: 270000, isSelected: false },
-      { value: 100000, isSelected: false },
-      { value: 310000, isSelected: true },
-      { value: 140000, isSelected: false },
-      { value: 160000, isSelected: false },
-      { value: 190000, isSelected: false },
-      { value: 210000, isSelected: false },
+    monthLabel: 'Septembre 2025',
+    counts: [
+      178, 201, 187, 256, 298, 321, 187, 199, 267, 289, 301, 188, 167, 198, 234, 267, 289, 301, 278, 245, 198, 167, 156, 234, 189, 167, 245, 198, 312,
+      287,
     ],
   },
-  // Ajouter d'autres mois si nécessaire
 ];

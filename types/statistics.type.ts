@@ -1,4 +1,4 @@
-import type { BarChartDataByMonth, ContributionBarChartData } from './dashboard.type';
+import type { ContributionBarChartData } from './dashboard.type';
 import type { User } from './user.type';
 import type { Village, VillagePhase } from './village.type';
 
@@ -40,7 +40,7 @@ export interface SessionsStats {
   registeredClassroomsCount: number;
   connectedClassroomsCount: number;
   contributedClassroomsCount: number;
-  barChartData: BarChartDataByMonth[];
+  dailyConnectionsCountsByMonth: DailyConnectionsCountsByMonth[];
   contributionsBarChartData: ContributionBarChartData;
 }
 
@@ -145,6 +145,11 @@ export enum GroupType {
   CLASSROOM,
   FAMILY,
   All,
+}
+
+export interface DailyConnectionsCountsByMonth {
+  readonly monthLabel: string;
+  readonly counts: number[];
 }
 
 export type VillageActivity = {

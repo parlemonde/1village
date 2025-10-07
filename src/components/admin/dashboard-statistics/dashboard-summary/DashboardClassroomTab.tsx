@@ -5,16 +5,12 @@ import Grid from '@mui/material/Grid';
 import CountryActivityPhaseAccordion from '../CountryActivityPhaseAccordion';
 import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from '../cards/StatsCard/StatsCard';
-import BarCharts from '../charts/BarCharts';
+import BarChartWithMonthSelector from '../charts/BarChartWithMonthSelector';
 import ContributionBarChart from '../charts/ContributionBarChart';
 import PieCharts from '../charts/PieCharts';
-import styles from '../styles/charts.module.css';
 import ClassroomsToMonitorTable from '../tables/ClassroomsToMonitorTable';
 import { DashboardType } from 'types/dashboard.type';
 import type { DashboardSummaryData } from 'types/dashboard.type';
-
-const ENGAGEMENT_BAR_CHAR_TITLE = 'Évolution des connexions';
-const CONTRIBUTION_BAR_CHAR_TITLE = 'Contribution des classes';
 
 export interface DashboardClassroomTabProps {
   dashboardSummaryData: DashboardSummaryData;
@@ -29,8 +25,6 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
     2: true,
     3: true,
   });
-
-  const barChartData = dashboardSummaryData.barChartData || [];
 
   const totalActivitiesCounts = dashboardSummaryData?.totalActivityCounts;
 
@@ -77,23 +71,14 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
             Nombre de connexions moyen par classe
           </AverageStatsCard>
         </Grid> */}
-        {dashboardType === DashboardType.ONE_VILLAGE_PANEL ? (
-          <Grid item xs={12} lg={12}>
-            <BarCharts className={styles.midContainer} dataByMonth={barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+        {dashboardType !== DashboardType.ONE_VILLAGE_PANEL && dashboardSummaryData.engagementStatusData && (
+          <Grid item xs={12} lg={4}>
+            <PieCharts engagementStatusData={dashboardSummaryData.engagementStatusData} />
           </Grid>
-        ) : (
-          <>
-            {dashboardSummaryData.engagementStatusData && (
-              <Grid item xs={12} lg={6}>
-                <PieCharts className={styles.minContainer} engagementStatusData={dashboardSummaryData.engagementStatusData} />
-              </Grid>
-            )}
-
-            <Grid item xs={12} lg={6}>
-              <BarCharts className={styles.midContainer} dataByMonth={barChartData} title={ENGAGEMENT_BAR_CHAR_TITLE} />
-            </Grid>
-          </>
         )}
+        <Grid item xs={12} lg={dashboardType === DashboardType.ONE_VILLAGE_PANEL ? 12 : 8}>
+          <BarChartWithMonthSelector data={dashboardSummaryData.dailyConnectionsCountsByMonth} title="Évolution des connexions" />
+        </Grid>
         <Grid container spacing={2} alignItems="stretch" style={{ paddingLeft: '32px', paddingTop: '32px', display: 'flex' }}>
           <Grid item xs={12} md={6} style={{ display: 'flex' }}>
             <ClassesExchangesCard
@@ -103,7 +88,7 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
             />
           </Grid>
           <Grid item xs={12} md={6} style={{ paddingLeft: '32px', display: 'flex' }}>
-            <ContributionBarChart dataByStep={dashboardSummaryData.contributionsBarChartData} title={CONTRIBUTION_BAR_CHAR_TITLE} />
+            <ContributionBarChart dataByStep={dashboardSummaryData.contributionsBarChartData} title="Contribution des classes" />
           </Grid>
         </Grid>
 

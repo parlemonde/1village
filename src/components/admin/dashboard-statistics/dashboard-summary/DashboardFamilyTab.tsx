@@ -4,14 +4,11 @@ import { Box } from '@mui/material';
 
 import { OneVillageTable } from '../../OneVillageTable';
 import StatsCard from '../cards/StatsCard/StatsCard';
-import BarCharts from '../charts/BarCharts';
-import { mockDataByMonth } from '../mocks/mocks';
+import BarChartWithMonthSelector from '../charts/BarChartWithMonthSelector';
 import styles from '../styles/charts.module.css';
 import { createFamiliesWithoutAccountRows, createFloatingAccountsRows } from '../utils/tableCreator';
 import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from '../utils/tableHeader';
 import type { DashboardSummaryData } from 'types/dashboard.type';
-
-const ENGAGEMENT_BAR_CHAR_TITLE = 'Évolution des connexions';
 
 export interface DashboardFamilyTabProps {
   dashboardSummaryData: DashboardSummaryData;
@@ -38,7 +35,7 @@ const DashboardFamilyTab = ({ dashboardSummaryData }: DashboardFamilyTabProps) =
       />
       <OneVillageTable
         admin={false}
-        emptyPlaceholder={<p>{'Pas de données'}</p>}
+        emptyPlaceholder={<p>Pas de données</p>}
         data={floatingAccountsRows}
         columns={FloatingAccountsHeaders}
         titleContent={`À surveiller : comptes flottants (${floatingAccountsRows.length})`}
@@ -87,7 +84,7 @@ const DashboardFamilyTab = ({ dashboardSummaryData }: DashboardFamilyTabProps) =
       </div> */}
 
       <div className="statistic--container">
-        <BarCharts className={styles.midContainer} dataByMonth={mockDataByMonth} title={ENGAGEMENT_BAR_CHAR_TITLE} />
+        <BarChartWithMonthSelector data={dashboardSummaryData.family.dailyConnectionsCountsByMonth} title="Évolution des connexions" />
       </div>
     </>
   );
