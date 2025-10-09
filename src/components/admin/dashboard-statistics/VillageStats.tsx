@@ -135,36 +135,6 @@ const VillageStats = () => {
                   />
                   <ClassesContributionCard data={sessionsStatistics.contributionsBarChartData} />
                 </div>
-
-                {selectedVillage &&
-                  (selectedPhase === 0 ? (
-                    [1, 2, 3].map((phase) => (
-                      <CountryActivityPhaseAccordion
-                        key={phase}
-                        phaseId={phase}
-                        villageId={selectedVillage}
-                        open={openPhases[phase]}
-                        onClick={() =>
-                          setOpenPhases((prev) => ({
-                            ...prev,
-                            [phase]: !prev[phase],
-                          }))
-                        }
-                      />
-                    ))
-                  ) : (
-                    <CountryActivityPhaseAccordion
-                      phaseId={selectedPhase}
-                      villageId={selectedVillage}
-                      open={openPhases[selectedPhase]}
-                      onClick={() =>
-                        setOpenPhases((prev) => ({
-                          ...prev,
-                          [selectedPhase]: !prev[selectedPhase],
-                        }))
-                      }
-                    />
-                  ))}
               </TabPanel>
               <TabPanel value={selectedTab} index={1}>
                 <OneVillageTable
