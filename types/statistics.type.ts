@@ -1,3 +1,4 @@
+import type { Country } from './country.type';
 import type { ContributionBarChartData } from './dashboard.type';
 import type { User } from './user.type';
 import type { Village, VillagePhase } from './village.type';
@@ -202,4 +203,21 @@ export enum EngagementStatusColor {
   GHOST = '#FFD678',
   OBSERVER = '#6082FC',
   ACTIVE = '#4CC64A',
+}
+
+export interface ClassroomIdentityDetails {
+  school: string;
+  country: Country | null;
+  email: string;
+  firstname: string;
+  lastname: string;
+  city: string;
+  postalCode: string;
+  address: string;
+  position: {
+    lat: number;
+    lng: number;
+  };
+  village: string;
+  lastConnexion: string | Date;
 }

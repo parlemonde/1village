@@ -18,8 +18,7 @@ import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
-import { useGetClassroomDetails, useGetClassroomEngagementStatus, useGetClassroomsStats } from 'src/api/statistics/statistics.get';
-import { useStatisticsSessions } from 'src/services/useStatistics';
+import { useGetClassroomIdentity, useGetClassroomEngagementStatus, useGetClassroomsStats } from 'src/api/statistics/statistics.get';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
@@ -36,13 +35,13 @@ const ClassroomStats = () => {
     3: true,
   });
 
+  const { data: classroomIdentityDetails, isLoading: isLoadingClassroomIdentityDetails } = useGetClassroomIdentity(selectedClassroom);
   const { data: classroomEngagementStatus, isLoading: isLoadingClassroomEngagementStatus } = useGetClassroomEngagementStatus(selectedClassroom);
-  const { data: _sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, null, 1);
+  //const { data: _sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, null, 1);
   const { data: selectedClassroomStatistics, isLoading: isLoadingSelectedClassroomsStatistics } = useGetClassroomsStats(
     selectedClassroom,
     selectedPhase,
   );
-  const { data: classroomDetails, isLoading: isLoadingClassroomDetail } = useGetClassroomDetails(selectedClassroom);
 
   const totalActivitiesCounts = selectedClassroomStatistics?.totalActivityCounts;
 
@@ -67,17 +66,17 @@ const ClassroomStats = () => {
       />
       {selectedCountry && selectedVillage && selectedClassroom ? (
         <Box mt={2}>
-          {isLoadingClassroomEngagementStatus || isLoadingClassroomDetail ? (
+          {isLoadingClassroomEngagementStatus || isLoadingClassroomIdentityDetails ? (
             <Loader analyticsDataType={AnalyticsDataType.GRAPHS} />
           ) : (
             <>
               {classroomEngagementStatus && (
                 <EntityEngagementStatus entityType={EntityType.CLASSROOM} entityEngagementStatus={classroomEngagementStatus} />
               )}
-              {classroomDetails && <ClassroomDetailsCard classroomDetails={classroomDetails} />}
+              {classroomIdentityDetails && <ClassroomDetailsCard classroomIdentityDetails={classroomIdentityDetails} />}
             </>
           )}
-          {isLoadingSessionsStatistics || isLoadingSelectedClassroomsStatistics ? (
+          {isLoadingSelectedClassroomsStatistics ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
           ) : (
             <>

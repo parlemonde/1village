@@ -2,46 +2,39 @@ import React from 'react';
 
 import CountryMap from '../../map/CountryMap/CountryMap';
 import styles from './ClassroomDetailsCard.module.css';
-import type { ClassroomDetails } from 'types/statistics.type';
+import { UserContext } from 'src/contexts/userContext';
+import { toDate } from 'src/utils';
+import type { ClassroomIdentityDetails } from 'types/statistics.type';
+import { UserType } from 'types/user.type';
 
 interface ClassroomDetailsCardProps {
-  classroomDetails?: ClassroomDetails;
+  classroomIdentityDetails: ClassroomIdentityDetails;
 }
 
-const ClassroomDetailsCard = ({ classroomDetails }: ClassroomDetailsCardProps) => {
-  if (!classroomDetails) {
-    return (
-      <div className={`${styles.root} ${styles.mainContainer}`}>
-        <CountryMap countryIso2="VN" />
-        <div className={styles.infoContainer}>
-          <h3>Détails de la classe</h3>
-          <p>Sélectionnez une classe pour voir ses détails</p>
-        </div>
-      </div>
-    );
-  }
+const ClassroomDetailsCard = ({ classroomIdentityDetails: classroomDetails }: ClassroomDetailsCardProps) => {
+  const { user } = React.useContext(UserContext);
+  const isObservator = user !== null && user.type === UserType.OBSERVATOR;
 
   return (
-    <div className={`${styles.root} ${styles.mainContainer}`}>
-      <CountryMap countryIso2={classroomDetails.countryCode || 'VN'} />
+    <div className={styles.mainContainer}>
+      <CountryMap classroomDetails={classroomDetails} />
       <div className={styles.infoContainer}>
-        <h3>Détails de la classe</h3>
+        <h1>École {classroomDetails.school}</h1>
         <ul>
           <li>
-            <strong>Nom de la classe :</strong> {classroomDetails.classroomName}
+            Adresse: {classroomDetails.address}, {classroomDetails.postalCode} {classroomDetails.city}
           </li>
-          <li>
-            <strong>Pays :</strong> {classroomDetails.countryCode}
-          </li>
-          <li>
-            <strong>Village :</strong> {classroomDetails.villageName}
-          </li>
-          <li>
-            <strong>Nombre de commentaires :</strong> {classroomDetails.commentsCount}
-          </li>
-          <li>
-            <strong>Nombre de vidéos :</strong> {classroomDetails.videosCount}
-          </li>
+          <li>Pays: {classroomDetails.country?.name}</li>
+          <li>Village Monde: {classroomDetails.village}</li>
+          {!isObservator && (
+            <>
+              <li>Adresse Mail: {classroomDetails.email}</li>
+              <li>Dernière connexion: {toDate(classroomDetails.lastConnexion as string)} </li>
+              <li>
+                Professeur: {classroomDetails.firstname} {classroomDetails.lastname}
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </div>
