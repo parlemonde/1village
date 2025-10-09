@@ -18,13 +18,7 @@ export interface DashboardClassroomTabProps {
   selectedPhase?: number;
 }
 
-const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCountry, selectedPhase = 0 }: DashboardClassroomTabProps) => {
-  const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
-    1: true,
-    2: true,
-    3: true,
-  });
-
+const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCountry }: DashboardClassroomTabProps) => {
   const totalActivitiesCounts = dashboardSummaryData?.totalActivityCounts;
 
   return (
