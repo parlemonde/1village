@@ -1,8 +1,17 @@
 import { ActivityStatus } from '../../../types/activity.type';
-import type { ClassroomCountDetails, CountryCountDetails, PhaseDetails, VillageCountDetails } from '../../../types/statistics.type';
+import type {
+  ClassroomCountDetails,
+  DailyConnectionsCountsByMonth,
+  StatsFilterParams,
+  CountryContribution,
+  CountryCountDetails,
+  PhaseDetails,
+  VillageCountDetails,
+} from '../../../types/statistics.type';
 import type { Activity } from '../../entities/activity';
 import type { Classroom } from '../../entities/classroom';
 import type { Village } from '../../entities/village';
+import { getCountries } from '../../features/countries/countries.service';
 import { getCountryCodes } from '../../repositories/country.repository';
 import {
   getVideosCountByClassroomUserByUserId,
@@ -22,6 +31,8 @@ import {
   getDraftActivitiesCountByVillageCountryAndPhase,
   getActivitiesCountByStatusAndClassroomUser,
 } from '../activities/activities.repository';
+import type { Last12MonthDailyCountRawData } from '../analytic-session/analytic-session.repository';
+import { getLast12MonthDailyConnectionCounts } from '../analytic-session/analytic-session.repository';
 import { getClassroomById, getClassrooms } from '../classrooms/classroom.repository';
 import {
   getCommentsCountByCountry,
@@ -33,6 +44,8 @@ import {
 import type { VillageWithNameAndId } from '../villages/village.repository';
 import { getAllVillagesNames, getVillageById } from '../villages/village.repository';
 import type { TotalActivitiesCounts } from './statistics.dto';
+
+type DailyCountsMap = Record<string, Record<number, number>>;
 
 const groupBy = <T>(list: T[], keyGetter: (item: T) => string | number) => {
   const map = new Map();
@@ -152,6 +165,30 @@ export async function getTotalActivitiesCounts(phase?: number): Promise<TotalAct
   return { totalPublications, totalComments, totalVideos };
 }
 
+export async function getPublishedContributionsByCountry(): Promise<CountryContribution[]> {
+  const allCountryCodes = (await getCountryCodes()).map((c) => c.countryCode);
+  const countries = await getCountries(false);
+
+  const countryMap = new Map(countries.map((c) => [c.isoCode, c]));
+
+  const countryPromises = allCountryCodes.map(async (countryCode) => {
+    const [publishedActivitiesCount, commentsCount] = await Promise.all([
+      getActivitiesCountByStatusAndCountry(ActivityStatus.PUBLISHED, countryCode),
+      getCommentsCountByCountry(countryCode),
+    ]);
+
+    const country = countryMap.get(countryCode);
+
+    return {
+      countryCode,
+      countryName: country?.name ?? countryCode,
+      total: publishedActivitiesCount + commentsCount,
+    };
+  });
+
+  return Promise.all(countryPromises);
+}
+
 export async function getDetailedActivitiesCountsByVillages(phase: number) {
   const allVillages: VillageWithNameAndId[] = await getAllVillagesNames();
 
@@ -260,3 +297,31 @@ async function formatClassroomsActivitiesByPhase(phase: number, classrooms: Clas
 
   return classroomDetails;
 }
+
+const mapToDailyConnectionCountsByMonth = (data: Last12MonthDailyCountRawData[]): DailyConnectionsCountsByMonth[] => {
+  const dailyConnectionsCountsByMonthMap = data.reduce((acc: DailyCountsMap, { year, month, day, count }) => {
+    const monthYear = new Date(year, month - 1).toLocaleDateString('en-EN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+    acc[monthYear] ??= {};
+    acc[monthYear][day] = Number(count);
+
+    return acc;
+  }, {});
+
+  return Object.keys(dailyConnectionsCountsByMonthMap).map((monthYear) => {
+    const date = new Date(monthYear);
+    const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+    const monthLabel = date.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+
+    const counts: number[] = Array(daysInMonth)
+      .fill(0)
+      .map((_, day) => dailyConnectionsCountsByMonthMap[monthYear][day + 1] || 0);
+
+    return { monthLabel, counts };
+  });
+};
+
+export const getDailyConnectionsCountsByMonth = async (filters?: StatsFilterParams): Promise<DailyConnectionsCountsByMonth[]> => {
+  const last12MonthDailyConnectionsCountsRawData = await getLast12MonthDailyConnectionCounts(filters);
+  return mapToDailyConnectionCountsByMonth(last12MonthDailyConnectionsCountsRawData);
+};

@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Tabs, Tab, Box } from '@mui/material';
 
 import { OneVillageTable } from '../OneVillageTable';
@@ -10,15 +8,15 @@ import EntityEngagementStatus, { EntityType } from './EntityEngagementStatus';
 import Loader, { AnalyticsDataType } from './Loader';
 import TabPanel from './TabPanel';
 import TeamCommentCard from './TeamCommentCard';
-import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesContributionCard from './cards/ClassesContributionCard/ClassesContributionCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
-import BarCharts from './charts/BarCharts';
+import BarChartWithMonthSelector from './charts/BarChartWithMonthSelector';
 import type { CountryChartData } from './charts/DualBarChart/DualBarChart';
 import DualBarChart from './charts/DualBarChart/DualBarChart';
 import PieCharts from './charts/PieCharts';
 import StatisticFilters from './filters/StatisticFilters';
+import { mockDailyConnectionsCountsByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import ClassroomsToMonitorTable from './tables/ClassroomsToMonitorTable';
@@ -53,8 +51,6 @@ const VillageStats = () => {
   });
 
   const totalActivitiesCounts = villageStatistics?.totalActivityCounts;
-
-  const barChartData = sessionsStatistics?.barChartData || [];
 
   useEffect(() => {
     if (villageStatistics?.family?.familiesWithoutAccount) {
@@ -139,7 +135,8 @@ const VillageStats = () => {
                   <StatsCard data={sessionsStatistics.connectedClassroomsCount ?? 0}>Nombre de classes connectées</StatsCard>
                   <StatsCard data={sessionsStatistics.contributedClassroomsCount ?? 0}>Nombre de classes contributrices</StatsCard>
                 </div>
-                <div className="statistic__average--container">
+                {/* VIL-824 : invisibiliser ces éléments dans le dashboard */}
+                {/* <div className="statistic__average--container">
                   <AverageStatsCard
                     data={{
                       min: sessionsStatistics.minDuration ? Math.floor(sessionsStatistics.minDuration / 60) : 0,
@@ -163,10 +160,10 @@ const VillageStats = () => {
                   >
                     Nombre de connexions moyen par classe
                   </AverageStatsCard>
-                </div>
+                </div> */}
                 <div className="statistic__average--container">
                   {engagementStatusStatistics && <PieCharts engagementStatusData={engagementStatusStatistics} />}
-                  <BarCharts dataByMonth={barChartData} title="Évolution des connexions" />
+                  <BarChartWithMonthSelector data={mockDailyConnectionsCountsByMonth} title="Évolution des connexions" />
                 </div>
                 <div className="statistic__average--container" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gridGap: '2rem' }}>
                   <ClassesExchangesCard

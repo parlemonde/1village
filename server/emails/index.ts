@@ -34,7 +34,7 @@ interface EmailMapping {
   [Email.INVALID_COUNTRY]: { userName: string; userEmail: string };
   [Email.CONFIRMATION_EMAIL]: { url: string; firstname: string; email: string; verificationHash: string };
   [Email.RESET_PASSWORD_EMAIL]: { url: string; email: string; verificationHash: string };
-  [Email.COMMENT_NOTIFICATION]: { userWhoComment: string; activityType: string; url: string };
+  [Email.COMMENT_NOTIFICATION]: { userWhoComment: string; activityType: string; url: string; token: string };
 }
 type EmailOptions<E extends Email> = EmailMapping[E];
 
@@ -89,10 +89,13 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
     };
   }
   if (email === Email.COMMENT_NOTIFICATION) {
+    const commentNotificationOptions = options as EmailMapping[Email.COMMENT_NOTIFICATION];
     return {
       filenameHtml: 'comment_notification.html',
       filenameText: 'comment_notification.txt',
-      subject: 'Du nouveau sur 1Village ! 🦜',
+      subject: commentNotificationOptions?.activityType
+        ? `Un nouveau commentaire sous votre activité ${commentNotificationOptions.activityType}`
+        : 'Un nouveau commentaire sous votre activité 1Village',
       args: {
         ...options,
       },

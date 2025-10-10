@@ -54,7 +54,6 @@ const Creer = () => {
       { name: 'Créer du contenu libre', link: '/admin/newportal/contenulibre' },
       { name: 'Créer une activité H5P', link: 'https://' },
       { name: 'Paramétrer l’hymne', link: 'https://' },
-      { name: 'Mixer l’hymne', link: 'https://' },
     ],
     [],
   );
