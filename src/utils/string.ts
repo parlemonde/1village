@@ -8,3 +8,7 @@ export const isNormalizedStringEqual = (str1: string, str2: string): boolean => 
 
   return strNorm1.toLocaleLowerCase() === strNorm2.toLocaleLowerCase();
 };
+
+export const isValidString = (value: unknown): value is string => {
+  return typeof value === 'string' && value !== null && value !== undefined;
+};

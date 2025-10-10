@@ -12,10 +12,11 @@ interface ContributionBarChartProps {
 }
 
 const ContributionBarChart: React.FC<ContributionBarChartProps> = ({ dataByStep, title, className }) => {
-  const dataWithPercent = dataByStep.dataBySteps.map((d: ContributionBySteps) => ({
-    ...d,
-    percent: Math.round((d.contributionCount / dataByStep.total) * 100),
-  }));
+  const dataWithPercent =
+    dataByStep?.dataBySteps.map((d: ContributionBySteps) => ({
+      ...d,
+      percent: Math.round((d.contributionCount / dataByStep.total) * 100),
+    })) || [];
 
   return (
     <div className={classNames(styles.contributionBarContainer, className)}>
