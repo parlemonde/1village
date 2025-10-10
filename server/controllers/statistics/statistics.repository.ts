@@ -1,15 +1,17 @@
 import { ActivityStatus } from '../../../types/activity.type';
 import type {
   ClassroomCountDetails,
-  CountryCountDetails,
   DailyConnectionsCountsByMonth,
-  PhaseDetails,
   StatsFilterParams,
+  CountryContribution,
+  CountryCountDetails,
+  PhaseDetails,
   VillageCountDetails,
 } from '../../../types/statistics.type';
 import type { Activity } from '../../entities/activity';
 import type { Classroom } from '../../entities/classroom';
 import type { Village } from '../../entities/village';
+import { getCountries } from '../../features/countries/countries.service';
 import { getCountryCodes } from '../../repositories/country.repository';
 import {
   getVideosCountByClassroomUserByUserId,
@@ -161,6 +163,30 @@ export async function getTotalActivitiesCounts(phase?: number): Promise<TotalAct
   const totalVideos = await getVideosTotalCount(phase);
 
   return { totalPublications, totalComments, totalVideos };
+}
+
+export async function getPublishedContributionsByCountry(): Promise<CountryContribution[]> {
+  const allCountryCodes = (await getCountryCodes()).map((c) => c.countryCode);
+  const countries = await getCountries(false);
+
+  const countryMap = new Map(countries.map((c) => [c.isoCode, c]));
+
+  const countryPromises = allCountryCodes.map(async (countryCode) => {
+    const [publishedActivitiesCount, commentsCount] = await Promise.all([
+      getActivitiesCountByStatusAndCountry(ActivityStatus.PUBLISHED, countryCode),
+      getCommentsCountByCountry(countryCode),
+    ]);
+
+    const country = countryMap.get(countryCode);
+
+    return {
+      countryCode,
+      countryName: country?.name ?? countryCode,
+      total: publishedActivitiesCount + commentsCount,
+    };
+  });
+
+  return Promise.all(countryPromises);
 }
 
 export async function getDetailedActivitiesCountsByVillages(phase: number) {

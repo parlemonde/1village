@@ -67,6 +67,12 @@ export type VillageCountDetails = {
   phaseDetails: PhaseDetails;
 };
 
+export type CountryContribution = {
+  countryCode: string;
+  countryName: string;
+  total: number;
+};
+
 export type PhaseDetails = {
   phaseId: number;
   commentCount: number;
@@ -103,6 +109,7 @@ export interface VillageStats {
     totalComments: number;
     totalVideos: number;
   };
+  contributionsByCountry: CountryContribution[];
 }
 
 export interface FamiliesWithoutAccount {

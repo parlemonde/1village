@@ -137,7 +137,7 @@ export const OneVillageTable = ({
   return (
     <NoSsr>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <TableContainer sx={{ minHeight: `${minTableHeightInPx + 2}px`, maxWidth: '48.5rem' }}>
+        <TableContainer sx={{ minHeight: `${minTableHeightInPx + 2}px` }}>
           {titleContent && (
             <Box sx={{ fontWeight: 'bold', display: 'flex', border: 'none', backgroundColor, p: '8px' }}>
               <RemoveRedEyeIcon sx={{ mr: '6px' }} /> {titleContent}

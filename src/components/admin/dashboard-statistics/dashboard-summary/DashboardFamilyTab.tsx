@@ -8,6 +8,7 @@ import BarChartWithMonthSelector from '../charts/BarChartWithMonthSelector';
 import styles from '../styles/charts.module.css';
 import { createFamiliesWithoutAccountRows, createFloatingAccountsRows } from '../utils/tableCreator';
 import { FamiliesWithoutAccountHeaders, FloatingAccountsHeaders } from '../utils/tableHeader';
+import { isValidString } from 'src/utils/string';
 import type { DashboardSummaryData } from 'types/dashboard.type';
 
 export interface DashboardFamilyTabProps {
@@ -23,6 +24,7 @@ const DashboardFamilyTab = ({ dashboardSummaryData }: DashboardFamilyTabProps) =
 
   const familiesWithoutAccountRows = createFamiliesWithoutAccountRows(familyData.familiesWithoutAccount);
   const floatingAccountsRows = createFloatingAccountsRows(familyData.floatingAccounts);
+  const displayedOnVillagePanel = isValidString(dashboardSummaryData.villageName);
 
   return (
     <>
@@ -33,13 +35,15 @@ const DashboardFamilyTab = ({ dashboardSummaryData }: DashboardFamilyTabProps) =
         columns={FamiliesWithoutAccountHeaders}
         titleContent={`À surveiller : comptes non créés (${familiesWithoutAccountRows.length})`}
       />
-      <OneVillageTable
-        admin={false}
-        emptyPlaceholder={<p>Pas de données</p>}
-        data={floatingAccountsRows}
-        columns={FloatingAccountsHeaders}
-        titleContent={`À surveiller : comptes flottants (${floatingAccountsRows.length})`}
-      />
+      {displayedOnVillagePanel && (
+        <OneVillageTable
+          admin={false}
+          emptyPlaceholder={<p>Pas de données</p>}
+          data={floatingAccountsRows}
+          columns={FloatingAccountsHeaders}
+          titleContent={`À surveiller : comptes flottants (${floatingAccountsRows.length})`}
+        />
+      )}
       <Box
         className={styles.classroomStats}
         sx={{
