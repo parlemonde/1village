@@ -1,6 +1,7 @@
 import { Not, In, IsNull } from 'typeorm';
 
 import { ActivityStatus, ActivityType } from '../../../types/activity.type';
+import type { VillageClassroomsContribution } from '../../../types/statistics.type';
 import { UserType } from '../../../types/user.type';
 import { Activity } from '../../entities/activity';
 import { AppDataSource } from '../../utils/data-source';
@@ -156,4 +157,31 @@ export async function getActivitiesByVillageIdAndPhase(villageId: number, phase:
     .andWhere('a.status = :status', { status: ActivityStatus.PUBLISHED })
     .andWhere('a.type NOT IN (:...excludedTypes)', { excludedTypes: [ActivityType.PRESENTATION, ActivityType.ANTHEM] })
     .getMany();
+}
+
+export async function getClassroomsContributionsCounts(villageId: number): Promise<VillageClassroomsContribution[]> {
+  return AppDataSource.query(`
+  WITH classroomsActivities AS (
+    SELECT cla.id as classroomId, cla.name as classroomName, cla.countryCode, cla.userId, u.displayName as userDisplayName, u.city, u.level, COUNT(a.id) as activitiesCount
+      FROM classroom cla
+      INNER JOIN user u ON u.id = cla.userId AND u.accountRegistration = ${USER_WITH_PLM_SSO_REGISTRATION} AND type = ${UserType.TEACHER}
+      LEFT JOIN activity a ON a.userId = cla.userId AND a.status = ${ActivityStatus.PUBLISHED} AND deleteDate IS NULL AND a.type NOT IN (${ActivityType.PRESENTATION},${ActivityType.ANTHEM})
+      WHERE cla.villageId = ${villageId}
+      GROUP BY cla.id, cla.name, cla.countryCode
+  ), classroomsContributions AS (
+    SELECT classroomId, classroomName, countryCode, userDisplayName, ca.userId, city, level, activitiesCount, COUNT(c.id) as commentCount FROM classroomsActivities ca
+      INNER JOIN comment c ON c.userId = ca.userId
+      GROUP BY classroomId, classroomName, countryCode, ca.userId, activitiesCount
+  )
+  SELECT classroomId, countryCode, activitiesCount + commentCount as total,
+    CASE
+      WHEN cc.classroomName IS NOT NULL THEN cc.classroomName
+      WHEN cc.userDisplayName IS NOT NULL THEN cc.userDisplayName
+      WHEN cc.level IS NOT NULL THEN CONCAT('La classe de ', cc.level, ' à ', cc.city)
+      ELSE CONCAT('La classe de ', cc.city)
+    END AS classroomName
+    FROM classroomsContributions cc
+    GROUP BY classroomId, classroomName, countryCode
+    ORDER BY countryCode;
+`);
 }
