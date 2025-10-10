@@ -135,33 +135,8 @@ const VillageStats = () => {
                   />
                   <ClassesContributionCard data={sessionsStatistics.contributionsBarChartData} />
                 </div>
-              </TabPanel>
-              <TabPanel value={selectedTab} index={1}>
-                <OneVillageTable
-                  admin={false}
-                  emptyPlaceholder={<p>Pas de données pour le Village-Monde sélectionné</p>}
-                  data={familiesWithoutAccountRows}
-                  columns={FamiliesWithoutAccountHeaders}
-                  titleContent={`À surveiller : comptes non créés (${familiesWithoutAccountRows.length})`}
-                />
-                <Box
-                  className={styles.classroomStats}
-                  sx={{
-                    display: 'flex',
-                    flexDirection: {
-                      xs: 'column',
-                      md: 'row',
-                    },
-                    gap: 2,
-                  }}
-                >
-                  <StatsCard data={villageStatistics?.family?.familyAccountsCount}>Nombre de profs ayant créé des comptes famille</StatsCard>
-                  <StatsCard data={villageStatistics?.family?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
-                  <StatsCard data={villageStatistics?.family?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
-                </Box>
-                {/* Phase tables for Familles tab */}
-                {!!selectedVillage &&
-                  selectedPhase !== undefined &&
+
+                {selectedVillage &&
                   (selectedPhase === 0 ? (
                     [1, 2, 3].map((phase) => (
                       <CountryActivityPhaseAccordion
@@ -190,6 +165,30 @@ const VillageStats = () => {
                       }
                     />
                   ))}
+              </TabPanel>
+              <TabPanel value={selectedTab} index={1}>
+                <OneVillageTable
+                  admin={false}
+                  emptyPlaceholder={<p>Pas de données pour le Village-Monde sélectionné</p>}
+                  data={familiesWithoutAccountRows}
+                  columns={FamiliesWithoutAccountHeaders}
+                  titleContent={`À surveiller : comptes non créés (${familiesWithoutAccountRows.length})`}
+                />
+                <Box
+                  className={styles.classroomStats}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: {
+                      xs: 'column',
+                      md: 'row',
+                    },
+                    gap: 2,
+                  }}
+                >
+                  <StatsCard data={villageStatistics?.family?.familyAccountsCount}>Nombre de profs ayant créé des comptes famille</StatsCard>
+                  <StatsCard data={villageStatistics?.family?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
+                  <StatsCard data={villageStatistics?.family?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
+                </Box>
               </TabPanel>
             </>
           )}
