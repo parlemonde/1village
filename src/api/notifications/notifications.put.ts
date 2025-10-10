@@ -16,7 +16,7 @@ async function putNotifications(params: { userId: number; data: NotificationChoi
   return await axiosRequest({
     method: 'PUT',
     baseURL: '/api',
-    url: `/notifications/suscribe/${userId}`,
+    url: `/notifications/subscribe/${userId}`,
     data: {
       data,
     },

@@ -25,7 +25,7 @@ export const EditNotificationPreferences = async (notification: Notifications) =
 
 const notificationsController = new Controller('/notifications');
 
-notificationsController.get({ path: '/suscribe/:userId' }, async (req: Request, res: Response) => {
+notificationsController.get({ path: '/users/:userId' }, async (req: Request, res: Response) => {
   const { userId } = req.params;
 
   try {
@@ -57,7 +57,7 @@ notificationsController.get({ path: '/suscribe/:userId' }, async (req: Request, 
   }
 });
 
-notificationsController.put({ path: '/suscribe/:userId' }, async (req: Request, res: Response) => {
+notificationsController.put({ path: '/subscribe/:userId' }, async (req: Request, res: Response) => {
   const { userId } = req.params;
   const { data } = req.body;
 
