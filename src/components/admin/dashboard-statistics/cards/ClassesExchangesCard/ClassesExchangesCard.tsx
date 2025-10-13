@@ -10,35 +10,65 @@ interface ClassesExchangesCardProps {
   totalPublications: number;
   totalComments: number;
   totalVideos: number;
+  enableColumns?: boolean;
 }
 
-const ClassesExchangesCard = ({ totalPublications, totalComments, totalVideos }: ClassesExchangesCardProps) => {
+const ICON_SX = { fontSize: '2.2rem', margin: '1rem .3rem' };
+
+const StatItem: React.FC<{
+  icon: React.ReactNode;
+  value: number;
+  label: string;
+  inlineLabel?: boolean;
+}> = ({ icon, value, label, inlineLabel = false }) => {
+  if (inlineLabel) {
+    return (
+      <div className={`${styles.cardCountContainer} ${styles.cardCountContainerInline}`}>
+        <span style={{ color: 'var(--secondary-color)' }}> {icon}</span>
+        <p className={styles.cardCount}>{value}</p>
+        <h4 style={{ fontWeight: 600 }}>{label}</h4>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className={styles.cardCountContainer}>
+        {icon}
+        <p className={styles.cardCount}>{value}</p>
+      </div>
+      <h5 className={styles.cardLabel}>{label}</h5>
+    </div>
+  );
+};
+
+const ClassesExchangesCard: React.FC<ClassesExchangesCardProps> = ({ totalPublications, totalComments, totalVideos, enableColumns = false }) => {
+  const stats = [
+    { key: 'publications', icon: <DescriptionOutlinedIcon sx={ICON_SX} />, value: totalPublications, label: 'Total des publications' },
+    { key: 'comments', icon: <ChatBubbleOutlineOutlinedIcon sx={ICON_SX} />, value: totalComments, label: 'Commentaires' },
+    { key: 'videos', icon: <YouTubeIcon sx={ICON_SX} />, value: totalVideos, label: 'Vidéos en ligne' },
+  ];
+
+  if (enableColumns) {
+    return (
+      <div className={`${styles.root} ${styles.cardContainerColumn}`}>
+        <h5 className={styles.title}>Résumé des échanges sur 1Village</h5>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', paddingTop: '2rem' }}>
+          {stats.map((s) => (
+            <StatItem key={s.key} icon={s.icon} value={s.value} label={s.label} inlineLabel={true} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`${styles.root} ${styles.cardContainer}`}>
       <h5 className={styles.title}>Résumé des échanges sur 1Village</h5>
-
       <div className={styles.cardContainerExchange}>
-        <div>
-          <div className={styles.cardCountContainer}>
-            <DescriptionOutlinedIcon sx={{ fontSize: '2.2rem', margin: '1rem .3rem' }} />
-            <p className={styles.cardCount}>{totalPublications}</p>
-          </div>
-          <h5 className={styles.cardLabel}>Total des publications</h5>
-        </div>
-        <div>
-          <div className={styles.cardCountContainer}>
-            <ChatBubbleOutlineOutlinedIcon sx={{ fontSize: '2.2rem', margin: '1rem .3rem' }} />
-            <p className={styles.cardCount}>{totalComments}</p>
-          </div>
-          <h5 className={styles.cardLabel}>Commentaires</h5>
-        </div>
-        <div>
-          <div className={styles.cardCountContainer}>
-            <YouTubeIcon sx={{ fontSize: '2.2rem', margin: '1rem .3rem' }} />
-            <p className={styles.cardCount}>{totalVideos}</p>
-          </div>
-          <h5 className={styles.cardLabel}>Vidéos en ligne</h5>
-        </div>
+        {stats.map((s) => (
+          <StatItem key={s.key} icon={s.icon} value={s.value} label={s.label} />
+        ))}
       </div>
     </div>
   );

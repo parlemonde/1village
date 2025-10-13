@@ -17,6 +17,13 @@
   height: 13rem;
 }
 
+.cardContainerColumn {
+  background-color: var(--card-bg-color);
+  padding: 0.75rem 1rem;
+  border-radius: 0.9rem;
+  height: 100%;
+}
+
 .cardContainerExchange {
   display: flex;
   margin: 3rem auto;
@@ -31,6 +38,11 @@
 .cardCountContainer {
   display: flex;
   height: 3.5rem;
+}
+
+.cardCountContainerInline {
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .cardCount {
