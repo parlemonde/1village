@@ -35,7 +35,7 @@ __metadata:
     "@types/d3-geo": "npm:3.0.2"
     "@types/draft-js": "npm:0.11.18"
     "@types/draftjs-to-html": "npm:0.8.4"
-    "@types/earcut": "npm:2.1.1"
+    "@types/earcut": "npm:2.1.4"
     "@types/express": "npm:4.17.13"
     "@types/express-useragent": "npm:1.0.2"
     "@types/file-saver": "npm:^2.0.7"
@@ -4026,10 +4026,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/earcut@npm:2.1.1":
-  version: 2.1.1
-  resolution: "@types/earcut@npm:2.1.1"
-  checksum: 10/7845dab97ba2bf379caeb4fb91bb732e6710b0ce018a8e357f023cb96ac2fa5c64352461e93ecac2504966dcf6b0b882d117c2258cf15a679bd0063b3cee0e14
+"@types/earcut@npm:2.1.4":
+  version: 2.1.4
+  resolution: "@types/earcut@npm:2.1.4"
+  checksum: 10/167e1c6d60e9d964d0f496c11b5065b9d155b4c1df04fb9abcec88af2c16213999ea8ed7cddeec9475620152e7e9e99a0f118e1c8070e1396cf0f299642beb6b
   languageName: node
   linkType: hard
 
