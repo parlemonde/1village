@@ -26,6 +26,7 @@ export interface TableOptions {
   sort?: 'asc' | 'desc';
   search?: string;
 }
+
 interface OneVillageTableProps {
   'aria-label'?: string;
   admin: boolean;
@@ -39,6 +40,7 @@ interface OneVillageTableProps {
   minTableHeightInPx?: number;
   rowStyle?: (row: any) => React.CSSProperties;
   tableLayout?: 'auto' | 'fixed';
+  showElementCount?: boolean;
 }
 
 export const OneVillageTable = ({
@@ -54,6 +56,7 @@ export const OneVillageTable = ({
   minTableHeightInPx = 240,
   rowStyle,
   tableLayout = 'fixed',
+  showElementCount = true,
 }: OneVillageTableProps) => {
   const nbElementsWithoutTotal = data.length - 1;
 
@@ -261,14 +264,16 @@ export const OneVillageTable = ({
               page={(options.page || 1) - 1}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
-              labelDisplayedRows={({ from, to, count }) => (
-                <span>{`${from} - ${to} sur ${count} ${footerElementsLabel}${nbElementsWithoutTotal > 0 ? 's' : ''}`}</span>
-              )}
+              labelDisplayedRows={({ from, to, count }) =>
+                showElementCount && <span>{`${from} - ${to} sur ${count} ${footerElementsLabel}${nbElementsWithoutTotal > 0 ? 's' : ''}`}</span>
+              }
             />
           ) : (
-            <p style={{ margin: 0, padding: '0', textAlign: 'right', fontSize: '14px' }}>{`${nbElementsWithoutTotal} ${footerElementsLabel}${
-              displayedData.length > 1 ? 's' : ''
-            }`}</p>
+            showElementCount && (
+              <p style={{ margin: 0, padding: '0', textAlign: 'right', fontSize: '14px' }}>{`${nbElementsWithoutTotal} ${footerElementsLabel}${
+                displayedData.length > 1 ? 's' : ''
+              }`}</p>
+            )
           )}
         </Box>
       </Paper>

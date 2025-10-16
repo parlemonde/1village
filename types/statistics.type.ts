@@ -224,6 +224,7 @@ export enum EngagementStatusColor {
   GHOST = '#FFD678',
   OBSERVER = '#6082FC',
   ACTIVE = '#4CC64A',
+  DEFAULT = '#FFF',
 }
 
 export interface ClassroomIdentityDetails {
