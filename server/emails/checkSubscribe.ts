@@ -58,14 +58,14 @@ export const getEmailInformation = async (activityId: number, userId: number, co
   return { commentAuthor, notificationRules, activityCreator, activity, column, classInformation };
 };
 
-type HasSuscribeProps = {
+type HasSubscribeProps = {
   emailType: number;
   notificationRules: Notifications | null;
   activityCreator: User | null;
   column: NotificationColumns;
 };
 
-export const hasSubscribed = ({ emailType, notificationRules, activityCreator, column }: HasSuscribeProps) => {
+export const hasSubscribed = ({ emailType, notificationRules, activityCreator, column }: HasSubscribeProps) => {
   if (
     emailType === emailMapping.commentary &&
     notificationRules &&

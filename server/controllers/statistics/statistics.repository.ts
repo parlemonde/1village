@@ -7,6 +7,8 @@ import type {
   CountryCountDetails,
   PhaseDetails,
   VillageCountDetails,
+  VillageClassroomsContribution,
+  CountryClassroomsContribution,
 } from '../../../types/statistics.type';
 import type { Activity } from '../../entities/activity';
 import type { Classroom } from '../../entities/classroom';
@@ -30,6 +32,7 @@ import {
   getActivitiesCountByStatusAndVillageId,
   getDraftActivitiesCountByVillageCountryAndPhase,
   getActivitiesCountByStatusAndClassroomUser,
+  getClassroomsContributionsCounts,
 } from '../activities/activities.repository';
 import type { Last12MonthDailyCountRawData } from '../analytic-session/analytic-session.repository';
 import { getLast12MonthDailyConnectionCounts } from '../analytic-session/analytic-session.repository';
@@ -187,6 +190,33 @@ export async function getPublishedContributionsByCountry(): Promise<CountryContr
   });
 
   return Promise.all(countryPromises);
+}
+
+export async function getPublishedContributionsByVillageClassrooms(villageId: number): Promise<CountryClassroomsContribution[]> {
+  const village = await getVillageById(villageId);
+  if (!village) {
+    throw new Error(`Village with id ${villageId} not found`);
+  }
+
+  const contributionsByVillageClassrooms: VillageClassroomsContribution[] = await getClassroomsContributionsCounts(villageId);
+
+  const contributionsByVillageCountryClassrooms = [];
+
+  for (const country of village.countries) {
+    contributionsByVillageCountryClassrooms.push({
+      countryCode: country.isoCode,
+      countryName: country?.name || country.isoCode,
+      classroomsContributions: contributionsByVillageClassrooms
+        .filter((contribution) => contribution.countryCode === country.isoCode)
+        .map((contribution) => ({
+          classroomId: contribution.classroomId,
+          classroomName: contribution.classroomName,
+          total: contribution.total,
+        })),
+    });
+  }
+
+  return contributionsByVillageCountryClassrooms;
 }
 
 export async function getDetailedActivitiesCountsByVillages(phase: number) {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, Tab, Tabs } from '@mui/material';
 
 import EntityEngagementStatus, { EntityType } from './EntityEngagementStatus';
 import Loader, { AnalyticsDataType } from './Loader';
@@ -19,11 +19,13 @@ import {
 } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
 import type { VillageListItem } from 'types/analytics/village-list-item';
+import { DashboardSummaryTab } from 'types/dashboard.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
 const CountryStats = () => {
   const [selectedPhase, setSelectedPhase] = useState<number>();
   const [selectedCountry, setSelectedCountry] = useState<string>();
+  const [selectedTab, setSelectedTab] = useState(DashboardSummaryTab.CLASSROOM);
 
   const [villageList, setVillageList] = useState<VillageListItem[]>([]);
   const [loadingVillageList, setLoadingVillageList] = useState<boolean>(true);
@@ -70,6 +72,10 @@ const CountryStats = () => {
     // TODO VIL-815 changer la valeur de selectedCountry quand on clique sur une barre du graphique
   };
 
+  const handleTabChange = (_event: React.SyntheticEvent, selectedTab: number) => {
+    setSelectedTab(selectedTab);
+  };
+
   return (
     <>
       <TeamCommentCard type={TeamCommentType.COUNTRY} />
@@ -101,17 +107,24 @@ const CountryStats = () => {
             classroomsStatistics &&
             sessionsStatistics &&
             countryStatistics && (
-              <DashboardSummary
-                dashboardSummaryData={{
-                  ...classroomsStatistics,
-                  ...sessionsStatistics,
-                  ...countryStatistics,
-                  ...activityCountDetails,
-                  engagementStatusData: engagementStatusStatistics,
-                }}
-                selectedCountry={selectedCountry}
-                selectedPhase={selectedPhase}
-              />
+              <>
+                <Tabs value={selectedTab} onChange={handleTabChange} sx={{ py: 3 }}>
+                  <Tab value={DashboardSummaryTab.CLASSROOM} label="En classe" />
+                  <Tab value={DashboardSummaryTab.FAMILY} label="En famille" />
+                </Tabs>
+                <DashboardSummary
+                  dashboardSummaryData={{
+                    ...classroomsStatistics,
+                    ...sessionsStatistics,
+                    ...countryStatistics,
+                    ...activityCountDetails,
+                    engagementStatusData: engagementStatusStatistics,
+                  }}
+                  selectedCountry={selectedCountry}
+                  selectedPhase={selectedPhase}
+                  activeTab={selectedTab}
+                />
+              </>
             )
           )}
         </Box>

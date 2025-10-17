@@ -54,7 +54,7 @@ describe('Notification api test', () => {
     };
 
     const response = await supertest(app)
-      .put(`/api/notifications/suscribe/${id}`)
+      .put(`/api/notifications/subscribe/${id}`)
       .set('authorization', `Bearer ${accessToken}`)
       .send({ data: updateData })
       .expect(200);
@@ -81,7 +81,7 @@ describe('Notification api test', () => {
     });
 
     const response = await supertest(app)
-      .put('/api/notifications/suscribe/1')
+      .put('/api/notifications/subscribe/1')
       .set('authorization', `Bearer ${accessToken}`)
       .send({ data: updateData })
       .expect(500);
