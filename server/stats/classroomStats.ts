@@ -49,22 +49,28 @@ export const getRegisteredClassroomsCount = async (villageId?: number | null) =>
   return result.classroomsCount ? parseInt(result.classroomsCount, 10) : null;
 };
 
-// TODO - add phase: number | null
-export const getConnectedClassroomsCount = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+export const getConnectedClassroomsCount = async (villageId?: number, countryCode?: string, classroomId?: number, phase?: VillagePhase) => {
   const queryBuilder = classroomRepository
     .createQueryBuilder('classroom')
     .select('COUNT(classroom.id)', 'classroomsCount')
     .innerJoin('classroom.user', 'user')
+    .innerJoin('classroom.village', 'village')
     .andWhere('user.accountRegistration = :accountRegistration', { accountRegistration: 10 });
 
   if (villageId) {
     queryBuilder.andWhere('classroom.villageId = :villageId', { villageId });
   }
+
   if (countryCode) {
     queryBuilder.andWhere('user.countryCode = :countryCode', { countryCode });
   }
+
   if (classroomId) {
     queryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
+  }
+
+  if (phase) {
+    queryBuilder.andWhere('village.activePhase = :phase', { phase });
   }
 
   const result = await queryBuilder.getRawOne();
@@ -207,7 +213,7 @@ export const getFamiliesWithoutAccountForClassroom = async (classroomId: number)
 /**
  * Retourne le nombre total de classes contributrices et le détail par phase.
  */
-export const getContributionsBarChartData = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null) => {
+export const getContributionsBarChartData = async (villageId?: number, countryCode?: string, classroomId?: number) => {
   const phases = [
     { step: 'Phase 1', value: 1 },
     { step: 'Phase 2', value: 2 },
