@@ -29,7 +29,9 @@ const PieCharts: React.FC<Props> = ({ engagementStatusData, className }) => {
 
   return (
     <div className={classNames(styles.pieContainer, className)}>
-      <div className={styles.title}>{"Niveau d'engagement"}</div>
+      <div className={styles.title} style={{ paddingBottom: '30px' }}>
+        {"Niveau d'engagement"}
+      </div>
       <PieChart
         colors={[EngagementStatusColor.GHOST, EngagementStatusColor.OBSERVER, EngagementStatusColor.ACTIVE]}
         series={[{ data: pieChartData }]}
@@ -38,9 +40,9 @@ const PieCharts: React.FC<Props> = ({ engagementStatusData, className }) => {
         slotProps={{
           legend: { hidden: true },
         }}
-        sx={{ marginLeft: '6.5rem' }}
+        sx={{ ml: { xl: '6.5rem', lg: '6.5rem', md: '2.0rem', xs: '6.5rem' } }}
       />
-      <div style={{ display: 'block', maxWidth: '215px', margin: '.5rem auto 0' }}>
+      <div style={{ display: 'block', textAlign: 'center', margin: '2.5rem auto 0' }}>
         {pieChartData.map((engagementData) => (
           <div key={engagementData.label} className={styles.legendItem}>
             <CircleIcon sx={{ color: engagementData.color, verticalAlign: 'middle', height: '.90rem' }} />

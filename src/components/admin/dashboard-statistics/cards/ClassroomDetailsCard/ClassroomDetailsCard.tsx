@@ -19,7 +19,7 @@ const ClassroomDetailsCard = ({ classroomIdentityDetails: classroomDetails }: Cl
     <div className={styles.mainContainer}>
       <CountryMap classroomDetails={classroomDetails} />
       <div className={styles.infoContainer}>
-        <h1>École {classroomDetails.school}</h1>
+        <h1 style={{ paddingBottom: '20px' }}>École {classroomDetails.school}</h1>
         <ul>
           <li>
             Adresse: {classroomDetails.address}, {classroomDetails.postalCode} {classroomDetails.city}
