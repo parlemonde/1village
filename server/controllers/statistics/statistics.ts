@@ -10,7 +10,6 @@ import { User } from '../../entities/user';
 import { Village } from '../../entities/village';
 import {
   getConnectedClassroomsCount,
-  getRegisteredClassroomsCount,
   getChildrenCodesCountForClassroom,
   getConnectedFamiliesCountForClassroom,
   getFamiliesWithoutAccountForClassroom,
@@ -100,10 +99,9 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
   const classroomId = req.query.classroomId ? parseInt(req.query.classroomId as string) : undefined;
   const phase = req.query.phase ? parseInt(req.query.phase as string) : undefined;
 
-  const filters: StatsFilterParams = { villageId, countryId: countryCode, classroomId, phase: undefined };
+  const filters: StatsFilterParams = { villageId, countryId: countryCode, classroomId, phase };
 
   try {
-    // Appelez les fonctions avec villageId
     const minDuration = await getMinDuration(filters);
     const maxDuration = await getMaxDuration(filters);
     const averageDuration = await getAverageDuration(filters);
@@ -114,7 +112,7 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
     const medianConnections = await getMedianConnections(filters);
     const testConnections = await getUserConnectionsList();
     const registeredClassroomsCount = await getClassroomCount(villageId, countryCode, classroomId);
-    const connectedClassroomsCount = await getConnectedClassroomsCount(villageId, countryCode, classroomId);
+    const connectedClassroomsCount = await getConnectedClassroomsCount(villageId, countryCode, classroomId, phase);
     const contributedClassroomsCount = await getContributedClassroomsCount(villageId, countryCode, classroomId, phase);
     const connectedFamiliesCount = await getConnectedFamiliesCount(filters);
     const familyAccountCount = await getFamilyAccountsCount(filters);
@@ -145,21 +143,6 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
     console.error('Error fetching statistics:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
-});
-
-statisticsController.get({ path: '/sessions/:phase' }, async (req: Request, res) => {
-  res.sendJSON({
-    minDuration: await getMinDuration(), // TODO - add phase
-    maxDuration: await getMaxDuration(), // TODO - add phase
-    averageDuration: await getAverageDuration(), // TODO - add phase
-    medianDuration: await getMedianDuration(), // TODO - add phase
-    minConnections: await getMinConnections(), // TODO - add phase
-    maxConnections: await getMaxConnections(), // TODO - add phase
-    averageConnections: await getAverageConnections(), // TODO - add phase
-    medianConnections: await getMedianConnections(), // TODO - add phase
-    registeredClassroomsCount: await getRegisteredClassroomsCount(),
-    connectedClassroomsCount: await getConnectedClassroomsCount(), // TODO - add phase
-  });
 });
 
 statisticsController.get({ path: '/classrooms-to-monitor' }, async (req, res) => {
@@ -409,7 +392,7 @@ statisticsController.get({ path: '/classrooms-identity/:classroomId' }, async (r
 statisticsController.get({ path: '/one-village' }, async (req, res) => {
   const phase = req.query.phase ? parseInt(req.query.phase as string) : undefined;
 
-  const filters: StatsFilterParams = {};
+  const filters: StatsFilterParams = { phase };
 
   const family = {
     ...(await constructFamilyResponseFromFilters(filters)),

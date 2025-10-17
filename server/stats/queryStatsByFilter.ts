@@ -65,8 +65,7 @@ export const getConnectedFamiliesCount = async (filterParams: StatsFilterParams)
     return await countConnectedFamiliesForCountry(countryId);
   }
 
-  // global
-  return await countConnectedFamiliesGlobal();
+  return await countConnectedFamiliesGlobal(phase);
 };
 
 export const getFloatingAccounts = async (filterParams: StatsFilterParams) => {
@@ -78,6 +77,7 @@ export const getFloatingAccounts = async (filterParams: StatsFilterParams) => {
 
   query.select(['user.id', 'user.firstname', 'user.lastname', 'user.language', 'user.email', 'user.createdAt']);
   const floatingAccounts = await query.getMany();
+
   return floatingAccounts;
 };
 
@@ -87,7 +87,9 @@ export const getFamilyAccountsCount = async (filterParams: StatsFilterParams) =>
 
   if (villageId) {
     const village = await villageRepository.findOne({ where: { id: villageId } });
+
     if (village) familyAccountsCount = await countFamilyAccounts(village, phase);
+
     return familyAccountsCount;
   }
 
@@ -95,14 +97,16 @@ export const getFamilyAccountsCount = async (filterParams: StatsFilterParams) =>
     return await countFamilyAccountsForCountry(countryId);
   }
 
-  return await countFamilyAccountsGlobal();
+  return await countFamilyAccountsGlobal(phase);
 };
 
 export const getChildrenCodesCount = async (filterParams: StatsFilterParams, whereClause?: WhereClause): Promise<number> => {
   const { villageId, countryId, phase } = filterParams;
+
   if (villageId) {
     whereClause = whereClause || { clause: 'village.id = :villageId', value: { villageId } };
     const village = await villageRepository.findOne({ where: { id: villageId } });
+
     return village ? await countChildrenCodes(village, phase, whereClause) : 0;
   }
 
@@ -110,5 +114,5 @@ export const getChildrenCodesCount = async (filterParams: StatsFilterParams, whe
     return await countChildrenCodesForCountry(countryId);
   }
 
-  return await countChildrenCodesGlobal();
+  return await countChildrenCodesGlobal(phase);
 };
