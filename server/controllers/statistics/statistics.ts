@@ -16,8 +16,8 @@ import {
   getFamiliesWithoutAccountForClassroom,
   getContributedClassroomsCount,
   getContributionsBarChartData,
+  getClassroomIdentity,
 } from '../../stats/classroomStats';
-import { getBarChartData } from '../../stats/connectionStats';
 import { getFamiliesWithoutAccountForCountry } from '../../stats/countryStats';
 import { getFamiliesWithoutAccountForGlobal } from '../../stats/globalStats';
 import { getChildrenCodesCount, getConnectedFamiliesCount, getFamilyAccountsCount, getFloatingAccounts } from '../../stats/queryStatsByFilter';
@@ -42,10 +42,13 @@ import {
   getDetailedActivitiesCountsByCountries,
   getDetailedActivitiesCountsByVillage,
   getDetailedActivitiesCountsByVillages,
+  getPublishedContributionsByCountry,
+  getPublishedContributionsByVillageClassrooms,
   getTotalActivitiesCounts,
   getTotalActivitiesCountsByClassroomId,
   getTotalActivitiesCountsByCountryCode,
   getTotalActivitiesCountsByVillageId,
+  getDailyConnectionsCountsByMonth,
 } from './statistics.repository';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
@@ -69,6 +72,8 @@ const constructFamilyResponseFromFilters = async (filters: StatsFilterParams) =>
   const connectedFamiliesCount = await getConnectedFamiliesCount(filtersFamily);
   const floatingAccounts = await getFloatingAccounts(filtersFamily);
 
+  const dailyConnectionsCountsByMonth = await getDailyConnectionsCountsByMonth(filtersFamily);
+
   return {
     minDuration,
     maxDuration,
@@ -84,6 +89,8 @@ const constructFamilyResponseFromFilters = async (filters: StatsFilterParams) =>
     childrenCodesCount,
     connectedFamiliesCount,
     floatingAccounts,
+
+    dailyConnectionsCountsByMonth,
   };
 };
 
@@ -112,7 +119,7 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
     const connectedFamiliesCount = await getConnectedFamiliesCount(filters);
     const familyAccountCount = await getFamilyAccountsCount(filters);
     const childrenCodesCount = await getChildrenCodesCount(filters);
-    const barChartData = await getBarChartData();
+    const dailyConnectionsCountsByMonth = await getDailyConnectionsCountsByMonth();
     const contributionsBarChartData = await getContributionsBarChartData(villageId, countryCode, classroomId);
 
     return res.sendJSON({
@@ -131,7 +138,7 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
       connectedFamiliesCount,
       familyAccountCount,
       childrenCodesCount,
-      barChartData,
+      dailyConnectionsCountsByMonth,
       contributionsBarChartData,
     });
   } catch (error) {
@@ -378,6 +385,27 @@ statisticsController.get({ path: '/classrooms/details/:classroomId' }, async (re
   res.sendJSON(classroomDetails);
 });
 
+statisticsController.get({ path: '/classrooms-identity/:classroomId' }, async (req, res) => {
+  try {
+    const classroomId = parseInt(req.params.classroomId);
+    if (isNaN(classroomId)) {
+      res.status(400).send(`L'identifiant de la classe est invalide.`);
+      return;
+    }
+
+    const classroomDetails = await getClassroomIdentity(classroomId);
+
+    if (!classroomDetails) {
+      return res.status(404).send('Error 404 - Not found.');
+    }
+
+    return res.status(200).json(classroomDetails);
+  } catch (error) {
+    console.error('Error fetching classroom identity:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 statisticsController.get({ path: '/one-village' }, async (req, res) => {
   const phase = req.query.phase ? parseInt(req.query.phase as string) : undefined;
 
@@ -455,8 +483,9 @@ statisticsController.get({ path: '/villages/:villageId' }, async (req, res) => {
   };
 
   const totalActivityCounts = await getTotalActivitiesCountsByVillageId(villageId, phase);
+  const contributionsByCountryClassrooms = await getPublishedContributionsByVillageClassrooms(villageId);
 
-  res.sendJSON({ family, totalActivityCounts });
+  res.sendJSON({ family, totalActivityCounts, contributionsByCountryClassrooms });
 });
 
 statisticsController.get({ path: '/villages/:villageId/engagement-status' }, async (req, res) => {
@@ -521,8 +550,9 @@ statisticsController.get({ path: '/countries/:countryCode' }, async (req, res) =
   };
 
   const totalActivityCounts = await getTotalActivitiesCountsByCountryCode(countryCode, phase);
+  const contributionsByCountry = await getPublishedContributionsByCountry();
 
-  res.sendJSON({ family, totalActivityCounts });
+  res.sendJSON({ family, totalActivityCounts, contributionsByCountry });
 });
 
 statisticsController.get({ path: '/countries/:countryCode/engagement-status' }, async (req, res) => {

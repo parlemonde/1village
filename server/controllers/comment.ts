@@ -1,6 +1,7 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
+import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
 import { EnumMailType, hasSubscribed, getEmailInformation, activityNameMapper, emailMapping } from '../emails/checkSubscribe';
 import { Activity } from '../entities/activity';
@@ -82,10 +83,13 @@ commentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
       const activityType = emailInformation?.activity?.type || 0;
       const activityName: string = activityNameMapper[activityType];
       const userName = emailInformation.classInformation || '';
+      const { accessToken } = await getAccessToken(emailInformation.activityCreator?.id || 0, false);
+
       await sendMail(Email.COMMENT_NOTIFICATION, emailInformation?.activityCreator?.email || '', {
         userWhoComment: userName,
         activityType: activityName,
         url: `https://1v.parlemonde.org/activite/${activityId}`,
+        token: accessToken,
       });
     }
 

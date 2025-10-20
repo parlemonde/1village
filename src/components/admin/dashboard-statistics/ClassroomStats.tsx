@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box, Tab, Tabs } from '@mui/material';
 
 import { OneVillageTable } from '../OneVillageTable';
@@ -10,23 +8,19 @@ import EntityEngagementStatus, { EntityType } from './EntityEngagementStatus';
 import Loader, { AnalyticsDataType } from './Loader';
 import TabPanel from './TabPanel';
 import TeamCommentCard from './TeamCommentCard';
-import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import ClassroomDetailsCard from './cards/ClassroomDetailsCard/ClassroomDetailsCard';
 import StatsCard from './cards/StatsCard/StatsCard';
-import BarCharts from './charts/BarCharts';
+import BarChartWithMonthSelector from './charts/BarChartWithMonthSelector';
 import StatisticFilters from './filters/StatisticFilters';
-import { mockDataByMonth } from './mocks/mocks';
+import { mockDailyConnectionsCountsByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
-import { useGetClassroomDetails, useGetClassroomEngagementStatus, useGetClassroomsStats } from 'src/api/statistics/statistics.get';
-import { useStatisticsSessions } from 'src/services/useStatistics';
+import { useGetClassroomIdentity, useGetClassroomEngagementStatus, useGetClassroomsStats } from 'src/api/statistics/statistics.get';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
-
-const BarChartTitle = 'Evolution des connexions';
 
 const ClassroomStats = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -41,13 +35,13 @@ const ClassroomStats = () => {
     3: true,
   });
 
+  const { data: classroomIdentityDetails, isLoading: isLoadingClassroomIdentityDetails } = useGetClassroomIdentity(selectedClassroom);
   const { data: classroomEngagementStatus, isLoading: isLoadingClassroomEngagementStatus } = useGetClassroomEngagementStatus(selectedClassroom);
-  const { data: sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, null, 1);
+  //const { data: _sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, null, 1);
   const { data: selectedClassroomStatistics, isLoading: isLoadingSelectedClassroomsStatistics } = useGetClassroomsStats(
     selectedClassroom,
     selectedPhase,
   );
-  const { data: classroomDetails, isLoading: isLoadingClassroomDetail } = useGetClassroomDetails(selectedClassroom);
 
   const totalActivitiesCounts = selectedClassroomStatistics?.totalActivityCounts;
 
@@ -72,17 +66,17 @@ const ClassroomStats = () => {
       />
       {selectedCountry && selectedVillage && selectedClassroom ? (
         <Box mt={2}>
-          {isLoadingClassroomEngagementStatus || isLoadingClassroomDetail ? (
+          {isLoadingClassroomEngagementStatus || isLoadingClassroomIdentityDetails ? (
             <Loader analyticsDataType={AnalyticsDataType.GRAPHS} />
           ) : (
             <>
               {classroomEngagementStatus && (
                 <EntityEngagementStatus entityType={EntityType.CLASSROOM} entityEngagementStatus={classroomEngagementStatus} />
               )}
-              {classroomDetails && <ClassroomDetailsCard classroomDetails={classroomDetails} />}
+              {classroomIdentityDetails && <ClassroomDetailsCard classroomIdentityDetails={classroomIdentityDetails} />}
             </>
           )}
-          {isLoadingSessionsStatistics || isLoadingSelectedClassroomsStatistics ? (
+          {isLoadingSelectedClassroomsStatistics ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
           ) : (
             <>
@@ -91,7 +85,8 @@ const ClassroomStats = () => {
                 <Tab label="En famille" />
               </Tabs>
               <TabPanel value={selectedTab} index={0}>
-                <div className="statistic__average--container">
+                {/* VIL-824 : invisibiliser ces éléments dans le dashboard */}
+                {/* <div className="statistic__average--container">
                   <AverageStatsCard
                     data={{
                       min: sessionsStatistics.minDuration ? Math.floor(sessionsStatistics.minDuration / 60) : 0,
@@ -115,9 +110,9 @@ const ClassroomStats = () => {
                   >
                     Nombre de connexions moyen par classe
                   </AverageStatsCard>
-                </div>
+                </div> */}
                 <div className="statistic--container">
-                  <BarCharts dataByMonth={mockDataByMonth} title={BarChartTitle} />
+                  <BarChartWithMonthSelector data={mockDailyConnectionsCountsByMonth} title="Évolution des connexions" />
                 </div>
                 <div style={{ marginTop: '2.5rem' }}>
                   <ClassesExchangesCard

@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Tabs, Tab, Box } from '@mui/material';
 
 import { OneVillageTable } from '../OneVillageTable';
@@ -10,15 +8,14 @@ import EntityEngagementStatus, { EntityType } from './EntityEngagementStatus';
 import Loader, { AnalyticsDataType } from './Loader';
 import TabPanel from './TabPanel';
 import TeamCommentCard from './TeamCommentCard';
-import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesContributionCard from './cards/ClassesContributionCard/ClassesContributionCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
-import BarCharts from './charts/BarCharts';
-import type { CountryChartData } from './charts/DualBarChart/DualBarChart';
+import BarChartWithMonthSelector from './charts/BarChartWithMonthSelector';
 import DualBarChart from './charts/DualBarChart/DualBarChart';
 import PieCharts from './charts/PieCharts';
 import StatisticFilters from './filters/StatisticFilters';
+import { mockDailyConnectionsCountsByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import ClassroomsToMonitorTable from './tables/ClassroomsToMonitorTable';
@@ -41,9 +38,6 @@ const VillageStats = () => {
     3: true,
   });
 
-  const [classroomContributionsByCountry, setClassroomContributionsByCountry] = useState<CountryChartData[]>([]);
-  const [isLoadingClassroomContributionsByCountryData, setIsLoadingClassroomContributionsByCountryData] = useState<boolean>(true);
-
   const { data: villageStatistics, isLoading: isLoadingVillageStatistics } = useGetVillagesStats(selectedVillage, selectedPhase);
   const { data: villageEngagementStatus, isLoading: isLoadingVillageEngagementStatus } = useGetVillageEngagementStatus(selectedVillage);
 
@@ -53,8 +47,6 @@ const VillageStats = () => {
   });
 
   const totalActivitiesCounts = villageStatistics?.totalActivityCounts;
-
-  const barChartData = sessionsStatistics?.barChartData || [];
 
   useEffect(() => {
     if (villageStatistics?.family?.familiesWithoutAccount) {
@@ -66,43 +58,7 @@ const VillageStats = () => {
     setSelectedTab(selectedTab);
   };
 
-  // On mocke l'asynchronisme en attendant d'avoir l'appel serveur censé retourner les interactions des villages-mondes
-  // A refacto lors de l'implémentation des tickets VIL-64, VIL-61 et VIL-10
-  useEffect(() => {
-    setTimeout(() => {
-      const classroomContributionsByCountry = [
-        {
-          country: 'France',
-          data: [
-            { name: 'École Jules Ferry', value: 127 },
-            { name: 'École Jean Jaurès', value: 98 },
-            { name: 'École Victor Hugo', value: 156 },
-            { name: 'École Saint-Exupéry', value: 89 },
-            { name: 'École Louis Pasteur', value: 142 },
-            { name: 'École Marie Curie', value: 113 },
-            { name: 'École Jean Moulin', value: 134 },
-          ],
-        },
-        {
-          country: 'Canada',
-          data: [
-            { name: 'École Champlain', value: 108 },
-            { name: 'École Cartier', value: 145 },
-            { name: 'École Garneau', value: 92 },
-            { name: 'École Frontenac', value: 167 },
-            { name: 'École Maisonneuve', value: 124 },
-            { name: 'École Montcalm', value: 96 },
-            { name: 'École Papineau', value: 138 },
-          ],
-        },
-      ];
-
-      setClassroomContributionsByCountry(classroomContributionsByCountry);
-      setIsLoadingClassroomContributionsByCountryData(false);
-    }, 5000);
-  }, []);
-
-  const isLoadingGraphsData = isLoadingVillageEngagementStatus || isLoadingClassroomContributionsByCountryData;
+  const isLoadingGraphsData = isLoadingVillageEngagementStatus || isLoadingVillageStatistics;
 
   return (
     <>
@@ -120,7 +76,9 @@ const VillageStats = () => {
           ) : (
             <>
               {villageEngagementStatus && <EntityEngagementStatus entityType={EntityType.VILLAGE} entityEngagementStatus={villageEngagementStatus} />}
-              {classroomContributionsByCountry && <DualBarChart data={classroomContributionsByCountry} />}
+              {villageStatistics?.contributionsByCountryClassrooms && (
+                <DualBarChart contributionsByCountryClassrooms={villageStatistics.contributionsByCountryClassrooms} />
+              )}
             </>
           )}
           {isLoadingSessionsStatistics || isLoadingVillageStatistics || isLoadingEngagementStatusStatistics ? (
@@ -139,7 +97,8 @@ const VillageStats = () => {
                   <StatsCard data={sessionsStatistics.connectedClassroomsCount ?? 0}>Nombre de classes connectées</StatsCard>
                   <StatsCard data={sessionsStatistics.contributedClassroomsCount ?? 0}>Nombre de classes contributrices</StatsCard>
                 </div>
-                <div className="statistic__average--container">
+                {/* VIL-824 : invisibiliser ces éléments dans le dashboard */}
+                {/* <div className="statistic__average--container">
                   <AverageStatsCard
                     data={{
                       min: sessionsStatistics.minDuration ? Math.floor(sessionsStatistics.minDuration / 60) : 0,
@@ -163,10 +122,10 @@ const VillageStats = () => {
                   >
                     Nombre de connexions moyen par classe
                   </AverageStatsCard>
-                </div>
+                </div> */}
                 <div className="statistic__average--container">
                   {engagementStatusStatistics && <PieCharts engagementStatusData={engagementStatusStatistics} />}
-                  <BarCharts dataByMonth={barChartData} title="Évolution des connexions" />
+                  <BarChartWithMonthSelector data={mockDailyConnectionsCountsByMonth} title="Évolution des connexions" />
                 </div>
                 <div className="statistic__average--container" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gridGap: '2rem' }}>
                   <ClassesExchangesCard

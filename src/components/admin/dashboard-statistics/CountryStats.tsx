@@ -1,42 +1,39 @@
 import { useEffect, useState } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, Tab, Tabs } from '@mui/material';
 
 import EntityEngagementStatus, { EntityType } from './EntityEngagementStatus';
 import Loader, { AnalyticsDataType } from './Loader';
 import TeamCommentCard from './TeamCommentCard';
 import VillageListCard from './cards/VillageListCard/VillageListCard';
-import HorizontalChart from './charts/HorizontalChart';
+import HorizontalBarChart from './charts/HorizontalBarChart';
 import DashboardSummary from './dashboard-summary/DashboardSummary';
 import StatisticFilters from './filters/StatisticFilters';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import {
-  useGetCountryEngagementStatus,
-  useGetCountriesStats,
   useGetClassroomsEngagementStatus,
   useGetCompareGlobalStats,
+  useGetCountriesStats,
+  useGetCountryEngagementStatus,
 } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
-import type { CountryStat } from 'types/analytics/country-stat';
 import type { VillageListItem } from 'types/analytics/village-list-item';
+import { DashboardSummaryTab } from 'types/dashboard.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
 const CountryStats = () => {
   const [selectedPhase, setSelectedPhase] = useState<number>();
   const [selectedCountry, setSelectedCountry] = useState<string>();
+  const [selectedTab, setSelectedTab] = useState(DashboardSummaryTab.CLASSROOM);
 
-  const [highlightedCountry, setHighlightedCountry] = useState<string>('');
-  const [loadingHighlightedCountry, setLoadingHighlightedCountry] = useState<boolean>(true);
-  const [barsChartData, setBarsChartData] = useState<CountryStat[]>([]);
-  const [loadingBarsChartData, setLoadingBarsChartData] = useState<boolean>(true);
   const [villageList, setVillageList] = useState<VillageListItem[]>([]);
   const [loadingVillageList, setLoadingVillageList] = useState<boolean>(true);
 
   const { data: countryEngagementStatus, isLoading: isLoadingCountryEngagementStatus } = useGetCountryEngagementStatus(selectedCountry);
   const { data: classroomsStatistics, isLoading: isLoadingClassroomStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
   const { data: sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, selectedCountry, null, selectedPhase);
-  const { data: familyStatistics, isLoading: isLoadingFamilyStatistics } = useGetCountriesStats(selectedCountry, selectedPhase);
+  const { data: countryStatistics, isLoading: isLoadingCountryStatistics } = useGetCountriesStats(selectedCountry, selectedPhase);
   const { data: engagementStatusStatistics, isLoading: isLoadingEngagementStatusStatistics } = useGetClassroomsEngagementStatus({
     countryCode: selectedCountry,
   });
@@ -46,18 +43,6 @@ const CountryStats = () => {
   // A refacto lors de l'implémentation des tickets VIL-407 et VIL-63
   useEffect(() => {
     setTimeout(() => {
-      const fakeHighlightedCountry: string = 'France';
-      const fakeContributionsByCountry = [
-        { country: 'France', total: 80 },
-        { country: 'Canada', total: 70 },
-        { country: 'Portugal', total: 60 },
-        { country: 'Grèce', total: 50 },
-        { country: 'Maroc', total: 40 },
-        { country: 'Tunisie', total: 30 },
-        { country: 'Belgique', total: 20 },
-        { country: 'Roumanie', total: 10 },
-      ];
-
       const fakeVillageListData = [
         { name: 'Village France - Canada', color: 'green' },
         { name: 'Village France - Liban', color: 'orange' },
@@ -70,26 +55,25 @@ const CountryStats = () => {
         { name: 'Village France - Australie', color: 'orange' },
       ];
 
-      setHighlightedCountry(fakeHighlightedCountry);
-      setLoadingHighlightedCountry(false);
-      setBarsChartData(fakeContributionsByCountry);
-      setLoadingBarsChartData(false);
       setVillageList(fakeVillageListData);
       setLoadingVillageList(false);
     }, 5000);
   }, []);
 
-  const isLoadingCountryStatisticsForGraphs =
-    isLoadingCountryEngagementStatus || loadingHighlightedCountry || loadingBarsChartData || loadingVillageList;
+  const isLoadingCountryStatisticsForGraphs = isLoadingCountryEngagementStatus || isLoadingCountryStatistics || loadingVillageList;
   const isLoadingClassroomStatisticsForWidgets =
     isLoadingClassroomStatistics ||
     isLoadingSessionsStatistics ||
-    isLoadingFamilyStatistics ||
+    isLoadingCountryStatistics ||
     isLoadingEngagementStatusStatistics ||
     isLoadingActivityCountDetails;
 
   const onCountrySelect = (_country: string) => {
     // TODO VIL-815 changer la valeur de selectedCountry quand on clique sur une barre du graphique
+  };
+
+  const handleTabChange = (_event: React.SyntheticEvent, selectedTab: number) => {
+    setSelectedTab(selectedTab);
   };
 
   return (
@@ -105,9 +89,13 @@ const CountryStats = () => {
           ) : (
             <>
               {countryEngagementStatus && <EntityEngagementStatus entityType={EntityType.COUNTRY} entityEngagementStatus={countryEngagementStatus} />}
-              {highlightedCountry && barsChartData && (
+              {countryStatistics?.contributionsByCountry && (
                 <div className={styles.simpleContainer}>
-                  <HorizontalChart highlightedCountry={highlightedCountry} barsChartData={barsChartData} onCountrySelect={onCountrySelect} />
+                  <HorizontalBarChart
+                    selectedCountry={selectedCountry}
+                    barsChartData={countryStatistics.contributionsByCountry}
+                    onCountrySelect={onCountrySelect}
+                  />
                 </div>
               )}
               {villageList && <VillageListCard villageList={villageList} />}
@@ -118,19 +106,25 @@ const CountryStats = () => {
           ) : (
             classroomsStatistics &&
             sessionsStatistics &&
-            familyStatistics && (
-              <DashboardSummary
-                dashboardSummaryData={{
-                  ...classroomsStatistics,
-                  ...sessionsStatistics,
-                  ...familyStatistics,
-                  ...activityCountDetails,
-                  barChartData: sessionsStatistics?.barChartData || [],
-                  engagementStatusData: engagementStatusStatistics,
-                }}
-                selectedCountry={selectedCountry}
-                selectedPhase={selectedPhase}
-              />
+            countryStatistics && (
+              <>
+                <Tabs value={selectedTab} onChange={handleTabChange} sx={{ py: 3 }}>
+                  <Tab value={DashboardSummaryTab.CLASSROOM} label="En classe" />
+                  <Tab value={DashboardSummaryTab.FAMILY} label="En famille" />
+                </Tabs>
+                <DashboardSummary
+                  dashboardSummaryData={{
+                    ...classroomsStatistics,
+                    ...sessionsStatistics,
+                    ...countryStatistics,
+                    ...activityCountDetails,
+                    engagementStatusData: engagementStatusStatistics,
+                  }}
+                  selectedCountry={selectedCountry}
+                  selectedPhase={selectedPhase}
+                  activeTab={selectedTab}
+                />
+              </>
             )
           )}
         </Box>

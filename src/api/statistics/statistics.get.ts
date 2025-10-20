@@ -12,6 +12,7 @@ import type {
   ClassroomToMonitor,
   EngagementStatusParams,
   EngagementStatusData,
+  ClassroomIdentityDetails,
 } from 'types/statistics.type';
 
 async function getSessionsStats(phase?: number): Promise<SessionsStats> {
@@ -299,4 +300,20 @@ export function useGetCompareClassroomsStats(villageId: number, phase: number) {
   return useQuery<ClassroomCompareData[]>(['compare-classes-stats', villageId, phase], () => getCompareClassroomsStats(villageId, phase), {
     enabled: !!villageId && !!phase,
   });
+}
+
+export function useGetClassroomIdentity(classroomId?: Classroom['id']) {
+  return useQuery(['classroom-details', classroomId], () => getClassroomIdentity(classroomId), {
+    enabled: classroomId !== null,
+  });
+}
+
+async function getClassroomIdentity(classroomId?: Classroom['id']): Promise<ClassroomIdentityDetails> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: `/statistics/classrooms-identity/${classroomId}`,
+    })
+  ).data;
 }
