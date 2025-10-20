@@ -6,6 +6,7 @@ import { Box, Button, Grid, Typography } from '@mui/material';
 import Home from 'src/svg/home.svg';
 import Logo from 'src/svg/logo_1village.svg';
 import School from 'src/svg/school.svg';
+import { onLoginSSO } from 'src/utils/sso';
 
 export function isRedirectValid(redirect: string) {
   // inner redirection.
@@ -21,34 +22,20 @@ export function isRedirectValid(redirect: string) {
 interface LoginBoxProps {
   title: string;
   subTitle: string;
-  route: string;
   Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  onClick: () => void;
 }
 
-const LoginBox: React.FC<LoginBoxProps> = ({ title, subTitle, route, Icon }) => {
-  const router = useRouter();
-
+const LoginBox: React.FC<LoginBoxProps> = ({ title, subTitle, Icon, onClick }) => {
   return (
     <Box borderRadius="10px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
       <Typography variant="h3" pb={2}>
         {title}
       </Typography>
       <Box width="fit-content" height="auto">
-        <Icon
-          style={{ cursor: 'pointer', width: '12rem', height: 'auto', margin: 'auto' }}
-          onClick={() => {
-            router.push(`/${route}`);
-          }}
-        />
+        <Icon style={{ cursor: 'pointer', width: '12rem', height: 'auto', margin: 'auto' }} onClick={onClick} />
       </Box>
-      <Button
-        color="primary"
-        variant="outlined"
-        style={{ margin: '10px 0' }}
-        onClick={() => {
-          router.push(`/${route}`);
-        }}
-      >
+      <Button color="primary" variant="outlined" style={{ margin: '10px 0' }} onClick={onClick}>
         {subTitle}
       </Button>
     </Box>
@@ -56,6 +43,14 @@ const LoginBox: React.FC<LoginBoxProps> = ({ title, subTitle, route, Icon }) => 
 };
 
 export const NewHome = () => {
+  const router = useRouter();
+  const handleTeacherLogin = () => {
+    onLoginSSO();
+  };
+  const handleFamilyLogin = () => {
+    router.push('/connexion');
+  };
+
   return (
     <Grid
       container
@@ -120,7 +115,7 @@ export const NewHome = () => {
               },
             }}
           >
-            <LoginBox title="Professionnel de l'éducation" subTitle="1Village en classe" route="login" Icon={School} />
+            <LoginBox title="Professionnel de l'éducation" subTitle="1Village en classe" onClick={handleTeacherLogin} Icon={School} />
           </Grid>
 
           <Box
@@ -138,7 +133,7 @@ export const NewHome = () => {
           ></Box>
 
           <Grid item xs={12} sm={6} spacing={2}>
-            <LoginBox title="Famille" subTitle="1Village en famille" route="connexion" Icon={Home} />
+            <LoginBox title="Famille" subTitle="1Village en famille" onClick={handleFamilyLogin} Icon={Home} />
           </Grid>
         </Grid>
       </Box>
