@@ -47,45 +47,57 @@ const Users = () => {
   const filteredUsers = useMemo(
     () =>
       users.filter((u) => {
-        const normalizedFullname = filters.fullname ? normalizeString(filters.fullname.toLowerCase()) : '';
-        const normalizedEmail = filters.email ? normalizeString(filters.email.toLowerCase()) : '';
-        const normalizedVillageName = filters.villageName && u.villageId ? normalizeString(villageMap[u.villageId].name.toLowerCase()) : '';
-        const normalizedCountry = filters.country ? normalizeString(filters.country.toLowerCase()) : '';
-
-        if (filters.fullname) {
-          const normalizedFirstname = normalizeString(u.firstname.toLowerCase());
-          const normalizedLastname = normalizeString(u.lastname.toLowerCase());
-          return [normalizedFirstname, normalizedLastname].some((field) => field.includes(normalizedFullname));
+        if (filters.fullname?.trim()) {
+          const normalized = normalizeString(filters.fullname.toLowerCase());
+          const firstName = normalizeString(u.firstname.toLowerCase());
+          const lastName = normalizeString(u.lastname.toLowerCase());
+          if (!firstName.includes(normalized) && !lastName.includes(normalized)) {
+            return false;
+          }
         }
-        if (filters.email) {
-          const normalizedEmailValue = normalizeString(u.email.toLowerCase());
-          return normalizedEmailValue.includes(normalizedEmail);
-        }
-        if (filters.villageName) {
-          const searchTerm = normalizeString(filters.villageName.toLowerCase());
 
+        if (filters.email?.trim()) {
+          const normalized = normalizeString(filters.email.toLowerCase());
+          const email = normalizeString(u.email.toLowerCase());
+          if (!email.includes(normalized)) {
+            return false;
+          }
+        }
+
+        if (filters.villageName?.trim()) {
           if (!u.villageId || !villageMap[u.villageId]) {
             return false;
           }
-          return normalizedVillageName.includes(searchTerm);
+          const searchTerm = normalizeString(filters.villageName.toLowerCase());
+          const villageName = normalizeString(villageMap[u.villageId].name.toLowerCase());
+          if (!villageName.includes(searchTerm)) {
+            return false;
+          }
         }
-        if (filters.country) {
-          const normalizedCountryName = u.country ? normalizeString(u.country?.name.toLowerCase()) : '';
-          return normalizedCountryName.includes(normalizedCountry);
+
+        if (filters.country?.trim()) {
+          const normalized = normalizeString(filters.country.toLowerCase());
+          const countryName = u.country ? normalizeString(u.country.name.toLowerCase()) : '';
+          if (!countryName.includes(normalized)) {
+            return false;
+          }
         }
-        if (filters.type !== undefined || (filters.type && parseInt(filters.type) === 0)) {
-          return u.type === parseInt(filters.type);
+
+        if (filters.type !== undefined && filters.type !== '') {
+          if (u.type !== parseInt(filters.type as string)) {
+            return false;
+          }
         }
 
         return true;
       }),
-    [users, filters.type, filters.fullname, filters.email, filters.villageName, filters.country, villageMap],
+    [users, filters, villageMap],
   );
 
   const tableData = useMemo(() => {
     return filteredUsers.map((u) => ({
       ...u,
-      country: u.country ? `${countryToFlag(u.country?.isoCode)} ${u.country?.name}` : <span style={{ color: 'grey' }}>Non renseignée</span>,
+      country: u.country ? `${countryToFlag(u.country.isoCode)} ${u.country.name}` : <span style={{ color: 'grey' }}>Non renseignée</span>,
       village: u.villageId ? (
         villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
       ) : (
@@ -105,17 +117,15 @@ const Users = () => {
       return;
     }
 
-    const datasToExport = filteredUsers.map((user) => {
-      return {
-        firstname: user.firstname ? user.firstname : 'Non renseigné',
-        lastname: user.lastname ? user.lastname : 'Non renseigné',
-        email: user.email,
-        school: user.school ? user.school : 'Non renseignée',
-        village: user.villageId ? villageMap[user.villageId]?.name : 'Non renseigné',
-        country: user.country ? user.country.name : 'Non renseignée',
-        type: user.type ? userTypeNames[user.type] : 'Non renseigné',
-      };
-    });
+    const datasToExport = filteredUsers.map((user) => ({
+      firstname: user.firstname || 'Non renseigné',
+      lastname: user.lastname || 'Non renseigné',
+      email: user.email,
+      school: user.school || 'Non renseignée',
+      village: user.villageId ? villageMap[user.villageId]?.name || 'Non renseigné' : 'Non renseigné',
+      country: user.country?.name || 'Non renseignée',
+      type: userTypeNames[user.type] || 'Non renseigné',
+    }));
 
     const headers = ['Prenom', 'Nom', 'Email', 'Ecole', 'Village', 'Pays', 'Rôle'];
 
@@ -197,23 +207,27 @@ const Users = () => {
         >
           <TextField
             label="Prénom et nom"
-            value={filters.fullname}
+            value={filters.fullname || ''}
             onChange={(e) => handleChange({ fullname: e.target.value })}
             variant="outlined"
             size="small"
           />
-          <TextField label="Mail" value={filters.email} onChange={(e) => handleChange({ email: e.target.value })} variant="outlined" size="small" />
+          <TextField
+            label="Mail"
+            value={filters.email || ''}
+            onChange={(e) => handleChange({ email: e.target.value })}
+            variant="outlined"
+            size="small"
+          />
 
           <FormControl fullWidth size="small">
             <InputLabel id="village-label">Village Monde</InputLabel>
             <Select
               labelId="village-label"
               id="village-select"
-              value={filters.villageName}
-              label="Village Monde" // fix display bug label
-              onChange={(e) => {
-                handleChange({ villageName: e.target.value });
-              }}
+              value={filters.villageName || ''}
+              label="Village Monde"
+              onChange={(e) => handleChange({ villageName: e.target.value })}
             >
               <MenuItem value="">
                 <em>Aucun</em>
@@ -225,37 +239,35 @@ const Users = () => {
               ))}
             </Select>
           </FormControl>
+
           <FormControl fullWidth size="small">
             <InputLabel id="country-label">Pays</InputLabel>
             <Select
               labelId="country-label"
               id="country-select"
-              value={filters.country}
-              label="Pays" // fix display bug label
-              onChange={(e) => {
-                handleChange({ country: e.target.value });
-              }}
+              value={filters.country || ''}
+              label="Pays"
+              onChange={(e) => handleChange({ country: e.target.value })}
             >
               <MenuItem value="">
                 <em>Aucun</em>
               </MenuItem>
-              {[...new Set(users.map((user) => user.country?.name))].map((countryName) => (
+              {[...new Set(users.map((user) => user.country?.name).filter(Boolean))].map((countryName) => (
                 <MenuItem key={countryName} value={countryName}>
                   {countryName}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
+
           <FormControl fullWidth size="small">
             <InputLabel id="role-label">Rôle</InputLabel>
             <Select
               labelId="role-label"
-              id="demo-simple-select"
-              value={filters.type}
-              label="Rôle" // fix bug display label
-              onChange={(e) => {
-                handleChange({ type: e.target.value });
-              }}
+              id="role-select"
+              value={filters.type || ''}
+              label="Rôle"
+              onChange={(e) => handleChange({ type: e.target.value })}
             >
               <MenuItem value="">
                 <em>Aucun</em>
@@ -271,7 +283,7 @@ const Users = () => {
 
         <OneVillageTable
           admin={true}
-          emptyPlaceholder={undefined}
+          emptyPlaceholder="Cette liste est vide !"
           data={tableData}
           columns={ManageUsersHeaders}
           actions={actions}
@@ -279,13 +291,12 @@ const Users = () => {
           footerElementsLabel="utilisateur"
         />
       </AdminTile>
+
       <NoSsr>
         <Modal
           title="Confirmer la suppression"
           open={deleteIndex !== -1}
-          onClose={() => {
-            setDeleteIndex(-1);
-          }}
+          onClose={() => setDeleteIndex(-1)}
           onConfirm={async () => {
             await deleteUser(users[deleteIndex]?.id || -1);
             setDeleteIndex(-1);
