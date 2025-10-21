@@ -51,7 +51,7 @@ const DashboardStatsNav = () => {
   const handleVillageSelectFromList = (villageId: number, countryCode?: string) => {
     setSelectedVillage(villageId);
     setSelectedCountry(countryCode);
-    setTabValue(2); // Aller sur l’onglet "Village-monde"
+    setTabValue(2);
   };
 
   const resetVillageFilters = () => {

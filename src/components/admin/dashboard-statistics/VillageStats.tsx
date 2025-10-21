@@ -56,8 +56,8 @@ const VillageStats: React.FC<VillageStatsProps> = ({ selectedCountry: initialCou
 
   // Pour éviter de ré-appliquer les props à chaque changement, on ne synchronise qu'au premier render :
   useEffect(() => {
-    if (initialCountry !== undefined) setSelectedCountry(initialCountry);
-    if (initialVillage !== undefined) setSelectedVillage(initialVillage);
+    if (initialCountry) setSelectedCountry(initialCountry);
+    if (initialVillage) setSelectedVillage(initialVillage);
   }, [initialCountry, initialVillage]);
 
   useEffect(() => {

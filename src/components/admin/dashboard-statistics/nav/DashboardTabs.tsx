@@ -42,7 +42,7 @@ const DashboardTabs = () => {
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+        <Tabs value={value} onChange={handleChange} aria-label="Selection tabs to display statistics by class or by family">
           <Tab label="En classe" {...a11yProps(0)} />
           <Tab label="En famille" {...a11yProps(1)} />
         </Tabs>

@@ -1,9 +1,9 @@
 import CircleIcon from '@mui/icons-material/Circle';
 import { Box } from '@mui/material';
 
-import type { EngagementStatusColor } from '../../../../types/statistics.type';
-import { EngagementStatus } from '../../../../types/statistics.type';
 import { getCountryColor } from './utils/colorMapper';
+import type { EngagementStatusColor } from 'types/statistics.type';
+import { EngagementStatus } from 'types/statistics.type';
 
 const entityStatusLabel: Record<EngagementStatus, (entityType: EntityType) => EngagementStatusLabel> = {
   [EngagementStatus.ACTIVE]: (entityType) => (entityType === EntityType.CLASSROOM ? EngagementStatusLabel.ACTIVE : EngagementStatusLabel.ACTIF),

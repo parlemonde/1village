@@ -41,15 +41,14 @@ const VillageItem = ({ village, selectedCountry, onClick }: VillageItemProps) =>
   return (
     <div className={styles.villageItem}>
       <span className={styles.villageBullet} style={{ backgroundColor: color }}></span>
-      <a
-        href="#"
+      <button
         onClick={(e) => {
-          e.preventDefault();
+          e.preventDefault(); // Optionnel, car `button` n'a pas besoin de `preventDefault`
           onClick && onClick(village.id, selectedCountry);
         }}
       >
         {village.name}
-      </a>
+      </button>
     </div>
   );
 };

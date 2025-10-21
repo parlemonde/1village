@@ -66,7 +66,7 @@ const CountryStats: React.FC<CountryStatsProps> = ({ onVillageSelect }) => {
         <PelicoCard message={'Merci de sélectionner un pays pour analyser ses statistiques'} />
       ) : (
         <Box mt={2}>
-          {isLoadingCountryStatisticsForGraphs || isLoadingVillages ? (
+          {isLoadingCountryStatisticsForGraphs ? (
             <Loader analyticsDataType={AnalyticsDataType.GRAPHS} />
           ) : (
             <>

@@ -33,10 +33,10 @@ export default function StatisticFilters({
   const [selectedClassroom, setSelectedClassroom] = useState<number>();
 
   useEffect(() => {
-    if (initialCountry !== undefined) {
+    if (initialCountry) {
       setSelectedCountry(initialCountry);
     }
-    if (initialVillage !== undefined) {
+    if (initialVillage) {
       setSelectedVillage(initialVillage);
     }
   }, [initialCountry, initialVillage]);

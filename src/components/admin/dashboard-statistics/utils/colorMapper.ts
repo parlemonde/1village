@@ -7,5 +7,5 @@ const entityStatusColor: Record<EngagementStatus, EngagementStatusColor> = {
 };
 
 export function getCountryColor(status?: EngagementStatus): EngagementStatusColor {
-  return status !== undefined ? entityStatusColor[status] : EngagementStatusColor.DEAULT;
+  return status !== undefined ? entityStatusColor[status] : EngagementStatusColor.DEFAULT;
 }
