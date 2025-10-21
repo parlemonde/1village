@@ -118,7 +118,7 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
     const connectedFamiliesCount = await getConnectedFamiliesCount(filters);
     const familyAccountCount = await getFamilyAccountsCount(filters);
     const childrenCodesCount = await getChildrenCodesCount(filters);
-    const dailyConnectionsCountsByMonth = await getDailyConnectionsCountsByMonth();
+    const dailyConnectionsCountsByMonth = await getDailyConnectionsCountsByMonth(filters);
     const contributionsBarChartData = await getContributionsBarChartData(villageId, countryCode, classroomId);
 
     return res.sendJSON({
