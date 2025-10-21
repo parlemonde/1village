@@ -189,37 +189,6 @@ const VillageStats = () => {
                   <StatsCard data={villageStatistics?.family?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
                   <StatsCard data={villageStatistics?.family?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
                 </Box>
-                {/* Phase tables for Familles tab */}
-                {!!selectedVillage &&
-                  selectedPhase !== undefined &&
-                  (selectedPhase === 0 ? (
-                    [1, 2, 3].map((phase) => (
-                      <CountryActivityPhaseAccordion
-                        key={phase}
-                        phaseId={phase}
-                        villageId={selectedVillage}
-                        open={openPhases[phase]}
-                        onClick={() =>
-                          setOpenPhases((prev) => ({
-                            ...prev,
-                            [phase]: !prev[phase],
-                          }))
-                        }
-                      />
-                    ))
-                  ) : (
-                    <CountryActivityPhaseAccordion
-                      phaseId={selectedPhase}
-                      villageId={selectedVillage}
-                      open={openPhases[selectedPhase]}
-                      onClick={() =>
-                        setOpenPhases((prev) => ({
-                          ...prev,
-                          [selectedPhase]: !prev[selectedPhase],
-                        }))
-                      }
-                    />
-                  ))}
               </TabPanel>
             </>
           )}
