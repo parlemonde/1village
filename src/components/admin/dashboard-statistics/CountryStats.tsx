@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Box, Tab, Tabs } from '@mui/material';
 
@@ -16,19 +16,20 @@ import {
   useGetCompareGlobalStats,
   useGetCountriesStats,
   useGetCountryEngagementStatus,
+  useGetVillages,
 } from 'src/api/statistics/statistics.get';
 import { useStatisticsClassrooms, useStatisticsSessions } from 'src/services/useStatistics';
-import type { VillageListItem } from 'types/analytics/village-list-item';
 import { DashboardSummaryTab } from 'types/dashboard.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
-const CountryStats = () => {
+interface CountryStatsProps {
+  onVillageSelect?: (villageId: number, selectedCountry?: string) => void;
+}
+
+const CountryStats: React.FC<CountryStatsProps> = ({ onVillageSelect }) => {
   const [selectedPhase, setSelectedPhase] = useState<number>();
   const [selectedCountry, setSelectedCountry] = useState<string>();
   const [selectedTab, setSelectedTab] = useState(DashboardSummaryTab.CLASSROOM);
-
-  const [villageList, setVillageList] = useState<VillageListItem[]>([]);
-  const [loadingVillageList, setLoadingVillageList] = useState<boolean>(true);
 
   const { data: countryEngagementStatus, isLoading: isLoadingCountryEngagementStatus } = useGetCountryEngagementStatus(selectedCountry);
   const { data: classroomsStatistics, isLoading: isLoadingClassroomStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
@@ -38,29 +39,9 @@ const CountryStats = () => {
     countryCode: selectedCountry,
   });
   const { data: activityCountDetails, isLoading: isLoadingActivityCountDetails } = useGetCompareGlobalStats(selectedPhase || 0);
+  const { data: villages, isLoading: isLoadingVillages } = useGetVillages(selectedCountry);
 
-  // On mocke l'asynchronisme en attendant d'avoir l'appel serveur censé retourner les interactions des villages-mondes
-  // A refacto lors de l'implémentation des tickets VIL-407 et VIL-63
-  useEffect(() => {
-    setTimeout(() => {
-      const fakeVillageListData = [
-        { name: 'Village France - Canada', color: 'green' },
-        { name: 'Village France - Liban', color: 'orange' },
-        { name: 'Village France - Italie', color: 'gold' },
-        { name: 'Village France - Hongrie', color: 'yellow' },
-        { name: 'Village France - Belgique', color: 'green' },
-        { name: 'Village France - Angleterre', color: 'limegreen' },
-        { name: 'Village France - Mexique', color: 'blue' },
-        { name: 'Village France - Russie', color: 'red' },
-        { name: 'Village France - Australie', color: 'orange' },
-      ];
-
-      setVillageList(fakeVillageListData);
-      setLoadingVillageList(false);
-    }, 5000);
-  }, []);
-
-  const isLoadingCountryStatisticsForGraphs = isLoadingCountryEngagementStatus || isLoadingCountryStatistics || loadingVillageList;
+  const isLoadingCountryStatisticsForGraphs = isLoadingCountryEngagementStatus || isLoadingCountryStatistics || isLoadingVillages;
   const isLoadingClassroomStatisticsForWidgets =
     isLoadingClassroomStatistics ||
     isLoadingSessionsStatistics ||
@@ -68,6 +49,7 @@ const CountryStats = () => {
     isLoadingEngagementStatusStatistics ||
     isLoadingActivityCountDetails;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onCountrySelect = (_country: string) => {
     // TODO VIL-815 changer la valeur de selectedCountry quand on clique sur une barre du graphique
   };
@@ -98,7 +80,15 @@ const CountryStats = () => {
                   />
                 </div>
               )}
-              {villageList && <VillageListCard villageList={villageList} />}
+              {villages && (
+                <VillageListCard
+                  villageList={villages}
+                  selectedCountry={selectedCountry}
+                  onVillageClick={(villageId, selectedCountry) => {
+                    onVillageSelect?.(villageId, selectedCountry);
+                  }}
+                />
+              )}
             </>
           )}
           {isLoadingClassroomStatisticsForWidgets ? (

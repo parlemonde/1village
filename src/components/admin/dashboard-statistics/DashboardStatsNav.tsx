@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -39,16 +39,30 @@ function a11yProps(index: number) {
 }
 
 const DashboardStatsNav = () => {
-  const [value, setValue] = React.useState(0);
+  const [tabValue, setTabValue] = useState(0);
+  const [selectedCountry, setSelectedCountry] = useState<string | undefined>();
+  const [selectedVillage, setSelectedVillage] = useState<number | undefined>();
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+    setTabValue(newValue);
+  };
+
+  // Callback passé à CountryStats (optionnel, utilisé seulement si clic village-monde)
+  const handleVillageSelectFromList = (villageId: number, countryCode?: string) => {
+    setSelectedVillage(villageId);
+    setSelectedCountry(countryCode);
+    setTabValue(2);
+  };
+
+  const resetVillageFilters = () => {
+    setSelectedCountry(undefined);
+    setSelectedVillage(undefined);
   };
 
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, marginBottom: 2, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+        <Tabs value={tabValue} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="1Village" {...a11yProps(0)} />
           <Tab label="Pays" {...a11yProps(1)} />
           <Tab label="Village-monde" {...a11yProps(2)} />
@@ -56,19 +70,19 @@ const DashboardStatsNav = () => {
           <Tab label="Données" {...a11yProps(4)} />
         </Tabs>
       </Box>
-      <CustomTabPanel value={value} index={0}>
+      <CustomTabPanel value={tabValue} index={0}>
         <GlobalStats />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        <CountryStats />
+      <CustomTabPanel value={tabValue} index={1}>
+        <CountryStats onVillageSelect={handleVillageSelectFromList} />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        <VillageStats />
+      <CustomTabPanel value={tabValue} index={2}>
+        <VillageStats selectedCountry={selectedCountry} selectedVillage={selectedVillage} onResetFilters={resetVillageFilters} />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={3}>
+      <CustomTabPanel value={tabValue} index={3}>
         <ClassroomStats />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={4}>
+      <CustomTabPanel value={tabValue} index={4}>
         <DataDetailsStats />
       </CustomTabPanel>
     </Box>
