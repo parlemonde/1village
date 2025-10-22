@@ -23,15 +23,13 @@ export const ACTIVITIES_PER_PHASE: { key: number; label: string; value: 'all' | 
     { key: 3, label: 'Jeux', value: [4] },
     { key: 4, label: 'Énigmes', value: [1] },
     { key: 5, label: 'Questions', value: [3] },
-    { key: 6, label: 'Réactions', value: [10] },
   ],
   [
     { key: 0, label: 'Toutes', value: 'all' },
     { key: 1, label: 'Couplets', value: [12] },
     { key: 2, label: 'Histoires', value: [13] },
-    { key: 3, label: 'Histoires ré-inventées', value: [14] },
   ],
-  // ! Special for teacher in there dashboard (Better Comments to highlight)
+  // ! Special for teacher in their dashboard (Better Comments to highlight)
   [
     { key: 0, label: 'Toutes', value: 'all' },
     { key: 1, label: 'Énigmes', value: [1] },
@@ -42,10 +40,8 @@ export const ACTIVITIES_PER_PHASE: { key: number; label: string; value: 'all' | 
     { key: 6, label: 'Symboles', value: [7] },
     { key: 7, label: 'Mascottes', value: [8] },
     { key: 8, label: 'Reportages', value: [9] },
-    { key: 9, label: 'Réactions', value: [10] },
     { key: 10, label: 'Couplets', value: [12] },
     { key: 11, label: 'Histoires', value: [13] },
-    { key: 12, label: 'Histoires ré-inventées', value: [14] },
   ],
 ];
 
@@ -89,8 +85,8 @@ export const Filters = ({ filters, onChange, countries = [], phase, isMesFamille
           options={[
             { key: 0, label: `Toutes`, value: 'all' },
             { key: 1, label: `Phase 1`, value: [6, 7, 3, 8] },
-            { key: 2, label: `Phase 2`, value: [9, 2, 4, 1, 3, 10] },
-            { key: 3, label: `Phase 3`, value: [12, 13, 14] },
+            { key: 2, label: `Phase 2`, value: [9, 2, 4, 1, 3] },
+            { key: 3, label: `Phase 3`, value: [12, 13] },
           ]}
           value={filters.selectedPhase}
           onChange={(option) => {
