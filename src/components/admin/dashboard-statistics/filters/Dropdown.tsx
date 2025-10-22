@@ -20,9 +20,7 @@ export default function Dropdown({ data, onItemChange, label, showNone = true, s
   const [item, setItem] = useState('');
 
   useEffect(() => {
-    if (selectedItem === undefined) {
-      setItem('');
-    }
+    setItem(selectedItem ?? '');
   }, [selectedItem]);
 
   const handleChange = (event: SelectChangeEvent) => {

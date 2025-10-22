@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Tabs, Tab, Box } from '@mui/material';
 
@@ -12,7 +12,6 @@ import ClassesContributionCard from './cards/ClassesContributionCard/ClassesCont
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
 import BarChartWithMonthSelector from './charts/BarChartWithMonthSelector';
-import type { CountryChartData } from './charts/DualBarChart/DualBarChart';
 import DualBarChart from './charts/DualBarChart/DualBarChart';
 import PieCharts from './charts/PieCharts';
 import StatisticFilters from './filters/StatisticFilters';
@@ -27,20 +26,23 @@ import { useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
-const VillageStats = () => {
+interface VillageStatsProps {
+  selectedCountry?: string;
+  selectedVillage?: number;
+  onResetFilters?: () => void;
+}
+
+const VillageStats: React.FC<VillageStatsProps> = ({ selectedCountry: initialCountry, selectedVillage: initialVillage, onResetFilters }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedPhase, setSelectedPhase] = useState<number>(0);
-  const [selectedCountry, setSelectedCountry] = useState<string>();
-  const [selectedVillage, setSelectedVillage] = useState<number>();
+  const [selectedCountry, setSelectedCountry] = useState<string | undefined>(initialCountry);
+  const [selectedVillage, setSelectedVillage] = useState<number | undefined>(initialVillage);
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = useState<Array<OneVillageTableRow>>([]);
   const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
     1: true,
     2: true,
     3: true,
   });
-
-  const [classroomContributionsByCountry, setClassroomContributionsByCountry] = useState<CountryChartData[]>([]);
-  const [isLoadingClassroomContributionsByCountryData, setIsLoadingClassroomContributionsByCountryData] = useState<boolean>(true);
 
   const { data: villageStatistics, isLoading: isLoadingVillageStatistics } = useGetVillagesStats(selectedVillage, selectedPhase);
   const { data: villageEngagementStatus, isLoading: isLoadingVillageEngagementStatus } = useGetVillageEngagementStatus(selectedVillage);
@@ -52,6 +54,19 @@ const VillageStats = () => {
 
   const totalActivitiesCounts = villageStatistics?.totalActivityCounts;
 
+  // Pour éviter de ré-appliquer les props à chaque changement, on ne synchronise qu'au premier render :
+  useEffect(() => {
+    if (initialCountry) setSelectedCountry(initialCountry);
+    if (initialVillage) setSelectedVillage(initialVillage);
+  }, [initialCountry, initialVillage]);
+
+  useEffect(() => {
+    // Cleanup au démontage
+    return () => {
+      if (onResetFilters) onResetFilters();
+    };
+  }, [onResetFilters]);
+
   useEffect(() => {
     if (villageStatistics?.family?.familiesWithoutAccount) {
       setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(villageStatistics.family.familiesWithoutAccount));
@@ -62,43 +77,7 @@ const VillageStats = () => {
     setSelectedTab(selectedTab);
   };
 
-  // On mocke l'asynchronisme en attendant d'avoir l'appel serveur censé retourner les interactions des villages-mondes
-  // A refacto lors de l'implémentation des tickets VIL-64, VIL-61 et VIL-10
-  useEffect(() => {
-    setTimeout(() => {
-      const classroomContributionsByCountry = [
-        {
-          country: 'France',
-          data: [
-            { name: 'École Jules Ferry', value: 127 },
-            { name: 'École Jean Jaurès', value: 98 },
-            { name: 'École Victor Hugo', value: 156 },
-            { name: 'École Saint-Exupéry', value: 89 },
-            { name: 'École Louis Pasteur', value: 142 },
-            { name: 'École Marie Curie', value: 113 },
-            { name: 'École Jean Moulin', value: 134 },
-          ],
-        },
-        {
-          country: 'Canada',
-          data: [
-            { name: 'École Champlain', value: 108 },
-            { name: 'École Cartier', value: 145 },
-            { name: 'École Garneau', value: 92 },
-            { name: 'École Frontenac', value: 167 },
-            { name: 'École Maisonneuve', value: 124 },
-            { name: 'École Montcalm', value: 96 },
-            { name: 'École Papineau', value: 138 },
-          ],
-        },
-      ];
-
-      setClassroomContributionsByCountry(classroomContributionsByCountry);
-      setIsLoadingClassroomContributionsByCountryData(false);
-    }, 5000);
-  }, []);
-
-  const isLoadingGraphsData = isLoadingVillageEngagementStatus || isLoadingClassroomContributionsByCountryData;
+  const isLoadingGraphsData = isLoadingVillageEngagementStatus || isLoadingVillageStatistics;
 
   return (
     <>
@@ -108,6 +87,8 @@ const VillageStats = () => {
         onCountryChange={setSelectedCountry}
         onVillageChange={setSelectedVillage}
         selectedPhase={selectedPhase}
+        selectedCountry={selectedCountry}
+        selectedVillage={selectedVillage}
       />
       {selectedCountry && selectedVillage ? (
         <>
@@ -116,7 +97,9 @@ const VillageStats = () => {
           ) : (
             <>
               {villageEngagementStatus && <EntityEngagementStatus entityType={EntityType.VILLAGE} entityEngagementStatus={villageEngagementStatus} />}
-              {classroomContributionsByCountry && <DualBarChart data={classroomContributionsByCountry} />}
+              {villageStatistics?.contributionsByCountryClassrooms && (
+                <DualBarChart contributionsByCountryClassrooms={villageStatistics.contributionsByCountryClassrooms} />
+              )}
             </>
           )}
           {isLoadingSessionsStatistics || isLoadingVillageStatistics || isLoadingEngagementStatusStatistics ? (
@@ -227,37 +210,6 @@ const VillageStats = () => {
                   <StatsCard data={villageStatistics?.family?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
                   <StatsCard data={villageStatistics?.family?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
                 </Box>
-                {/* Phase tables for Familles tab */}
-                {!!selectedVillage &&
-                  selectedPhase !== undefined &&
-                  (selectedPhase === 0 ? (
-                    [1, 2, 3].map((phase) => (
-                      <CountryActivityPhaseAccordion
-                        key={phase}
-                        phaseId={phase}
-                        villageId={selectedVillage}
-                        open={openPhases[phase]}
-                        onClick={() =>
-                          setOpenPhases((prev) => ({
-                            ...prev,
-                            [phase]: !prev[phase],
-                          }))
-                        }
-                      />
-                    ))
-                  ) : (
-                    <CountryActivityPhaseAccordion
-                      phaseId={selectedPhase}
-                      villageId={selectedVillage}
-                      open={openPhases[selectedPhase]}
-                      onClick={() =>
-                        setOpenPhases((prev) => ({
-                          ...prev,
-                          [selectedPhase]: !prev[selectedPhase],
-                        }))
-                      }
-                    />
-                  ))}
               </TabPanel>
             </>
           )}

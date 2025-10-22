@@ -73,6 +73,19 @@ export type CountryContribution = {
   total: number;
 };
 
+export type VillageClassroomsContribution = {
+  classroomId: number;
+  classroomName: string;
+  countryCode: string;
+  total: number;
+};
+
+export type CountryClassroomsContribution = {
+  countryCode: string;
+  countryName: string;
+  classroomsContributions: Omit<VillageClassroomsContribution, 'countryCode'>[];
+};
+
 export type PhaseDetails = {
   phaseId: number;
   commentCount: number;
@@ -110,6 +123,7 @@ export interface VillageStats {
     totalVideos: number;
   };
   contributionsByCountry: CountryContribution[];
+  contributionsByCountryClassrooms?: CountryClassroomsContribution[];
 }
 
 export interface FamiliesWithoutAccount {
@@ -210,6 +224,7 @@ export enum EngagementStatusColor {
   GHOST = '#FFD678',
   OBSERVER = '#6082FC',
   ACTIVE = '#4CC64A',
+  DEFAULT = '#FFF',
 }
 
 export interface ClassroomIdentityDetails {
