@@ -3,12 +3,14 @@ import type { NextFunction, Request, Response } from 'express';
 
 import { Classroom } from '../entities/classroom';
 import { User, UserType } from '../entities/user';
+import { createClassroomsFromPLM } from '../legacy-plm/api';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { Controller } from './controller';
 
 export const classroomController = new Controller('/classrooms');
+const classroomRepository = AppDataSource.getRepository(Classroom);
 
 /**
  * Classroom controller to get teacher's class parameters.
@@ -96,8 +98,8 @@ classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: R
   if (!req.user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
-  // Verification if the classrom already created
-  // * Memo:  this logic may change in the future if teacher can have multiple classes
+  // Verification if the classroom already created
+  // * Memo: this logic may change in the future if a teacher can have multiple classes
   const verification = await AppDataSource.getRepository(Classroom).find({
     where: { user: { id: req.user.id } },
   });
@@ -180,4 +182,15 @@ classroomController.delete({ path: '/:id', userType: UserType.TEACHER }, async (
 
   await AppDataSource.getRepository(Classroom).delete({ id });
   res.status(204).send();
+});
+
+//--- import ParLeMonde classrooms ---
+classroomController.post({ path: '/import/plm', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
+  const count = await createClassroomsFromPLM();
+
+  if (count === null) {
+    throw new AppError('Unknown error', ErrorCode.UNKNOWN);
+  }
+
+  res.sendJSON({ success: true, count });
 });
