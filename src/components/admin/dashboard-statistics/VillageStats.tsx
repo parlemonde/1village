@@ -113,8 +113,10 @@ const VillageStats: React.FC<VillageStatsProps> = ({ selectedCountry: initialCou
               <TabPanel value={selectedTab} index={0}>
                 <ClassroomsToMonitorTable villageId={selectedVillage} countryId={selectedCountry} />
                 <br />
-                <div className="statistic--container">
-                  <StatsCard data={sessionsStatistics.registeredClassroomsCount ?? 0}>Nombre de classes inscrites</StatsCard>
+                <div className="statistic--container" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                  <StatsCard data={sessionsStatistics.registeredClassroomsCount ?? 0} style={{ height: 'auto', width: '100%' }}>
+                    Nombre de classes inscrites
+                  </StatsCard>
                   <StatsCard data={sessionsStatistics.connectedClassroomsCount ?? 0}>Nombre de classes connectées</StatsCard>
                   <StatsCard data={sessionsStatistics.contributedClassroomsCount ?? 0}>Nombre de classes contributrices</StatsCard>
                 </div>
@@ -144,15 +146,21 @@ const VillageStats: React.FC<VillageStatsProps> = ({ selectedCountry: initialCou
                     Nombre de connexions moyen par classe
                   </AverageStatsCard>
                 </div> */}
-                <div className="statistic__average--container">
+                <Box
+                  className="statistic__average--container"
+                  sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr', lg: '1fr 2fr' }, gap: 2, mt: 2 }}
+                >
                   {engagementStatusStatistics && <PieCharts engagementStatusData={engagementStatusStatistics} />}
-                  <BarChartWithMonthSelector data={mockDailyConnectionsCountsByMonth} title="Évolution des connexions" />
-                </div>
-                <div className="statistic__average--container" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gridGap: '2rem' }}>
+                  <span style={{ marginLeft: '14px' }}>
+                    <BarChartWithMonthSelector data={mockDailyConnectionsCountsByMonth} title="Évolution des connexions" />
+                  </span>
+                </Box>
+                <div className="statistic__average--container" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gridGap: '2rem' }}>
                   <ClassesExchangesCard
                     totalPublications={totalActivitiesCounts?.totalPublications || 0}
                     totalComments={totalActivitiesCounts?.totalComments || 0}
                     totalVideos={totalActivitiesCounts?.totalVideos || 0}
+                    enableColumns={true}
                   />
                   <ClassesContributionCard data={sessionsStatistics.contributionsBarChartData} />
                 </div>
@@ -207,7 +215,9 @@ const VillageStats: React.FC<VillageStatsProps> = ({ selectedCountry: initialCou
                   }}
                 >
                   <StatsCard data={villageStatistics?.family?.familyAccountsCount}>Nombre de profs ayant créé des comptes famille</StatsCard>
-                  <StatsCard data={villageStatistics?.family?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
+                  <StatsCard data={villageStatistics?.family?.childrenCodesCount} style={{ width: '100%', height: 'auto' }}>
+                    Nombre de codes enfant créés
+                  </StatsCard>
                   <StatsCard data={villageStatistics?.family?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
                 </Box>
               </TabPanel>
