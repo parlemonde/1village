@@ -17,7 +17,7 @@ type FormatedVillageActivity = {
 };
 
 const countriesToText = (countries: Country[]) => {
-  return countries.map((c) => `${countryToFlag(c.isoCode)} ${c.name}`).join(' - ');
+  return countries.map((country) => `${countryToFlag(country.isoCode)} ${country.name}`).join(' - ');
 };
 
 const ActivityTable = ({ activityTableData }: { activityTableData: VillageInteractionsActivity[] }) => {
@@ -27,8 +27,9 @@ const ActivityTable = ({ activityTableData }: { activityTableData: VillageIntera
       <OneVillageTable
         admin
         emptyPlaceholder="Aucune donnée disponible"
-        footerElementsLabel="village"
         data={tableData}
+        usePagination={false}
+        showElementCount={false}
         columns={[
           { key: 'countries', label: 'Pays', sortable: true },
           { key: 'totalConnections', label: 'Total connexions', sortable: true },
