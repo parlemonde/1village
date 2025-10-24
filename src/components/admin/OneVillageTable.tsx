@@ -15,7 +15,6 @@ import { primaryColorLight } from 'src/styles/variables.const';
 import { normalizeString } from 'src/utils/string';
 
 function paginate<T>(array: T[], pageSize: number, pageNumber: number): T[] {
-  // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
   return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
 }
 
@@ -55,7 +54,8 @@ export const OneVillageTable = ({
   rowStyle,
   tableLayout = 'fixed',
 }: OneVillageTableProps) => {
-  const nbElementsWithoutTotal = data.length - 1;
+  const hasTotal = data.some((d) => d.id === 'total');
+  const nbElementsWithoutTotal = hasTotal ? data.length - 1 : data.length;
 
   const theme = useTheme();
   const backgroundColor = admin ? theme.palette.secondary.main : primaryColorLight;
@@ -85,14 +85,13 @@ export const OneVillageTable = ({
           page: 1,
           sort: prevOptions.sort === 'asc' ? 'desc' : 'asc',
         };
-      } else {
-        return {
-          ...prevOptions,
-          page: 1,
-          order: name.toLowerCase(),
-          sort: 'asc',
-        };
       }
+      return {
+        ...prevOptions,
+        page: 1,
+        order: name.toLowerCase(),
+        sort: 'asc',
+      };
     });
   };
 
@@ -114,21 +113,15 @@ export const OneVillageTable = ({
           if (typeof bValue === 'string') bValue = normalizeString(bValue.toLowerCase());
 
           if (isValidElement(aValue)) {
-            const key = aValue.key?.toString() || '';
-            aValue = key.toLowerCase();
+            aValue = (aValue.key?.toString() || '').toLowerCase();
           }
           if (isValidElement(bValue)) {
-            const key = bValue.key?.toString() || '';
-            bValue = key.toLowerCase();
+            bValue = (bValue.key?.toString() || '').toLowerCase();
           }
 
-          if (aValue > bValue) {
-            return options.sort === 'asc' ? 1 : -1;
-          } else if (aValue < bValue) {
-            return options.sort === 'asc' ? -1 : 1;
-          } else {
-            return 0;
-          }
+          if (aValue > bValue) return options.sort === 'asc' ? 1 : -1;
+          if (aValue < bValue) return options.sort === 'asc' ? -1 : 1;
+          return 0;
         })
       : data;
     return usePagination ? paginate(sortedData, options.limit || 10, options.page || 1) : sortedData;
@@ -144,7 +137,7 @@ export const OneVillageTable = ({
             </Box>
           )}
           <Table size="small" aria-label={ariaLabel} sx={{ tableLayout }}>
-            {nbElementsWithoutTotal === 0 ? (
+            {data.length === 0 ? (
               <TableBody>
                 <TableRow sx={{ height: '242px' }}>
                   <TableCell colSpan={columns.length + (actions ? 1 : 0)} align="center">
@@ -154,11 +147,7 @@ export const OneVillageTable = ({
               </TableBody>
             ) : (
               <>
-                <TableHead
-                  sx={{
-                    fontWeight: 'bold',
-                  }}
-                >
+                <TableHead sx={{ fontWeight: 'bold' }}>
                   <TableRow
                     sx={{
                       th: {
@@ -170,16 +159,11 @@ export const OneVillageTable = ({
                     }}
                   >
                     {columns.map((c) => (
-                      <TableCell
-                        key={c.key}
-                        sx={{
-                          fontWeight: 'bold',
-                        }}
-                      >
+                      <TableCell key={c.key} sx={{ fontWeight: 'bold' }}>
                         {c.sortable ? (
                           <TableSortLabel active={options.order === c.key} direction={options.sort} onClick={onSortBy(c.key)}>
                             {c.label}
-                            {options.order === c.label ? (
+                            {options.order === c.label && (
                               <span
                                 style={{
                                   border: 0,
@@ -195,7 +179,7 @@ export const OneVillageTable = ({
                               >
                                 {options.sort === 'desc' ? 'sorted descending' : 'sorted ascending'}
                               </span>
-                            ) : null}
+                            )}
                           </TableSortLabel>
                         ) : (
                           c.label
@@ -246,13 +230,7 @@ export const OneVillageTable = ({
             )}
           </Table>
         </TableContainer>
-        <Box
-          sx={{
-            flex: 1,
-            display: 'flex',
-            justifyContent: 'flex-end',
-          }}
-        >
+        <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
           {usePagination && nbElementsWithoutTotal > 5 ? (
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, 50, 100]}
@@ -262,13 +240,13 @@ export const OneVillageTable = ({
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
               labelDisplayedRows={({ from, to, count }) => (
-                <span>{`${from} - ${to} sur ${count} ${footerElementsLabel}${nbElementsWithoutTotal > 0 ? 's' : ''}`}</span>
+                <span>{`${from} - ${to} sur ${count} ${footerElementsLabel}${count > 1 ? 's' : ''}`}</span>
               )}
             />
           ) : (
-            <p style={{ margin: 0, padding: '0', textAlign: 'right', fontSize: '14px' }}>{`${nbElementsWithoutTotal} ${footerElementsLabel}${
-              displayedData.length > 1 ? 's' : ''
-            }`}</p>
+            <p style={{ margin: 0, padding: 0, textAlign: 'right', fontSize: '14px' }}>
+              {`${data.length} ${footerElementsLabel}${data.length > 1 ? 's' : ''}`}
+            </p>
           )}
         </Box>
       </Paper>

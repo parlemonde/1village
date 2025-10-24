@@ -54,8 +54,8 @@ const BarChartWithMonthSelector = ({ data, yAxisLabel, title }: BarChartWithMont
     canShowNextMonthData && setSelectedMonthIndex(selectedMonthIndex + 1);
   };
 
-  const todayIndex = isCurrentMonth(selectedData.monthLabel) ? new Date().getDate() - 1 : -1;
-  const maxValue = Math.max(0, ...selectedData.counts);
+  const todayIndex = isCurrentMonth(selectedData?.monthLabel) ? new Date().getDate() - 1 : -1;
+  const maxValue = Math.max(0, ...(selectedData?.counts ?? []));
   const yMax = Math.max(1, maxValue);
 
   return (

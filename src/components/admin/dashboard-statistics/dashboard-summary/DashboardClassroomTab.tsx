@@ -23,7 +23,9 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
 
   return (
     <>
-      <ClassroomsToMonitorTable countryId={selectedCountry} />
+      <div style={{ paddingTop: '33px' }}>
+        <ClassroomsToMonitorTable countryId={selectedCountry} />
+      </div>
       <br />
       <Grid container spacing={4} direction={{ xs: 'column', md: 'row' }}>
         <Grid item xs={12} lg={4}>
@@ -64,23 +66,32 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
             Nombre de connexions moyen par classe
           </AverageStatsCard>
         </Grid> */}
-        {dashboardType !== DashboardType.ONE_VILLAGE_PANEL && dashboardSummaryData.engagementStatusData && (
-          <Grid item xs={12} lg={4}>
-            <PieCharts engagementStatusData={dashboardSummaryData.engagementStatusData} />
-          </Grid>
-        )}
-        <Grid item xs={12} lg={dashboardType === DashboardType.ONE_VILLAGE_PANEL ? 12 : 8}>
-          <BarChartWithMonthSelector data={dashboardSummaryData.dailyConnectionsCountsByMonth} title="Évolution des connexions" />
+        <Grid container spacing={2} sx={{ width: '100%', paddingLeft: '32px', paddingTop: '32px' }} style={{ display: 'flex', flexGrow: 1 }}>
+          {dashboardType !== DashboardType.ONE_VILLAGE_PANEL && dashboardSummaryData.engagementStatusData ? (
+            <>
+              <Grid item xs={12} md={4}>
+                <PieCharts engagementStatusData={dashboardSummaryData.engagementStatusData} />
+              </Grid>
+              <Grid item xs={12} md={8}>
+                <BarChartWithMonthSelector data={dashboardSummaryData.dailyConnectionsCountsByMonth} title="Évolution des connexions" />
+              </Grid>
+            </>
+          ) : (
+            <Grid item xs={12}>
+              <BarChartWithMonthSelector data={dashboardSummaryData.dailyConnectionsCountsByMonth} title="Évolution des connexions" />
+            </Grid>
+          )}
         </Grid>
         <Grid container spacing={2} alignItems="stretch" style={{ paddingLeft: '32px', paddingTop: '32px', display: 'flex' }}>
-          <Grid item xs={12} md={6} style={{ display: 'flex' }}>
+          <Grid item xs={12} md={4}>
             <ClassesExchangesCard
               totalPublications={totalActivitiesCounts?.totalPublications || 0}
               totalComments={totalActivitiesCounts?.totalComments || 0}
               totalVideos={totalActivitiesCounts?.totalVideos || 0}
+              enableColumns={true}
             />
           </Grid>
-          <Grid item xs={12} md={6} style={{ paddingLeft: '32px', display: 'flex' }}>
+          <Grid item xs={12} md={8}>
             <ContributionBarChart dataByStep={dashboardSummaryData.contributionsBarChartData} title="Contribution des classes" />
           </Grid>
         </Grid>
