@@ -13,12 +13,12 @@ import ClassroomDetailsCard from './cards/ClassroomDetailsCard/ClassroomDetailsC
 import StatsCard from './cards/StatsCard/StatsCard';
 import BarChartWithMonthSelector from './charts/BarChartWithMonthSelector';
 import StatisticFilters from './filters/StatisticFilters';
-import { mockDailyConnectionsCountsByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { createFamiliesWithoutAccountRows } from './utils/tableCreator';
 import { FamiliesWithoutAccountHeaders } from './utils/tableHeader';
 import { useGetClassroomIdentity, useGetClassroomEngagementStatus, useGetClassroomsStats } from 'src/api/statistics/statistics.get';
+import { useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
@@ -37,7 +37,7 @@ const ClassroomStats = () => {
 
   const { data: classroomIdentityDetails, isLoading: isLoadingClassroomIdentityDetails } = useGetClassroomIdentity(selectedClassroom);
   const { data: classroomEngagementStatus, isLoading: isLoadingClassroomEngagementStatus } = useGetClassroomEngagementStatus(selectedClassroom);
-  //const { data: _sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, null, 1);
+  const { data: sessionsStatistics, isLoading: isLoadingSessionsStatistics } = useStatisticsSessions(null, null, selectedClassroom);
   const { data: selectedClassroomStatistics, isLoading: isLoadingSelectedClassroomsStatistics } = useGetClassroomsStats(
     selectedClassroom,
     selectedPhase,
@@ -76,7 +76,7 @@ const ClassroomStats = () => {
               {classroomIdentityDetails && <ClassroomDetailsCard classroomIdentityDetails={classroomIdentityDetails} />}
             </>
           )}
-          {isLoadingSelectedClassroomsStatistics ? (
+          {isLoadingSelectedClassroomsStatistics || isLoadingSessionsStatistics ? (
             <Loader analyticsDataType={AnalyticsDataType.WIDGETS} />
           ) : (
             <>
@@ -112,7 +112,7 @@ const ClassroomStats = () => {
                   </AverageStatsCard>
                 </div> */}
                 <div className="statistic--container">
-                  <BarChartWithMonthSelector data={mockDailyConnectionsCountsByMonth} title="Évolution des connexions" />
+                  <BarChartWithMonthSelector data={sessionsStatistics.dailyConnectionsCountsByMonth} title="Évolution des connexions" />
                 </div>
                 <div style={{ marginTop: '2.5rem' }}>
                   <ClassesExchangesCard
@@ -177,6 +177,9 @@ const ClassroomStats = () => {
                   <StatsCard data={selectedClassroomStatistics?.family?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
                   <StatsCard data={selectedClassroomStatistics?.family?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
                 </Box>
+                <div className="statistic--container">
+                  <BarChartWithMonthSelector data={sessionsStatistics.dailyConnectionsCountsByMonth} title="Évolution des connexions" />
+                </div>
               </TabPanel>
             </>
           )}
