@@ -150,7 +150,7 @@ classroomController.put({ path: '/:id', userType: UserType.TEACHER }, async (req
   }
 
   const userId = parseInt(req.params.id, 10) || 0;
-  // * Memo:  this logic may change in the future if teacher can have multiple classes
+  // * Memo: this logic may change in the future if teacher can have multiple classes
   const classroom = await AppDataSource.getRepository(Classroom)
     .createQueryBuilder('classroom')
     .where('classroom.userId = :userId', { userId: userId })
