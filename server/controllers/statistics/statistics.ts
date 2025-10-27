@@ -459,8 +459,8 @@ type VillageEngagementStatus = {
   villageId: number;
   villageName: string;
   countryCodes: string;
-  status: string;
-  statusCount: number;
+  dominantStatus: string;
+  totalUsers: number;
 };
 
 statisticsController.get({ path: '/one-village/village-engagement-statuses' }, async (req, res) => {
@@ -487,18 +487,28 @@ statisticsController.get({ path: '/one-village/village-engagement-statuses' }, a
       LEFT JOIN analytic_session sess ON sess.userId = u.id
       LEFT JOIN activity act ON act.userId = u.id AND act.status = 0 AND act.deleteDate IS NULL
       LEFT JOIN comment com ON com.userId = u.id
-      GROUP BY u.id, u.villageId, v.name
+      GROUP BY u.id, u.villageId, v.name, v.countryCodes
+    ),
+    statusCounts AS (
+      SELECT
+        villageId,
+        villageName,
+        countryCodes,
+        status,
+        COUNT(*) as userCount,
+        ROW_NUMBER() OVER (PARTITION BY villageId ORDER BY COUNT(*) DESC) as rn
+      FROM getUsersStatus
+      GROUP BY villageId, villageName, countryCodes, status
     )
     SELECT 
       villageId,
       villageName,
-      v.countryCodes,
-      status,
-      COUNT(*) as totalConnections
-    FROM getUsersStatus
-    INNER JOIN villages v ON v.id = villageId
-    GROUP BY villageId, villageName, v.countryCodes, status
-    ORDER BY totalConnections DESC;
+      countryCodes,
+      status as dominantStatus,
+      (SELECT COUNT(*) FROM getUsersStatus g WHERE g.villageId = s.villageId) as totalConnections
+    FROM statusCounts s
+    WHERE rn = 1
+    ORDER BY villageId;
   `);
 
   const villageEngagementStatusResponse = await Promise.all(

@@ -7,5 +7,5 @@ export interface VillageInteractionsActivity {
   villageName: string;
   totalConnections: number;
   totalActivities: number;
-  status: EngagementStatus;
+  dominantStatus: EngagementStatus;
 }

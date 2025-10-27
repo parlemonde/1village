@@ -10,7 +10,7 @@ import type { Country } from 'types/country.type';
 
 type FormatedVillageActivity = {
   countries: string;
-  status: JSX.Element;
+  dominantStatus: JSX.Element;
   id: number;
   totalConnections: number;
   totalActivities: number;
@@ -34,7 +34,7 @@ const ActivityTable = ({ activityTableData }: { activityTableData: VillageIntera
           { key: 'countries', label: 'Pays', sortable: true },
           { key: 'totalConnections', label: 'Total connexions', sortable: true },
           { key: 'totalActivities', label: 'Total activités', sortable: true },
-          { key: 'status', label: 'Statut', sortable: true },
+          { key: 'dominantStatus', label: 'Statut', sortable: true },
         ]}
       />
     </Box>
@@ -47,8 +47,8 @@ function formatVillagesData(activityData: VillageInteractionsActivity[]): Format
   return activityData.map((villageActivity) => ({
     ...villageActivity,
     countries: countriesToText(villageActivity.countries),
-    status: (
-      <span key={villageActivity.status} style={{ color: getCountryColor(villageActivity.status), fontSize: 24 }}>
+    dominantStatus: (
+      <span key={villageActivity.id} style={{ color: getCountryColor(villageActivity.dominantStatus), fontSize: 24 }}>
         ●
       </span>
     ),
