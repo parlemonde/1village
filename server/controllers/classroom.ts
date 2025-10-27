@@ -8,9 +8,9 @@ import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { Controller } from './controller';
+import { resetClassroomStatsForAllVillages } from './villages/village.repository';
 
 export const classroomController = new Controller('/classrooms');
-const classroomRepository = AppDataSource.getRepository(Classroom);
 
 /**
  * Classroom controller to get teacher's class parameters.
@@ -150,7 +150,7 @@ classroomController.put({ path: '/:id', userType: UserType.TEACHER }, async (req
   }
 
   const userId = parseInt(req.params.id, 10) || 0;
-  // * Memo:  this logic may change in the future if teacher can have multiple classes
+  // * Memo: this logic may change in the future if teacher can have multiple classes
   const classroom = await AppDataSource.getRepository(Classroom)
     .createQueryBuilder('classroom')
     .where('classroom.userId = :userId', { userId: userId })
@@ -185,12 +185,14 @@ classroomController.delete({ path: '/:id', userType: UserType.TEACHER }, async (
 });
 
 //--- import ParLeMonde classrooms ---
-classroomController.post({ path: '/import/plm', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
+classroomController.post({ path: '/import/plm', userType: UserType.ADMIN }, async (_req: Request, res: Response) => {
+  await resetClassroomStatsForAllVillages();
+
   const count = await createClassroomsFromPLM();
 
   if (count === null) {
     throw new AppError('Unknown error', ErrorCode.UNKNOWN);
   }
 
-  res.sendJSON({ success: true, count });
+  res.json({ success: true, count });
 });
