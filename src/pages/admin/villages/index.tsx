@@ -16,6 +16,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { Modal } from 'src/components/Modal';
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { OneVillageTable } from 'src/components/admin/OneVillageTable';
+import { useClassroomsRequests } from 'src/services/useClassrooms';
 import { useVillages, useVillageRequests } from 'src/services/useVillages';
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import { countryToFlag } from 'src/utils';
@@ -26,8 +27,9 @@ const Villages = () => {
   const router = useRouter();
   const { villages } = useVillages();
   const { deleteVillage, importVillages } = useVillageRequests();
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [deleteIndex, setDeleteIndex] = React.useState(-1);
+  const { importClassrooms } = useClassroomsRequests();
+  const [isLoading, setIsLoading] = useState(false);
+  const [deleteIndex, setDeleteIndex] = useState(-1);
   const [search, setSearch] = useState('');
 
   const filteredVillages = useMemo(
@@ -46,6 +48,7 @@ const Villages = () => {
   const onImportVillages = async () => {
     setIsLoading(true);
     await importVillages();
+    await importClassrooms();
     setIsLoading(false);
   };
 
