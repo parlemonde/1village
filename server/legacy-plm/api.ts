@@ -68,7 +68,7 @@ export async function createClassroomsFromPLM(): Promise<number | null> {
       url: `${plmSsoUrl}/wp-json/api/v1/registered-classrooms?client_id=${client_id}&client_secret=${client_secret}`,
     });
 
-    const registeredClassrooms = result.data as PlmClassroom[];
+    const registeredClassrooms: PlmClassroom[] = result.data;
 
     return await createClassroom(registeredClassrooms);
   } catch (error) {

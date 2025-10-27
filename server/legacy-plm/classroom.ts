@@ -1,68 +1,61 @@
-import { Classroom } from '../entities/classroom';
-import { User } from '../entities/user';
 import { Village } from '../entities/village';
 import { AppDataSource } from '../utils/data-source';
 import { countries } from '../utils/iso-3166-countries-french';
-import { logger } from '../utils/logger';
 
 export type PlmClassroom = {
-  user_id: number;
-  plm_id: number;
+  plm_id: string;
   country: string;
   email: string;
 };
 
-const classroomRepository = AppDataSource.getRepository(Classroom);
-const userRepository = AppDataSource.getRepository(User);
 const villageRepository = AppDataSource.getRepository(Village);
+const generalInformationLabel = 'Informations générales';
+const excludedDomains = ['@parlemonde.org', '@parlemonde.slack.com', '@yopmail'];
 
 async function createVillage(plmClassroom: PlmClassroom): Promise<boolean> {
-  const plmId = plmClassroom.plm_id || 0;
-  const userId = plmClassroom.user_id;
-  const email = plmClassroom.email;
+  const plmId = parseInt(plmClassroom.plm_id || '0');
 
-  // Check if a classroom already exists
-  const classroomCount = await classroomRepository.count({
-    where: { user: { id: userId, email: email } },
-  });
+  const isInternalOrTemporaryEmail = excludedDomains.some((domain) => plmClassroom?.email?.includes(domain));
 
-  if (classroomCount > 0) {
+  if (isInternalOrTemporaryEmail) {
     return false;
   }
 
-  // Create a new classroom
-  const matchingCountry = countries.find((c) => c.name === plmClassroom.country);
-  const existingUser = await userRepository.findOne({
-    where: { id: userId },
-  });
-  const userVillage = await villageRepository.findOne({
-    where: { users: { id: userId } },
-    relations: { users: true },
+  const village = await villageRepository.findOne({
+    where: { plmId },
   });
 
-  const classroom = new Classroom();
+  const country = countries.find((country) => country.name === plmClassroom.country);
 
-  if (matchingCountry?.isoCode) {
-    classroom.countryCode = matchingCountry.isoCode;
+  if (!village || !country || village?.name === generalInformationLabel) {
+    return false;
   }
 
-  if (existingUser) {
-    classroom.user = existingUser;
-  }
+  const { isoCode } = country;
 
-  if (userVillage) {
-    classroom.village = userVillage;
-    classroom.villageId = userVillage.id;
-  }
+  const currentCount = village.classroomsStats?.registeredClassrooms?.[isoCode] || 0;
 
-  await classroomRepository.save(classroom);
-  logger.info(`Classroom created for user ${userId} with village ${userVillage?.id}`);
+  village.classroomsStats = {
+    registeredClassrooms: {
+      ...(village.classroomsStats?.registeredClassrooms || {}),
+      [isoCode]: currentCount + 1,
+    },
+  };
+
+  await villageRepository.save(village);
 
   return true;
 }
 
 export async function createClassroom(plmClassrooms: PlmClassroom[]): Promise<number> {
-  const promises = plmClassrooms.map((v) => createVillage(v));
-  const results = await Promise.all(promises);
-  return results.filter((r) => r).length;
+  let successCount = 0;
+  for (const classroom of plmClassrooms) {
+    const success = await createVillage(classroom);
+
+    if (success) {
+      successCount++;
+    }
+  }
+
+  return successCount;
 }
