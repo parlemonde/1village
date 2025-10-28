@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 
+import CountryActivityPhaseAccordion from '../CountryActivityPhaseAccordion';
 import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from '../cards/StatsCard/StatsCard';
 import BarChartWithMonthSelector from '../charts/BarChartWithMonthSelector';
@@ -18,9 +19,13 @@ export interface DashboardClassroomTabProps {
   selectedPhase?: number;
 }
 
-const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCountry }: DashboardClassroomTabProps) => {
+const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCountry, selectedPhase = 0 }: DashboardClassroomTabProps) => {
+  const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
+    1: true,
+    2: true,
+    3: true,
+  });
   const totalActivitiesCounts = dashboardSummaryData?.totalActivityCounts;
-
   return (
     <>
       <div style={{ paddingTop: '33px' }}>
@@ -95,6 +100,39 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
             <ContributionBarChart dataByStep={dashboardSummaryData.contributionsBarChartData} title="Contribution des classes" />
           </Grid>
         </Grid>
+        {/* Accordéons par phase */}
+        {selectedCountry &&
+          (selectedPhase === 0 ? (
+            [1, 2, 3].map((phase) => (
+              <Grid item xs={12} lg={12} key={phase}>
+                <CountryActivityPhaseAccordion
+                  phaseId={phase}
+                  countryCode={selectedCountry}
+                  open={openPhases[phase]}
+                  onClick={() =>
+                    setOpenPhases((prev) => ({
+                      ...prev,
+                      [phase]: !prev[phase],
+                    }))
+                  }
+                />
+              </Grid>
+            ))
+          ) : (
+            <Grid item xs={12} lg={12}>
+              <CountryActivityPhaseAccordion
+                phaseId={selectedPhase}
+                countryCode={selectedCountry}
+                open={openPhases[selectedPhase]}
+                onClick={() =>
+                  setOpenPhases((prev) => ({
+                    ...prev,
+                    [selectedPhase]: !prev[selectedPhase],
+                  }))
+                }
+              />
+            </Grid>
+          ))}
       </Grid>
     </>
   );
