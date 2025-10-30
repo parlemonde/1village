@@ -177,7 +177,7 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
     }
     const response = await axiosRequest({
       method: 'DELETE',
-      url: `users/${user.id}`,
+      url: `users/account`,
     });
     if (response.error) {
       return false;
