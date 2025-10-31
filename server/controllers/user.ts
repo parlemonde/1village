@@ -458,6 +458,59 @@ userController.put({ path: '/:id/password', userType: UserType.OBSERVATOR }, asy
   res.sendJSON({ success: true });
 });
 
+// --- Delete an user, FAMILY version ---
+userController.delete(
+  { path: '/account', userType: UserType.FAMILY | UserType.TEACHER | UserType.OBSERVATOR },
+  async (req: Request, res: Response) => {
+    const currentUser = req.user;
+    if (!currentUser) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+
+    const userId = currentUser.id;
+
+    // UserType.FAMILY has liked students :
+    if (currentUser.type === UserType.FAMILY && currentUser.hasStudentLinked) {
+      const studentRelations = await AppDataSource.getRepository(UserToStudent).find({
+        relations: { student: true },
+        where: { user: { id: userId } },
+        select: { student: { id: true } },
+      });
+
+      const studentsIds = studentRelations.map((studentRelation) => studentRelation.student.id);
+
+      if (studentsIds.length > 0) {
+        await AppDataSource.getRepository(Student).update(studentsIds, {
+          numLinkedAccount: () => 'numLinkedAccount - 1',
+        });
+
+        const affectedUserIds: number[] = [];
+        for (const studentId of studentsIds) {
+          const studentWithRelations = await AppDataSource.getRepository(Student).findOne({
+            where: { id: studentId },
+            relations: ['userToStudents', 'userToStudents.user'],
+          });
+          if (studentWithRelations) {
+            for (const userToStudent of studentWithRelations.userToStudents) {
+              if (userToStudent.user && userToStudent.user.id !== userId) {
+                affectedUserIds.push(userToStudent.user.id);
+              }
+            }
+          }
+        }
+
+        if (affectedUserIds.length > 0) {
+          await updateHasStudentLinkedForAffectedUsers(affectedUserIds);
+        }
+      }
+    }
+
+    await AppDataSource.getRepository(AnalyticSession).delete({ userId });
+    await AppDataSource.getRepository(User).delete({ id: userId });
+    await AppDataSource.getRepository(Notifications).delete({ userId });
+
+    res.status(204).send();
+  },
+);
+
 // --- Delete an user. ---
 userController.delete({ path: '/:id', userType: UserType.SUPER_ADMIN | UserType.ADMIN }, async (req: Request, res: Response) => {
   const currentUser = req.user;
