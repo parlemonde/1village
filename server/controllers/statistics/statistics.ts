@@ -289,9 +289,11 @@ statisticsController.get({ path: '/classrooms' }, async (req, res) => {
 statisticsController.get({ path: '/classrooms-engagement-status' }, async (req, res) => {
   const villageId = req.query.villageId ? parseInt(req.query.villageId as string) : null;
   const countryCode = req.query.countryCode ? (req.query.countryCode as string) : null;
+  const phase = req.query.phase ? parseInt(req.query.phase as string) : undefined;
 
   const conditionOnVillageId = villageId ? ` AND cla.villageId = ${villageId}` : '';
   const conditionOnCountryCode = countryCode ? ` AND cla.countryCode = '${countryCode}'` : '';
+  const conditionOnphase = phase ? ` AND v.activePhase = '${phase}'` : '';
 
   const additionalCondition: string = conditionOnVillageId || conditionOnCountryCode;
   const queryBuilder = AppDataSource.createQueryBuilder()
@@ -317,6 +319,7 @@ statisticsController.get({ path: '/classrooms-engagement-status' }, async (req, 
         .leftJoin(Activity, 'act', 'u.id = act.userId AND act.status = 0 AND act.deleteDate IS NULL')
         .leftJoin(Comment, 'com', 'u.id = com.userId')
         .innerJoin(Classroom, 'cla', `u.id = cla.userId${additionalCondition}`)
+        .innerJoin('village', 'v', `v.id = cla.villageId${conditionOnphase}`)
         .groupBy('u.id')
         .addGroupBy('cla.id');
     }, 'statusCounts')
