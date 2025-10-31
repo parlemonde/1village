@@ -17,6 +17,7 @@ type StatisticFiltersProps = {
   selectedPhase?: number;
   selectedCountry?: string;
   selectedVillage?: number;
+  selectedClassroom?: number;
 };
 
 export default function StatisticFilters({
@@ -26,11 +27,12 @@ export default function StatisticFilters({
   onClassroomChange,
   selectedCountry: initialCountry,
   selectedVillage: initialVillage,
+  selectedClassroom: initialCLassroom,
   selectedPhase,
 }: StatisticFiltersProps) {
   const [selectedCountry, setSelectedCountry] = useState<string | undefined>(initialCountry);
   const [selectedVillage, setSelectedVillage] = useState<number | undefined>(initialVillage);
-  const [selectedClassroom, setSelectedClassroom] = useState<number>();
+  const [selectedClassroom, setSelectedClassroom] = useState<number | undefined>(initialCLassroom);
 
   useEffect(() => {
     if (initialCountry) {
@@ -39,7 +41,10 @@ export default function StatisticFilters({
     if (initialVillage) {
       setSelectedVillage(initialVillage);
     }
-  }, [initialCountry, initialVillage]);
+    if (initialCLassroom) {
+      setSelectedClassroom(initialCLassroom);
+    }
+  }, [initialCountry, initialVillage, initialCLassroom]);
 
   // PHASE
   const phaseDropdownOptions = [

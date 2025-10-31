@@ -30,9 +30,15 @@ interface VillageStatsProps {
   selectedCountry?: string;
   selectedVillage?: number;
   onResetFilters?: () => void;
+  handleClassroomSelectFromList?: (villageId?: number, countryCode?: string, classroomId?: number) => void;
 }
 
-const VillageStats: React.FC<VillageStatsProps> = ({ selectedCountry: initialCountry, selectedVillage: initialVillage, onResetFilters }) => {
+const VillageStats: React.FC<VillageStatsProps> = ({
+  selectedCountry: initialCountry,
+  selectedVillage: initialVillage,
+  onResetFilters,
+  handleClassroomSelectFromList,
+}) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedPhase, setSelectedPhase] = useState<number>(0);
   const [selectedCountry, setSelectedCountry] = useState<string | undefined>(initialCountry);
@@ -98,7 +104,12 @@ const VillageStats: React.FC<VillageStatsProps> = ({ selectedCountry: initialCou
             <>
               {villageEngagementStatus && <EntityEngagementStatus entityType={EntityType.VILLAGE} entityEngagementStatus={villageEngagementStatus} />}
               {villageStatistics?.contributionsByCountryClassrooms && (
-                <DualBarChart contributionsByCountryClassrooms={villageStatistics.contributionsByCountryClassrooms} />
+                <DualBarChart
+                  contributionsByCountryClassrooms={villageStatistics.contributionsByCountryClassrooms}
+                  handleClassroomSelectFromList={handleClassroomSelectFromList}
+                  selectedCountry={selectedCountry}
+                  villageId={selectedVillage}
+                />
               )}
             </>
           )}

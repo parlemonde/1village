@@ -44,12 +44,19 @@ const DashboardStatsNav = () => {
   const [tabValue, setTabValue] = useState(0);
   const [selectedCountry, setSelectedCountry] = useState<string | undefined>();
   const [selectedVillage, setSelectedVillage] = useState<number | undefined>();
+  const [selectedClassroom, setSelectedClassroom] = useState<number | undefined>();
   const { user } = useContext(UserContext);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
+  const handleClassroomSelectFromList = (villageId?: number, countryCode?: string, classroomId?: number) => {
+    setSelectedCountry(countryCode);
+    setSelectedVillage(villageId);
+    setSelectedClassroom(classroomId);
+    setTabValue(3);
+  };
   // Callback passé à CountryStats (optionnel, utilisé seulement si clic village-monde)
   const handleVillageSelectFromList = (villageId: number, countryCode?: string) => {
     setSelectedVillage(villageId);
@@ -85,10 +92,15 @@ const DashboardStatsNav = () => {
         <CountryStats onVillageSelect={handleVillageSelectFromList} selectedCountryFilter={selectedCountry} />
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={2}>
-        <VillageStats selectedCountry={selectedCountry} selectedVillage={selectedVillage} onResetFilters={resetVillageFilters} />
+        <VillageStats
+          selectedCountry={selectedCountry}
+          selectedVillage={selectedVillage}
+          onResetFilters={resetVillageFilters}
+          handleClassroomSelectFromList={handleClassroomSelectFromList}
+        />
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={3}>
-        <ClassroomStats />
+        <ClassroomStats classroomId={selectedClassroom} villageId={selectedVillage} countryId={selectedCountry} />
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={4}>
         <DataDetailsStats />

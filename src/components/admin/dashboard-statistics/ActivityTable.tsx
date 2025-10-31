@@ -6,7 +6,6 @@ import { OneVillageTable } from '../OneVillageTable';
 import { getCountryColor } from './utils/colorMapper';
 import { countryToFlag } from 'src/utils';
 import type { VillageInteractionsActivity } from 'types/analytics/village-interactions-activity';
-import type { Country } from 'types/country.type';
 
 type FormatedVillageActivity = {
   countries: JSX.Element;
@@ -16,8 +15,30 @@ type FormatedVillageActivity = {
   totalActivities: number;
 };
 
-const countriesToText = (countries: Country[]) => {
-  return countries.map((country) => `${countryToFlag(country.isoCode)} ${country.name}`).join(' - ');
+const mapCountriesToText = (
+  villageActivity: VillageInteractionsActivity,
+  onVillageSelect?: (villageId: number, selectedCountry?: string) => void,
+) => {
+  return (
+    <div style={{ display: 'flex', gap: '4px', alignItems: 'center', flexWrap: 'wrap' }}>
+      {villageActivity.countries.map((country, index) => (
+        <span key={country.isoCode}>
+          <span
+            onClick={() => onVillageSelect?.(villageActivity.villageId, country.isoCode)}
+            style={{
+              cursor: 'pointer',
+              textDecoration: 'none',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
+            onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
+          >
+            {countryToFlag(country.isoCode)} {country.name}
+          </span>
+          {index < villageActivity.countries.length - 1 && <span> - </span>}
+        </span>
+      ))}
+    </div>
+  );
 };
 
 type Props = {
@@ -54,15 +75,7 @@ function formatVillagesData(
 ): FormatedVillageActivity[] {
   return activityData.map((villageActivity) => ({
     ...villageActivity,
-    countries: (
-      <span
-        key={villageActivity.countries.map((c) => c.isoCode).join('-')}
-        onClick={() => onVillageSelect?.(villageActivity.id, villageActivity.countries[0]?.isoCode)}
-        style={{ cursor: 'pointer' }}
-      >
-        {countriesToText(villageActivity.countries)}
-      </span>
-    ),
+    countries: mapCountriesToText(villageActivity, onVillageSelect),
     dominantStatus: (
       <span key={villageActivity.id} style={{ color: getCountryColor(villageActivity.dominantStatus), fontSize: 24 }}>
         ●

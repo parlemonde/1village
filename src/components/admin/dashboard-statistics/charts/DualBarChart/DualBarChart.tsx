@@ -9,9 +9,17 @@ import type { CountryClassroomsContribution } from 'types/statistics.type';
 
 interface DualBarChartProps {
   contributionsByCountryClassrooms: CountryClassroomsContribution[];
+  handleClassroomSelectFromList?: (villageId?: number, countryCode?: string, classroomId?: number) => void;
+  selectedCountry?: string;
+  villageId?: number;
 }
 
-export default function DualBarChart({ contributionsByCountryClassrooms }: DualBarChartProps) {
+export default function DualBarChart({
+  contributionsByCountryClassrooms,
+  handleClassroomSelectFromList,
+  selectedCountry,
+  villageId,
+}: DualBarChartProps) {
   const maxValue = Math.max(
     ...contributionsByCountryClassrooms.flatMap((countryContribution) =>
       countryContribution.classroomsContributions.map((classroomContribution) => classroomContribution.total),
@@ -41,15 +49,32 @@ export default function DualBarChart({ contributionsByCountryClassrooms }: DualB
     );
   };
 
-  const renderBarChart = (countryChartData: CountryClassroomsContribution, barChartColor: string, showYAxisLabels: boolean = false) => {
+  const renderBarChart = (
+    countryChartData: CountryClassroomsContribution,
+    barChartColor: string,
+    handleClassroomSelectFromList?: (villageId?: number, countryCode?: string, classroomId?: number) => void,
+    selectedCountry?: string,
+    villageId?: number,
+    showYAxisLabels: boolean = false,
+  ) => {
     return (
       <Box width="45%" display="flex" flexDirection="column" alignItems="center">
         <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={countryChartData.classroomsContributions} barSize={15} margin={{ top: 0, right: 15, left: 15, bottom: 0 }}>
+          <BarChart
+            data={countryChartData.classroomsContributions}
+            barSize={15}
+            margin={{ top: 0, right: 15, left: 15, bottom: 0 }}
+            onClick={(data) => handleClassroomSelectFromList?.(villageId, selectedCountry, data?.activePayload?.[0]?.payload?.classroomId)}
+          >
             <YAxis type="number" tickLine={false} axisLine={false} tick={showYAxisLabels} domain={[0, maxValue]} />
             <XAxis dataKey="classroomName" tickLine={false} axisLine={false} tick={false} />
             <Tooltip />
-            <Bar dataKey="total" fill={barChartColor} radius={[16, 16, 16, 16]}>
+            <Bar
+              dataKey="total"
+              fill={barChartColor}
+              radius={[16, 16, 16, 16]}
+              onClick={(data) => handleClassroomSelectFromList?.(villageId, selectedCountry, data?.activePayload?.[0]?.payload?.classroomId)}
+            >
               <LabelList dataKey="classroomName" position="insideTop" content={<VerticalLabelInsideBar />} />
             </Bar>
           </BarChart>
@@ -71,8 +96,8 @@ export default function DualBarChart({ contributionsByCountryClassrooms }: DualB
       >
         Publications & commentaires
       </Typography>
-      {renderBarChart(contributionsByCountryClassrooms[0], '#78BEFF', true)}
-      {renderBarChart(contributionsByCountryClassrooms[1], '#FF57F8')}
+      {renderBarChart(contributionsByCountryClassrooms[0], '#78BEFF', handleClassroomSelectFromList, selectedCountry, villageId, true)}
+      {renderBarChart(contributionsByCountryClassrooms[1], '#FF57F8', handleClassroomSelectFromList, selectedCountry, villageId)}
     </DashboardCard>
   );
 }
