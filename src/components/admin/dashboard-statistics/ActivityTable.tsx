@@ -9,7 +9,7 @@ import type { VillageInteractionsActivity } from 'types/analytics/village-intera
 import type { Country } from 'types/country.type';
 
 type FormatedVillageActivity = {
-  countries: string;
+  countries: JSX.Element;
   dominantStatus: JSX.Element;
   id: number;
   totalConnections: number;
@@ -20,8 +20,13 @@ const countriesToText = (countries: Country[]) => {
   return countries.map((country) => `${countryToFlag(country.isoCode)} ${country.name}`).join(' - ');
 };
 
-const ActivityTable = ({ activityTableData }: { activityTableData: VillageInteractionsActivity[] }) => {
-  const tableData = formatVillagesData(activityTableData);
+type Props = {
+  activityTableData: VillageInteractionsActivity[];
+  onVillageSelect?: (villageId: number, selectedCountry?: string) => void;
+};
+
+const ActivityTable = ({ activityTableData, onVillageSelect }: Props) => {
+  const tableData = formatVillagesData(activityTableData, onVillageSelect);
   return (
     <Box sx={{ overflow: 'auto', marginTop: 2 }}>
       <OneVillageTable
@@ -43,10 +48,21 @@ const ActivityTable = ({ activityTableData }: { activityTableData: VillageIntera
 
 export default ActivityTable;
 
-function formatVillagesData(activityData: VillageInteractionsActivity[]): FormatedVillageActivity[] {
+function formatVillagesData(
+  activityData: VillageInteractionsActivity[],
+  onVillageSelect?: (villageId: number, selectedCountry?: string) => void,
+): FormatedVillageActivity[] {
   return activityData.map((villageActivity) => ({
     ...villageActivity,
-    countries: countriesToText(villageActivity.countries),
+    countries: (
+      <span
+        key={villageActivity.countries.map((c) => c.isoCode).join('-')}
+        onClick={() => onVillageSelect?.(villageActivity.id, villageActivity.countries[0]?.isoCode)}
+        style={{ cursor: 'pointer' }}
+      >
+        {countriesToText(villageActivity.countries)}
+      </span>
+    ),
     dominantStatus: (
       <span key={villageActivity.id} style={{ color: getCountryColor(villageActivity.dominantStatus), fontSize: 24 }}>
         ●

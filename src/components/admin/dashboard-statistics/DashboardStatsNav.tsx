@@ -57,6 +57,11 @@ const DashboardStatsNav = () => {
     setTabValue(2);
   };
 
+  const handleCountrySelectFromList = (countryCode?: string) => {
+    setSelectedCountry(countryCode);
+    setTabValue(1);
+  };
+
   const resetVillageFilters = () => {
     setSelectedCountry(undefined);
     setSelectedVillage(undefined);
@@ -74,10 +79,10 @@ const DashboardStatsNav = () => {
         </Tabs>
       </Box>
       <CustomTabPanel value={tabValue} index={0}>
-        <GlobalStats />
+        <GlobalStats handleCountrySelectFromList={handleCountrySelectFromList} onVillageSelect={handleVillageSelectFromList} />
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={1}>
-        <CountryStats onVillageSelect={handleVillageSelectFromList} />
+        <CountryStats onVillageSelect={handleVillageSelectFromList} selectedCountryFilter={selectedCountry} />
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={2}>
         <VillageStats selectedCountry={selectedCountry} selectedVillage={selectedVillage} onResetFilters={resetVillageFilters} />
