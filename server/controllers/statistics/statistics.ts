@@ -501,19 +501,19 @@ statisticsController.get({ path: '/one-village/village-engagement-statuses' }, a
       GROUP BY villageId, villageName, countryCodes, status
     )
     SELECT 
-      villageId,
-      villageName,
-      countryCodes,
-      status as dominantStatus,
-      (SELECT COUNT(*) FROM getUsersStatus g WHERE g.villageId = s.villageId) as totalConnections
+      s.villageId AS "villageId",
+      s.villageName AS "villageName",
+      s.countryCodes AS "countryCodes",
+      s.status AS "dominantStatus",
+      (SELECT COUNT(*) FROM getUsersStatus g WHERE g.villageId = s.villageId) AS "totalConnections"
     FROM statusCounts s
-    WHERE rn = 1
-    ORDER BY villageId;
+    WHERE s.rn = 1
+    ORDER BY s.villageId;
   `);
 
   const villageEngagementStatusResponse = await Promise.all(
-    villageEngagementStatus.map(async ({ countryCodes, villageId, ...rest }: VillageEngagementStatus) => {
-      const { totalPublications, totalComments, totalVideos } = await getTotalActivitiesCountsByVillageId(villageId);
+    villageEngagementStatus.map(async ({ countryCodes, ...rest }: VillageEngagementStatus) => {
+      const { totalPublications, totalComments, totalVideos } = await getTotalActivitiesCountsByVillageId(rest.villageId);
 
       return {
         ...rest,

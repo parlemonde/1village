@@ -21,7 +21,12 @@ import type { VillageInteractionsActivity } from 'types/analytics/village-intera
 import { DashboardType, DashboardSummaryTab } from 'types/dashboard.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
-const GlobalStats = () => {
+type Props = {
+  handleCountrySelectFromList?: (countryCode?: string) => void;
+  onVillageSelect?: (villageId: number, selectedCountry?: string) => void;
+};
+
+const GlobalStats = ({ handleCountrySelectFromList, onVillageSelect }: Props) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedPhase, setSelectedPhase] = useState<number>();
   const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
@@ -65,8 +70,10 @@ const GlobalStats = () => {
         <Loader analyticsDataType={AnalyticsDataType.GRAPHS} />
       ) : (
         <>
-          {countriesEngagementStatuses && <DashboardWorldMap countriesEngagementStatuses={countriesEngagementStatuses} />}
-          <ActivityTable activityTableData={villagesActivityData} />
+          {countriesEngagementStatuses && (
+            <DashboardWorldMap countriesEngagementStatuses={countriesEngagementStatuses} handleCountrySelectFromList={handleCountrySelectFromList} />
+          )}
+          <ActivityTable activityTableData={villagesActivityData} onVillageSelect={onVillageSelect} />
         </>
       )}
 
