@@ -3,12 +3,12 @@ import type { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilde
 import type { StatsFilterParams } from '../../types/statistics.type';
 import { GroupType } from '../../types/statistics.type';
 import { AnalyticSession } from '../entities/analytic';
-import { Classroom } from '../entities/classroom';
 import { UserType } from '../entities/user';
+import { Village } from '../entities/village';
 import { AppDataSource } from '../utils/data-source';
 
 const analyticSessionRepository = AppDataSource.getRepository(AnalyticSession);
-const classroomRepository = AppDataSource.getRepository(Classroom);
+const villageRepository = AppDataSource.getRepository(Village);
 
 const addFiltersToQuery = (queryBuilder: SelectQueryBuilder<AnalyticSession>, params?: StatsFilterParams) => {
   const { countryId, villageId, classroomId, groupType } = params || {};
@@ -83,26 +83,37 @@ export const getAverageDuration = async (params?: StatsFilterParams) => {
   return result.averageDuration ? parseInt(result.averageDuration, 10) : null;
 };
 
-export const getClassroomCount = async (villageId?: number | null, countryCode?: string | null, classroomId?: number | null): Promise<number> => {
-  try {
-    const queryBuilder = classroomRepository.createQueryBuilder('classroom');
+export const getRegisteredClassroomsCount = async (villageId?: number, countryCode?: string, phase?: number): Promise<number> => {
+  const qb = villageRepository.createQueryBuilder('village').select('village.classroomsStats', 'classroomsStats');
 
-    if (villageId) {
-      queryBuilder.andWhere('classroom.villageId = :villageId', { villageId });
-    }
-    if (countryCode) {
-      queryBuilder.andWhere('classroom.countryCode = :countryCode', { countryCode });
-    }
-    if (classroomId) {
-      queryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
-    }
-
-    const count = await queryBuilder.getCount();
-    return count;
-  } catch (error) {
-    console.error('Error fetching classroom count:', error);
-    throw new Error('Unable to fetch classroom count.');
+  if (villageId) {
+    qb.where('village.id = :villageId', { villageId });
   }
+
+  if (phase) {
+    qb.andWhere('village.activePhase = :phase', { phase });
+  }
+
+  const rows: Array<{ classroomsStats: { registeredClassrooms?: Record<string, number> } | null }> = await qb.getRawMany();
+
+  const aggregatedClassroomCount: Record<string, number> = {};
+
+  for (const row of rows) {
+    const registeredClassrooms = row?.classroomsStats?.registeredClassrooms;
+
+    if (registeredClassrooms) {
+      for (const [code, count] of Object.entries(registeredClassrooms)) {
+        const classroomCount = typeof count === 'number' ? count : parseInt(String(count), 10) || 0;
+        aggregatedClassroomCount[code] = (aggregatedClassroomCount[code] || 0) + classroomCount;
+      }
+    }
+  }
+
+  if (countryCode) {
+    return aggregatedClassroomCount[countryCode] || 0;
+  }
+
+  return Object.values(aggregatedClassroomCount).reduce((sum, n) => sum + n, 0);
 };
 
 // TODO - add phase: number | null
