@@ -487,7 +487,7 @@ statisticsController.get({ path: '/one-village/village-engagement-statuses' }, a
       LEFT JOIN analytic_session sess ON sess.userId = u.id
       LEFT JOIN activity act ON act.userId = u.id AND act.status = 0 AND act.deleteDate IS NULL
       LEFT JOIN comment com ON com.userId = u.id
-      GROUP BY u.id, u.villageId, v.name, v.countryCodes
+      GROUP BY u.id, u.villageId, v.name, v.id, v.countryCodes
     ),
     statusCounts AS (
       SELECT
@@ -501,14 +501,14 @@ statisticsController.get({ path: '/one-village/village-engagement-statuses' }, a
       GROUP BY villageId, villageName, countryCodes, status
     )
     SELECT 
-      s.villageId AS "villageId",
-      s.villageName AS "villageName",
-      s.countryCodes AS "countryCodes",
-      s.status AS "dominantStatus",
-      (SELECT COUNT(*) FROM getUsersStatus g WHERE g.villageId = s.villageId) AS "totalConnections"
+      villageId,
+      villageName,
+      countryCodes,
+      status as dominantStatus,
+      (SELECT COUNT(*) FROM getUsersStatus g WHERE g.villageId = s.villageId) as totalConnections
     FROM statusCounts s
-    WHERE s.rn = 1
-    ORDER BY s.villageId;
+    WHERE rn = 1
+    ORDER BY villageId;
   `);
 
   const villageEngagementStatusResponse = await Promise.all(
