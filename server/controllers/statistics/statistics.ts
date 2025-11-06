@@ -790,3 +790,213 @@ statisticsController.get({ path: '/classrooms/:classroomId/engagement-status' },
 
   res.sendJSON(classroomEngagementStatus);
 });
+
+statisticsController.get({ path: '/export' }, async (_req, res) => {
+  const phases = [1, 2, 3];
+  const [phase1, phase2, phase3] = await Promise.all(phases.map((phaseId) => getDetailedActivitiesCountsByVillages(phaseId)));
+
+  const villageNamesSet = new Set<string>();
+  const metricsSet = new Set<string>();
+
+  [...phase1, ...phase2, ...phase3].forEach((v) => {
+    v?.name && villageNamesSet.add(v.name);
+
+    Object.keys(v.phaseDetails || {}).forEach((pd) => {
+      pd !== 'phaseId' && metricsSet.add(pd);
+    });
+  });
+
+  const villageNames = Array.from(villageNamesSet).sort((a, b) => a.localeCompare(b, 'fr'));
+  const headers: string[] = ['Phase', 'Indicateur', ...villageNames];
+
+  // Libellés français pour les indicateurs exportés dans le CSV
+  const metricLabels: Record<string, string> = {
+    commentCount: 'Commentaires sous les activités',
+    draftCount: 'Brouillons',
+    videoCount: 'Total vidéos produites',
+    indiceCount: 'Indices',
+    mascotCount: 'Mascottes',
+    challengeCount: 'Défis',
+    enigmaCount: 'Énigmes',
+    gameCount: 'Jeux',
+    questionCount: 'Questions',
+    reactionCount: 'Réactions',
+    reportingCount: 'Reportage',
+    storyCount: 'Invention histoire',
+    anthemCount: 'Couplet hymne',
+    contentLibreCount: 'Contenus libres',
+    reinventStoryCount: 'Histoires réinventées',
+  };
+
+  // Indexe les données par phase et village pour accès rapide
+  const byPhase = [phase1, phase2, phase3].map((list) => {
+    const m = new Map<string, any>();
+    list.forEach((v) => m.set(v.name, v.phaseDetails));
+    return m;
+  });
+
+  // Mappe nom de village -> id (par phase) pour calculer les compteurs par village
+  const villageIdByNamePerPhase = [phase1, phase2, phase3].map((list) => {
+    const m = new Map<string, number>();
+    list.forEach((v: any) => v?.name && v?.id && m.set(v.name, v.id));
+    return m;
+  });
+
+  const rows: (string | number)[][] = [];
+
+  // Ligne globale (hors phase) — Nombre de classes inscrites, juste après le header
+  // Unifie les mappings nom de village -> id à partir des 3 phases
+  const villageIdByName = new Map<string, number>();
+  villageIdByNamePerPhase.forEach((map) => {
+    map.forEach((id, name) => {
+      if (!villageIdByName.has(name)) {
+        villageIdByName.set(name, id);
+      }
+    });
+  });
+
+  const registeredLabel = 'Nombre de classes inscrites';
+  const registeredRow: (string | number)[] = ['', registeredLabel];
+
+  const registeredCounts = await Promise.all(
+    villageNames.map(async (villageName) => {
+      const villageId = villageIdByName.get(villageName);
+      if (!villageId) return 0;
+      const count = await getRegisteredClassroomsCount(villageId, undefined, undefined);
+      return typeof count === 'number' ? count : 0;
+    }),
+  );
+
+  registeredCounts.forEach((c) => registeredRow.push(c));
+  rows.push(registeredRow);
+
+  // Définir les catégories d'activités par phase (hors commentaires/vidéos et autres métriques spéciales)
+  const activityKeysByPhase: Record<number, string[]> = {
+    1: ['mascotCount', 'indiceCount'],
+    2: ['reportingCount', 'challengeCount', 'enigmaCount', 'gameCount', 'questionCount'],
+    3: ['anthemCount', 'storyCount'],
+  };
+
+  // Pré-calculer le nombre de classes connectées et contributrices par phase et par village
+  const connectedByPhase: Array<Map<string, number>> = [];
+  const contributedByPhase: Array<Map<string, number>> = [];
+
+  for (let i = 0; i < phases.length; i++) {
+    const phase = phases[i];
+    const idMap = villageIdByNamePerPhase[i];
+    const connectedMap = new Map<string, number>();
+    const contributedMap = new Map<string, number>();
+
+    await Promise.all(
+      villageNames.map(async (villageName) => {
+        const villageId = idMap.get(villageName);
+        if (!villageId) {
+          connectedMap.set(villageName, 0);
+          contributedMap.set(villageName, 0);
+          return;
+        }
+
+        const [connectedCount, contributedCount] = await Promise.all([
+          getConnectedClassroomsCount(villageId, undefined, undefined, phase as any),
+          getContributedClassroomsCount(villageId, undefined, undefined, phase as any),
+        ]);
+
+        connectedMap.set(villageName, typeof connectedCount === 'number' ? connectedCount : 0);
+        contributedMap.set(villageName, typeof contributedCount === 'number' ? contributedCount : 0);
+      }),
+    );
+
+    connectedByPhase.push(connectedMap);
+    contributedByPhase.push(contributedMap);
+  }
+
+  phases.forEach((phase, index) => {
+    const activityKeys = activityKeysByPhase[phase] || [];
+
+    // Lignes pour les activités de la phase
+    activityKeys
+      .filter((k) => metricsSet.has(k))
+      .forEach((metric) => {
+        const row: (string | number)[] = [phase, metricLabels[metric] || metric];
+
+        villageNames.forEach((villageName) => {
+          const details = byPhase[index].get(villageName) || {};
+          const value = details[metric];
+
+          row.push(typeof value === 'number' ? value : 0);
+        });
+
+        rows.push(row);
+      });
+
+    // Ligne pour Commentaires sous les activités
+    if (metricsSet.has('commentCount')) {
+      const commentRow: (string | number)[] = [phase, metricLabels['commentCount']];
+      villageNames.forEach((villageName) => {
+        const details = byPhase[index].get(villageName) || {};
+        const value = details['commentCount'];
+        commentRow.push(typeof value === 'number' ? value : 0);
+      });
+      rows.push(commentRow);
+    }
+
+    // Ligne pour Nombre de classes connectées
+    const connectedLabel = 'Nombre de classes connectées';
+    const connectedRow: (string | number)[] = [phase, connectedLabel];
+    villageNames.forEach((villageName) => {
+      connectedRow.push(connectedByPhase[index].get(villageName) || 0);
+    });
+    rows.push(connectedRow);
+
+    // Ligne pour Nombre de classes contributrices
+    const contributedLabel = 'Nombre de classes contributrices';
+    const contributedRow: (string | number)[] = [phase, contributedLabel];
+    villageNames.forEach((villageName) => {
+      contributedRow.push(contributedByPhase[index].get(villageName) || 0);
+    });
+    rows.push(contributedRow);
+
+    // Lignes de totaux demandées
+    const allInteractionsLabel = 'Total des interactions (activités et commentaires)';
+    const activitiesNoCommentsLabel = 'Total des activités (hors commentaires)';
+
+    const totalAllRow: (string | number)[] = [phase, allInteractionsLabel];
+    const totalNoCommentsRow: (string | number)[] = [phase, activitiesNoCommentsLabel];
+
+    villageNames.forEach((villageName) => {
+      const details = byPhase[index].get(villageName) || {};
+
+      const sumActivities = activityKeys.reduce((acc, key) => acc + (typeof details[key] === 'number' ? details[key] : 0), 0);
+      const comment = typeof details['commentCount'] === 'number' ? details['commentCount'] : 0;
+      const videos = typeof details['videoCount'] === 'number' ? details['videoCount'] : 0;
+
+      // Conserver le comportement existant : inclure les vidéos dans les totaux
+      const sumAll = sumActivities + comment + videos;
+      const sumNoComments = sumActivities + videos; // hors commentaires
+
+      totalAllRow.push(sumAll);
+      totalNoCommentsRow.push(sumNoComments);
+    });
+
+    rows.push(totalAllRow);
+    rows.push(totalNoCommentsRow);
+
+    // Ligne Total vidéos produites
+    if (metricsSet.has('videoCount')) {
+      const videoRow: (string | number)[] = [phase, metricLabels['videoCount']];
+      villageNames.forEach((villageName) => {
+        const details = byPhase[index].get(villageName) || {};
+        const value = details['videoCount'];
+        videoRow.push(typeof value === 'number' ? value : 0);
+      });
+      rows.push(videoRow);
+    }
+  });
+
+  const csvContent = [headers, ...rows].map((line) => line.join(',')).join('\n');
+
+  const filename = 'export-statistiques-villages.csv';
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  res.status(200).send(`\uFEFF${csvContent}`); // BOM pour Excel
+});
