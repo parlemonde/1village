@@ -40,33 +40,41 @@ function a11yProps(index: number) {
   };
 }
 
+enum StatisticsDashboardTabType {
+  GLOBAL,
+  COUNTRY,
+  VILLAGE,
+  CLASSROOM,
+  DATA,
+}
+
 const DashboardStatsNav = () => {
-  const [tabValue, setTabValue] = useState(0);
+  const [selectedTab, setSelectedTab] = useState(0);
   const [selectedCountry, setSelectedCountry] = useState<string | undefined>();
   const [selectedVillage, setSelectedVillage] = useState<number | undefined>();
   const [selectedClassroom, setSelectedClassroom] = useState<number | undefined>();
   const { user } = useContext(UserContext);
 
-  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue);
+  const handleChange = (_event: React.SyntheticEvent, selectedTab: number) => {
+    setSelectedTab(selectedTab);
   };
 
   const handleClassroomSelectFromList = (villageId?: number, countryCode?: string, classroomId?: number) => {
     setSelectedCountry(countryCode);
     setSelectedVillage(villageId);
     setSelectedClassroom(classroomId);
-    setTabValue(3);
+    setSelectedTab(StatisticsDashboardTabType.CLASSROOM);
   };
   // Callback passé à CountryStats (optionnel, utilisé seulement si clic village-monde)
   const handleVillageSelectFromList = (villageId: number, countryCode?: string) => {
     setSelectedVillage(villageId);
     setSelectedCountry(countryCode);
-    setTabValue(2);
+    setSelectedTab(StatisticsDashboardTabType.VILLAGE);
   };
 
   const handleCountrySelectFromList = (countryCode?: string) => {
     setSelectedCountry(countryCode);
-    setTabValue(1);
+    setSelectedTab(StatisticsDashboardTabType.COUNTRY);
   };
 
   const resetVillageFilters = () => {
@@ -77,21 +85,21 @@ const DashboardStatsNav = () => {
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, marginBottom: 2, borderColor: 'divider' }}>
-        <Tabs value={tabValue} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="1Village" {...a11yProps(0)} />
-          <Tab label="Pays" {...a11yProps(1)} />
-          <Tab label="Village-monde" {...a11yProps(2)} />
-          {user?.type !== UserType.OBSERVATOR && <Tab label="Classe" {...a11yProps(3)} />}
-          {user?.type !== UserType.OBSERVATOR && <Tab label="Données" {...a11yProps(4)} />}
+        <Tabs value={selectedTab} onChange={handleChange} aria-label="Dashboard Statistics Navigation">
+          <Tab label="1Village" {...a11yProps(StatisticsDashboardTabType.GLOBAL)} />
+          <Tab label="Pays" {...a11yProps(StatisticsDashboardTabType.COUNTRY)} />
+          <Tab label="Village-monde" {...a11yProps(StatisticsDashboardTabType.VILLAGE)} />
+          {user?.type !== UserType.OBSERVATOR && <Tab label="Classe" {...a11yProps(StatisticsDashboardTabType.CLASSROOM)} />}
+          {user?.type !== UserType.OBSERVATOR && <Tab label="Données" {...a11yProps(StatisticsDashboardTabType.DATA)} />}
         </Tabs>
       </Box>
-      <CustomTabPanel value={tabValue} index={0}>
+      <CustomTabPanel value={selectedTab} index={StatisticsDashboardTabType.GLOBAL}>
         <GlobalStats handleCountrySelectFromList={handleCountrySelectFromList} onVillageSelect={handleVillageSelectFromList} />
       </CustomTabPanel>
-      <CustomTabPanel value={tabValue} index={1}>
+      <CustomTabPanel value={selectedTab} index={StatisticsDashboardTabType.COUNTRY}>
         <CountryStats onVillageSelect={handleVillageSelectFromList} selectedCountryFilter={selectedCountry} />
       </CustomTabPanel>
-      <CustomTabPanel value={tabValue} index={2}>
+      <CustomTabPanel value={selectedTab} index={StatisticsDashboardTabType.VILLAGE}>
         <VillageStats
           selectedCountry={selectedCountry}
           selectedVillage={selectedVillage}
@@ -99,10 +107,10 @@ const DashboardStatsNav = () => {
           handleClassroomSelectFromList={handleClassroomSelectFromList}
         />
       </CustomTabPanel>
-      <CustomTabPanel value={tabValue} index={3}>
+      <CustomTabPanel value={selectedTab} index={StatisticsDashboardTabType.CLASSROOM}>
         <ClassroomStats classroomId={selectedClassroom} villageId={selectedVillage} countryId={selectedCountry} />
       </CustomTabPanel>
-      <CustomTabPanel value={tabValue} index={4}>
+      <CustomTabPanel value={selectedTab} index={StatisticsDashboardTabType.DATA}>
         <DataDetailsStats />
       </CustomTabPanel>
     </Box>
