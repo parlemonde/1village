@@ -10,7 +10,6 @@ import { User } from '../../entities/user';
 import { Village } from '../../entities/village';
 import {
   getConnectedClassroomsCount,
-  getRegisteredClassroomsCount,
   getChildrenCodesCountForClassroom,
   getConnectedFamiliesCountForClassroom,
   getFamiliesWithoutAccountForClassroom,
@@ -35,6 +34,7 @@ import {
 } from '../../stats/sessionStats';
 import { getFamiliesWithoutAccountForVillage } from '../../stats/villageStats';
 import { AppDataSource } from '../../utils/data-source';
+import { countries } from '../../utils/iso-3166-countries-french';
 import { Controller } from '../controller';
 import type { StatisticsDto } from './statistics.dto';
 import {
@@ -100,10 +100,9 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
   const classroomId = req.query.classroomId ? parseInt(req.query.classroomId as string) : undefined;
   const phase = req.query.phase ? parseInt(req.query.phase as string) : undefined;
 
-  const filters: StatsFilterParams = { villageId, countryId: countryCode, classroomId, phase: undefined };
+  const filters: StatsFilterParams = { villageId, countryId: countryCode, classroomId, phase };
 
   try {
-    // Appelez les fonctions avec villageId
     const minDuration = await getMinDuration(filters);
     const maxDuration = await getMaxDuration(filters);
     const averageDuration = await getAverageDuration(filters);
@@ -114,12 +113,12 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
     const medianConnections = await getMedianConnections(filters);
     const testConnections = await getUserConnectionsList();
     const registeredClassroomsCount = await getClassroomCount(villageId, countryCode, classroomId);
-    const connectedClassroomsCount = await getConnectedClassroomsCount(villageId, countryCode, classroomId);
+    const connectedClassroomsCount = await getConnectedClassroomsCount(villageId, countryCode, classroomId, phase);
     const contributedClassroomsCount = await getContributedClassroomsCount(villageId, countryCode, classroomId, phase);
     const connectedFamiliesCount = await getConnectedFamiliesCount(filters);
     const familyAccountCount = await getFamilyAccountsCount(filters);
     const childrenCodesCount = await getChildrenCodesCount(filters);
-    const dailyConnectionsCountsByMonth = await getDailyConnectionsCountsByMonth();
+    const dailyConnectionsCountsByMonth = await getDailyConnectionsCountsByMonth(filters);
     const contributionsBarChartData = await getContributionsBarChartData(villageId, countryCode, classroomId);
 
     return res.sendJSON({
@@ -145,21 +144,6 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
     console.error('Error fetching statistics:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
-});
-
-statisticsController.get({ path: '/sessions/:phase' }, async (req: Request, res) => {
-  res.sendJSON({
-    minDuration: await getMinDuration(), // TODO - add phase
-    maxDuration: await getMaxDuration(), // TODO - add phase
-    averageDuration: await getAverageDuration(), // TODO - add phase
-    medianDuration: await getMedianDuration(), // TODO - add phase
-    minConnections: await getMinConnections(), // TODO - add phase
-    maxConnections: await getMaxConnections(), // TODO - add phase
-    averageConnections: await getAverageConnections(), // TODO - add phase
-    medianConnections: await getMedianConnections(), // TODO - add phase
-    registeredClassroomsCount: await getRegisteredClassroomsCount(),
-    connectedClassroomsCount: await getConnectedClassroomsCount(), // TODO - add phase
-  });
 });
 
 statisticsController.get({ path: '/classrooms-to-monitor' }, async (req, res) => {
@@ -409,7 +393,7 @@ statisticsController.get({ path: '/classrooms-identity/:classroomId' }, async (r
 statisticsController.get({ path: '/one-village' }, async (req, res) => {
   const phase = req.query.phase ? parseInt(req.query.phase as string) : undefined;
 
-  const filters: StatsFilterParams = {};
+  const filters: StatsFilterParams = { phase };
 
   const family = {
     ...(await constructFamilyResponseFromFilters(filters)),
@@ -469,6 +453,80 @@ statisticsController.get({ path: '/one-village/countries-engagement-statuses' },
 `);
 
   res.sendJSON(countryEngagementStatus);
+});
+
+type VillageEngagementStatus = {
+  villageId: number;
+  villageName: string;
+  countryCodes: string;
+  dominantStatus: string;
+  totalUsers: number;
+};
+
+statisticsController.get({ path: '/one-village/village-engagement-statuses' }, async (req, res) => {
+  const villageEngagementStatus = await AppDataSource.query<VillageEngagementStatus[]>(`
+    WITH villages AS (
+      SELECT DISTINCT v.id, v.name, v.countryCodes
+      FROM village v
+      INNER JOIN classroom c ON c.villageId = v.id
+    ),
+    getUsersStatus AS (
+      SELECT
+        u.id,
+        u.villageId,
+        v.name as villageName,
+        v.countryCodes,
+        CASE
+          WHEN MAX(sess.date) IS NULL OR MAX(sess.date) < (NOW() - INTERVAL 21 DAY) THEN 'ghost'
+          WHEN MAX(act.publishDate) >= (NOW() - INTERVAL 21 DAY)
+            OR MAX(com.createDate) >= (NOW() - INTERVAL 21 DAY) THEN 'active'
+          ELSE 'observer'
+        END AS status
+      FROM villages v
+      INNER JOIN user u ON u.villageId = v.id
+      LEFT JOIN analytic_session sess ON sess.userId = u.id
+      LEFT JOIN activity act ON act.userId = u.id AND act.status = 0 AND act.deleteDate IS NULL
+      LEFT JOIN comment com ON com.userId = u.id
+      GROUP BY u.id, u.villageId, v.name, v.countryCodes
+    ),
+    statusCounts AS (
+      SELECT
+        villageId,
+        villageName,
+        countryCodes,
+        status,
+        COUNT(*) as userCount,
+        ROW_NUMBER() OVER (PARTITION BY villageId ORDER BY COUNT(*) DESC) as rn
+      FROM getUsersStatus
+      GROUP BY villageId, villageName, countryCodes, status
+    )
+    SELECT 
+      villageId,
+      villageName,
+      countryCodes,
+      status as dominantStatus,
+      (SELECT COUNT(*) FROM getUsersStatus g WHERE g.villageId = s.villageId) as totalConnections
+    FROM statusCounts s
+    WHERE rn = 1
+    ORDER BY villageId;
+  `);
+
+  const villageEngagementStatusResponse = await Promise.all(
+    villageEngagementStatus.map(async ({ countryCodes, villageId, ...rest }: VillageEngagementStatus) => {
+      const { totalPublications, totalComments, totalVideos } = await getTotalActivitiesCountsByVillageId(villageId);
+
+      return {
+        ...rest,
+        totalActivities: totalPublications + totalComments + totalVideos,
+        countries: countryCodes.split(',').map((countryCode) => ({
+          isoCode: countryCode,
+          name: countries.find((country) => country.isoCode === countryCode)?.name,
+        })),
+      };
+    }),
+  );
+
+  res.sendJSON(villageEngagementStatusResponse);
 });
 
 statisticsController.get({ path: '/villages/:villageId' }, async (req, res) => {

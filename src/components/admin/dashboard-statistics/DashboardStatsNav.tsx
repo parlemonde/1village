@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -10,6 +10,8 @@ import CountryStats from './CountryStats';
 import DataDetailsStats from './DataDetailsStats';
 import GlobalStats from './GlobalStats';
 import VillageStats from './VillageStats';
+import { UserContext } from 'src/contexts/userContext';
+import { UserType } from 'types/user.type';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -42,6 +44,7 @@ const DashboardStatsNav = () => {
   const [tabValue, setTabValue] = useState(0);
   const [selectedCountry, setSelectedCountry] = useState<string | undefined>();
   const [selectedVillage, setSelectedVillage] = useState<number | undefined>();
+  const { user } = useContext(UserContext);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -66,8 +69,8 @@ const DashboardStatsNav = () => {
           <Tab label="1Village" {...a11yProps(0)} />
           <Tab label="Pays" {...a11yProps(1)} />
           <Tab label="Village-monde" {...a11yProps(2)} />
-          <Tab label="Classe" {...a11yProps(3)} />
-          <Tab label="Données" {...a11yProps(4)} />
+          {user?.type !== UserType.OBSERVATOR && <Tab label="Classe" {...a11yProps(3)} />}
+          {user?.type !== UserType.OBSERVATOR && <Tab label="Données" {...a11yProps(4)} />}
         </Tabs>
       </Box>
       <CustomTabPanel value={tabValue} index={0}>

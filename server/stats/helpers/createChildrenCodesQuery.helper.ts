@@ -1,11 +1,22 @@
+import type { VillagePhase } from '../../../types/village.type';
 import { Student } from '../../entities/student';
 import { AppDataSource } from '../../utils/data-source';
 
 const studentRepository = AppDataSource.getRepository(Student);
-export const createChildrenCodesQuery = () => {
-  return studentRepository.createQueryBuilder('student').innerJoin('student.classroom', 'classroom').innerJoin('classroom.village', 'village');
+
+export const createChildrenCodesQuery = (phase?: VillagePhase) => {
+  const queryBuilder = studentRepository
+    .createQueryBuilder('student')
+    .innerJoin('student.classroom', 'classroom')
+    .innerJoin('classroom.village', 'village');
+
+  if (phase) {
+    queryBuilder.andWhere('village.activePhase = :phase', { phase });
+  }
+
+  return queryBuilder;
 };
 
-export const createChildreCodesInCountryQuery = (countryId: string) => {
+export const createChildrenCodesInCountryQuery = (countryId: string) => {
   return createChildrenCodesQuery().andWhere('classroom.countryCode = :countryId', { countryId });
 };

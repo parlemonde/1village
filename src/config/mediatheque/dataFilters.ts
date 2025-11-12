@@ -1,18 +1,6 @@
 // Ces const sont utilisées pour l'affichage des filtres dans la médiathèque pour les activités
 
-export const activitiesLabel = [
-  'Indice',
-  'Indice symbolique',
-  'Mascotte',
-  'Reportage',
-  'Défis',
-  'Jeux',
-  'Réaction',
-  'Enigme',
-  'Couplet',
-  'Inventer une histoire',
-  'Réinventer une histoire',
-];
+export const activitiesLabel = ['Indice', 'Mascotte', 'Reportage', 'Défis', 'Jeux', 'Enigme', 'Couplet', 'Réinventer une histoire'];
 
 export const themeOfIndice = [
   'Paysages',
@@ -54,29 +42,23 @@ export const subThemesMap: { [key: string]: string[] } = {
 
 export const activityNumberMapper: { [key: string]: number } = {
   Indice: 6,
-  'Indice symbolique': 7,
   Mascotte: 8,
   Reportage: 9,
   Défis: 2,
   Jeux: 4,
-  Réaction: 10,
   Enigme: 1,
   Couplet: 12,
-  'Inventer une histoire': 13,
   'Réinventer une histoire': 14,
 };
 
 export const activityNameMapper: { [key: number]: string } = {
   6: 'Indice',
-  7: 'Indice symbolique',
   8: 'Mascotte',
   9: 'Reportage',
   2: 'Défis',
   4: 'Jeux',
-  10: 'Réaction',
   1: 'Enigme',
   12: 'Couplet',
-  13: 'Inventer une histoire',
   14: 'Réinventer une histoire',
 };
 

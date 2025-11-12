@@ -179,7 +179,7 @@ const Presentation = () => {
     setIsLoading(true);
     const response = await axiosRequest({
       method: 'DELETE',
-      url: `/users/${user.id}`,
+      url: `/users/account`,
     });
     if (response.error) {
       enqueueSnackbar('Une erreur inconnue est survenue...', {

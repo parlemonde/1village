@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 
+import CountryActivityPhaseAccordion from '../CountryActivityPhaseAccordion';
 import ClassesExchangesCard from '../cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from '../cards/StatsCard/StatsCard';
 import BarChartWithMonthSelector from '../charts/BarChartWithMonthSelector';
@@ -18,12 +19,18 @@ export interface DashboardClassroomTabProps {
   selectedPhase?: number;
 }
 
-const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCountry }: DashboardClassroomTabProps) => {
+const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCountry, selectedPhase = 0 }: DashboardClassroomTabProps) => {
+  const [openPhases, setOpenPhases] = useState<Record<number, boolean>>({
+    1: true,
+    2: true,
+    3: true,
+  });
   const totalActivitiesCounts = dashboardSummaryData?.totalActivityCounts;
-
   return (
     <>
-      <ClassroomsToMonitorTable countryId={selectedCountry} />
+      <div style={{ paddingTop: '33px' }}>
+        <ClassroomsToMonitorTable countryId={selectedCountry} />
+      </div>
       <br />
       <Grid container spacing={4} direction={{ xs: 'column', md: 'row' }}>
         <Grid item xs={12} lg={4}>
@@ -64,26 +71,68 @@ const DashboardClassroomTab = ({ dashboardSummaryData, dashboardType, selectedCo
             Nombre de connexions moyen par classe
           </AverageStatsCard>
         </Grid> */}
-        {dashboardType !== DashboardType.ONE_VILLAGE_PANEL && dashboardSummaryData.engagementStatusData && (
-          <Grid item xs={12} lg={4}>
-            <PieCharts engagementStatusData={dashboardSummaryData.engagementStatusData} />
-          </Grid>
-        )}
-        <Grid item xs={12} lg={dashboardType === DashboardType.ONE_VILLAGE_PANEL ? 12 : 8}>
-          <BarChartWithMonthSelector data={dashboardSummaryData.dailyConnectionsCountsByMonth} title="Évolution des connexions" />
+        <Grid container spacing={2} sx={{ width: '100%', paddingLeft: '32px', paddingTop: '32px' }} style={{ display: 'flex', flexGrow: 1 }}>
+          {dashboardType !== DashboardType.ONE_VILLAGE_PANEL && dashboardSummaryData.engagementStatusData ? (
+            <>
+              <Grid item xs={12} md={4}>
+                <PieCharts engagementStatusData={dashboardSummaryData.engagementStatusData} />
+              </Grid>
+              <Grid item xs={12} md={8}>
+                <BarChartWithMonthSelector data={dashboardSummaryData.dailyConnectionsCountsByMonth} title="Évolution des connexions" />
+              </Grid>
+            </>
+          ) : (
+            <Grid item xs={12}>
+              <BarChartWithMonthSelector data={dashboardSummaryData.dailyConnectionsCountsByMonth} title="Évolution des connexions" />
+            </Grid>
+          )}
         </Grid>
         <Grid container spacing={2} alignItems="stretch" style={{ paddingLeft: '32px', paddingTop: '32px', display: 'flex' }}>
-          <Grid item xs={12} md={6} style={{ display: 'flex' }}>
+          <Grid item xs={12} md={4}>
             <ClassesExchangesCard
               totalPublications={totalActivitiesCounts?.totalPublications || 0}
               totalComments={totalActivitiesCounts?.totalComments || 0}
               totalVideos={totalActivitiesCounts?.totalVideos || 0}
+              enableColumns={true}
             />
           </Grid>
-          <Grid item xs={12} md={6} style={{ paddingLeft: '32px', display: 'flex' }}>
+          <Grid item xs={12} md={8}>
             <ContributionBarChart dataByStep={dashboardSummaryData.contributionsBarChartData} title="Contribution des classes" />
           </Grid>
         </Grid>
+        {/* Accordéons par phase */}
+        {selectedCountry &&
+          (selectedPhase === 0 ? (
+            [1, 2, 3].map((phase) => (
+              <Grid item xs={12} lg={12} key={phase}>
+                <CountryActivityPhaseAccordion
+                  phaseId={phase}
+                  countryCode={selectedCountry}
+                  open={openPhases[phase]}
+                  onClick={() =>
+                    setOpenPhases((prev) => ({
+                      ...prev,
+                      [phase]: !prev[phase],
+                    }))
+                  }
+                />
+              </Grid>
+            ))
+          ) : (
+            <Grid item xs={12} lg={12}>
+              <CountryActivityPhaseAccordion
+                phaseId={selectedPhase}
+                countryCode={selectedCountry}
+                open={openPhases[selectedPhase]}
+                onClick={() =>
+                  setOpenPhases((prev) => ({
+                    ...prev,
+                    [selectedPhase]: !prev[selectedPhase],
+                  }))
+                }
+              />
+            </Grid>
+          ))}
       </Grid>
     </>
   );
