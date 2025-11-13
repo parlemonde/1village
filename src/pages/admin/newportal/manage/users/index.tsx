@@ -279,9 +279,28 @@ const Users = () => {
               ))}
             </Select>
           </FormControl>
-          <Button className="like-button blue" sx={defaultContainedButtonStyle} component="a" onClick={() => setFilters({})}>
-            Réinitialiser les filtres
-          </Button>
+          <Box style={{ maxWidth: '100%' }}>
+            <Button
+              className="like-button blue"
+              sx={{
+                // ...defaultContainedButtonStyle,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                maxWidth: '100%',
+                minWidth: '80px',
+              }}
+              style={{
+                color: '#4c3ed9',
+                border: '1px solid #4c3ed9',
+                backgroundColor: 'white',
+                width: 'auto',
+              }}
+              onClick={() => setFilters({})}
+            >
+              Réinitialiser les filtres
+            </Button>
+          </Box>
         </Box>
 
         <OneVillageTable
