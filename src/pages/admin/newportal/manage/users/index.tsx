@@ -3,8 +3,10 @@ import { useRouter } from 'next/router';
 import type { SetStateAction } from 'react';
 import React, { useMemo, useState } from 'react';
 
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { Box, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import NoSsr from '@mui/material/NoSsr';
 
 import { useUsers } from 'src/api/user/user.list';
@@ -279,28 +281,9 @@ const Users = () => {
               ))}
             </Select>
           </FormControl>
-          <Box style={{ maxWidth: '100%' }}>
-            <Button
-              className="like-button blue"
-              sx={{
-                // ...defaultContainedButtonStyle,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                maxWidth: '100%',
-                minWidth: '80px',
-              }}
-              style={{
-                color: '#4c3ed9',
-                border: '1px solid #4c3ed9',
-                backgroundColor: 'white',
-                width: 'auto',
-              }}
-              onClick={() => setFilters({})}
-            >
-              Réinitialiser les filtres
-            </Button>
-          </Box>
+          <IconButton aria-label="delete" color="primary" onClick={() => setFilters({})}>
+            <RefreshIcon />
+          </IconButton>
         </Box>
 
         <OneVillageTable
