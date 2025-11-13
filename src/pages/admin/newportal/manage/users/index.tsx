@@ -279,6 +279,9 @@ const Users = () => {
               ))}
             </Select>
           </FormControl>
+          <Button className="like-button blue" sx={defaultContainedButtonStyle} component="a" onClick={() => setFilters({})}>
+            Réinitialiser les filtres
+          </Button>
         </Box>
 
         <OneVillageTable
