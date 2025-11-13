@@ -3,8 +3,10 @@ import { useRouter } from 'next/router';
 import type { SetStateAction } from 'react';
 import React, { useMemo, useState } from 'react';
 
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { Box, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import NoSsr from '@mui/material/NoSsr';
 
 import { useUsers } from 'src/api/user/user.list';
@@ -279,6 +281,9 @@ const Users = () => {
               ))}
             </Select>
           </FormControl>
+          <IconButton aria-label="delete" color="primary" onClick={() => setFilters({})}>
+            <RefreshIcon />
+          </IconButton>
         </Box>
 
         <OneVillageTable
