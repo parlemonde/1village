@@ -10,25 +10,20 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { isQuestion } from 'src/activity-types/anyActivity';
-import type { QuestionActivity } from 'src/activity-types/question.types';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { getActivityPhase } from 'src/components/activities/utils';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
-import { VillageContext } from 'src/contexts/villageContext';
-import { axiosRequest } from 'src/utils/axiosRequest';
-import { ActivityType, ActivityStatus } from 'types/activity.type';
+import { ActivityStatus } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
 const Question3 = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user } = React.useContext(UserContext);
-  const { village, selectedPhase } = React.useContext(VillageContext);
   const { activity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
   const content = React.useMemo(() => activity?.content?.filter((q) => q.value) ?? null, [activity]);
@@ -54,48 +49,17 @@ const Question3 = () => {
 
   const isValid = errorSteps.length === 0;
 
-  const createQuestionActivity = async (question: string): Promise<boolean> => {
-    if (!village) {
-      return false;
-    }
-    const data: Partial<QuestionActivity> = {
-      type: ActivityType.QUESTION,
-      villageId: village.id,
-      phase: getActivityPhase(ActivityType.QUESTION, village.activePhase, selectedPhase),
-      data: {},
-      content: [
-        {
-          id: 0,
-          type: 'text',
-          value: question,
-        },
-      ],
-    };
-    const response = await axiosRequest({
-      method: 'POST',
-      url: '/activities',
-      data,
-    });
-    if (response.error) {
-      return false;
-    } else {
-      return true;
-    }
-  };
-
   const onPublish = async () => {
     if (!isValid || !activity || !content) {
       return;
     }
     setIsLoading(true);
-    //This condition below may be useless because there is always a draft created with an id !
-    if (activity.id !== 0) {
-      await Promise.all(content.map((question) => createQuestionActivity(question.value)));
+
+    const { success } = await save(true);
+    if (success) {
       queryClient.invalidateQueries('activities');
-    } else {
-      await save(true);
+      router.push('/poser-une-question/success');
     }
-    router.push('/poser-une-question/success');
     setIsLoading(false);
   };
 
