@@ -41,11 +41,11 @@ function a11yProps(index: number) {
 }
 
 enum StatisticsDashboardTabType {
-  GLOBAL = 0,
-  COUNTRY = 1,
-  VILLAGE = 2,
-  CLASSROOM = 3,
-  DATA = 4,
+  GLOBAL,
+  COUNTRY,
+  VILLAGE,
+  CLASSROOM,
+  DATA,
 }
 
 const DashboardStatsNav = () => {

@@ -790,3 +790,92 @@ statisticsController.get({ path: '/classrooms/:classroomId/engagement-status' },
 
   res.sendJSON(classroomEngagementStatus);
 });
+
+statisticsController.get({ path: '/export' }, async (_req, res) => {
+  const phases = [1, 2, 3];
+  const [phase1, phase2, phase3] = await Promise.all(phases.map((phaseId) => getDetailedActivitiesCountsByVillages(phaseId)));
+
+  const villageNamesSet = new Set<string>();
+  const metricsSet = new Set<string>();
+
+  [...phase1, ...phase2, ...phase3].forEach((v) => {
+    v?.name && villageNamesSet.add(v.name);
+
+    Object.keys(v.phaseDetails || {}).forEach((pd) => {
+      pd !== 'phaseId' && metricsSet.add(pd);
+    });
+  });
+
+  const villageNames = Array.from(villageNamesSet).sort((a, b) => a.localeCompare(b, 'fr'));
+
+  const preferredOrder = [
+    'commentCount',
+    // 'draftCount',
+    'videoCount',
+    'indiceCount',
+    'mascotCount',
+    'challengeCount',
+    'enigmaCount',
+    'gameCount',
+    'questionCount',
+    //'reactionCount',
+    'reportingCount',
+    'storyCount',
+    'anthemCount',
+    // 'contentLibreCount',
+    // 'reinventStoryCount',
+  ];
+
+  const metrics = preferredOrder.filter((keyword) => metricsSet.has(keyword));
+  const headers: string[] = ['Phase', 'Indicateur', ...villageNames];
+
+  // Libellés français pour les indicateurs exportés dans le CSV
+  const metricLabels: Record<string, string> = {
+    commentCount: 'Commentaires sous les activités', //
+    draftCount: 'Brouillons',
+    videoCount: 'Total vidéos produites', //
+    indiceCount: 'Indices', //
+    mascotCount: 'Mascottes', //
+    challengeCount: 'Défis', //
+    enigmaCount: 'Énigmes', //
+    gameCount: 'Jeux', //
+    questionCount: 'Questions', //
+    reactionCount: 'Réactions',
+    reportingCount: 'Reportages', //
+    storyCount: 'Invention histoires', //
+    anthemCount: 'Couplet hymne', //
+    contentLibreCount: 'Contenus libres',
+    reinventStoryCount: 'Histoires réinventées',
+  };
+
+  // Indexe les données par phase et village pour accès rapide
+  const byPhase = [phase1, phase2, phase3].map((list) => {
+    const m = new Map<string, any>();
+    list.forEach((v) => m.set(v.name, v.phaseDetails));
+    return m;
+  });
+
+  const rows: (string | number)[][] = [];
+
+  phases.forEach((phase, index) => {
+    metrics.forEach((metric) => {
+      const row: (string | number)[] = [phase, metricLabels[metric] || metric];
+
+      villageNames.forEach((villageName) => {
+        const details = byPhase[index].get(villageName) || {};
+        const value = details[metric];
+
+        row.push(typeof value === 'number' ? value : 0);
+      });
+
+      rows.push(row);
+    });
+  });
+
+  const csvContent = [headers, ...rows].map((line) => line.join(',')).join('\n');
+
+  const filename = 'export-statistiques-villages.csv';
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  res.status(200).send(`\uFEFF${csvContent}`); // BOM pour Excel
+});
