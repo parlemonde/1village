@@ -202,6 +202,7 @@ export interface ClassroomToMonitor {
 export interface EngagementStatusParams {
   countryCode?: string;
   villageId?: Village['id'];
+  phase?: number;
 }
 
 export interface EngagementStatusData {
