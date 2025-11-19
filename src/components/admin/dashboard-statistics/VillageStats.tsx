@@ -15,7 +15,6 @@ import BarChartWithMonthSelector from './charts/BarChartWithMonthSelector';
 import DualBarChart from './charts/DualBarChart/DualBarChart';
 import PieCharts from './charts/PieCharts';
 import StatisticFilters from './filters/StatisticFilters';
-import { mockDailyConnectionsCountsByMonth } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import ClassroomsToMonitorTable from './tables/ClassroomsToMonitorTable';
@@ -152,7 +151,7 @@ const VillageStats: React.FC<VillageStatsProps> = ({ selectedCountry: initialCou
                 >
                   {engagementStatusStatistics && <PieCharts engagementStatusData={engagementStatusStatistics} />}
                   <span style={{ marginLeft: '14px' }}>
-                    <BarChartWithMonthSelector data={mockDailyConnectionsCountsByMonth} title="Évolution des connexions" />
+                    <BarChartWithMonthSelector data={sessionsStatistics.dailyConnectionsCountsByMonth} title="Évolution des connexions" />
                   </span>
                 </Box>
                 <div className="statistic__average--container" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gridGap: '2rem' }}>
@@ -220,6 +219,9 @@ const VillageStats: React.FC<VillageStatsProps> = ({ selectedCountry: initialCou
                   </StatsCard>
                   <StatsCard data={villageStatistics?.family?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
                 </Box>
+                <div className="statistic--container">
+                  <BarChartWithMonthSelector data={sessionsStatistics.dailyConnectionsCountsByMonth} title="Évolution des connexions" />
+                </div>
               </TabPanel>
             </>
           )}
