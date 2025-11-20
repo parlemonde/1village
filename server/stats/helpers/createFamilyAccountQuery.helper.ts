@@ -22,6 +22,6 @@ export const createFamilyAccountInVillageQuery = (villageId: number) => {
   return createFamilyAccountQuery().innerJoin('classroom.village', 'village').andWhere('village.id = :villageId', { villageId });
 };
 
-export const createFamilyAccountInCountryQuery = (countryId: string, phase: number | undefined) => {
+export const createFamilyAccountInCountryQuery = (countryId: string, phase?: number) => {
   return createFamilyAccountQuery(phase).andWhere('classroom.countryCode = :countryId', { countryId });
 };
