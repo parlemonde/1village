@@ -170,7 +170,7 @@ statisticsController.get({ path: '/classrooms-to-monitor' }, async (req, res) =>
       'village.name AS vm',
       "COALESCE(NULLIF(CONCAT(user.firstname, ' ', user.lastname), ' '), user.pseudo) AS teacher",
       `CASE
-      WHEN MAX(a.date) IS NULL THEN 0
+      WHEN COUNT(a.date) < 2 THEN 0
       WHEN MAX(a.date) < (NOW() - INTERVAL 21 DAY) THEN 1
       WHEN COUNT(DISTINCT act.id) >= 3 THEN 2
       ELSE NULL
@@ -194,7 +194,7 @@ statisticsController.get({ path: '/classrooms-to-monitor' }, async (req, res) =>
     .addGroupBy('user.city')
     .addGroupBy('user.level')
     .addGroupBy('user.createdAt')
-    .having('(MAX(a.date) IS NULL OR MAX(a.date) < (NOW() - INTERVAL 21 DAY)) OR COUNT(DISTINCT act.id) >= 3');
+    .having('(COUNT(a.date) < 2 OR MAX(a.date) < (NOW() - INTERVAL 21 DAY)) OR COUNT(DISTINCT act.id) >= 3');
 
   if (countryCode) {
     queryBuilder = queryBuilder.andWhere('FIND_IN_SET(:countryCode, village.countryCodes) > 0', { countryCode });
@@ -487,7 +487,7 @@ statisticsController.get({ path: '/one-village/village-engagement-statuses' }, a
       LEFT JOIN analytic_session sess ON sess.userId = u.id
       LEFT JOIN activity act ON act.userId = u.id AND act.status = 0 AND act.deleteDate IS NULL
       LEFT JOIN comment com ON com.userId = u.id
-      GROUP BY u.id, u.villageId, v.name, v.countryCodes
+      GROUP BY u.id, u.villageId, v.name, v.id, v.countryCodes
     ),
     statusCounts AS (
       SELECT
@@ -512,8 +512,8 @@ statisticsController.get({ path: '/one-village/village-engagement-statuses' }, a
   `);
 
   const villageEngagementStatusResponse = await Promise.all(
-    villageEngagementStatus.map(async ({ countryCodes, villageId, ...rest }: VillageEngagementStatus) => {
-      const { totalPublications, totalComments, totalVideos } = await getTotalActivitiesCountsByVillageId(villageId);
+    villageEngagementStatus.map(async ({ countryCodes, ...rest }: VillageEngagementStatus) => {
+      const { totalPublications, totalComments, totalVideos } = await getTotalActivitiesCountsByVillageId(rest.villageId);
 
       return {
         ...rest,

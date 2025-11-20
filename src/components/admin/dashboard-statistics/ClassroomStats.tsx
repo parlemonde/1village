@@ -22,7 +22,13 @@ import { useStatisticsSessions } from 'src/services/useStatistics';
 import type { OneVillageTableRow } from 'types/statistics.type';
 import { TeamCommentType } from 'types/teamComment.type';
 
-const ClassroomStats = () => {
+type Props = {
+  classroomId?: number;
+  villageId?: number;
+  countryId?: string;
+};
+
+const ClassroomStats = ({ classroomId, villageId, countryId }: Props) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedPhase, setSelectedPhase] = useState(0);
   const [selectedCountry, setSelectedCountry] = useState<string>();
@@ -51,6 +57,18 @@ const ClassroomStats = () => {
     }
   }, [selectedClassroomStatistics?.family?.familiesWithoutAccount]);
 
+  useEffect(() => {
+    if (countryId) {
+      setSelectedCountry(countryId);
+    }
+    if (villageId) {
+      setSelectedVillage(villageId);
+    }
+    if (classroomId) {
+      setSelectedClassroom(classroomId);
+    }
+  }, [countryId, villageId, classroomId]);
+
   const handleTabChange = (_event: React.SyntheticEvent, selectedTab: number) => {
     setSelectedTab(selectedTab);
   };
@@ -63,6 +81,9 @@ const ClassroomStats = () => {
         onCountryChange={setSelectedCountry}
         onVillageChange={setSelectedVillage}
         onClassroomChange={setSelectedClassroom}
+        selectedCountry={selectedCountry}
+        selectedVillage={selectedVillage}
+        selectedClassroom={selectedClassroom}
       />
       {selectedCountry && selectedVillage && selectedClassroom ? (
         <Box mt={2}>

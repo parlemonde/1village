@@ -6,8 +6,8 @@ export const getStatusLabel = (status: ClassroomMonitoringStatus): string => {
   return (
     new Map<ClassroomMonitoringStatus, string>([
       [ClassroomMonitoringStatus.NO_CONNECTION_SINCE_FIRST, '1 seule connexion'],
-      [ClassroomMonitoringStatus.AT_LEAST_THREE_DRAFTS_IN_PROGRESS, 'accumulation de brouillons '],
       [ClassroomMonitoringStatus.THREE_WEEK_WITHOUT_CONNECTION, 'Au moins 3 semaines sans connexion'],
+      [ClassroomMonitoringStatus.AT_LEAST_THREE_DRAFTS_IN_PROGRESS, 'Au moins 3 brouillons en cours'],
     ]).get(status) ?? 'Statut inconnu'
   );
 };
