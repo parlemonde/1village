@@ -17,6 +17,6 @@ export const createChildrenCodesQuery = (phase?: VillagePhase) => {
   return queryBuilder;
 };
 
-export const createChildrenCodesInCountryQuery = (countryId: string) => {
-  return createChildrenCodesQuery().andWhere('classroom.countryCode = :countryId', { countryId });
+export const createChildrenCodesInCountryQuery = (countryId: string, phase?: number) => {
+  return createChildrenCodesQuery(phase).andWhere('classroom.countryCode = :countryId', { countryId });
 };
