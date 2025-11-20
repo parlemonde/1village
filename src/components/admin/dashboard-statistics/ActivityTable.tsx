@@ -6,22 +6,48 @@ import { OneVillageTable } from '../OneVillageTable';
 import { getCountryColor } from './utils/colorMapper';
 import { countryToFlag } from 'src/utils';
 import type { VillageInteractionsActivity } from 'types/analytics/village-interactions-activity';
-import type { Country } from 'types/country.type';
 
 type FormatedVillageActivity = {
-  countries: string;
+  countries: JSX.Element;
   dominantStatus: JSX.Element;
   id: number;
   totalConnections: number;
   totalActivities: number;
 };
 
-const countriesToText = (countries: Country[]) => {
-  return countries.map((country) => `${countryToFlag(country.isoCode)} ${country.name}`).join(' - ');
+const mapCountriesToText = (
+  villageActivity: VillageInteractionsActivity,
+  onVillageSelect?: (villageId: number, selectedCountry?: string) => void,
+) => {
+  return (
+    <div style={{ display: 'flex', gap: '4px', alignItems: 'center', flexWrap: 'wrap' }}>
+      {villageActivity.countries.map((country, index) => (
+        <span key={country.isoCode}>
+          <span
+            onClick={() => onVillageSelect?.(villageActivity.villageId, country.isoCode)}
+            style={{
+              cursor: 'pointer',
+              textDecoration: 'none',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
+            onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
+          >
+            {countryToFlag(country.isoCode)} {country.name}
+          </span>
+          {index < villageActivity.countries.length - 1 && <span> - </span>}
+        </span>
+      ))}
+    </div>
+  );
 };
 
-const ActivityTable = ({ activityTableData }: { activityTableData: VillageInteractionsActivity[] }) => {
-  const tableData = formatVillagesData(activityTableData);
+type Props = {
+  activityTableData: VillageInteractionsActivity[];
+  onVillageSelect?: (villageId: number, selectedCountry?: string) => void;
+};
+
+const ActivityTable = ({ activityTableData, onVillageSelect }: Props) => {
+  const tableData = formatVillagesData(activityTableData, onVillageSelect);
   return (
     <Box sx={{ overflow: 'auto', marginTop: 2 }}>
       <OneVillageTable
@@ -43,10 +69,13 @@ const ActivityTable = ({ activityTableData }: { activityTableData: VillageIntera
 
 export default ActivityTable;
 
-function formatVillagesData(activityData: VillageInteractionsActivity[]): FormatedVillageActivity[] {
+function formatVillagesData(
+  activityData: VillageInteractionsActivity[],
+  onVillageSelect?: (villageId: number, selectedCountry?: string) => void,
+): FormatedVillageActivity[] {
   return activityData.map((villageActivity) => ({
     ...villageActivity,
-    countries: countriesToText(villageActivity.countries),
+    countries: mapCountriesToText(villageActivity, onVillageSelect),
     dominantStatus: (
       <span key={villageActivity.id} style={{ color: getCountryColor(villageActivity.dominantStatus), fontSize: 24 }}>
         ●
