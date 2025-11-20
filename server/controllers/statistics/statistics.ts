@@ -118,7 +118,7 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
     const connectedFamiliesCount = await getConnectedFamiliesCount(filters);
     const familyAccountCount = await getFamilyAccountsCount(filters);
     const childrenCodesCount = await getChildrenCodesCount(filters);
-    const dailyConnectionsCountsByMonth = await getDailyConnectionsCountsByMonth();
+    const dailyConnectionsCountsByMonth = await getDailyConnectionsCountsByMonth(filters);
     const contributionsBarChartData = await getContributionsBarChartData(villageId, countryCode, classroomId);
 
     return res.sendJSON({
@@ -170,7 +170,7 @@ statisticsController.get({ path: '/classrooms-to-monitor' }, async (req, res) =>
       'village.name AS vm',
       "COALESCE(NULLIF(CONCAT(user.firstname, ' ', user.lastname), ' '), user.pseudo) AS teacher",
       `CASE
-      WHEN MAX(a.date) IS NULL THEN 0
+      WHEN COUNT(a.date) < 2 THEN 0
       WHEN MAX(a.date) < (NOW() - INTERVAL 21 DAY) THEN 1
       WHEN COUNT(DISTINCT act.id) >= 3 THEN 2
       ELSE NULL
@@ -194,7 +194,7 @@ statisticsController.get({ path: '/classrooms-to-monitor' }, async (req, res) =>
     .addGroupBy('user.city')
     .addGroupBy('user.level')
     .addGroupBy('user.createdAt')
-    .having('(MAX(a.date) IS NULL OR MAX(a.date) < (NOW() - INTERVAL 21 DAY)) OR COUNT(DISTINCT act.id) >= 3');
+    .having('(COUNT(a.date) < 2 OR MAX(a.date) < (NOW() - INTERVAL 21 DAY)) OR COUNT(DISTINCT act.id) >= 3');
 
   if (countryCode) {
     queryBuilder = queryBuilder.andWhere('FIND_IN_SET(:countryCode, village.countryCodes) > 0', { countryCode });
