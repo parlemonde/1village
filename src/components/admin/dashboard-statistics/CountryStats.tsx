@@ -24,12 +24,19 @@ import { TeamCommentType } from 'types/teamComment.type';
 
 interface CountryStatsProps {
   onVillageSelect?: (villageId: number, selectedCountry?: string) => void;
+  selectedCountryFilter?: string;
 }
 
-const CountryStats: React.FC<CountryStatsProps> = ({ onVillageSelect }) => {
+const CountryStats: React.FC<CountryStatsProps> = ({ onVillageSelect, selectedCountryFilter }) => {
   const [selectedPhase, setSelectedPhase] = useState<number>();
   const [selectedCountry, setSelectedCountry] = useState<string>();
   const [selectedTab, setSelectedTab] = useState(DashboardSummaryTab.CLASSROOM);
+
+  React.useEffect(() => {
+    if (selectedCountryFilter) {
+      setSelectedCountry(selectedCountryFilter);
+    }
+  }, [selectedCountryFilter]);
 
   const { data: countryEngagementStatus, isLoading: isLoadingCountryEngagementStatus } = useGetCountryEngagementStatus(selectedCountry);
   const { data: classroomsStatistics, isLoading: isLoadingClassroomStatistics } = useStatisticsClassrooms(null, selectedCountry, null);
@@ -62,7 +69,7 @@ const CountryStats: React.FC<CountryStatsProps> = ({ onVillageSelect }) => {
   return (
     <>
       <TeamCommentCard type={TeamCommentType.COUNTRY} />
-      <StatisticFilters onPhaseChange={setSelectedPhase} onCountryChange={setSelectedCountry} />
+      <StatisticFilters onPhaseChange={setSelectedPhase} onCountryChange={setSelectedCountry} selectedCountry={selectedCountry} />
       {!selectedCountry ? (
         <PelicoCard message={'Merci de sélectionner un pays pour analyser ses statistiques'} />
       ) : (

@@ -11,9 +11,10 @@ import { EngagementStatus, EngagementStatusColor } from 'types/statistics.type';
 
 interface DashboardWorldMapProps {
   countriesEngagementStatuses: CountryEngagementStatus[];
+  handleCountrySelectFromList?: (countryCode?: string) => void;
 }
 
-const DashboardWorldMap = ({ countriesEngagementStatuses }: DashboardWorldMapProps) => {
+const DashboardWorldMap = ({ countriesEngagementStatuses, handleCountrySelectFromList }: DashboardWorldMapProps) => {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
   const [tooltipData, setTooltipData] = useState<GeoJSONCountryData | null>(null);
 
@@ -54,6 +55,7 @@ const DashboardWorldMap = ({ countriesEngagementStatuses }: DashboardWorldMapPro
                       outline: 'none',
                     },
                   }}
+                  onClick={() => handleCountrySelectFromList?.(geo?.properties.iso2)}
                 />
               ))
             }
