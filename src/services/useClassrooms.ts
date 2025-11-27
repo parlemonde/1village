@@ -67,7 +67,7 @@ export const useClassroomsRequests = () => {
       return;
     }
 
-    enqueueSnackbar(response.data.count === 0 ? 'Aucun nouveau village importé!' : 'Les classes ont été importés avec succès !', {
+    enqueueSnackbar(response.data.count === 0 ? 'Aucune nouvelle classe importée !' : 'Les classes ont été importées avec succès !', {
       variant: 'success',
     });
     queryClient.invalidateQueries('classrooms');
