@@ -128,7 +128,7 @@ villageController.delete({ path: '/:id', userType: UserType.ADMIN }, async (req:
 villageController.post({ path: '/import/plm', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
   const count = await createVillagesFromPLM();
   if (count === null) {
-    throw new AppError('Unkown error', ErrorCode.UNKNOWN);
+    throw new AppError('Unknown error', ErrorCode.UNKNOWN);
   }
   res.sendJSON({ success: true, count });
 });

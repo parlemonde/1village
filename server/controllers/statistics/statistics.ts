@@ -23,13 +23,13 @@ import { getChildrenCodesCount, getConnectedFamiliesCount, getFamilyAccountsCoun
 import {
   getAverageConnections,
   getAverageDuration,
-  getClassroomCount,
   getMaxConnections,
   getMaxDuration,
   getMedianConnections,
   getMedianDuration,
   getMinConnections,
   getMinDuration,
+  getRegisteredClassroomsCount,
   getUserConnectionsList,
 } from '../../stats/sessionStats';
 import { getFamiliesWithoutAccountForVillage } from '../../stats/villageStats';
@@ -112,7 +112,7 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
     const averageConnections = await getAverageConnections(filters);
     const medianConnections = await getMedianConnections(filters);
     const testConnections = await getUserConnectionsList();
-    const registeredClassroomsCount = await getClassroomCount(villageId, countryCode, classroomId);
+    const registeredClassroomsCount = await getRegisteredClassroomsCount(villageId, countryCode, phase);
     const connectedClassroomsCount = await getConnectedClassroomsCount(villageId, countryCode, classroomId, phase);
     const contributedClassroomsCount = await getContributedClassroomsCount(villageId, countryCode, classroomId, phase);
     const connectedFamiliesCount = await getConnectedFamiliesCount(filters);
