@@ -29,3 +29,7 @@ export async function getAllVillagesNames(): Promise<VillageWithNameAndId[]> {
 export async function getVillageById(id: number): Promise<Village | null> {
   return await villageRepository.findOneBy({ id });
 }
+
+export async function resetClassroomStatsForAllVillages() {
+  await AppDataSource.getRepository(Village).createQueryBuilder().update().set({ classroomsStats: null }).execute();
+}

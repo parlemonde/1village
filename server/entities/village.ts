@@ -29,6 +29,7 @@ export class Village implements VillageInterface {
   set countryCodes(newCountryCodes: string[]) {
     this.countries = newCountryCodes.map((isoCode) => countriesMap[isoCode]).filter((c) => c !== undefined);
   }
+
   get countryCodes() {
     return this.countries.map((c) => c.isoCode);
   }
@@ -67,4 +68,9 @@ export class Village implements VillageInterface {
 
   @OneToMany(() => Classroom, (classroom: Classroom) => classroom.village)
   public classrooms: Classroom[];
+
+  @Column('simple-json', { nullable: true })
+  public classroomsStats: {
+    registeredClassrooms: Record<string, number>;
+  } | null;
 }

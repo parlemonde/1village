@@ -789,4 +789,20 @@ export const countries: Country[] = [
     isoCode: 'ZW',
     name: 'Zimbabwe',
   },
+  {
+    isoCode: 'FR',
+    name: 'Réunion',
+  },
+  {
+    isoCode: 'FR',
+    name: 'Guadeloupe',
+  },
+  {
+    isoCode: 'FR',
+    name: 'Martinique',
+  },
+  {
+    isoCode: 'FR',
+    name: 'Guyane Française',
+  },
 ];
