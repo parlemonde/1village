@@ -5,6 +5,7 @@ import { axiosRequest } from 'src/utils/axiosRequest';
 type NotificationChoice = {
   commentary: boolean;
   reaction: boolean;
+  publicationFromAdmin: boolean;
   schoolPublication: boolean;
   adminPublication: boolean;
   creationAccountFamily: boolean;
