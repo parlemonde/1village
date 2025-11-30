@@ -44,6 +44,7 @@ const CountryStats: React.FC<CountryStatsProps> = ({ onVillageSelect, selectedCo
   const { data: countryStatistics, isLoading: isLoadingCountryStatistics } = useGetCountriesStats(selectedCountry, selectedPhase);
   const { data: engagementStatusStatistics, isLoading: isLoadingEngagementStatusStatistics } = useGetClassroomsEngagementStatus({
     countryCode: selectedCountry,
+    phase: selectedPhase,
   });
   const { data: activityCountDetails, isLoading: isLoadingActivityCountDetails } = useGetCompareGlobalStats(selectedPhase || 0);
   const { data: villages, isLoading: isLoadingVillages } = useGetVillages(selectedCountry);

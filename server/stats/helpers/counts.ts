@@ -17,8 +17,8 @@ export const countFamilyAccounts = async (village: Village, phase: number | unde
   return query.getCount();
 };
 
-export const countFamilyAccountsForCountry = async (countryId: string): Promise<number> => {
-  return createFamilyAccountInCountryQuery(countryId).getCount();
+export const countFamilyAccountsForCountry = async (countryId: string, phase?: number): Promise<number> => {
+  return createFamilyAccountInCountryQuery(countryId, phase).getCount();
 };
 
 export const countFamilyAccountsGlobal = async (phase?: VillagePhase): Promise<number> => {
@@ -34,8 +34,8 @@ export const countChildrenCodes = async (village: Village, phase: number | undef
   return query.getCount();
 };
 
-export const countChildrenCodesForCountry = async (countryId: string): Promise<number> => {
-  return createChildrenCodesInCountryQuery(countryId).getCount();
+export const countChildrenCodesForCountry = async (countryId: string, phase?: number): Promise<number> => {
+  return createChildrenCodesInCountryQuery(countryId, phase).getCount();
 };
 
 export const countChildrenCodesGlobal = async (phase?: VillagePhase): Promise<number> => {
@@ -52,8 +52,8 @@ export const countConnectedFamilies = async (village: Village, phase: number | u
   return query.getCount();
 };
 
-export const countConnectedFamiliesForCountry = async (countryId: string): Promise<number> => {
-  return createConnectedFamilyInCountryQuery(countryId).getCount();
+export const countConnectedFamiliesForCountry = async (countryId: string, phase?: number): Promise<number> => {
+  return createConnectedFamilyInCountryQuery(countryId, phase).getCount();
 };
 
 export const countConnectedFamiliesGlobal = async (phase?: VillagePhase): Promise<number> => {

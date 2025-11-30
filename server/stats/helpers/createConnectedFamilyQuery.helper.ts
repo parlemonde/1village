@@ -18,6 +18,6 @@ export const createConnectedFamilyQuery = (phase?: VillagePhase) => {
   return queryBuilder;
 };
 
-export const createConnectedFamilyInCountryQuery = (countryId: string) => {
-  return createConnectedFamilyQuery().andWhere('classroom.countryCode = :countryId', { countryId });
+export const createConnectedFamilyInCountryQuery = (countryId: string, phase: number | undefined) => {
+  return createConnectedFamilyQuery(phase).andWhere('classroom.countryCode = :countryId', { countryId });
 };
