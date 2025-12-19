@@ -11,6 +11,12 @@ export type PlmClassroom = {
 const villageRepository = AppDataSource.getRepository(Village);
 const generalInformationLabel = 'Informations générales';
 const excludedDomains = ['@parlemonde.org', '@parlemonde.slack.com', '@yopmail'];
+const frenchDomTom = [
+  { isoCode: 'FR', name: 'Réunion' },
+  { isoCode: 'FR', name: 'Guadeloupe' },
+  { isoCode: 'FR', name: 'Martinique' },
+  { isoCode: 'FR', name: 'Guyane Française' },
+];
 
 async function createVillage(plmClassroom: PlmClassroom): Promise<boolean> {
   const plmId = parseInt(plmClassroom.plm_id || '0');
@@ -25,7 +31,7 @@ async function createVillage(plmClassroom: PlmClassroom): Promise<boolean> {
     where: { plmId },
   });
 
-  const country = countries.find((country) => country.name === plmClassroom.country);
+  const country = [...countries, ...frenchDomTom].find((country) => country.name === plmClassroom.country);
 
   if (!village || !country || village?.name === generalInformationLabel) {
     return false;
