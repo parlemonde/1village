@@ -36,6 +36,18 @@ import { getFamiliesWithoutAccountForVillage } from '../../stats/villageStats';
 import { AppDataSource } from '../../utils/data-source';
 import { countries } from '../../utils/iso-3166-countries-french';
 import { Controller } from '../controller';
+import {
+  buildCsvHeaders,
+  buildPhaseRows,
+  buildAllPhasesRows,
+  buildRegisteredClassroomsRow,
+  buildVillageClassroomsOrdered,
+  buildVillageCountriesMap,
+  calculateConnectionCounts,
+  fetchVillagesData,
+  indexDataByPhase,
+  PHASES,
+} from './export-csv';
 import type { StatisticsDto } from './statistics.dto';
 import {
   getDetailedActivitiesCountsByClassrooms,
@@ -789,4 +801,55 @@ statisticsController.get({ path: '/classrooms/:classroomId/engagement-status' },
   }>();
 
   res.sendJSON(classroomEngagementStatus);
+});
+
+statisticsController.get({ path: '/export' }, async (_req, res) => {
+  const countryLabelByCode = new Map<string, string>();
+  countries.forEach((country) => countryLabelByCode.set(country.isoCode, country.name));
+
+  const villages = await fetchVillagesData(PHASES);
+  const villageCountries = await buildVillageCountriesMap(villages, countryLabelByCode, PHASES[0]);
+  const villageClassroomsOrdered = await buildVillageClassroomsOrdered(villages, villageCountries, countryLabelByCode);
+  const headers = buildCsvHeaders(villages, villageCountries, villageClassroomsOrdered, countryLabelByCode);
+
+  const { byPhaseVillage, byPhaseVillageCountry, byPhaseVillageClassroom } = await indexDataByPhase(PHASES, villages);
+  const connectionCounts = await calculateConnectionCounts(PHASES, villages, villageCountries, villageClassroomsOrdered);
+
+  const rows: (string | number)[][] = [];
+  const registeredRow = await buildRegisteredClassroomsRow(villages, villageCountries, villageClassroomsOrdered);
+
+  rows.push(registeredRow);
+
+  const phaseRows = await buildPhaseRows(
+    PHASES,
+    villages,
+    villageCountries,
+    villageClassroomsOrdered,
+    byPhaseVillage,
+    byPhaseVillageCountry,
+    byPhaseVillageClassroom,
+    connectionCounts,
+  );
+
+  rows.push(...phaseRows);
+
+  // Totaux toutes phases confondues
+  const allPhasesRows = await buildAllPhasesRows(
+    PHASES,
+    villages,
+    villageCountries,
+    villageClassroomsOrdered,
+    byPhaseVillage,
+    byPhaseVillageCountry,
+    byPhaseVillageClassroom,
+    connectionCounts,
+  );
+
+  rows.push(...allPhasesRows);
+
+  const csvContent = [headers, ...rows].map((line) => line.join(',')).join('\n');
+  const filename = 'export-statistiques-villages-pays-classes.csv';
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  res.status(200).send(`\uFEFF${csvContent}`);
 });

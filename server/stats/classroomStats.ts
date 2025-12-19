@@ -91,11 +91,14 @@ export const getContributedClassroomsCount = async (
     .andWhere('activity.status != :status', { status: 1 })
     .groupBy('classroom.id');
 
+  // Appliquer les filtres de manière cumulative (ET logique) si présents
   if (classroomId) {
     queryBuilder.andWhere('classroom.id = :classroomId', { classroomId });
-  } else if (villageId) {
+  }
+  if (typeof villageId === 'number' && villageId) {
     queryBuilder.andWhere('classroom.villageId = :villageId', { villageId });
-  } else if (countryCode) {
+  }
+  if (countryCode) {
     queryBuilder.andWhere('classroom.countryCode = :countryCode', { countryCode });
   }
 
