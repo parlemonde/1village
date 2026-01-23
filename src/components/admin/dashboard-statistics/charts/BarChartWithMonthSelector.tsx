@@ -1,10 +1,11 @@
+import React, { useState } from 'react';
+import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis, Label } from 'recharts';
+
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import React, { useState } from 'react';
-import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis, Label } from 'recharts';
 
 import DashboardCard from '../DashboardCard';
 import type { DailyConnectionsCountsByMonth } from 'types/statistics.type';
