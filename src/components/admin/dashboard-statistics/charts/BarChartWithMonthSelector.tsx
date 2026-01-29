@@ -27,7 +27,8 @@ const isCurrentMonth = (label: string): boolean => {
 };
 
 const BarChartWithMonthSelector = ({ data, yAxisLabel, title }: BarChartWithMonthSelectorProps) => {
-  const [selectedMonthIndex, setSelectedMonthIndex] = useState(Math.max(0, data.length - 1));
+  const initialMonthIndex = data && data.length ? data.length - 1 : 0;
+  const [selectedMonthIndex, setSelectedMonthIndex] = useState(Math.max(0, initialMonthIndex));
 
   if (!data || data.length === 0) {
     return (
