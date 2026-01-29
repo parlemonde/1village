@@ -90,8 +90,9 @@ const Anthem = () => {
           <h1>Voici l’hymne de votre village-monde : </h1>
           <div style={{ height: '100%', width: '100%', objectFit: 'contain' }}>
             <p>
-              Avez-vous remarqué qu’il manque quelque chose ? Il n’y a pas les paroles du couplet ! C’est à vous de les imaginer, les écrire puis les
-              chanter. Pour cela, repensez à votre expérience d’1Village, ce que vous avez aimé, ce que vous retenez…
+              Avant de chanter votre couplet, vous devez imaginer et écrire ses paroles. Pour cela, repensez à votre expérience d&apos;1Village, ce
+              que vous avez aimé, ce que vous retenez… Pour vous aider, nous avons déjà choisi un rythme et des instruments que vous allez découvrir à
+              l&apos;étape suivante. C&apos;est parti !
             </p>
           </div>
         </div>
