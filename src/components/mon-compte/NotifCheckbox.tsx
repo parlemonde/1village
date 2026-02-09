@@ -13,10 +13,11 @@ export const NotifCheckbox = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [commentChecked, setCommentChecked] = React.useState(false);
+  const [publicationFromAdminChecked, setPublicationFromAdminChecked] = React.useState(false);
+
   // ---------- Uncomment the following lines to add more checkboxes ----------
   // const [reactionChecked, setReactionChecked] = React.useState(true);
   // const [publicationFromAClassChecked, setPublicationFromAClassChecked] = React.useState(true);
-  // const [publicationFromAdminChecked, setPublicationFromAdminChecked] = React.useState(true);
   // const [creationAccountFamilyChecked, setCreationAccountFamilyChecked] = React.useState(true);
   // const [phaseOpeningChecked, setPhaseOpeningChecked] = React.useState(true);
 
@@ -25,6 +26,7 @@ export const NotifCheckbox = () => {
   useEffect(() => {
     if (notifications) {
       setCommentChecked(notifications.commentary ?? false);
+      setPublicationFromAdminChecked(notifications.publicationFromAdmin ?? false);
     }
   }, [notifications]);
 
@@ -32,6 +34,10 @@ export const NotifCheckbox = () => {
 
   const handleCommentChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCommentChecked(event.target.checked);
+  };
+
+  const handlePublicationFromAdminChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPublicationFromAdminChecked(event.target.checked);
   };
 
   // ---------- Uncomment the following lines to add more checkboxes ----------
@@ -44,10 +50,6 @@ export const NotifCheckbox = () => {
   //   setPublicationFromAClassChecked(event.target.checked);
   // };
 
-  // const handlePublicationFromAdminChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setPublicationFromAdminChecked(event.target.checked);
-  // };
-
   // const handleCreationAccountFamilyChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   setCreationAccountFamilyChecked(event.target.checked);
   // };
@@ -58,10 +60,10 @@ export const NotifCheckbox = () => {
 
   const mappingCheckbox = [
     { label: 'Commentaire d’une classe sur une de mes publications', checked: commentChecked, handle: handleCommentChecked },
+    { label: 'Publication de Pélico', checked: publicationFromAdminChecked, handle: handlePublicationFromAdminChecked },
     // ---------- Uncomment the following lines to add more checkboxes ----------
     // { label: 'Réaction à une de vos publications', checked: reactionChecked, handle: handleReactionChecked },
     // { label: 'Publication d’une classe', checked: publicationFromAClassChecked, handle: handlePublicationFromAClassChecked },
-    // { label: 'Publication de Pélico', checked: publicationFromAdminChecked, handle: handlePublicationFromAdminChecked },
     // { label: 'Création de compte famille', checked: creationAccountFamilyChecked, handle: handleCreationAccountFamilyChecked },
     // { label: 'Ouverture de phase', checked: phaseOpeningChecked, handle: handlePhaseOpeningChecked },
   ];
@@ -71,7 +73,7 @@ export const NotifCheckbox = () => {
       commentary: commentChecked,
       reaction: false,
       publicationFromSchool: false,
-      publicationFromAdmin: false,
+      publicationFromAdmin: publicationFromAdminChecked,
       creationAccountFamily: false,
       openingVillageStep: false,
     };
@@ -93,7 +95,7 @@ export const NotifCheckbox = () => {
   return (
     <div className="account__panel">
       <h2>Notifications</h2>
-      {isLoadingNotifications ? (
+      {isLoadingNotifications || !notifications ? (
         <p>Chargement...</p>
       ) : (
         <>
