@@ -8,23 +8,25 @@ async function uploadFiles(params: { files: File[] }): Promise<string[]> {
   for (const file of files) {
     formData.append('files', file);
   }
-  return (
-    await axiosRequest({
-      method: 'POST',
-      baseURL: '/api',
-      url: `/files`,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      data: formData,
-    })
-  ).data as Promise<string[]>;
+  const result = await axiosRequest({
+    method: 'POST',
+    baseURL: '/api',
+    url: `/files`,
+    data: formData,
+  });
+  if (!Array.isArray(result.data)) {
+    throw new Error('Invalid API response for file import !');
+  }
+  return result.data;
 }
 
 export const useUploadFiles = () => {
   return useMutation({
     mutationFn: (files: File[]) => {
       return uploadFiles({ files });
+    },
+    onError: (error) => {
+      console.error('File upload failed', error);
     },
   });
 };
