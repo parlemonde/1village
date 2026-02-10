@@ -37,6 +37,11 @@ const whitelist = [
 ];
 export const fileUpladInMemory = multer({
   storage: multer.memoryStorage(),
+  limits: {
+    // 20MB per file, 5 files max
+    fileSize: 20 * 1024 * 1024,
+    files: 5,
+  },
   fileFilter: (_req, file, cb) => {
     if (!whitelist.includes(file.mimetype)) {
       return cb(new Error('file is not allowed'));
