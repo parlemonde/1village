@@ -19,6 +19,12 @@ interface DocumentEditorProps {
 export default function DocumentModal({ id, isModalOpen, setIsModalOpen, onDeleteEditor, onChange }: DocumentEditorProps) {
   const uploadFiles = useUploadFiles();
   const [urls, setUrls] = useState<string[]>([]);
+  let previewText;
+  if (uploadFiles && uploadFiles.isError) {
+    previewText = "Erreur lors de l'import du fichier";
+  } else {
+    previewText = 'Aperçu';
+  }
 
   async function handleUploadFiles(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
@@ -72,7 +78,7 @@ export default function DocumentModal({ id, isModalOpen, setIsModalOpen, onDelet
         <div style={{ flex: '1', padding: '0.5rem', minWidth: 0 }}>
           <div style={{ width: '100%', minHeight: '15rem', backgroundColor: bgPage, padding: '0.5rem' }}>
             <div className="text-center text text--bold" style={{ height: '10%' }}>
-              Aperçu
+              {previewText}
             </div>
 
             {urls.length ? (
