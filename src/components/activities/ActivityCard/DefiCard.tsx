@@ -36,7 +36,7 @@ const defiTypeLink: Record<DefiTypeEnum, string> = {
   [DefiTypeEnum.COOKING]: 'culinaire/4',
   [DefiTypeEnum.ECOLOGICAL]: 'ecologique/4',
   [DefiTypeEnum.LINGUISTIC]: 'linguistique/5',
-  [DefiTypeEnum.OTHER]: 'linguistique/5',
+  [DefiTypeEnum.OTHER]: '4',
 };
 
 export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<DefiActivity>) => {
