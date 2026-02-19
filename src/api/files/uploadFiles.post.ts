@@ -15,7 +15,9 @@ async function uploadFiles(params: { files: File[] }): Promise<string[]> {
     data: formData,
   });
   if (!Array.isArray(result.data)) {
-    throw new Error('Invalid API response for file import !');
+    throw new Error('Invalid API response for file import !', {
+      cause: result.data.slice(result.data.indexOf('<pre>') + 5, result.data.indexOf('<br>')),
+    });
   }
   return result.data;
 }
