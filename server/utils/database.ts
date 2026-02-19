@@ -53,6 +53,7 @@ async function createSuperAdminUser(): Promise<void> {
   const adminPseudo = process.env.ADMIN_PSEUDO;
   const adminPassword = process.env.ADMIN_PASSWORD;
   const count = await AppDataSource.getRepository(User).count({ where: { pseudo: adminPseudo } });
+  logger.info(`Admin user count with pseudo ${adminPseudo} : ${count}`);
   if (count > 0) {
     return;
   }
@@ -78,7 +79,7 @@ export async function connectToDatabase(tries: number = 10): Promise<boolean> {
     return false;
   }
   try {
-    await AppDataSource.initialize();
+    await initDatabase();
     await createTablesIfNotExist();
     await createSuperAdminUser();
     return true;
@@ -92,4 +93,23 @@ export async function connectToDatabase(tries: number = 10): Promise<boolean> {
     }
     return connectToDatabase(tries - 1);
   }
+}
+
+let initializing: Promise<void> | null = null;
+
+export async function initDatabase() {
+  if (AppDataSource.isInitialized) {
+    logger.info('Database already initialized. No need to intialize it !');
+    return;
+  }
+
+  if (!initializing) {
+    initializing = (async () => {
+      logger.info('Initializing database...');
+      await AppDataSource.initialize();
+      logger.info('Database initialized');
+    })();
+  }
+
+  await initializing;
 }
