@@ -43,7 +43,7 @@ const axiosRequest = async <ResponseType = any>(req: AxiosRequestConfig): Promis
       };
     }
     return {
-      data: null,
+      data: error || null,
       error: true,
       status: 500,
     };

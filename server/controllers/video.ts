@@ -57,6 +57,11 @@ videoController.upload(
     }
 
     const url = await uploadVideo(req.file.path, req.body.name, req.user?.id ?? 0);
+    const isUrlOK = url !== '';
+
+    if (!isUrlOK) {
+      throw new AppError('Video upload failed!', ErrorCode.UNKNOWN);
+    }
 
     res.sendJSON({
       url,
