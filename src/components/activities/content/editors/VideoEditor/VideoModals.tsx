@@ -6,8 +6,7 @@ import { useQueryClient } from 'react-query';
 
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Button, Divider, TextField } from '@mui/material';
-import Alert from '@mui/material/Alert';
+import { Button, Divider, TextField, Alert, AlertTitle } from '@mui/material';
 
 import { Modal } from 'src/components/Modal';
 import { useCopy } from 'src/hooks/useCopy';
@@ -129,20 +128,21 @@ export const VideoModals = ({ id, isModalOpen, setIsModalOpen, videoUrl, setVide
     if (response.error) {
       setTempVideoUrl('');
       setFile(null);
-      enqueueSnackbar('Une erreur est survenue...', {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        <Alert severity="error">
+          <AlertTitle>Une erreur est survenue...</AlertTitle>
+          <p>{JSON.stringify(response.data)}</p>
+        </Alert>,
+        {
+          variant: 'error',
+          autoHideDuration: 10000,
+        },
+      );
     } else {
       prevValue.current = response.data.url;
       setVideoUrl(response.data.url);
-      if (!response.data.url) {
-        enqueueSnackbar('Une erreur est survenue...', {
-          variant: 'error',
-        });
-      } else {
-        queryClient.invalidateQueries('videos');
-        setIsSuccessModalOpen(true);
-      }
+      queryClient.invalidateQueries('videos');
+      setIsSuccessModalOpen(true);
     }
     setProgress(-1);
     setName('');
