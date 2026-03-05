@@ -183,18 +183,18 @@ export const Navigation = (): JSX.Element => {
       */
       // ---- PHASE 3 ----
       {
-        label: 'Inventer une histoire',
-        path: '/creer-une-histoire',
-        icon: <StoryIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-        phase: 3,
-        disabled: isParent,
-      },
-      {
         label: 'Créer son couplet',
         path: '/chanter-un-couplet',
         icon: <MusicIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 3,
         disabled: !village?.anthemId || isParent,
+      },
+      {
+        label: 'Inventer une histoire',
+        path: '/creer-une-histoire',
+        icon: <StoryIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 3,
+        disabled: isParent,
       },
       /*
       {
