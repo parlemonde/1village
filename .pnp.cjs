@@ -53,7 +53,7 @@ const RAW_RUNTIME_STATE =
           ["@types/d3-geo", "npm:3.0.2"],\
           ["@types/draft-js", "npm:0.11.18"],\
           ["@types/draftjs-to-html", "npm:0.8.4"],\
-          ["@types/earcut", "npm:2.1.1"],\
+          ["@types/earcut", "npm:2.1.4"],\
           ["@types/express", "npm:4.17.13"],\
           ["@types/express-useragent", "npm:1.0.2"],\
           ["@types/file-saver", "npm:2.0.7"],\
@@ -221,7 +221,7 @@ const RAW_RUNTIME_STATE =
           ["@types/d3-geo", "npm:3.0.2"],\
           ["@types/draft-js", "npm:0.11.18"],\
           ["@types/draftjs-to-html", "npm:0.8.4"],\
-          ["@types/earcut", "npm:2.1.1"],\
+          ["@types/earcut", "npm:2.1.4"],\
           ["@types/express", "npm:4.17.13"],\
           ["@types/express-useragent", "npm:1.0.2"],\
           ["@types/file-saver", "npm:2.0.7"],\
@@ -6105,10 +6105,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@types/earcut", [\
-      ["npm:2.1.1", {\
-        "packageLocation": "./.yarn/cache/@types-earcut-npm-2.1.1-8c1f5c6956-7845dab97b.zip/node_modules/@types/earcut/",\
+      ["npm:2.1.4", {\
+        "packageLocation": "./.yarn/cache/@types-earcut-npm-2.1.4-b4c7bde879-167e1c6d60.zip/node_modules/@types/earcut/",\
         "packageDependencies": [\
-          ["@types/earcut", "npm:2.1.1"]\
+          ["@types/earcut", "npm:2.1.4"]\
         ],\
         "linkType": "HARD"\
       }]\
