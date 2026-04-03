@@ -6,6 +6,7 @@ import type { UserType } from '../entities/user';
 import { User } from '../entities/user';
 import { getHeader } from '../utils';
 import { AppDataSource } from '../utils/data-source';
+import { logger } from '../utils/logger';
 
 const secret: string = process.env.APP_SECRET || '';
 
@@ -20,12 +21,14 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
       }
       token = req.cookies['access-token'];
     } else if (req.cookies && req.cookies['refresh-token']) {
+      const refreshToken: string = req.cookies['refresh-token'];
+      logger.info(`Refresh token received: ${refreshToken}`);
       if (!req.isCsrfValid && req.method !== 'GET') {
         // check cookie was not stolen
         res.status(401).send('bad csrf token');
         return;
       }
-      const newTokens = await getNewAccessToken(req.cookies['refresh-token']);
+      const newTokens = await getNewAccessToken(refreshToken);
       if (newTokens === null) {
         res.status(401).send('invalid refresh token');
         return;

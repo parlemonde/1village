@@ -1,7 +1,8 @@
+import { useSnackbar } from 'notistack';
 import React, { useState } from 'react';
 
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { Button } from '@mui/material';
+import { Button, Alert, AlertTitle } from '@mui/material';
 
 import PdfDisplay from './PdfDisplay';
 import { useUploadFiles } from 'src/api/files/uploadFiles.post';
@@ -19,12 +20,40 @@ interface DocumentEditorProps {
 export default function DocumentModal({ id, isModalOpen, setIsModalOpen, onDeleteEditor, onChange }: DocumentEditorProps) {
   const uploadFiles = useUploadFiles();
   const [urls, setUrls] = useState<string[]>([]);
+  const { enqueueSnackbar } = useSnackbar();
+  let previewText;
+  if (uploadFiles && uploadFiles.isError) {
+    previewText = "Erreur lors de l'import du fichier";
+  } else {
+    previewText = 'Aperçu';
+  }
 
   async function handleUploadFiles(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
       const files = Array.from(e.target.files);
-      const urls = await uploadFiles.mutateAsync(files);
-      setUrls(urls);
+      try {
+        const urls = await uploadFiles.mutateAsync(files);
+        setUrls(urls);
+      } catch (err: unknown) {
+        let causeErrorMessage;
+        if (err && typeof err === 'object' && err !== null && 'cause' in err) {
+          causeErrorMessage = <>{(err as Error).cause}</>;
+        }
+        enqueueSnackbar(
+          <Alert severity="error">
+            <AlertTitle>Une erreur s’est produite lors de l’import de votre fichier.</AlertTitle>
+            {causeErrorMessage ? (
+              <p>{causeErrorMessage}</p>
+            ) : (
+              <p>Merci de vous déconnecter et de vous reconnecter à 1Village avant de réimporter votre fichier.</p>
+            )}
+          </Alert>,
+          {
+            variant: 'error',
+            autoHideDuration: 10000,
+          },
+        );
+      }
     }
   }
   return (
@@ -72,7 +101,7 @@ export default function DocumentModal({ id, isModalOpen, setIsModalOpen, onDelet
         <div style={{ flex: '1', padding: '0.5rem', minWidth: 0 }}>
           <div style={{ width: '100%', minHeight: '15rem', backgroundColor: bgPage, padding: '0.5rem' }}>
             <div className="text-center text text--bold" style={{ height: '10%' }}>
-              Aperçu
+              {previewText}
             </div>
 
             {urls.length ? (
