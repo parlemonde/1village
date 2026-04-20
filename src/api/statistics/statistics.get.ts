@@ -223,10 +223,10 @@ export const useGetClassroomsToMonitorStats = (countryId?: string, villageId?: n
 function getClassroomsEngagementStatusUrl(engagementStatusParams: EngagementStatusParams): string {
   let baseClassroomsURL = `/statistics/classrooms-engagement-status`;
   if (engagementStatusParams.countryCode) {
-    baseClassroomsURL = `${baseClassroomsURL}?&countryCode=${engagementStatusParams.countryCode}`;
+    baseClassroomsURL = `${baseClassroomsURL}?&countryCode=${engagementStatusParams.countryCode}&phase=${engagementStatusParams.phase}`;
   }
   if (engagementStatusParams.villageId) {
-    baseClassroomsURL = `${baseClassroomsURL}?&villageId=${engagementStatusParams.villageId}`;
+    baseClassroomsURL = `${baseClassroomsURL}?&villageId=${engagementStatusParams.villageId}&phase=${engagementStatusParams.phase}`;
   }
 
   return baseClassroomsURL;
@@ -244,7 +244,7 @@ async function getClassroomsEngagementStatus(engagementStatusParams: EngagementS
 
 export function useGetClassroomsEngagementStatus(engagementStatusParams: EngagementStatusParams) {
   return useQuery(
-    ['classrooms-engagement-status-stats', engagementStatusParams.countryCode, engagementStatusParams.villageId],
+    ['classrooms-engagement-status-stats', engagementStatusParams.countryCode, engagementStatusParams.villageId, engagementStatusParams.phase],
     () => getClassroomsEngagementStatus(engagementStatusParams),
     {
       enabled: !!engagementStatusParams.countryCode || !!engagementStatusParams.villageId,

@@ -62,7 +62,7 @@ export const getConnectedFamiliesCount = async (filterParams: StatsFilterParams)
   }
 
   if (countryId) {
-    return await countConnectedFamiliesForCountry(countryId);
+    return await countConnectedFamiliesForCountry(countryId, phase);
   }
 
   return await countConnectedFamiliesGlobal(phase);
@@ -94,7 +94,7 @@ export const getFamilyAccountsCount = async (filterParams: StatsFilterParams) =>
   }
 
   if (countryId) {
-    return await countFamilyAccountsForCountry(countryId);
+    return await countFamilyAccountsForCountry(countryId, phase);
   }
 
   return await countFamilyAccountsGlobal(phase);
@@ -111,7 +111,7 @@ export const getChildrenCodesCount = async (filterParams: StatsFilterParams, whe
   }
 
   if (countryId) {
-    return await countChildrenCodesForCountry(countryId);
+    return await countChildrenCodesForCountry(countryId, phase);
   }
 
   return await countChildrenCodesGlobal(phase);
